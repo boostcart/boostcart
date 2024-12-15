@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BoostCart
+
+Supercharge your online presence with BoostCart, the solution for selling online.
 
 ## Getting Started
 
-First, run the development server:
+First, clone the repo
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```shell
+$ git clone https://github.com/boostcart/boostcart
+Cloning into boostcart...
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Second, install the depenencies (we recommend using `bun`, however you can use any other package manager)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```shell
+$ bun install
+Runing bun install...
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Finally, start the development server
 
-## Learn More
+```shell
+$ bun dev
+Starting next development server...
+```
 
-To learn more about Next.js, take a look at the following resources:
+Open your new online store in your browser at [https://localhost:3000](https://localhost:3000)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## About
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+BoostCart is a platform built using [Next.js](https://nextjs.org), made to lower difficulty of creating online stores.
 
-## Deploy on Vercel
+## Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Here's a list of our main features:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Multiple languages
+- PPR (Partial Prerendering) - Combine static and dynamic components together for the best performance
+- Server actions - Use the server, make your life easier
+- PrismaORM - Talk to your database easily
+- Optimized Images - Using the built-in `next/image` package for optimized images so you don't have to worry about them and if your store will run fast
+- Made for SEO - Our engineers have made SEO a breeze, why - because we know what a pain it is
+
+## Requirements
+
+[Node.js](https://nodejs.org) v20.17
+[Bun](https://bun.sh) or your preferred package manager. (We recommend using Bun as it's faster, more stable and we know that our app WILL build and run smoothly!)
+
+## Learn more
+
+If you want to learn more about BoostCart and how it works feel free to open our [documentation](https://docs.boostcart.dev). (Coming soon)
+Here's the [Next.js documentation](https://nextjs.org/docs/) aswell.
+
+## Deploying
+
+We recommend using [Vercel](https://vercel.com) as your hosting provider.
+Why? Because after all they are the creators of [Next.js](https://nextjs.org) and they do know what's best for hosting your Next app.
