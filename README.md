@@ -25,7 +25,7 @@ $ bun dev
 Starting next development server...
 ```
 
-Open your new online store in your browser at [https://localhost:3000](https://localhost:3000)
+Open your new online store in your browser at [http://localhost:3000](http://localhost:3000)
 
 ## About
 
