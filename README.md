@@ -44,8 +44,8 @@ Here's a list of our main features:
 
 ## Requirements
 
-[Node.js](https://nodejs.org) v20.17
-[Bun](https://bun.sh) or your preferred package manager. (We recommend using Bun as it's faster, more stable and we know that our app WILL build and run smoothly!)
+- [Node.js](https://nodejs.org) v20.17
+- [Bun](https://bun.sh) or your preferred package manager. (We recommend using Bun as it's faster, more stable and we know that our app WILL build and run smoothly!)
 
 ## Learn more
 
