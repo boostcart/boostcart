@@ -17,28 +17,28 @@ const DashboardSidebar = () => {
 			label: t("dashboard.nav.home"),
 			href: "/dashboard",
 			icon: (
-				<Home className="flex-shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200" />
+				<Home className="shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200" />
 			)
 		},
 		{
 			label: t("dashboard.nav.orders"),
 			href: "/dashboard/orders",
 			icon: (
-				<Inbox className="flex-shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200" />
+				<Inbox className="shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200" />
 			)
 		},
 		{
 			label: t("dashboard.nav.products"),
 			href: "/dashboard/products",
 			icon: (
-				<Boxes className="flex-shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200" />
+				<Boxes className="shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200" />
 			)
 		},
 		{
 			label: t("dashboard.nav.customers"),
 			href: "/dashboard/customers",
 			icon: (
-				<Users className="flex-shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200" />
+				<Users className="shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200" />
 			)
 		}
 	];
@@ -69,13 +69,13 @@ const DashboardSidebar = () => {
 							label: t("dashboard.nav.toStore"),
 							href: "/",
 							icon: (
-								<ShoppingBasket className="flex-shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200" />
+								<ShoppingBasket className="shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200" />
 							)
 						}}
 					/>
 
 					<button className="flex items-center justify-start gap-2 py-2 group/sidebar" onClick={() => signOut()}>
-						<DoorOpen className="flex-shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200 group-hover/sidebar:text-destructive-400" />
+						<DoorOpen className="shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200 group-hover/sidebar:text-destructive-400" />
 
 						<motion.span
 							animate={{
@@ -83,7 +83,7 @@ const DashboardSidebar = () => {
 								opacity: open ? 1 : 0,
 							}}
 
-							className="text-neutral-700 dark:text-neutral-200 group-hover/sidebar:text-destructive-400 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+							className="text-neutral-700 dark:text-neutral-200 group-hover/sidebar:text-destructive-400 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block p-0! m-0!"
 						>
 							{t("dashboard.nav.logout")}
 						</motion.span>

@@ -49,7 +49,7 @@ const LanguageSwitcher = () => {
     >
       <SelectTrigger
         className={`
-          outline-none ${!pathname.includes('dashboard') && 'lg:text-white lg:bg-transparent lg:border-0'}  
+          outline-hidden ${!pathname.includes('dashboard') && 'lg:text-white lg:bg-transparent lg:border-0'}  
         `}
         disabled={isPending}
       >

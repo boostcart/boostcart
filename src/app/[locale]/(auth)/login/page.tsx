@@ -44,7 +44,7 @@ export default async function LoginPage() {
 			<AuthProviders />
 
 			<div className="relative flex flex-col items-center justify-center w-full">
-				<span className="h-[2px] w-96 bg-gradient-to-r from-transparent via-neutral-300 to-transparent"></span>
+				<span className="h-[2px] w-96 bg-linear-to-r from-transparent via-neutral-300 to-transparent"></span>
 				<span className="absolute px-1 text-sm font-semibold uppercase bg-white text-neutral-500">{t('general.or')}</span>
 			</div>
 

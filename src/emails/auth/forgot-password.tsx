@@ -38,7 +38,7 @@ export default function ForgotPasswordEmail(props: any) {
 			<Tailwind>
 				<Body className='bg-neutral-100 p-4'>
 					<MailHeader />
-					<Section className='w-full p-4 bg-white rounded-md shadow-sm'>
+					<Section className='w-full p-4 bg-white rounded-md shadow-xs'>
 						<Row>
 							<Column align='center'>
 								<Heading as='h2'>Hey, {name}! Forgot your password?</Heading>
@@ -47,7 +47,7 @@ export default function ForgotPasswordEmail(props: any) {
 						</Row>
 						<Row>
 							<Column align='center'>
-								<Button href={resetLink} className="bg-[#f03d7e] text-[#fff5f5] h-10 px-5 py-2 text-md inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-semibold ring-offset-background transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">Reset your password</Button>
+								<Button href={resetLink} className="bg-[#f03d7e] text-[#fff5f5] h-10 px-5 py-2 text-md inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-semibold ring-offset-background transition focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">Reset your password</Button>
 							</Column>
 						</Row>
 						<Row className='mt-8'>
