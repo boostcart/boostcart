@@ -1,13 +1,17 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
-// import Facebook from "next-auth/providers/facebook";
-// import Apple from "next-auth/providers/apple";
+import { getUserByEmail, getUserById } from "@/data/user";
+
+import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-// import Loops from "next-auth/providers/loops";
-import { getUserById } from "@/data/user";
+import { LoginSchema } from "./schemas";
+import NextAuth from "next-auth";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import { UserRole } from "@prisma/client";
 import authConfig from "../auth.config";
+import bcrypt from "bcrypt";
 import { prisma } from "@/lib/db";
-import NextAuth from "next-auth";
+
+// import Facebook from "next-auth/providers/facebook";
+// import Apple from "next-auth/providers/apple";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   callbacks: {
@@ -39,6 +43,30 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
     Google,
-    // Loops,
+    Credentials({
+      credentials: {
+        email: { label: "email", type: "text" },
+        password: { label: "password", type: "password" },
+      },
+      authorize: async (credentials) => {
+        const validatedFields = LoginSchema.safeParse(credentials);
+
+        if (validatedFields.success) {
+          const { email, password } = validatedFields.data;
+
+          const user = await getUserByEmail(email);
+
+          if (!user || !user.password) return null;
+
+          const isValid = await bcrypt.compare(password, user.password);
+
+          if (isValid) return user;
+
+          return null;
+        }
+
+        return null;
+      }
+    })
   ],
 });

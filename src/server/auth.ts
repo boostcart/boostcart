@@ -1,0 +1,142 @@
+"use server";
+
+import {
+  ForgotPasswordSchema,
+  ForgotPasswordSchemaType,
+  LoginSchema,
+  LoginSchemaType,
+  SignUpSchema,
+  SignUpSchemaType,
+} from "@/schemas";
+
+import { AuthError } from "next-auth";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import bcrypt from "bcrypt";
+import { generateResetToken } from "@/lib/utils";
+import { getCurrentUser } from "@/lib/actions";
+import { getUserByEmail } from "@/data/user";
+import { prisma } from "@/lib/db";
+import { sendResetEmail } from "@/lib/mail";
+import { signIn } from "@/auth";
+
+export async function signUp(data: SignUpSchemaType) {
+  if (!data) return { error: "no_data" };
+
+  const isUserLoggedIn = await getCurrentUser();
+
+  if (isUserLoggedIn) return { error: "already_logged_in" };
+
+  const validatedFields = SignUpSchema.safeParse(data);
+
+  if (!validatedFields.success) return { error: "invalid_fields" };
+
+  const { name, email, password } = validatedFields.data;
+
+  const hashedPassword = await bcrypt.hash(password, 12);
+
+  try {
+    await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+      },
+    });
+
+    await signIn("credentials", {
+      email,
+      password,
+      redirect: false, // Ensure no redirection
+    });
+
+    return { success: "signed_up" };
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      // P2002 is the error code for unique constraint violation
+      if (error.code === "P2002") return { error: "email_already_exists" };
+    }
+
+    return { error: "something_went_wrong" };
+  }
+}
+
+export async function login(data: LoginSchemaType) {
+  if (!data) return { error: "no_data" };
+
+  const isUserLoggedIn = await getCurrentUser();
+
+  if (isUserLoggedIn) return { error: "already_logged_in" };
+
+  const validatedFields = LoginSchema.safeParse(data);
+
+  if (!validatedFields.success) return { error: "invalid_fields" };
+
+  const { email, password } = validatedFields.data;
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (!user) return { error: "user_not_found" };
+
+  if (!user.password) return { error: "no_password" };
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordValid) return { error: "invalid_password" };
+
+  try {
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false, // Ensure no redirection
+    });
+
+    if (result?.error) {
+      return { error: "invalid_password" };
+    }
+
+    return { success: "signed_in" };
+  } catch (error) {
+    if (error instanceof AuthError) {
+      if (error.type == "CredentialsSignin") {
+        return { error: "invalid_password" };
+      }
+
+      return { error: "something_went_wrong" };
+    }
+
+    return { error: "something_went_wrong" };
+  }
+}
+
+export async function sendResetLink(data: ForgotPasswordSchemaType) {
+  if (!data) return { error: "no_data" };
+
+  const isUserLoggedIn = await getCurrentUser();
+
+  if (isUserLoggedIn) return { error: "already_logged_in" };
+
+  const validatedFields = ForgotPasswordSchema.safeParse(data);
+
+  if (!validatedFields.success) return { error: "invalid_fields" };
+
+  const { email } = validatedFields.data;
+
+  const user = await getUserByEmail(email);
+
+  if (!user) return { error: "user_not_found" };
+
+  const resetToken = await generateResetToken(email);
+
+  if (!resetToken) return { error: "token_could_not_generate" };
+
+  try {
+    await sendResetEmail(user.name, email, resetToken.token);
+    return { success: "reset_link_sent" };
+  } catch {
+    return { error: "something_went_wrong" };
+  }
+}

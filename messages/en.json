@@ -1,3 +1,92 @@
 {
-	"locale": "en"
+  "locale": "en",
+  "app": "BoostCart",
+  "general": {
+    "loading": "Loading...",
+    "continue": "Continue",
+    "or": "OR"
+  },
+  "auth": {
+    "errors": {
+      "no_data": "No data provided",
+      "invalid_fields": "The data provided is invalid",
+      "already_logged_in": "You are already logged in",
+      "not_logged_in": "You must be logged in",
+      "email_already_exists": "The email provided is already in use",
+      "something_went_wrong": "Something went wrong!",
+      "user_not_found": "User not found",
+      "no_password": "No password found, seems like you've signed in with a social provider",
+      "invalid_password": "The password provided is invalid"
+    },
+    "success": {
+      "signed_up": "You have successfuly created an account!",
+      "signed_in": "Successfuly signed in!",
+      "reset_link_sent": "A password reset link has been sent to your email! The link is valid for 1 hour"
+    },
+    "general": {
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "forgotPassword": "Forgot your password?",
+      "noAccount": "Don't have an account? Sign up",
+      "haveAccount": "Already have an account?",
+      "rememberPassword": "Remember your password? Sign in",
+      "continueWith": "Continue with",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "send": "Send",
+      "signIn": "Sign In",
+      "signUp": "Sign Up"
+    },
+    "login": {
+      "title": "Welcome back!",
+      "subtitle": "Sign back into your account",
+      "meta": {
+        "title": "Login",
+        "description": "Log in to your BoostCart account to start selling your products online."
+      }
+    },
+    "signUp": {
+      "title": "Create an account",
+      "subtitle": "Sign up and start shopping now!",
+      "meta": {
+        "title": "Sign Up",
+        "description": "Sign up to BoostCart to start selling your products online."
+      }
+    },
+    "forgotPassword": {
+      "title": "Forgot your password?",
+      "subtitle": "Don't worry about it, we'll help you out!",
+      "successTitle": "Check your email",
+      "successSubtitle": "We've sent a password reset link to",
+      "openEmailAppButton": "Open email app",
+      "didntReceiveEmail": "Didn't receive the email?",
+      "clickToResend": "Click to resend",
+      "meta": {
+        "title": "Forgot Password"
+      }
+    },
+    "resetPassword": {
+      "title": "Make a new password",
+      "subtitle": "Make sure to remember it this time!",
+      "meta": {
+        "title": "Reset Password"
+      }
+    },
+    "verifyEmail": {
+      "title": "Verify your email",
+      "subtitle": "We've sent you an email with a verification link!"
+    }
+  },
+  "dashboard": {
+    "nav": {
+      "home": "Home",
+      "orders": "Orders",
+      "products": "Products",
+      "customers": "Customers",
+      "settings": "Settings",
+      "toStore": "To Store",
+      "logout": "Logout"
+    }
+  }
 }

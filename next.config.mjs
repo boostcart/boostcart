@@ -24,7 +24,8 @@ const nextConfig = {
 		serverSourceMaps: false,
 		serverActions: {
 			bodySizeLimit: '100mb'
-		}
+		},
+		authInterrupts: true
 	},
 	productionBrowserSourceMaps: false,
 	serverExternalPackages: ["yjs"],
