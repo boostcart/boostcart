@@ -40,7 +40,8 @@
     "@radix-ui/react-toggle-group": "^1.1.2",
     "@radix-ui/react-tooltip": "^1.1.8",
     "@react-email/components": "^0.0.32",
-    "@uploadthing/react": "^7.1.5",
+    "@tailwindcss/postcss": "^4.0.6",
+    "@uploadthing/react": "^7.2.0",
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -70,10 +71,10 @@
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
-    "uploadthing": "^7.4.4",
+    "uploadthing": "^7.5.0",
     "uuid": "^11.0.5",
     "vaul": "^1.1.2",
-    "zod": "^3.24.1"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -85,7 +86,7 @@
     "eslint-config-next": "15.1.4",
     "postcss": "^8.5.2",
     "react-email": "3.0.6",
-    "tailwindcss": "^4.0.0",
+    "tailwindcss": "^4.0.6",
     "typescript": "^5.7.3"
   },
   "overrides": {
