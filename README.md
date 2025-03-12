@@ -15,7 +15,14 @@ Second, install the depenencies (we recommend using `bun`, however you can use a
 
 ```shell
 $ bun install
-Runing bun install...
+Running bun install...
+```
+
+Third, add the connection strings for your database in the `.env` file and run the migrations
+
+```shell
+$ bunx prisma migrate
+Migrating the database schema
 ```
 
 Finally, start the development server
