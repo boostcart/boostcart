@@ -36,9 +36,9 @@ const Logo: React.FC<LogoProps> = ({
 						width={width || 40}
 						height={height || 40}
 						className={`
-							${size === "sm" && "size-8"}
-							${size === "md" && "size-12"}
-							${size === "lg" && "size-16"}
+							${variant === "icon" && size === "sm" && "size-8"}
+							${variant === "icon" && size === "md" && "size-12"}
+							${variant === "icon" && size === "lg" && "size-16"}
 							h-auto ${className}
 						`}
 					/>

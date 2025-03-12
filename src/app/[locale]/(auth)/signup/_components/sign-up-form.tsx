@@ -42,7 +42,7 @@ const SignUpForm = () => {
 					if (callback?.success) {
 						form.reset();
 						toast.success(t(`auth.success.${callback.success as keyof IntlMessages["auth"]["success"]}`));
-						router.push("/");
+						router.push(`/`);
 					}
 				})
 				.catch(() => { toast.error(t(`auth.errors.something_went_wrong`)) });
@@ -57,7 +57,7 @@ const SignUpForm = () => {
 					name="name"
 					render={({ field }) => (
 						<FormItem className="w-full">
-							<FormLabel>{t("auth.general.name")}</FormLabel>
+							<FormLabel>{t("general.name")}</FormLabel>
 							<FormControl>
 								<Input
 									{...field}
@@ -76,7 +76,7 @@ const SignUpForm = () => {
 					name="email"
 					render={({ field }) => (
 						<FormItem className="w-full">
-							<FormLabel>{t("auth.general.email")}</FormLabel>
+							<FormLabel>{t("general.email")}</FormLabel>
 							<FormControl>
 								<Input
 									{...field}
@@ -97,7 +97,7 @@ const SignUpForm = () => {
 					render={({ field }) => (
 						<FormItem className="w-full">
 							<FormLabel>
-								{t("auth.general.password")}
+								{t("general.password")}
 							</FormLabel>
 							<FormControl>
 								<PasswordInput

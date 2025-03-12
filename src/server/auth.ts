@@ -8,15 +8,16 @@ import {
   SignUpSchema,
   SignUpSchemaType,
 } from "@/schemas";
+import { generateResetToken, generateVerificationToken } from "@/lib/utils";
+import { sendResetEmail, sendVerificationEmail } from "@/lib/mail";
 
 import { AuthError } from "next-auth";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import bcrypt from "bcrypt";
-import { generateResetToken } from "@/lib/utils";
+import bcrypt from "bcryptjs";
 import { getCurrentUser } from "@/lib/actions";
 import { getUserByEmail } from "@/data/user";
+import { getVerificationTokenByToken } from "@/data/email-verification-token";
 import { prisma } from "@/lib/db";
-import { sendResetEmail } from "@/lib/mail";
 import { signIn } from "@/auth";
 
 export async function signUp(data: SignUpSchemaType) {
@@ -43,11 +44,7 @@ export async function signUp(data: SignUpSchemaType) {
       },
     });
 
-    await signIn("credentials", {
-      email,
-      password,
-      redirect: false, // Ensure no redirection
-    });
+    await sendVerificationLink(email);
 
     return { success: "signed_up" };
   } catch (error) {
@@ -112,6 +109,37 @@ export async function login(data: LoginSchemaType) {
   }
 }
 
+export async function sendVerificationLink(data: string) {
+  if (!data) return { error: "no_data" };
+
+  const isUserLoggedIn = await getCurrentUser();
+
+  if (isUserLoggedIn) return { error: "already_logged_in" };
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(data)) return { error: "invalid_email" };
+
+  const validatedFields = { email: data };
+
+  const { email } = validatedFields;
+
+  const user = await getUserByEmail(email);
+
+  if (!user) return { error: "user_not_found" };
+
+  const verificationToken = await generateVerificationToken(email);
+
+  if (!verificationToken) return { error: "token_could_not_generate" };
+
+  try {
+    await sendVerificationEmail(user.name, email, verificationToken.token);
+    return { success: "verification_email_sent" };
+  } catch {
+    return { error: "something_went_wrong" };
+  }
+}
+
 export async function sendResetLink(data: ForgotPasswordSchemaType) {
   if (!data) return { error: "no_data" };
 
@@ -140,3 +168,35 @@ export async function sendResetLink(data: ForgotPasswordSchemaType) {
     return { error: "something_went_wrong" };
   }
 }
+
+export const verifyEmail = async (token: string) => {
+  if (!token) return { error: "no_data" };
+
+  const existingToken = await getVerificationTokenByToken(token);
+
+  if (!existingToken) return { error: "email_verification_token_not_found" };
+
+  const hasExpired = new Date(existingToken.expires) < new Date();
+
+  if (hasExpired) return { error: "email_verification_token_not_found" };
+
+  const existingUser = await getUserByEmail(existingToken.email);
+
+  if (!existingUser) return { error: "user_not_found" };
+
+  await prisma.user.update({
+    where: {
+      id: existingUser.id,
+    },
+    data: {
+      email: existingToken.email,
+      emailVerified: new Date(),
+    },
+  });
+
+  await prisma.emailVerificationToken.delete({
+    where: { id: existingToken.id },
+  });
+
+  return { success: "email_verified" };
+};

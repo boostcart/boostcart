@@ -8,7 +8,7 @@ import MailFooter from '@/components/mail/footer';
 import MailHeader from '@/components/mail/header';
 
 export default function VerifyEmail(props: any) {
-	const { name, verifyLink } = props;
+	const { name, email, verifyLink, requestNewLink } = props;
 
 	return (
 		<Html>
@@ -36,25 +36,25 @@ export default function VerifyEmail(props: any) {
 				/>
 			</Head>
 			<Tailwind>
-				<Body className='bg-neutral-100 p-4'>
+				<Body className='p-4 bg-neutral-100'>
 					<MailHeader />
 					<Section className='w-full p-4 bg-white rounded-md shadow-xs'>
 						<Row>
 							<Column align='center'>
-								<Heading as='h2'>Hey, {name}! Forgot your password?</Heading>
-								<Text className='text-lg text-neutral-500 max-w-lg'>That&apos;s okay, it happens! Make a new one by clicking the link below.</Text>
+								<Heading as='h2'>Welcome to BoostCart, {name}!</Heading>
+								<Text className='max-w-lg text-lg text-neutral-500'>Thank you for signing up! There&apos;s one more step before you continue, please verify your email so we know it&apos;s you.</Text>
 							</Column>
 						</Row>
 						<Row>
 							<Column align='center'>
-								<Button href={verifyLink} className="bg-[#f03d7e] text-[#fff5f5] h-10 px-5 py-2 text-md inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-semibold ring-offset-background transition focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">Verify email</Button>
+								<Button href={verifyLink} className="bg-[#f03d7e] text-[#fff5f5] h-10 px-5 py-2 text-md inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-semibold ring-offset-background transition focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">Verify your email</Button>
 							</Column>
 						</Row>
 						<Row className='mt-8'>
 							<Column className='text-sm leading-3' align='center'>
-								<Text className='text-neutral-500'>If you didn&apos;t make this request, please ignore this email.</Text>
+								<Text className='text-neutral-500'>This email was sent to <strong>{email}</strong>. If you didn&apos;t sign up for BoostCart, please ignore this email.</Text>
 								<Text className='text-neutral-500'>
-									Please note that this link <strong>expires in 24 hours</strong>. If your link has expired, you can always <Link className='text-[#f03d7e] underline' href="">request another</Link>.
+									Please note that this link <strong>expires in 24 hours</strong>. If your link has expired, you can always <Link className='text-[#f03d7e] underline' href={requestNewLink}>request another</Link>.
 								</Text>
 							</Column>
 						</Row>
@@ -68,5 +68,7 @@ export default function VerifyEmail(props: any) {
 
 VerifyEmail.PreviewProps = {
 	name: "John",
-	verifyLink: "http://localhost:3000/verify-email"
+	email: "johndoe@example.com",
+	verifyLink: "http://localhost:3000/verify-email?token=some-random-token",
+	requestNewLink: "http://localhost:3000/verify-email?resend=true&email=johndoe@example.com"
 }

@@ -1,96 +1,162 @@
 "use client";
 
-import { Sidebar, SidebarBody, SidebarLink } from "./custom-sidebar";
-import { useTranslations } from "next-intl";
-import { signOut } from "next-auth/react";
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { ChevronRight, Folders, Home, Inbox, Mail, Settings, Store, Tag, Users } from "lucide-react";
+import { Collapsible, CollapsibleContent } from "@radix-ui/react-collapsible";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "./ui/sidebar";
+
+import { CollapsibleTrigger } from "./ui/collapsible";
+import Link from "next/link";
 import Logo from "./logo";
-import { Boxes, DoorOpen, Home, Inbox, ShoppingBasket, Users } from "lucide-react";
+import { usePathname } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 const DashboardSidebar = () => {
 	const t = useTranslations();
-	const [open, setOpen] = useState<boolean>(false);
+	const pathname = usePathname();
 
-	const links = [
+	const items = [
 		{
-			label: t("dashboard.nav.home"),
-			href: "/dashboard",
-			icon: (
-				<Home className="shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200" />
-			)
+			title: t("dashboard.nav.home"),
+			url: "/dashboard",
+			icon: Home
 		},
 		{
-			label: t("dashboard.nav.orders"),
-			href: "/dashboard/orders",
-			icon: (
-				<Inbox className="shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200" />
-			)
+			title: t("dashboard.nav.orders"),
+			url: "/dashboard/orders",
+			icon: Inbox,
+			hasBadge: true,
+			badgeContent: 3
 		},
 		{
-			label: t("dashboard.nav.products"),
-			href: "/dashboard/products",
-			icon: (
-				<Boxes className="shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200" />
-			)
+			title: t("dashboard.nav.messages"),
+			url: "/dashboard/messages",
+			icon: Mail,
+			hasBadge: true,
+			badgeContent: 1
 		},
 		{
-			label: t("dashboard.nav.customers"),
-			href: "/dashboard/customers",
-			icon: (
-				<Users className="shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200" />
-			)
+			title: t("dashboard.nav.inventory"),
+			url: "#",
+			icon: Tag,
+			children: [
+				{
+					title: t("dashboard.nav.products"),
+					url: "/dashboard/products"
+				},
+				{
+					title: t("dashboard.nav.categories"),
+					url: "/dashboard/categories"
+				},
+				{
+					title: t("dashboard.nav.brands"),
+					url: "/dashboard/brands"
+				}
+			]
+		},
+		{
+			title: t("dashboard.nav.content"),
+			url: "#",
+			icon: Folders,
+			children: [
+				{
+					title: t("dashboard.nav.blog"),
+					url: "/dashboard/blog"
+				},
+				{
+					title: t("dashboard.nav.pages"),
+					url: "/dashboard/pages"
+				}
+			]
+		},
+		{
+			title: t("dashboard.nav.customers"),
+			url: "/dashboard/customers",
+			icon: Users
+		},
+		{
+			title: t("dashboard.nav.settings"),
+			url: "/dashboard/settings",
+			icon: Settings
 		}
 	];
 
 	return (
-		<Sidebar open={open} setOpen={setOpen} animate={true}>
-			<SidebarBody className="justify-between gap-10 bg-background">
-				<div className="flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
-					<div className="w-full">
-						<Logo
-							width={250}
-							height={250}
-							href="/dashboard"
-							variant="wordmark"
-							className="w-48"
-						/>
-					</div>
-
-					<div className="flex flex-col gap-2 mt-8">
-						{links.map((link, idx) => (
-							<SidebarLink key={idx} link={link} />
-						))}
-					</div>
-				</div>
-				<div className="flex flex-col gap-2">
-					<SidebarLink
-						link={{
-							label: t("dashboard.nav.toStore"),
-							href: "/",
-							icon: (
-								<ShoppingBasket className="shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200" />
-							)
-						}}
-					/>
-
-					<button className="flex items-center justify-start gap-2 py-2 group/sidebar" onClick={() => signOut()}>
-						<DoorOpen className="shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200 group-hover/sidebar:text-destructive-400" />
-
-						<motion.span
-							animate={{
-								display: open ? "inline-block" : "none",
-								opacity: open ? 1 : 0,
-							}}
-
-							className="text-neutral-700 dark:text-neutral-200 group-hover/sidebar:text-destructive-400 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block p-0! m-0!"
-						>
-							{t("dashboard.nav.logout")}
-						</motion.span>
-					</button>
-				</div>
-			</SidebarBody>
-		</Sidebar>
+		<Sidebar collapsible="none">
+			<SidebarHeader>
+				<Logo
+					variant="logo"
+					color="black"
+					href="/dashboard"
+					width={150}
+					height={30}
+					className="p-2 hover:opacity-70 transition-opacity"
+				/>
+			</SidebarHeader>
+			<SidebarContent>
+				<SidebarGroup>
+					<SidebarGroupContent>
+						<SidebarMenu>
+							{items.map((item) => (
+								<div key={item.title}>
+									{item.children ? (
+										<Collapsible defaultOpen className="group/collapsible">
+											<SidebarMenuItem>
+												<CollapsibleTrigger asChild>
+													<SidebarMenuButton isActive={item.children.some((child) => pathname == child.url)}>
+														<item.icon />
+														<span>{item.title}</span>
+														<ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+													</SidebarMenuButton>
+												</CollapsibleTrigger>
+												<CollapsibleContent>
+													<SidebarMenuSub>
+														{item.children.map((child) => (
+															<SidebarMenuSubItem key={child.title}>
+																<SidebarMenuSubButton asChild isActive={pathname.includes(child.url)}>
+																	<Link href={child.url}>
+																		{child.title}
+																	</Link>
+																</SidebarMenuSubButton>
+															</SidebarMenuSubItem>
+														))}
+													</SidebarMenuSub>
+												</CollapsibleContent>
+											</SidebarMenuItem>
+										</Collapsible>
+									) : (
+										<SidebarMenuItem key={item.title}>
+											<SidebarMenuButton asChild isActive={pathname == item.url}>
+												<Link href={item.url}>
+													<item.icon />
+													<span>{item.title}</span>
+												</Link>
+											</SidebarMenuButton>
+											{item.hasBadge && (
+												<SidebarMenuBadge>
+													{item.badgeContent}
+												</SidebarMenuBadge>
+											)}
+										</SidebarMenuItem>
+									)}
+								</div>
+							))}
+						</SidebarMenu>
+					</SidebarGroupContent>
+				</SidebarGroup>
+			</SidebarContent>
+			<SidebarFooter>
+				<SidebarMenu>
+					<SidebarMenuItem>
+						<SidebarMenuButton asChild>
+							<Link href="/">
+								<Store />
+								<span>{t("dashboard.nav.toStore")}</span>
+							</Link>
+						</SidebarMenuButton>
+					</SidebarMenuItem>
+				</SidebarMenu>
+			</SidebarFooter>
+		</Sidebar >
 	)
 }
 

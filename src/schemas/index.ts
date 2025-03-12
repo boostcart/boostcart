@@ -1,6 +1,7 @@
 import * as z from "zod";
 
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+const passwordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 export const LoginSchema = z.object({
   email: z.string().email("Please enter a valid email address."),
@@ -38,3 +39,27 @@ export const ResetPasswordSchema = z.object({
 });
 
 export type ResetPasswordSchemaType = z.infer<typeof ResetPasswordSchema>;
+
+export const DashboardGeneralSettingsSchema = z.object({
+  name: z.string(),
+  url: z.string(),
+  logo: z.string(),
+  favicon: z.string(),
+});
+
+export type DashboardGeneralSettingsSchemaType = z.infer<
+  typeof DashboardGeneralSettingsSchema
+>;
+
+export const DashboardSocialsSettingsSchema = z.object({
+  facebook: z.string().url("Please enter a valid URL.").optional(),
+  instagram: z.string().url("Please enter a valid URL.").optional(),
+  tiktok: z.string().url("Please enter a valid URL.").optional(),
+  youtube: z.string().url("Please enter a valid URL.").optional(),
+  twitter: z.string().url("Please enter a valid URL.").optional(),
+  linkedin: z.string().url("Please enter a valid URL.").optional(),
+});
+
+export type DashboardSocialsSettingsSchemaType = z.infer<
+  typeof DashboardSocialsSettingsSchema
+>;

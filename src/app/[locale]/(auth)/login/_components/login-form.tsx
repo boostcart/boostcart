@@ -56,7 +56,7 @@ const LoginForm = () => {
 					name="email"
 					render={({ field }) => (
 						<FormItem className="w-full">
-							<FormLabel>{t("auth.general.email")}</FormLabel>
+							<FormLabel>{t("general.email")}</FormLabel>
 							<FormControl>
 								<Input
 									{...field}
@@ -78,7 +78,7 @@ const LoginForm = () => {
 					render={({ field }) => (
 						<FormItem className="w-full">
 							<FormLabel className="flex items-center justify-between">
-								<span>{t("auth.general.password")}</span>
+								<span>{t("general.password")}</span>
 
 								<Button variant="link" asChild className="p-0 m-0 h-fit" tabIndex={4}>
 									<Link href="/forgot-password">

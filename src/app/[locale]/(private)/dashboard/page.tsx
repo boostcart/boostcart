@@ -1,9 +1,6 @@
-import React from 'react'
 
-const DashboardHome = () => {
+export default async function DashboardHome () {
 	return (
 		<div>DashboardHome</div>
 	)
 }
-
-export default DashboardHome;

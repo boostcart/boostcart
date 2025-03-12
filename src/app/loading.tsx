@@ -1,5 +1,5 @@
-import { getTranslations } from 'next-intl/server';
 import Loader from '@/components/loader';
+import { getTranslations } from 'next-intl/server';
 
 const Loading = async () => {
 	const t = await getTranslations("general");

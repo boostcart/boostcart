@@ -78,7 +78,7 @@ const ForgotPasswordForm = () => {
 								name="email"
 								render={({ field }) => (
 									<FormItem className="w-full">
-										<FormLabel>{t("auth.general.email")}</FormLabel>
+										<FormLabel>{t("general.email")}</FormLabel>
 										<FormControl>
 											<Input
 												{...field}
@@ -94,7 +94,7 @@ const ForgotPasswordForm = () => {
 							/>
 
 							<Button type="submit" className="w-full h-10 px-4 py-2 text-sm rounded-md md:px-8 md:h-11 text-md" disabled={isPending}>
-								{t("auth.general.send")}
+								{t("general.send")}
 							</Button>
 
 							<Button variant="link" asChild>
@@ -123,7 +123,7 @@ const ForgotPasswordForm = () => {
 
 					<div className="flex flex-row space-x-1 text-neutral-500">
 						<span>{t("auth.forgotPassword.didntReceiveEmail")}</span>
-						<button className="font-bold hover:text-primary transition" onClick={form.handleSubmit(onSubmit)}>
+						<button className="font-bold hover:text-primary transition cursor-pointer" onClick={form.handleSubmit(onSubmit)}>
 							{t("auth.forgotPassword.clickToResend")}
 						</button>
 					</div>

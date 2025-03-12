@@ -4,7 +4,19 @@
   "general": {
     "loading": "Loading...",
     "continue": "Continue",
-    "or": "OR"
+    "or": "OR",
+    "saveChanges": "Save changes",
+    "cancel": "Cancel",
+    "connect": "Connect",
+    "new": "New",
+    "comingSoon": "Coming soon",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "send": "Send",
+    "url": "URL",
+    "logo": "Logo",
+    "favicon": "Favicon"
   },
   "auth": {
     "errors": {
@@ -13,20 +25,21 @@
       "already_logged_in": "You are already logged in",
       "not_logged_in": "You must be logged in",
       "email_already_exists": "The email provided is already in use",
-      "something_went_wrong": "Something went wrong!",
+      "something_went_wrong": "Something went wrong",
       "user_not_found": "User not found",
       "no_password": "No password found, seems like you've signed in with a social provider",
-      "invalid_password": "The password provided is invalid"
+      "invalid_email": "The email provided is invalid",
+      "email_not_provided": "There's no provided email",
+      "invalid_password": "The password provided is invalid",
+      "email_verification_token_not_found": "Looks like the token used to verify your email is invalid or expired"
     },
     "success": {
-      "signed_up": "You have successfuly created an account!",
+      "signed_up": "You have successfuly created an account! We've sent you an email to verify your account.",
       "signed_in": "Successfuly signed in!",
-      "reset_link_sent": "A password reset link has been sent to your email! The link is valid for 1 hour"
+      "reset_link_sent": "A password reset link has been sent to your email! The link is valid for 1 hour",
+      "email_verified": "Your email has been verified! You can now sign in"
     },
     "general": {
-      "name": "Name",
-      "email": "Email",
-      "password": "Password",
       "forgotPassword": "Forgot your password?",
       "noAccount": "Don't have an account? Sign up",
       "haveAccount": "Already have an account?",
@@ -34,7 +47,6 @@
       "continueWith": "Continue with",
       "showPassword": "Show password",
       "hidePassword": "Hide password",
-      "send": "Send",
       "signIn": "Sign In",
       "signUp": "Sign Up"
     },
@@ -74,19 +86,88 @@
       }
     },
     "verifyEmail": {
-      "title": "Verify your email",
-      "subtitle": "We've sent you an email with a verification link!"
+      "title": "Email verification",
+      "loading": "Verifying your email..."
     }
   },
   "dashboard": {
     "nav": {
       "home": "Home",
       "orders": "Orders",
+      "inventory": "Inventory",
       "products": "Products",
+      "categories": "Categories",
+      "brands": "Brands",
       "customers": "Customers",
       "settings": "Settings",
-      "toStore": "To Store",
-      "logout": "Logout"
+      "messages": "Messages",
+      "content": "Content",
+      "blog": "Blog",
+      "pages": "Pages",
+      "toStore": "To store"
+    },
+    "settings": {
+      "nav": {
+        "general": "General",
+        "integrations": "Integrations",
+        "payments": "Payments",
+        "security": "Security",
+        "appearance": "Appearance",
+        "socials": "Socials"
+      },
+      "integrations": {
+        "featured": "Featured",
+        "allIntegrations": "All integrations",
+        "searchIntegrations": "Search for integrations"
+      },
+      "security": {
+        "storeSecurity": "Store security",
+        "lockYourStore": {
+          "title": "Lock your store",
+          "description": "This makes your store password protected, so only users with the password you've set can access it."
+        },
+        "storePassword": {
+          "title": "Store password",
+          "description": "This password will be used to access your store when you've locked it.",
+          "placeholder": "Enter your store password"
+        },
+        "accountSecurity": "Account security",
+        "enforceEmailVerification": {
+          "title": "Enforce email verification",
+          "description": "Enhance your store's security by requiring users to verify their emails."
+        },
+        "enforceTwoFactorAuthentication": {
+          "title": "Enforce two-factor authentication",
+          "description": "Require users to add a two-step verification method to secure their accounts better."
+        }
+      },
+      "general": {
+        "appName": {
+          "description": "This is the name for your store"
+        },
+        "appUrl": {
+          "description": "This is the url for your store."
+        },
+        "favicon": {
+          "description": "Recommended size: 128x128 (up to 1 mb)"
+        },
+        "logo": {
+          "description": "Recommended size: 800x300 (up to 4 mb)"
+        }
+      }
+    },
+    "errors": {
+      "something_went_wrong": "Something went wrong while enforcing email verification",
+      "no_settings": "No settings found",
+      "invalid_data": "The data provided is invalid."
+    },
+    "success": {
+      "email_verification_enforced": "Successfuly enforced email verification!",
+      "email_verification_disabled": "Successfuly made email verification optional!",
+      "two_factor_enforced": "Successfuly enforced two-factor authentication!",
+      "two_factor_disabled": "Successfuly made two-factor authentication optional!",
+      "socials_updated": "Successfuly updated social media!",
+      "general_updated": "Successfuly updated the general settings!"
     }
   }
 }
