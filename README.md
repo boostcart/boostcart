@@ -22,7 +22,7 @@ Third, add the connection strings for your database in the `.env` file and run t
 
 ```shell
 $ bunx prisma migrate
-Migrating the database schema
+Migrating the database schema...
 ```
 
 Finally, start the development server
