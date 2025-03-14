@@ -16,6 +16,12 @@ const seedSettings = async (prisma: PrismaClient) => {
   });
   console.log("Seeding general settings completed.");
 
+  console.log("Seeding social settings...");
+  const socialSettings = await prisma.socialSettings.create({
+    data: {},
+  });
+  console.log("Seeding social settings completed.");
+
   console.log("Seeding appearance settings...");
   const appearanceSettings = await prisma.appearanceSettings.create({
     data: {},
@@ -48,26 +54,15 @@ const seedSettings = async (prisma: PrismaClient) => {
   });
   console.log("Seeding security settings completed.");
 
-  console.log("Seeding app settings...");
-  const appSettings = await prisma.appSettings.create({
-    data: {
-      generalSettingsId: generalSettings.id,
-      appearanceSettingsId: appearanceSettings.id,
-      paymentSettingsId: paymentSettings.id,
-      securitySettingsId: securitySettings.id,
-    },
-  });
-  console.log("Seeding app settings completed.");
-
   const end = Date.now();
   console.log(`Seeding settings completed in ${end - start}ms`);
 
   return {
     generalSettings,
+    socialSettings,
     appearanceSettings,
     paymentSettings,
     securitySettings,
-    appSettings,
   };
 };
 

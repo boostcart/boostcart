@@ -4,7 +4,7 @@ import DashboardSidebar from "@/components/dashboard-sidebar";
 import { Metadata } from "next";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { UserRole } from "@prisma/client";
-import { getCurrentUser } from "@/lib/actions";
+import { auth } from "@/auth";
 
 export const metadata: Metadata = {
 	title: "Dashboard 🚀 BoostCart",
@@ -20,13 +20,13 @@ export default async function DashboardLayout(
 	}>
 ) {
 	const { children } = props;
-	const currentUser = await getCurrentUser();
+	const session = await auth();
 
-	if (!currentUser) {
+	if (!session) {
 		return unauthorized();
 	}
 
-	if (currentUser.role === UserRole.USER) {
+	if (session.user.role === UserRole.USER) {
 		return forbidden();
 	}
 

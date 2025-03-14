@@ -5,9 +5,10 @@ import { Collapsible, CollapsibleContent } from "@radix-ui/react-collapsible";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "./ui/sidebar";
 
 import { CollapsibleTrigger } from "./ui/collapsible";
+import LanguageSwitcher from "./language-switcher";
 import Link from "next/link";
 import Logo from "./logo";
-import { usePathname } from "@/i18n/routing";
+import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 const DashboardSidebar = () => {
@@ -153,6 +154,9 @@ const DashboardSidebar = () => {
 								<span>{t("dashboard.nav.toStore")}</span>
 							</Link>
 						</SidebarMenuButton>
+					</SidebarMenuItem>
+					<SidebarMenuItem>
+						<LanguageSwitcher />
 					</SidebarMenuItem>
 				</SidebarMenu>
 			</SidebarFooter>

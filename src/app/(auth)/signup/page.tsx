@@ -1,26 +1,26 @@
 import AuthProviders from "@/components/auth-providers";
 import Image from "next/image";
 import Link from "next/link";
-import LoginForm from "./_components/login-form";
 import { Metadata } from "next";
-import { getCurrentUser } from "@/lib/actions";
-import { getTranslations } from "next-intl/server"
+import SignUpForm from "./_components/sign-up-form";
+import { auth } from "@/auth";
+import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getTranslations();
 
 	return {
-		title: `${t('auth.login.meta.title')} 🚀 ${t('app')}`,
-		description: t('auth.login.meta.description')
+		title: `${t('auth.signUp.meta.title')} 🚀 ${t('app')}`,
+		description: t('auth.signUp.meta.description')
 	}
 }
 
-export default async function LoginPage() {
+export default async function SignUpPage() {
 	const t = await getTranslations();
-	const currentUser = await getCurrentUser();
+	const session = await auth();
 
-	if (currentUser) {
+	if (session) {
 		return redirect("/");
 	}
 
@@ -37,18 +37,18 @@ export default async function LoginPage() {
 			</Link>
 
 			<div className="flex flex-col items-center w-full space-y-2">
-				<h1 className="text-4xl font-bold">{t("auth.login.title")}</h1>
-				<h2 className="font-medium text-neutral-500">{t("auth.login.subtitle")}</h2>
+				<h1 className="text-4xl font-bold">{t("auth.signUp.title")}</h1>
+				<h2 className="font-medium text-neutral-500">{t("auth.signUp.subtitle")}</h2>
 			</div>
 
 			<AuthProviders />
 
 			<div className="relative flex flex-col items-center justify-center w-full">
 				<span className="h-[2px] w-96 bg-linear-to-r from-transparent via-neutral-300 to-transparent"></span>
-				<span className="absolute px-1 text-sm font-semibold uppercase bg-white text-neutral-500">{t('general.or')}</span>
+				<span className="absolute px-1 text-sm font-semibold uppercase bg-white text-neutral-500">{t("general.or")}</span>
 			</div>
 
-			<LoginForm />
+			<SignUpForm />
 		</div>
 	)
 }

@@ -1,18 +1,19 @@
 "use client";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { usePathname, useRouter } from "@/i18n/routing";
-import ReactCountryFlag from "react-country-flag";
 import { useState, useTransition } from "react";
-import { useParams } from "next/navigation";
-import { Locale } from "@/types";
+
 import { Globe } from "lucide-react";
+import { Locale } from "@/i18n/config";
+import ReactCountryFlag from "react-country-flag";
+import { setUserLocale } from "@/server/locale";
+import { useLocale } from "next-intl";
+import { usePathname } from "next/navigation";
 
 const LanguageSwitcher = () => {
-  const router = useRouter();
-  const params = useParams();
+  const locale = useLocale();
   const pathname = usePathname();
-  const [value, setValue] = useState<string>(params.locale as string);
+  const [value, setValue] = useState<string>(locale);
   const [isPending, startTransition] = useTransition();
 
   type Language = {
@@ -30,13 +31,8 @@ const LanguageSwitcher = () => {
     const nextLocale = value as Locale;
 
     startTransition(() => {
-      router.replace(
-        pathname,
-        { locale: nextLocale }
-      );
-
+      setUserLocale(nextLocale);
       setValue(nextLocale);
-      router.refresh();
     });
 
     console.log("Locale changed to", nextLocale);

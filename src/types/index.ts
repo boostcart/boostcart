@@ -1,9 +1,7 @@
-import { User } from "@prisma/client";
 import { ClientUploadedFileData } from "uploadthing/types";
+import { User } from "@prisma/client";
 
 export type Roles = "USER" | "ADMIN" | "SUPER_ADMIN";
-
-export type Locale = "en" | "bg";
 
 export type UploadedFile<T = unknown> = ClientUploadedFileData<T>;
 

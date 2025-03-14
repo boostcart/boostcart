@@ -1,7 +1,6 @@
-import { setRequestLocale } from "next-intl/server";
 import { getRequestConfig } from "next-intl/server";
-import { routing } from "./routing";
 import { Formats } from "next-intl";
+import { getUserLocale } from "@/server/locale";
 
 export const formats = {
   dateTime: {
@@ -24,19 +23,13 @@ export const formats = {
   },
 } satisfies Formats;
 
-export default getRequestConfig(async ({ requestLocale }) => {
-  let locale = await requestLocale;
-
-  if (!locale || !routing.locales.includes(locale as any)) {
-    locale = routing.defaultLocale;
-  }
-
-  setRequestLocale(locale);
+export default getRequestConfig(async () => {
+  const locale = await getUserLocale();
 
   return {
-    messages: (await import(`../../messages/${locale}.json`)).default,
     locale,
+    messages: (await import(`../../messages/${locale}.json`)).default,
     formats,
-    timeZone: "Europe/Sofia"
+    timeZone: "Europe/Sofia",
   };
 });

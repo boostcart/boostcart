@@ -1,16 +1,7 @@
-import createMiddleware from "next-intl/middleware";
-import { NextRequest } from "next/server";
-import authConfig from "../auth.config";
-import { routing } from "./i18n/routing";
 import NextAuth from "next-auth";
+import authConfig from "../auth.config";
 
-const handleI18nRouting = createMiddleware(routing);
-
-const { auth } = NextAuth(authConfig);
-
-export default auth(async function middleware(req: NextRequest) {
-  return handleI18nRouting(req);
-});
+export const { auth: middleware } = NextAuth(authConfig);
 
 export const config = {
   matcher: [
@@ -18,7 +9,7 @@ export const config = {
     "/((?!_next|api|trpc|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|avif|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
 
     // mine
-    "/(en|bg)/:path*",
+    "/:path*",
     "/dashboard/:path*",
   ],
 };

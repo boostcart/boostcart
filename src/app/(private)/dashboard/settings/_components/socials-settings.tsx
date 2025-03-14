@@ -37,11 +37,11 @@ const SocialsSettings: React.FC<{ settings: SocialSettings }> = ({ settings }) =
 			updateSocials(data)
 				.then((callback) => {
 					if (callback.error) {
-						toast.error(t(`dashboard.errors.${callback.error as keyof IntlMessages["dashboard"]["errors"]}`));
+						toast.error(t(`dashboard.errors.${callback.error}`));
 					}
 
 					if (callback.success) {
-						toast.success(t(`dashboard.success.${callback.success as keyof IntlMessages["dashboard"]["success"]}`));
+						toast.success(t(`dashboard.success.${callback.success}`));
 						router.refresh();
 					}
 				});
@@ -50,7 +50,7 @@ const SocialsSettings: React.FC<{ settings: SocialSettings }> = ({ settings }) =
 
 	return (
 		<div className="flex flex-col space-y-4">
-			<h2 className="text-xl font-medium">Social media</h2>
+			<h2 className="text-xl font-medium">{t("dashboard.settings.nav.socials")}</h2>
 
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-2">

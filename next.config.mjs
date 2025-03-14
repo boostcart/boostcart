@@ -29,6 +29,7 @@ const nextConfig = {
 	},
 	productionBrowserSourceMaps: false,
 	serverExternalPackages: ["yjs"],
+	devIndicators: false,
 };
 
 export default withNextIntl(nextConfig);

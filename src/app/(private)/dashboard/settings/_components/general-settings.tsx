@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { Button } from "@/components/ui/button";
+import { updateGeneral } from "@/server/dashboard";
+import { toast } from "sonner";
 
 const GeneralSettings: React.FC<{ settings: GeneralSettings }> = ({ settings }) => {
 	const t = useTranslations();
@@ -29,13 +31,23 @@ const GeneralSettings: React.FC<{ settings: GeneralSettings }> = ({ settings }) 
 
 	const onSubmit = (data: DashboardGeneralSettingsSchemaType) => {
 		startTransition(() => {
-			console.log(data);
+			updateGeneral(data)
+				.then((callback) => {
+					if (callback.error) {
+						toast.error(t(`dashboard.errors.${callback.error}`));
+					}
+
+					if (callback.success) {
+						toast.success(t(`dashboard.success.${callback.success}`));
+						router.refresh();
+					}
+				});
 		});
 	}
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(data => console.log(data))} className="flex flex-col space-y-2">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-2">
 				<FormField
 					control={form.control}
 					name="name"
@@ -82,7 +94,7 @@ const GeneralSettings: React.FC<{ settings: GeneralSettings }> = ({ settings }) 
 					)}
 				/>
 
-				<FormField
+				{/* <FormField
 					control={form.control}
 					name="logo"
 					render={({ field }) => (
@@ -114,7 +126,7 @@ const GeneralSettings: React.FC<{ settings: GeneralSettings }> = ({ settings }) 
 							<FormMessage />
 						</FormItem>
 					)}
-				/>
+				/> */}
 
 				<div className="flex flex-row justify-end mt-2 space-x-2">
 					<Button

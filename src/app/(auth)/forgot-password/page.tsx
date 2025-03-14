@@ -2,7 +2,7 @@ import ForgotPasswordForm from "./_components/forgot-password-form";
 import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
-import { getCurrentUser } from "@/lib/actions";
+import { auth } from "@/auth";
 import { getTranslations } from "next-intl/server"
 import { redirect } from "next/navigation";
 
@@ -19,9 +19,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ForgotPasswordPage() {
-	const currentUser = await getCurrentUser();
+	const session = await auth();
 
-	if (currentUser) {
+	if (session) {
 		return redirect("/");
 	}
 
