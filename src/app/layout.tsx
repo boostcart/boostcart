@@ -23,7 +23,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-      <body className={`${font.className} antialiased`}>
+      <body className={`${font.className} antialiased scheme-light`}>
         <NextTopLoader color="#f03d7e" />
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
         <Toaster richColors />

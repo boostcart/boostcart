@@ -17,12 +17,13 @@ const buttonVariants = cva(
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
+        destructiveGhost: "hover:bg-destructive/80 hover:text-destructive-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         flag:
           "border border-neutral-200 bg-white hover:bg-neutral-100 dark:border-neutral-50 dark:bg-neutral-950 dark:hover:bg-neutral-50 dark:text-white text-black transition focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2",
         google: "bg-white text-black hover:bg-accent border border-input",
         facebook: "bg-[#1877f2] text-white hover:bg-[#0e5a9d]",
-        apple: "bg-black text-white hover:bg-[#333333]",
+        apple: "bg-black text-white hover:bg-[#333333]"
       },
       size: {
         default: "h-10 px-4 py-2 text-sm",

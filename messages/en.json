@@ -16,7 +16,15 @@
     "send": "Send",
     "url": "URL",
     "logo": "Logo",
-    "favicon": "Favicon"
+    "favicon": "Favicon",
+    "role": "Role",
+    "createdAt": "Created at",
+    "actions": "Actions",
+    "user": "Customer",
+    "admin": "Admin",
+    "superAdmin": "Super Admin",
+    "edit": "Edit",
+    "delete": "Delete"
   },
   "auth": {
     "errors": {
@@ -159,7 +167,9 @@
     "errors": {
       "something_went_wrong": "Something went wrong while enforcing email verification",
       "no_settings": "No settings found",
-      "invalid_data": "The data provided is invalid."
+      "invalid_data": "The data provided is invalid.",
+      "unauthorized": "Seems like you don't have the required permissions to do this.",
+      "user_not_found": "User not found"
     },
     "success": {
       "email_verification_enforced": "Successfuly enforced email verification!",
@@ -167,7 +177,14 @@
       "two_factor_enforced": "Successfuly enforced two-factor authentication!",
       "two_factor_disabled": "Successfuly made two-factor authentication optional!",
       "socials_updated": "Successfuly updated social media!",
-      "general_updated": "Successfuly updated the general settings!"
+      "general_updated": "Successfuly updated the general settings!",
+      "user_deleted": "Successfuly deleted the customer!"
+    },
+    "customers": {
+      "deleteUser": {
+        "title": "Are you sure you want to delete the customer?",
+        "description": "If you delete the customer there's no going back! Their shopping history will be kept but they wont be able to sign back in again and they would be required to make a new account."
+      }
     }
   }
 }

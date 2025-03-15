@@ -78,8 +78,8 @@ export const updateGeneral = async (
         appName: name,
         appUrl: url,
         appLogo: logo,
-        appFavicon: favicon
-      }
+        appFavicon: favicon,
+      },
     });
 
     return { success: "general_updated" };
@@ -151,7 +151,7 @@ export const toggleEmailVerification = async () => {
     });
 
     return {
-      success: settings.requireVerifiedEmail
+      success: !settings.requireVerifiedEmail
         ? "email_verification_enforced"
         : "email_verification_disabled",
     };
@@ -182,10 +182,41 @@ export const toggleTwoFactorAuthentication = async () => {
     });
 
     return {
-      success: settings.requireTwoFactor
+      success: !settings.requireTwoFactor
         ? "two_factor_enforced"
         : "two_factor_disabled",
     };
+  } catch {
+    return { error: "something_went_wrong" };
+  }
+};
+
+export const deleteUser = async (userId: string) => {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) return { error: "not_logged_in" };
+
+  if (currentUser.role === "USER") return { error: "unauthorized" };
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) return { error: "user_not_found" };
+
+  if (user.role === "SUPER_ADMIN") return { error: "unauthorized" };
+
+  if (user.role === "ADMIN" && currentUser.role === "ADMIN")
+    return { error: "unauthorized" };
+
+  try {
+    await prisma.user.delete({
+      where: {
+        id: userId,
+      },
+    });
+
+    return { success: "user_deleted" };
   } catch {
     return { error: "something_went_wrong" };
   }
