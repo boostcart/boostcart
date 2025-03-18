@@ -40,7 +40,6 @@ model User {
   password              String?
   isTwoFactorEnabled    Boolean                @default(false)
   marketingEmails       Boolean                @default(false)
-  emailNotifications    Boolean                @default(true)
   role                  UserRole               @default(USER)
   accounts              Account[]
   shippingAddresses     ShippingAddress[]

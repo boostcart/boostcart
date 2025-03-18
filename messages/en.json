@@ -20,11 +20,14 @@
     "role": "Role",
     "createdAt": "Created at",
     "actions": "Actions",
-    "user": "Customer",
-    "admin": "Admin",
-    "superAdmin": "Super Admin",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "create": "Create",
+    "roles": {
+      "user": "Customer",
+      "admin": "Admin",
+      "superAdmin": "Super Admin"
+    }
   },
   "auth": {
     "errors": {
@@ -184,6 +187,18 @@
       "deleteUser": {
         "title": "Are you sure you want to delete the customer?",
         "description": "If you delete the customer there's no going back! Their shopping history will be kept but they wont be able to sign back in again and they would be required to make a new account."
+      },
+      "newUser": {
+        "title": "Create a new customer",
+        "button": "New customer",
+        "rolePlaceholder": "Select a role for the customer"
+      },
+      "editUser": {
+        "title": "Edit customer - {userName}"
+      },
+      "marketingEmails": {
+        "title": "Marketing emails",
+        "description": "Should the customer receive marketing emails"
       }
     }
   }

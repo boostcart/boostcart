@@ -1,15 +1,14 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 import DeleteUser from "./delete-user";
+import EditUser from "./edit-user";
 import Link from "next/link";
-import { Pencil } from "lucide-react";
 import type { User } from "@prisma/client";
 import { UsersTable } from "./table";
 import { useTranslations } from "use-intl";
 
-const UsersTableClient: React.FC<{ users: User[] }> = ({ users }) => {
+const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ users, currentUser }) => {
 	const t = useTranslations();
 
 	const columns: ColumnDef<User>[] = [
@@ -33,15 +32,15 @@ const UsersTableClient: React.FC<{ users: User[] }> = ({ users }) => {
 			header: t("general.role"),
 			cell: ({ row }) => {
 				if (row.original.role === "USER") {
-					return t("general.user");
+					return t("general.roles.user");
 				}
 
 				if (row.original.role === "ADMIN") {
-					return t("general.admin");
+					return t("general.roles.admin");
 				}
 
 				if (row.original.role === "SUPER_ADMIN") {
-					return t("general.superAdmin");
+					return t("general.roles.superAdmin");
 				}
 			}
 		},
@@ -58,16 +57,16 @@ const UsersTableClient: React.FC<{ users: User[] }> = ({ users }) => {
 			accessorKey: "actions",
 			header: t("general.actions"),
 			cell: ({ row }) => {
-				const userId = row.original.id;
-				
-				return (
-					<div className="flex space-x-2">
-						<Button variant="ghost" size="icon">
-							<Pencil />
-						</Button>
-						<DeleteUser userId={userId} />
-					</div>
-				)
+				const user = row.original;
+
+				if (currentUser.id !== user.id && !(currentUser.role === "ADMIN" && user.role === "SUPER_ADMIN")) {
+					return (
+						<div className="flex space-x-2">
+							<EditUser user={user} />
+							<DeleteUser userId={user.id} />
+						</div>
+					)
+				}
 			}
 		}
 	];

@@ -63,3 +63,21 @@ export const DashboardSocialsSettingsSchema = z.object({
 export type DashboardSocialsSettingsSchemaType = z.infer<
   typeof DashboardSocialsSettingsSchema
 >;
+
+export const DashboardCustomersNewUserSchema = z.object({
+  name: z.string().min(2, "Please enter a name."),
+  email: z.string().email("Please enter a valid email address."),
+  emailVerified: z.date().optional(),
+  password: z
+    .string()
+    .regex(
+      passwordRegex,
+      "Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one number."
+    ),
+  role: z.enum(["USER", "ADMIN", "SUPER_ADMIN"]),
+  marketingEmails: z.boolean(),
+});
+
+export type DashboardCustomersNewUserSchemaType = z.infer<
+  typeof DashboardCustomersNewUserSchema
+>;

@@ -13,11 +13,7 @@ export async function getCurrentUser() {
 
     if (!currentUser) return null;
 
-    return {
-      ...currentUser,
-      createdAt: currentUser.createdAt.toISOString(),
-      updatedAt: currentUser.updatedAt.toISOString(),
-    };
+    return currentUser;
   } catch {
     return null;
   }
