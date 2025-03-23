@@ -168,6 +168,7 @@
       }
     },
     "errors": {
+      "not_logged_in": "You must be logged in",
       "something_went_wrong": "Something went wrong while enforcing email verification",
       "no_settings": "No settings found",
       "invalid_data": "The data provided is invalid.",
@@ -181,6 +182,8 @@
       "two_factor_disabled": "Successfuly made two-factor authentication optional!",
       "socials_updated": "Successfuly updated social media!",
       "general_updated": "Successfuly updated the general settings!",
+      "user_created": "Successfuly made a new customer!",
+      "user_updated": "Successfuly updated the customer!",
       "user_deleted": "Successfuly deleted the customer!"
     },
     "customers": {
@@ -194,11 +197,15 @@
         "rolePlaceholder": "Select a role for the customer"
       },
       "editUser": {
-        "title": "Edit customer - {userName}"
+        "title": "Edit customer – {userName}"
       },
       "marketingEmails": {
         "title": "Marketing emails",
         "description": "Should the customer receive marketing emails"
+      },
+      "noResults": "No customers found.",
+      "emailVerified": {
+        "title": "Verified email"
       }
     }
   }

@@ -15,6 +15,8 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 
+import { useTranslations } from "next-intl";
+
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
 	data: TData[];
@@ -24,6 +26,8 @@ export function UsersTable<TData, TValue>({
 	columns,
 	data,
 }: DataTableProps<TData, TValue>) {
+	const t = useTranslations();
+
 	const table = useReactTable({
 		data,
 		columns,
@@ -68,7 +72,7 @@ export function UsersTable<TData, TValue>({
 					) : (
 						<TableRow>
 							<TableCell colSpan={columns.length} className="h-24 text-center">
-								No results.
+								{t("dashboard.customers.noResults")}
 							</TableCell>
 						</TableRow>
 					)}

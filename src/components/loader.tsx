@@ -1,10 +1,10 @@
 "use client";
 
-import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
+import GridLoader from "react-spinners/GridLoader";
 
 const Loader = () => {
 	return (
-		<ClimbingBoxLoader
+		<GridLoader
 			loading={true}
 			speedMultiplier={1.7}
 		/>

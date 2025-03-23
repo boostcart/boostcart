@@ -42,26 +42,10 @@ const LanguageSwitcher = () => {
     <Select
       defaultValue={value}
       onValueChange={handleLocaleChange}
+      disabled={isPending}
     >
-      <SelectTrigger
-        className={`
-          outline-hidden ${!pathname.includes('dashboard') && 'lg:text-white lg:bg-transparent lg:border-0'}  
-        `}
-        disabled={isPending}
-      >
-        {pathname.includes("dashboard") ? (
-          <SelectValue />
-        ) : (
-          <div>
-            <div className="lg:hidden">
-              <SelectValue />
-            </div>
-
-            <span className="hidden p-2 text-xl uppercase opacity-0 lg:opacity-100 lg:block lg:hover:opacity-70 transition">
-              <Globe />
-            </span>
-          </div>
-        )}
+      <SelectTrigger>
+        <SelectValue />
       </SelectTrigger>
       <SelectContent>
         {languages.map((language, index) => (

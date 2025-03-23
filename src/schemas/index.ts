@@ -1,7 +1,7 @@
 import * as z from "zod";
 
 const passwordRegex =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?#^();'<>\\\/\|\_\-&]{8,}$/;
 
 export const LoginSchema = z.object({
   email: z.string().email("Please enter a valid email address."),
@@ -79,5 +79,25 @@ export const DashboardCustomersNewUserSchema = z.object({
 });
 
 export type DashboardCustomersNewUserSchemaType = z.infer<
+  typeof DashboardCustomersNewUserSchema
+>;
+
+export const DashboardCustomersEditUserSchema = z.object({
+  name: z.string().min(2, "Please enter a name."),
+  email: z.string().email("Please enter a valid email address."),
+  emailVerified: z.date().optional(),
+  password: z
+    .string()
+    .regex(
+      passwordRegex,
+      "Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one number."
+    )
+    .optional()
+    .or(z.literal('')),
+  role: z.enum(["USER", "ADMIN", "SUPER_ADMIN"]),
+  marketingEmails: z.boolean(),
+});
+
+export type DashboardCustomersEditUserSchemaType = z.infer<
   typeof DashboardCustomersNewUserSchema
 >;

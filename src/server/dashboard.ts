@@ -1,6 +1,9 @@
 "use server";
 
 import {
+  DashboardCustomersEditUserSchema,
+  DashboardCustomersNewUserSchema,
+  DashboardCustomersNewUserSchemaType,
   DashboardGeneralSettingsSchema,
   DashboardGeneralSettingsSchemaType,
   DashboardSocialsSettingsSchema,
@@ -186,6 +189,73 @@ export const toggleTwoFactorAuthentication = async () => {
         ? "two_factor_enforced"
         : "two_factor_disabled",
     };
+  } catch {
+    return { error: "something_went_wrong" };
+  }
+};
+
+export const createUser = async (data: DashboardCustomersNewUserSchemaType) => {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) return { error: "not_logged_in" };
+
+  if (currentUser.role === "USER") return { error: "unauthorized" };
+
+  const validatedFields = DashboardCustomersNewUserSchema.safeParse(data);
+
+  if (!validatedFields.success) return { error: "invalid_data" };
+
+  const { name, email, password, role, marketingEmails } = validatedFields.data;
+
+  if (currentUser.role === "ADMIN" && role === "SUPER_ADMIN")
+    return { error: "unauthorized" };
+
+  try {
+    await prisma.user.create({
+      data: {
+        name,
+        email,
+        password,
+        role,
+        marketingEmails,
+      },
+    });
+
+    return { success: "user_created" };
+  } catch {
+    return { error: "something_went_wrong" };
+  }
+};
+
+export const editUser = async (userId: string, data: DashboardCustomersNewUserSchemaType) => {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) return { error: "not_logged_in" };
+
+  if (currentUser.role === "USER") return { error: "unauthorized" };
+
+  const validatedFields = DashboardCustomersEditUserSchema.safeParse(data);
+
+  if (!validatedFields.success) return { error: "invalid_data" };
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) return { error: "user_not_found" };
+
+  if (user.role === "SUPER_ADMIN" && currentUser.role === "ADMIN")
+    return { error: "unauthorized" };
+
+  try {
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: validatedFields.data,
+    });
+
+    return { success: "user_updated" };
   } catch {
     return { error: "something_went_wrong" };
   }

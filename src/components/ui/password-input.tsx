@@ -1,12 +1,13 @@
 'use client'
 
 import * as React from 'react'
+
 import { EyeIcon, EyeOffIcon, LockIcon } from 'lucide-react'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './tooltip'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './tooltip'
 import { useTranslations } from 'next-intl'
 
 interface PasswordInputProps extends React.ComponentProps<'input'> {
@@ -28,30 +29,30 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(({ 
 				{...props}
 			/>
 			<TooltipProvider>
-				<Button
-					type="button"
-					variant="ghost"
-					size="sm"
-					className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
-					onClick={() => setShowPassword((prev) => !prev)}
-					disabled={disabled}
-				>
-					<Tooltip>
-						<TooltipTrigger asChild>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<Button
+							type="button"
+							variant="ghost"
+							size="sm"
+							className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
+							onClick={() => setShowPassword((prev) => !prev)}
+							disabled={disabled}
+						>
 							{showPassword && !disabled ? (
 								<EyeIcon className="w-4 h-4" aria-hidden="true" />
 							) : (
 								<EyeOffIcon className="w-4 h-4" aria-hidden="true" />
 							)}
-						</TooltipTrigger>
-						<TooltipContent>
-							<p>
-								{showPassword ? t('auth.general.hidePassword') : t('auth.general.showPassword')}
-							</p>
-						</TooltipContent>
-						<span className="sr-only">{showPassword ? 'Hide password' : 'Show password'}</span>
-					</Tooltip>
-				</Button>
+						</Button>
+					</TooltipTrigger>
+					<TooltipContent>
+						<p>
+							{showPassword ? t('auth.general.hidePassword') : t('auth.general.showPassword')}
+						</p>
+					</TooltipContent>
+					<span className="sr-only">{showPassword ? t('auth.general.hidePassword') : t('auth.general.showPassword')}</span>
+				</Tooltip>
 			</TooltipProvider>
 
 			{/* hides browsers password toggles */}

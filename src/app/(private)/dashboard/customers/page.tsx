@@ -1,5 +1,7 @@
 import NewUser from "./_components/new-user";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import UsersTableClient from "./_components/client";
+import { forbidden } from "next/navigation";
 import { getCurrentUser } from "@/lib/actions";
 import { getTranslations } from "next-intl/server";
 import { getUsers } from "@/data/user";
@@ -7,6 +9,9 @@ import { getUsers } from "@/data/user";
 export default async function DashboardCustomers() {
 	const t = await getTranslations();
 	const currentUser = await getCurrentUser();
+
+	if (!currentUser) return forbidden();
+
 	let users = await getUsers() || [];
 
 	if (!users) {
@@ -21,7 +26,9 @@ export default async function DashboardCustomers() {
 				<NewUser />
 			</div>
 
-			{currentUser && <UsersTableClient users={users} currentUser={currentUser} />}
+			<TooltipProvider>
+				<UsersTableClient users={users} currentUser={currentUser} />
+			</TooltipProvider>
 		</div>
 	)
 }

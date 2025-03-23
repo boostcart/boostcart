@@ -1,17 +1,20 @@
 "use client";
 
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { deleteUser } from "@/server/dashboard";
 import { toast } from "sonner";
-import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 const DeleteUser: React.FC<{ userId: string; }> = ({ userId }) => {
 	const t = useTranslations();
 	const [isPending, startTransition] = useTransition();
+	const [isOpen, setOpen] = useState<boolean>(false);
+	const router = useRouter();
 
 	const handleDelete = async () => {
 		startTransition(() => {
@@ -23,15 +26,17 @@ const DeleteUser: React.FC<{ userId: string; }> = ({ userId }) => {
 
 					if (callback.success) {
 						toast.success(t(`dashboard.success.${callback.success}`));
+						router.refresh();
+						setOpen(false);
 					}
 				});
 		});
 	};
 
 	return (
-		<Dialog>
+		<Dialog open={isOpen} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<Button variant="destructiveGhost" size="icon">
+				<Button variant="destructiveGhost" size="icon" disabled={isPending}>
 					<Trash2 />
 				</Button>
 			</DialogTrigger>

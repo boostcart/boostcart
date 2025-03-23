@@ -4,18 +4,24 @@ import { DashboardCustomersNewUserSchema, DashboardCustomersNewUserSchemaType } 
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Switch } from "@/components/ui/switch";
+import { createUser } from "@/server/dashboard";
+import { toast } from "sonner";
 import { useForm } from "react-hook-form";
-import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const NewUser = () => {
 	const t = useTranslations();
 	const [isPending, startTransition] = useTransition();
+	const [isOpen, setOpen] = useState<boolean>(false);
+	const router = useRouter();
 
 	const form = useForm<DashboardCustomersNewUserSchemaType>({
 		resolver: zodResolver(DashboardCustomersNewUserSchema),
@@ -30,12 +36,24 @@ const NewUser = () => {
 
 	const onSubmit = (data: DashboardCustomersNewUserSchemaType) => {
 		startTransition(() => {
-			console.log(data);
+			createUser(data)
+				.then((callback) => {
+					if (callback.error) {
+						toast.error(t(`dashboard.customers.newUser.errors.${callback.error}`));
+					}
+
+					if (callback.success) {
+						toast.success(t(`dashboard.customers.newUser.success.${callback.success}`));
+						form.reset();
+						router.refresh();
+						setOpen(false);
+					}
+				});
 		});
 	}
 
 	return (
-		<Sheet >
+		<Sheet open={isOpen} onOpenChange={setOpen}>
 			<SheetTrigger asChild>
 				<Button>
 					{t("dashboard.customers.newUser.button")}
@@ -47,7 +65,7 @@ const NewUser = () => {
 						<SheetHeader>
 							<SheetTitle>{t("dashboard.customers.newUser.title")}</SheetTitle>
 						</SheetHeader>
-						<div className="flex flex-col space-y-4 my-4">
+						<div className="flex flex-col my-4 space-y-4">
 							<FormField
 								control={form.control}
 								name="name"
@@ -91,10 +109,9 @@ const NewUser = () => {
 									<FormItem>
 										<FormLabel>{t("general.password")}</FormLabel>
 										<FormControl>
-											<Input
+											<PasswordInput
 												{...field}
 												placeholder={t("general.password")}
-												type="password"
 												disabled={isPending}
 											/>
 										</FormControl>
@@ -118,7 +135,6 @@ const NewUser = () => {
 											<SelectContent>
 												<SelectItem value="USER">{t("general.roles.user")}</SelectItem>
 												<SelectItem value="ADMIN">{t("general.roles.admin")}</SelectItem>
-												<SelectItem value="SUPER_ADMIN">{t("general.roles.superAdmin")}</SelectItem>
 											</SelectContent>
 										</Select>
 										<FormMessage />
@@ -130,7 +146,7 @@ const NewUser = () => {
 								control={form.control}
 								name="marketingEmails"
 								render={({ field }) => (
-									<FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+									<FormItem className="flex flex-row items-center justify-between p-4 border rounded-lg">
 										<div className="space-y-0.5">
 											<FormLabel className="text-base">
 												{t("dashboard.customers.marketingEmails.title")}

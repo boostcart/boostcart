@@ -1,5 +1,8 @@
 "use client";
 
+import { Pencil, Trash2 } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 import DeleteUser from "./delete-user";
 import EditUser from "./edit-user";
@@ -59,14 +62,25 @@ const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ use
 			cell: ({ row }) => {
 				const user = row.original;
 
-				if (currentUser.id !== user.id && !(currentUser.role === "ADMIN" && user.role === "SUPER_ADMIN")) {
+				if (currentUser.id === user.id || (currentUser.role === "ADMIN" && user.role === "SUPER_ADMIN")) {
 					return (
-						<div className="flex space-x-2">
-							<EditUser user={user} />
-							<DeleteUser userId={user.id} />
+						<div className="flex items-center space-x-2">
+							<Button variant="ghost" size="icon" disabled>
+								<Pencil />
+							</Button>
+							<Button variant="destructiveGhost" size="icon" disabled>
+								<Trash2 />
+							</Button>
 						</div>
 					)
 				}
+
+				return (
+					<div className="flex items-center space-x-2">
+						<EditUser user={user} />
+						<DeleteUser userId={user.id} />
+					</div>
+				)
 			}
 		}
 	];
