@@ -2,6 +2,7 @@
 
 import { DashboardCustomersNewUserSchema, DashboardCustomersNewUserSchemaType } from "@/schemas";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Plus, UserPlus } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useTransition } from "react";
@@ -10,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Switch } from "@/components/ui/switch";
-import { createUser } from "@/server/dashboard";
+import { createUser } from "@/data/user";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -56,6 +57,7 @@ const NewUser = () => {
 		<Sheet open={isOpen} onOpenChange={setOpen}>
 			<SheetTrigger asChild>
 				<Button>
+					<UserPlus />
 					{t("dashboard.customers.newUser.button")}
 				</Button>
 			</SheetTrigger>
@@ -172,6 +174,7 @@ const NewUser = () => {
 								</Button>
 							</SheetClose>
 							<Button type="submit" disabled={isPending}>
+								<Plus />
 								{t("general.create")}
 							</Button>
 						</SheetFooter>

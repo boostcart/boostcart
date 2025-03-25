@@ -1,44 +1,43 @@
 "use client";
 
-import { DashboardCustomersEditUserSchema, DashboardCustomersEditUserSchemaType } from "@/schemas";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Pencil, SaveIcon } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { MailPlus, Plus } from "lucide-react";
+import { MessagesSchema, MessagesSchemaType } from "@/schemas";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { PasswordInput } from "@/components/ui/password-input";
 import { Switch } from "@/components/ui/switch";
-import type { User } from "@prisma/client";
-import { editUser } from "@/data/user";
+import { Textarea } from "@/components/ui/textarea";
+import { newMessage } from "@/data/message";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const EditUser: React.FC<{ user: User; }> = ({ user }) => {
+const NewMessage = () => {
 	const t = useTranslations();
 	const [isPending, startTransition] = useTransition();
 	const [isOpen, setOpen] = useState<boolean>(false);
 	const router = useRouter();
 
-	const form = useForm<DashboardCustomersEditUserSchemaType>({
-		resolver: zodResolver(DashboardCustomersEditUserSchema),
+	const form = useForm<MessagesSchemaType>({
+		resolver: zodResolver(MessagesSchema),
 		defaultValues: {
-			name: user.name,
-			email: user.email,
-			password: "",
-			role: user.role,
-			marketingEmails: user.marketingEmails,
+			name: "",
+			email: "",
+			phone: "",
+			subject: "",
+			message: "",
+			read: false,
 		}
 	});
 
 	const onSubmit = (data: any) => {
 		startTransition(() => {
-			editUser(user.id, data)
+			newMessage(data)
 				.then((callback) => {
 					if (callback.error) {
 						toast.error(t(`dashboard.errors.${callback.error}`));
@@ -56,15 +55,16 @@ const EditUser: React.FC<{ user: User; }> = ({ user }) => {
 	return (
 		<Sheet open={isOpen} onOpenChange={setOpen}>
 			<SheetTrigger asChild>
-				<Button variant="ghost" size="icon" disabled={isPending}>
-					<Pencil />
+				<Button>
+					<MailPlus />
+					{t("dashboard.messages.newMessage.button")}
 				</Button>
 			</SheetTrigger>
 			<SheetContent>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)}>
 						<SheetHeader>
-							<SheetTitle>{t("dashboard.customers.editUser.title", { userName: user.name })}</SheetTitle>
+							<SheetTitle>{t("dashboard.messages.newMessage.title")}</SheetTitle>
 						</SheetHeader>
 						<div className="flex flex-col my-4 space-y-4">
 							<FormField
@@ -105,14 +105,14 @@ const EditUser: React.FC<{ user: User; }> = ({ user }) => {
 
 							<FormField
 								control={form.control}
-								name="password"
+								name="phone"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>{t("general.password")}</FormLabel>
+										<FormLabel>{t("general.phone")}</FormLabel>
 										<FormControl>
-											<PasswordInput
+											<Input
 												{...field}
-												placeholder={t("general.password")}
+												placeholder={t("general.phone")}
 												disabled={isPending}
 											/>
 										</FormControl>
@@ -123,21 +123,17 @@ const EditUser: React.FC<{ user: User; }> = ({ user }) => {
 
 							<FormField
 								control={form.control}
-								name="role"
+								name="subject"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>{t("general.role")}</FormLabel>
-										<Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
-											<FormControl>
-												<SelectTrigger>
-													<SelectValue placeholder={t("dashboard.customers.newUser.rolePlaceholder")}>{t(`general.roles.${field.value.toLowerCase()}`)}</SelectValue>
-												</SelectTrigger>
-											</FormControl>
-											<SelectContent>
-												<SelectItem value="USER">{t("general.roles.user")}</SelectItem>
-												<SelectItem value="ADMIN">{t("general.roles.admin")}</SelectItem>
-											</SelectContent>
-										</Select>
+										<FormLabel>{t("general.subject")}</FormLabel>
+										<FormControl>
+											<Input
+												{...field}
+												placeholder={t("general.subject")}
+												disabled={isPending}
+											/>
+										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
@@ -145,15 +141,33 @@ const EditUser: React.FC<{ user: User; }> = ({ user }) => {
 
 							<FormField
 								control={form.control}
-								name="marketingEmails"
+								name="message"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>{t("general.message")}</FormLabel>
+										<FormControl>
+											<Textarea
+												{...field}
+												placeholder={t("general.message")}
+												disabled={isPending}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="read"
 								render={({ field }) => (
 									<FormItem className="flex flex-row items-center justify-between p-4 border rounded-lg">
 										<div className="space-y-0.5">
 											<FormLabel className="text-base">
-												{t("dashboard.customers.marketingEmails.title")}
+												{t("dashboard.messages.markAsRead")}
 											</FormLabel>
 											<FormDescription>
-												{t("dashboard.customers.marketingEmails.description")}
+												{t("dashboard.messages.markAsReadDescription")}
 											</FormDescription>
 										</div>
 										<FormControl>
@@ -174,8 +188,8 @@ const EditUser: React.FC<{ user: User; }> = ({ user }) => {
 								</Button>
 							</SheetClose>
 							<Button disabled={isPending}>
-								<SaveIcon />
-								{t("general.saveChanges")}
+								<Plus />
+								{t("general.create")}
 							</Button>
 						</SheetFooter>
 					</form>
@@ -185,4 +199,4 @@ const EditUser: React.FC<{ user: User; }> = ({ user }) => {
 	)
 }
 
-export default EditUser;
+export default NewMessage;

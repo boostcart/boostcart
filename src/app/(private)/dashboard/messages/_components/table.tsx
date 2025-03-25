@@ -12,12 +12,7 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
-import {
-	DropdownMenu,
-	DropdownMenuCheckboxItem,
-	DropdownMenuContent,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import {
 	Table,
 	TableBody,
@@ -39,7 +34,7 @@ interface DataTableProps<TData, TValue> {
 	data: TData[];
 }
 
-export function UsersTable<TData, TValue>({
+export function MessagesTable<TData, TValue>({
 	columns,
 	data,
 }: DataTableProps<TData, TValue>) {
@@ -72,7 +67,7 @@ export function UsersTable<TData, TValue>({
 		<div className="flex flex-col space-y-4">
 			<div className="flex flex-col gap-4 w-fit md:flex-row md:items-center">
 				<Input
-					placeholder={t("dashboard.customers.search")}
+					placeholder={t("dashboard.messages.search")}
 					value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
 					onChange={(event) => {
 						const value = event.target.value;
@@ -149,7 +144,7 @@ export function UsersTable<TData, TValue>({
 						) : (
 							<TableRow>
 								<TableCell colSpan={columns.length} className="h-24 text-center">
-									{t("dashboard.customers.noResults")}
+									{t("dashboard.messages.noResults")}
 								</TableCell>
 							</TableRow>
 						)}

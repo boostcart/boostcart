@@ -1,21 +1,46 @@
 "use client";
 
-import { ChevronsUpDown, Pencil, Trash2 } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ChevronsUpDown } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
-import DeleteUser from "./delete-user";
-import EditUser from "./edit-user";
+import DeleteMessage from "./delete-message";
+import EditMessage from "./edit-message";
 import Link from "next/link";
-import type { User } from "@prisma/client";
-import { UsersTable } from "./table";
+import type { Message } from "@prisma/client";
+import { MessagesTable } from "./table";
+import ViewMessage from "./view-message";
+import { toast } from "sonner";
+import { toggleMessageStatus } from "@/data/message";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { useTranslations } from "use-intl";
 
-const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ users, currentUser }) => {
+const MessagesTableClient: React.FC<{ messages: Message[]; }> = ({ messages }) => {
 	const t = useTranslations();
+	const [isPending, startTransition] = useTransition();
+	const router = useRouter();
 
-	const columns: ColumnDef<User>[] = [
+	const handleRead = (messageId: string) => {
+		startTransition(() => {
+			toggleMessageStatus(messageId)
+				.then((callback) => {
+					if (callback.error) {
+						toast.error(t(`dashboard.error.${callback.error}`));
+					}
+
+					if (callback.success) {
+						toast.success(t(`dashboard.success.${callback.success}`));
+						router.refresh();
+					}
+				});
+		});
+	}
+
+	const columns: ColumnDef<Message>[] = [
 		{
 			id: "select",
 			header: ({ table }) => (
@@ -82,7 +107,7 @@ const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ use
 			}
 		},
 		{
-			accessorKey: "role",
+			accessorKey: "subject",
 			header: ({ column }) => {
 				return (
 					<Button
@@ -90,24 +115,11 @@ const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ use
 						className="h-auto pl-0 w-fit"
 						onClick={() => column.toggleSorting()}
 					>
-						{t("general.role")}
+						{t("general.subject")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
 				)
 			},
-			cell: ({ row }) => {
-				if (row.original.role === "USER") {
-					return t("general.roles.user");
-				}
-
-				if (row.original.role === "ADMIN") {
-					return t("general.roles.admin");
-				}
-
-				if (row.original.role === "SUPER_ADMIN") {
-					return t("general.roles.superAdmin");
-				}
-			}
 		},
 		{
 			accessorKey: "createdAt",
@@ -130,39 +142,53 @@ const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ use
 			}
 		},
 		{
+			accessorKey: "read",
+			header: t("general.status"),
+			cell: ({ row }) => {
+				const message = row.original;
+
+				return (
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<Button
+								onClick={() => handleRead(message.id)}
+								disabled={isPending}
+								variant="invisible"
+							>
+								<Badge variant={message.read ? "success" : "destructive"}>
+									{message.read ? t("general.read") : t("general.unread")}
+								</Badge>
+							</Button>
+						</TooltipTrigger>
+						<TooltipContent>
+							{message.read ? t("dashboard.messages.markAsUnread") : t("dashboard.messages.markAsRead")}
+						</TooltipContent>
+					</Tooltip>
+				)
+			}
+		},
+		{
 			accessorKey: "actions",
 			header: t("general.actions"),
 			cell: ({ row }) => {
-				const user = row.original;
-
-				if (currentUser.id === user.id || (currentUser.role === "ADMIN" && user.role === "SUPER_ADMIN")) {
-					return (
-						<div className="flex items-center space-x-2">
-							<Button variant="ghost" size="icon" disabled>
-								<Pencil />
-							</Button>
-							<Button variant="destructiveGhost" size="icon" disabled>
-								<Trash2 />
-							</Button>
-						</div>
-					)
-				}
+				const message = row.original;
 
 				return (
 					<div className="flex items-center space-x-2">
-						<EditUser user={user} />
-						<DeleteUser userId={user.id} />
+						<ViewMessage message={message} />
+						<EditMessage message={message} />
+						<DeleteMessage messageId={message.id} />
 					</div>
 				)
 			},
 			enableHiding: false,
 			enableSorting: false,
-		},
+		}
 	];
 
 	return (
-		<UsersTable columns={columns} data={users} />
+		<MessagesTable columns={columns} data={messages} />
 	)
 }
 
-export default UsersTableClient;
+export default MessagesTableClient;

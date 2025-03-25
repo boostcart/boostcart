@@ -11,7 +11,12 @@ import Logo from "./logo";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-const DashboardSidebar = () => {
+interface DashboardSidebarProps {
+	orderCount: number;
+	messageCount: number;
+}
+
+const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ orderCount, messageCount }) => {
 	const t = useTranslations();
 	const pathname = usePathname();
 
@@ -26,14 +31,14 @@ const DashboardSidebar = () => {
 			url: "/dashboard/orders",
 			icon: Inbox,
 			hasBadge: true,
-			badgeContent: 3
+			badgeContent: orderCount
 		},
 		{
 			title: t("dashboard.nav.messages"),
 			url: "/dashboard/messages",
 			icon: Mail,
 			hasBadge: true,
-			badgeContent: 1
+			badgeContent: messageCount
 		},
 		{
 			title: t("dashboard.nav.inventory"),

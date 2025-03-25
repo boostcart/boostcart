@@ -5,12 +5,12 @@ import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
-import { deleteUser } from "@/data/user";
+import { deleteMessage } from "@/data/message";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-const DeleteUser: React.FC<{ userId: string; }> = ({ userId }) => {
+const DeleteMessage: React.FC<{ messageId: string; }> = ({ messageId }) => {
 	const t = useTranslations();
 	const [isPending, startTransition] = useTransition();
 	const [isOpen, setOpen] = useState<boolean>(false);
@@ -18,7 +18,7 @@ const DeleteUser: React.FC<{ userId: string; }> = ({ userId }) => {
 
 	const handleDelete = async () => {
 		startTransition(() => {
-			deleteUser(userId)
+			deleteMessage(messageId)
 				.then((callback) => {
 					if (callback.error) {
 						toast.error(t(`dashboard.errors.${callback.error}`));
@@ -56,4 +56,4 @@ const DeleteUser: React.FC<{ userId: string; }> = ({ userId }) => {
 	)
 }
 
-export default DeleteUser;
+export default DeleteMessage;

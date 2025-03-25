@@ -27,6 +27,23 @@
       "user": "Customer",
       "admin": "Admin",
       "superAdmin": "Super Admin"
+    },
+    "subject": "Subject",
+    "status": "Status",
+    "read": "Read",
+    "unread": "Unread",
+    "phone": "Phone",
+    "message": "Message",
+    "close": "Close",
+    "columnsVisibility": "Column visibility",
+    "pagination": {
+      "selectedRows": "{selected} of {total} row(s) selected",
+      "rowsPerPage": "Rows per page:",
+      "page": "Page {current} of {total}",
+      "goToFirstPage": "Go to first page",
+      "goToPrevPage": "Go to previous page",
+      "goToNextPage": "Go to next page",
+      "goToLastPage": "Go to last page"
     }
   },
   "auth": {
@@ -173,7 +190,8 @@
       "no_settings": "No settings found",
       "invalid_data": "The data provided is invalid.",
       "unauthorized": "Seems like you don't have the required permissions to do this.",
-      "user_not_found": "User not found"
+      "user_not_found": "User not found",
+      "message_not_found": "Message not found"
     },
     "success": {
       "email_verification_enforced": "Successfuly enforced email verification!",
@@ -184,7 +202,11 @@
       "general_updated": "Successfuly updated the general settings!",
       "user_created": "Successfuly made a new customer!",
       "user_updated": "Successfuly updated the customer!",
-      "user_deleted": "Successfuly deleted the customer!"
+      "user_deleted": "Successfuly deleted the customer!",
+      "message_updated": "Successfuly updated the message!",
+      "message_deleted": "Successfuly deleted the message!",
+      "message_marked_as_read": "Successfuly marked the message as read!",
+      "message_marked_as_unread": "Successfuly marked the message as unread!"
     },
     "customers": {
       "deleteUser": {
@@ -206,6 +228,21 @@
       "noResults": "No customers found.",
       "emailVerified": {
         "title": "Verified email"
+      },
+      "search": "Search for customers..."
+    },
+    "messages": {
+      "noResults": "No messages found.",
+      "markAsUnread": "Mark as unread",
+      "markAsRead": "Mark as read",
+      "editMessage": {
+        "title": "Editing – {subject}"
+      },
+      "markAsReadDescription": "Should the message be marked as read or unread",
+      "search": "Search for messages...",
+      "newMessage": {
+        "button": "New message",
+        "title": "Create a new message"
       }
     }
   }

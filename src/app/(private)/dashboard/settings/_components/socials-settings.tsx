@@ -6,6 +6,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SaveIcon } from "lucide-react";
 import type { SocialSettings } from "@prisma/client";
 import { toast } from "sonner";
 import { updateSocials } from "@/server/dashboard";
@@ -194,6 +195,7 @@ const SocialsSettings: React.FC<{ settings: SocialSettings }> = ({ settings }) =
 							type="submit"
 							disabled={isPending}
 						>
+							<SaveIcon />
 							{t("general.saveChanges")}
 						</Button>
 					</div>

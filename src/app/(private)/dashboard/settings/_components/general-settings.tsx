@@ -13,6 +13,7 @@ import { useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { updateGeneral } from "@/server/dashboard";
 import { toast } from "sonner";
+import { SaveIcon } from "lucide-react";
 
 const GeneralSettings: React.FC<{ settings: GeneralSettings }> = ({ settings }) => {
 	const t = useTranslations();
@@ -142,6 +143,7 @@ const GeneralSettings: React.FC<{ settings: GeneralSettings }> = ({ settings }) 
 						type="submit"
 						disabled={isPending}
 					>
+						<SaveIcon />
 						{t("general.saveChanges")}
 					</Button>
 				</div>

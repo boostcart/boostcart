@@ -93,11 +93,24 @@ export const DashboardCustomersEditUserSchema = z.object({
       "Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one number."
     )
     .optional()
-    .or(z.literal('')),
+    .or(z.literal("")),
   role: z.enum(["USER", "ADMIN", "SUPER_ADMIN"]),
   marketingEmails: z.boolean(),
 });
 
 export type DashboardCustomersEditUserSchemaType = z.infer<
   typeof DashboardCustomersNewUserSchema
+>;
+
+export const MessagesSchema = z.object({
+  name: z.string().min(2, "Please enter a name."),
+  email: z.string().email("Please enter a valid email address."),
+  phone: z.string().min(10, "Please enter a valid phone number.").optional(),
+  subject: z.string().min(2, "Please enter a subject."),
+  message: z.string().min(2, "Please enter a message."),
+  read: z.boolean(),
+});
+
+export type MessagesSchemaType = z.infer<
+  typeof MessagesSchema
 >;

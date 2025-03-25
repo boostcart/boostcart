@@ -45,6 +45,7 @@ model User {
   shippingAddresses     ShippingAddress[]
   passwordChanges       PasswordChange[]
   twoFactorConfirmation TwoFactorConfirmation?
+  messages              Message[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -190,4 +191,18 @@ model SecuritySettings {
   passwordLowercase        Boolean @default(true)
   passwordNumber           Boolean @default(true)
   passwordSpecialCharacter Boolean @default(false)
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  userId    String?
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 }
