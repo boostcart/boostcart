@@ -44,7 +44,11 @@
       "goToPrevPage": "Go to previous page",
       "goToNextPage": "Go to next page",
       "goToLastPage": "Go to last page"
-    }
+    },
+    "account": "Account",
+    "settings": "Settings",
+    "help": "Help",
+    "logout": "Logout"
   },
   "auth": {
     "errors": {
@@ -132,7 +136,7 @@
       "content": "Content",
       "blog": "Blog",
       "pages": "Pages",
-      "toStore": "To store"
+      "toStore": "Store"
     },
     "settings": {
       "nav": {
@@ -211,7 +215,8 @@
     "customers": {
       "deleteUser": {
         "title": "Are you sure you want to delete the customer?",
-        "description": "If you delete the customer there's no going back! Their shopping history will be kept but they wont be able to sign back in again and they would be required to make a new account."
+        "description": "If you delete the customer there's no going back! Their shopping history will be kept but they wont be able to sign back in again and they would be required to make a new account.",
+        "tooltip": "Delete customer"
       },
       "newUser": {
         "title": "Create a new customer",
@@ -219,7 +224,8 @@
         "rolePlaceholder": "Select a role for the customer"
       },
       "editUser": {
-        "title": "Edit customer – {userName}"
+        "title": "Edit customer – {userName}",
+        "tooltip": "Edit customer"
       },
       "marketingEmails": {
         "title": "Marketing emails",
@@ -236,13 +242,19 @@
       "markAsUnread": "Mark as unread",
       "markAsRead": "Mark as read",
       "editMessage": {
-        "title": "Editing – {subject}"
+        "title": "Editing – {subject}",
+        "tooltip": "Edit message"
       },
       "markAsReadDescription": "Should the message be marked as read or unread",
       "search": "Search for messages...",
       "newMessage": {
         "button": "New message",
-        "title": "Create a new message"
+        "title": "Create a new message",
+        "selectUser": "Select customer"
+      },
+      "viewMessage": "View message",
+      "deleteMessage": {
+        "tooltip": "Delete message"
       }
     }
   }

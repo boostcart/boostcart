@@ -1,6 +1,7 @@
 "use client";
 
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -36,9 +37,16 @@ const DeleteMessage: React.FC<{ messageId: string; }> = ({ messageId }) => {
 	return (
 		<Dialog open={isOpen} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<Button variant="destructiveGhost" size="icon" disabled={isPending}>
-					<Trash2 />
-				</Button>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<Button variant="destructiveGhost" size="icon" disabled={isPending}>
+							<Trash2 />
+						</Button>
+					</TooltipTrigger>
+					<TooltipContent>
+						<p>{t("dashboard.messages.deleteMessage.tooltip")}</p>
+					</TooltipContent>
+				</Tooltip>
 			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader>
@@ -49,7 +57,10 @@ const DeleteMessage: React.FC<{ messageId: string; }> = ({ messageId }) => {
 					<DialogClose asChild>
 						<Button variant="secondary" disabled={isPending}>{t("general.cancel")}</Button>
 					</DialogClose>
-					<Button variant="destructive" onClick={() => handleDelete()} disabled={isPending}>{t("general.delete")}</Button>
+					<Button variant="destructive" onClick={() => handleDelete()} disabled={isPending}>
+						<Trash2 />
+						{t("general.delete")}
+					</Button>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>

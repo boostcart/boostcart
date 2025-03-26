@@ -44,10 +44,18 @@ const LanguageSwitcher = () => {
       onValueChange={handleLocaleChange}
       disabled={isPending}
     >
-      <SelectTrigger>
-        <SelectValue />
+      <SelectTrigger
+        className={`
+          ${pathname.includes("/dashboard") && "bg-transparent border-0 outline-none w-fit cursor-pointer"}
+        `}
+      >
+        {pathname.includes("/dashboard") ? (
+          <Globe className="mr-1" />
+        ) : (
+          <SelectValue />
+        )}
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent align={pathname.includes("/dashboard") ? "end" : "start"}>
         {languages.map((language, index) => (
           <SelectItem key={index} value={language.code}>
             <div className="flex items-center space-x-2">

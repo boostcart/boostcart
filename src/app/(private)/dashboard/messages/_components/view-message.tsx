@@ -1,10 +1,11 @@
 "use client";
 
+import { Eye, EyeClosed } from "lucide-react";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Eye } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { Message } from "@prisma/client";
@@ -40,9 +41,16 @@ const ViewMessage: React.FC<{ message: Message; }> = ({ message }) => {
 	return (
 		<Sheet open={isOpen} onOpenChange={setOpen}>
 			<SheetTrigger asChild>
-				<Button variant="ghost" size="icon">
-					<Eye />
-				</Button>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<Button variant="ghost" size="icon">
+							<Eye />
+						</Button>
+					</TooltipTrigger>
+					<TooltipContent>
+						<p>{t("dashboard.messages.viewMessage")}</p>
+					</TooltipContent>
+				</Tooltip>
 			</SheetTrigger>
 			<SheetContent>
 				<SheetHeader>
@@ -101,7 +109,17 @@ const ViewMessage: React.FC<{ message: Message; }> = ({ message }) => {
 						</Button>
 					</SheetClose>
 					<Button onClick={() => handleRead(message.id)} disabled={isPending}>
-						{message.read ? t("dashboard.messages.markAsUnread") : t("dashboard.messages.markAsRead")}
+						{message.read ? (
+							<>
+								<EyeClosed />
+								{t("dashboard.messages.markAsUnread")}
+							</>
+						) : (
+							<>
+								<Eye />
+								{t("dashboard.messages.markAsRead")}
+							</>
+						)}
 					</Button>
 				</SheetFooter>
 			</SheetContent>

@@ -1,11 +1,10 @@
 "use client";
 
-import { ChevronRight, Folders, Home, Inbox, Mail, Settings, Store, Tag, Users } from "lucide-react";
+import { ChevronRight, Folders, Home, Inbox, LifeBuoy, Mail, Settings, Store, Tag, Users } from "lucide-react";
 import { Collapsible, CollapsibleContent } from "@radix-ui/react-collapsible";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "./ui/sidebar";
 
 import { CollapsibleTrigger } from "./ui/collapsible";
-import LanguageSwitcher from "./language-switcher";
 import Link from "next/link";
 import Logo from "./logo";
 import { usePathname } from "next/navigation";
@@ -87,7 +86,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ orderCount, message
 	];
 
 	return (
-		<Sidebar collapsible="none">
+		<Sidebar variant="inset">
 			<SidebarHeader>
 				<Logo
 					variant="logo"
@@ -161,7 +160,12 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ orderCount, message
 						</SidebarMenuButton>
 					</SidebarMenuItem>
 					<SidebarMenuItem>
-						<LanguageSwitcher />
+						<SidebarMenuButton asChild>
+							<Link href="/dashboard/help">
+								<LifeBuoy />
+								<span>{t("general.help")}</span>
+							</Link>
+						</SidebarMenuButton>
 					</SidebarMenuItem>
 				</SidebarMenu>
 			</SidebarFooter>

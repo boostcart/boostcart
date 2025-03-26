@@ -11,11 +11,7 @@ export default async function DashboardCustomers() {
 
 	if (!currentUser) return forbidden();
 
-	let users = await getUsers();
-
-	if (!users) {
-		users = [];
-	}
+	const users = await getUsers() || [];
 
 	return (
 		<div className="flex flex-col space-y-4">

@@ -109,6 +109,7 @@ export const MessagesSchema = z.object({
   subject: z.string().min(2, "Please enter a subject."),
   message: z.string().min(2, "Please enter a message."),
   read: z.boolean(),
+  userId: z.string().optional(),
 });
 
 export type MessagesSchemaType = z.infer<

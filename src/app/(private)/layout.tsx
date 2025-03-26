@@ -1,12 +1,15 @@
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { forbidden, unauthorized } from "next/navigation";
 
 import DashboardSidebar from "@/components/dashboard-sidebar";
+import LanguageSwitcher from "@/components/language-switcher";
 import { Metadata } from "next";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import UserMenu from "./dashboard/_components/user-menu-dropdown";
 import { UserRole } from "@prisma/client";
 import { auth } from "@/auth";
 import { getMessages } from "@/data/message";
+import { getUserById } from "@/data/user";
 
 export const metadata: Metadata = {
 	title: "Dashboard 🚀 BoostCart",
@@ -24,7 +27,7 @@ export default async function DashboardLayout(
 	const { children } = props;
 	const session = await auth();
 
-	if (!session) {
+	if (!session || !session.user || !session.user.id) {
 		return unauthorized();
 	}
 
@@ -32,17 +35,30 @@ export default async function DashboardLayout(
 		return forbidden();
 	}
 
+	const user = await getUserById(session.user.id);
+
+	if (!user) {
+		return unauthorized();
+	}
+
 	const messageCount = await getMessages().then((messages) => messages?.filter(message => !message.read).length || 0);
 
 	return (
-		<div className="flex flex-col flex-1 w-full h-screen overflow-hidden md:flex-row bg-background dark">
+		<div className="flex flex-col flex-1 w-full h-screen overflow-hidden md:flex-row bg-background">
 			<TooltipProvider>
 				<SidebarProvider>
 					<DashboardSidebar messageCount={messageCount} orderCount={3} />
 
-					<main className="w-full h-screen px-4 py-3 overflow-y-auto rounded-l-large bg-background">
-						{children}
-					</main>
+					<SidebarInset>
+						<div className="flex flex-col space-y-4 px-4 py-3 overflow-y-auto">
+							<div className="flex items-center space-x-4 justify-end">
+								<LanguageSwitcher />
+								<UserMenu user={user} />
+							</div>
+
+							<main>{children}</main>
+						</div>
+					</SidebarInset>
 				</SidebarProvider>
 			</TooltipProvider>
 		</div>

@@ -4,6 +4,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { MessagesSchema, MessagesSchemaType } from "@/schemas";
 import { Pencil, SaveIcon } from "lucide-react";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -56,9 +57,16 @@ const EditMessage: React.FC<{ message: Message; }> = ({ message }) => {
 	return (
 		<Sheet open={isOpen} onOpenChange={setOpen}>
 			<SheetTrigger asChild>
-				<Button variant="ghost" size="icon" disabled={isPending}>
-					<Pencil />
-				</Button>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<Button variant="ghost" size="icon" disabled={isPending}>
+							<Pencil />
+						</Button>
+					</TooltipTrigger>
+					<TooltipContent>
+						<p>{t("dashboard.messages.editMessage.tooltip")}</p>
+					</TooltipContent>
+				</Tooltip>
 			</SheetTrigger>
 			<SheetContent>
 				<Form {...form}>
