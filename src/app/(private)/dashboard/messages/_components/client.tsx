@@ -44,7 +44,7 @@ const MessagesTableClient: React.FC<{ messages: Message[]; }> = ({ messages }) =
 		{
 			id: "select",
 			header: ({ table }) => (
-				<div className="flex items-center ">
+				<div className="flex items-center">
 					<Checkbox
 						variant="black"
 						checked={
@@ -57,7 +57,7 @@ const MessagesTableClient: React.FC<{ messages: Message[]; }> = ({ messages }) =
 				</div>
 			),
 			cell: ({ row }) => (
-				<div className="flex items-center ">
+				<div className="flex items-center">
 					<Checkbox
 						variant="black"
 						checked={row.getIsSelected()}

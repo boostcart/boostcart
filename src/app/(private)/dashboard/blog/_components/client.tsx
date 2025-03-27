@@ -1,0 +1,222 @@
+"use client";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ChevronsUpDown, Eye } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ColumnDef } from "@tanstack/react-table";
+import DeletePost from "./delete-post";
+import Link from "next/link";
+import type { Post } from "@prisma/client";
+import { PostsTable } from "./table";
+import { useTranslations } from "use-intl";
+
+export type PostWithUser = Post & {
+	user: {
+		name: string;
+		email: string;
+		image: string | undefined;
+	};
+};
+
+const PostsTableClient: React.FC<{ posts: PostWithUser[]; }> = ({ posts }) => {
+	const t = useTranslations();
+
+	const columns: ColumnDef<PostWithUser>[] = [
+		{
+			id: "select",
+			header: ({ table }) => (
+				<div className="flex items-center">
+					<Checkbox
+						variant="black"
+						checked={
+							table.getIsAllPageRowsSelected() ||
+							(table.getIsSomePageRowsSelected() && "indeterminate")
+						}
+						onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+						aria-label="Select all"
+					/>
+				</div>
+			),
+			cell: ({ row }) => (
+				<div className="flex items-center">
+					<Checkbox
+						variant="black"
+						checked={row.getIsSelected()}
+						onCheckedChange={(value) => row.toggleSelected(!!value)}
+						aria-label="Select row"
+					/>
+				</div>
+			),
+			enableSorting: false,
+			enableHiding: false,
+		},
+		{
+			accessorKey: "defaultTitle",
+			header: ({ column }) => {
+				return (
+					<Button
+						variant="invisible"
+						className="h-auto pl-0 w-fit"
+						onClick={() => column.toggleSorting()}
+					>
+						{t("general.title")}
+						<ChevronsUpDown className="size-4" />
+					</Button>
+				)
+			},
+			cell: ({ row }) => {
+				const post = row.original;
+
+				return (
+					<div className="flex flex-col">
+						<span>{post.defaultTitle}</span>
+						<span className="text-xs text-muted-foreground">{post.slug}</span>
+					</div>
+				)
+			}
+		},
+		{
+			accessorKey: "status",
+			header: ({ column }) => {
+				return (
+					<Button
+						variant="invisible"
+						className="h-auto pl-0 w-fit"
+						onClick={() => column.toggleSorting()}
+					>
+						{t("general.status")}
+						<ChevronsUpDown className="size-4" />
+					</Button>
+				)
+			},
+			cell: ({ row }) => {
+				const post = row.original;
+
+				return (
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<Badge variant={post.status === "PUBLISHED" ? "success" : "secondary"}>
+								{post.status === "PUBLISHED" ? t("blog.post.status.published") : (post.status === "HIDDEN" ? t("blog.post.status.hidden") : t("blog.post.status.draft"))}
+							</Badge>
+						</TooltipTrigger>
+						<TooltipContent>
+							{post.status === "HIDDEN" ? t("dashboard.blog.hiddenStatus") : (post.status === "PUBLISHED" ? t("blog.post.status.published") : t("blog.post.status.draft"))}
+						</TooltipContent>
+					</Tooltip>
+				)
+			}
+		},
+		{
+			accessorKey: "user",
+			header: ({ column }) => {
+				return (
+					<Button
+						variant="invisible"
+						className="h-auto pl-0 w-fit"
+						onClick={() => column.toggleSorting()}
+					>
+						{t("general.author")}
+						<ChevronsUpDown className="size-4" />
+					</Button>
+				)
+			},
+			cell: ({ row }) => {
+				const user = row.original.user;
+
+				return (
+					<Tooltip>
+						<TooltipTrigger>
+							<Avatar>
+								<AvatarImage
+									src={user.image as string}
+									alt={user.name as string}
+								/>
+								<AvatarFallback>
+									{user.name ?
+										user.name.split(' ').length > 1
+											? `${user.name.split(' ')[0][0]}${user.name.split(' ')[user.name.split(' ').length - 1][0]}`
+											: user.name.substring(0, 2)
+										: '??'}
+								</AvatarFallback>
+							</Avatar>
+						</TooltipTrigger>
+						<TooltipContent>
+							<div className="flex flex-col items-center">
+								<span>{user.name}</span>
+								<Link
+									href={`mailto:${user.email}`}
+									className="text-xs text-muted-foreground underline hover:no-underline"
+								>
+									{user.email}
+								</Link>
+							</div>
+						</TooltipContent>
+					</Tooltip>
+				)
+			}
+		},
+		{
+			accessorKey: "createdAt",
+			header: ({ column }) => {
+				return (
+					<Button
+						variant="invisible"
+						className="h-auto pl-0 w-fit"
+						onClick={() => column.toggleSorting()}
+					>
+						{t("general.createdAt")}
+						<ChevronsUpDown className="size-4" />
+					</Button>
+				)
+			},
+			cell: ({ row }) => {
+				const formattedDate = new Date(row.original.createdAt).toLocaleDateString(t("locale"));
+
+				return formattedDate;
+			}
+		},
+		{
+			accessorKey: "actions",
+			header: t("general.actions"),
+			cell: ({ row }) => {
+				const post = row.original;
+
+				return (
+					<div className="flex items-center space-x-2">
+						{post.status === "DRAFT" ? (
+							<Tooltip>
+								<TooltipTrigger>
+									<div className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium ring-offset-background transition focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 pointer-events-none opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 size-10">
+										<Eye />
+									</div>
+								</TooltipTrigger>
+								<TooltipContent>
+									<p>{t("dashboard.blog.previewNotAvailable")}</p>
+								</TooltipContent>
+							</Tooltip>
+						) : (
+							<Link href={`/blog/${post.slug}`}>
+								<Button variant="ghost" size="icon" disabled>
+									<Eye />
+								</Button>
+							</Link>
+						)}
+						<DeletePost postId={post.id} />
+					</div>
+				)
+			},
+			enableHiding: false,
+			enableSorting: false,
+		}
+	];
+
+	return (
+		<PostsTable columns={columns} data={posts} />
+	)
+}
+
+export default PostsTableClient;

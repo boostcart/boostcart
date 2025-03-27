@@ -5,12 +5,12 @@ import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
-import { deleteUser } from "@/data/user";
+import { deletePost } from "@/data/post";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-const DeleteUser: React.FC<{ userId: string; }> = ({ userId }) => {
+const DeletePost: React.FC<{ postId: string; }> = ({ postId }) => {
 	const t = useTranslations();
 	const [isPending, startTransition] = useTransition();
 	const [isOpen, setOpen] = useState<boolean>(false);
@@ -18,7 +18,7 @@ const DeleteUser: React.FC<{ userId: string; }> = ({ userId }) => {
 
 	const handleDelete = async () => {
 		startTransition(() => {
-			deleteUser(userId)
+			deletePost(postId)
 				.then((callback) => {
 					if (callback.error) {
 						toast.error(t(`dashboard.errors.${callback.error}`));
@@ -42,8 +42,8 @@ const DeleteUser: React.FC<{ userId: string; }> = ({ userId }) => {
 			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>{t("dashboard.customers.deleteUser.title")}</DialogTitle>
-					<DialogDescription>{t("dashboard.customers.deleteUser.description")}</DialogDescription>
+					<DialogTitle>{t("dashboard.blog.deletePost.title")}</DialogTitle>
+					<DialogDescription>{t("dashboard.blog.deletePost.description")}</DialogDescription>
 				</DialogHeader>
 				<DialogFooter>
 					<DialogClose asChild>
@@ -59,4 +59,4 @@ const DeleteUser: React.FC<{ userId: string; }> = ({ userId }) => {
 	)
 }
 
-export default DeleteUser;
+export default DeletePost;

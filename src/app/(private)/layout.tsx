@@ -51,7 +51,7 @@ export default async function DashboardLayout(
 
 					<SidebarInset>
 						<div className="flex flex-col space-y-4 px-4 py-3 overflow-y-auto">
-							<div className="flex items-center space-x-4 justify-end">
+							<div className="flex items-center space-x-2 justify-end">
 								<LanguageSwitcher />
 								<UserMenu user={user} />
 							</div>

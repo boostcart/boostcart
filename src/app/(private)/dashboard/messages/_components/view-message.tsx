@@ -2,7 +2,6 @@
 
 import { Eye, EyeClosed } from "lucide-react";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -41,16 +40,9 @@ const ViewMessage: React.FC<{ message: Message; }> = ({ message }) => {
 	return (
 		<Sheet open={isOpen} onOpenChange={setOpen}>
 			<SheetTrigger asChild>
-				<Tooltip>
-					<TooltipTrigger asChild>
-						<Button variant="ghost" size="icon">
-							<Eye />
-						</Button>
-					</TooltipTrigger>
-					<TooltipContent>
-						<p>{t("dashboard.messages.viewMessage")}</p>
-					</TooltipContent>
-				</Tooltip>
+				<Button variant="ghost" size="icon">
+					<Eye />
+				</Button>
 			</SheetTrigger>
 			<SheetContent>
 				<SheetHeader>

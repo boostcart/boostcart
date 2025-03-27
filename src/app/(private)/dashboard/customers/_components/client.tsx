@@ -19,7 +19,7 @@ const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ use
 		{
 			id: "select",
 			header: ({ table }) => (
-				<div className="flex items-center ">
+				<div className="flex items-center">
 					<Checkbox
 						variant="black"
 						checked={
@@ -32,7 +32,7 @@ const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ use
 				</div>
 			),
 			cell: ({ row }) => (
-				<div className="flex items-center ">
+				<div className="flex items-center">
 					<Checkbox
 						variant="black"
 						checked={row.getIsSelected()}

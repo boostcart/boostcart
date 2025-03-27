@@ -31,6 +31,12 @@ enum ShippingAddressType {
   ECONT_OFFICE
 }
 
+enum PostStatus {
+  DRAFT
+  HIDDEN
+  PUBLISHED
+}
+
 model User {
   id                    String                 @id @default(cuid())
   name                  String
@@ -46,6 +52,7 @@ model User {
   passwordChanges       PasswordChange[]
   twoFactorConfirmation TwoFactorConfirmation?
   messages              Message[]
+  posts                 Post[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -205,4 +212,34 @@ model Message {
   createdAt DateTime @default(now())
 
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+}
+
+model Post {
+  id           String            @id @default(cuid())
+  defaultTitle String // Default title for fallback purposes and slug generation
+  slug         String            @unique
+  cover        String?
+  status       PostStatus        @default(DRAFT)
+  userId       String
+  translations PostTranslation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PostTranslation {
+  id       String @id @default(cuid())
+  postId   String
+  language String
+  title    String
+  content  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, language])
 }

@@ -112,6 +112,32 @@ export const MessagesSchema = z.object({
   userId: z.string().optional(),
 });
 
-export type MessagesSchemaType = z.infer<
-  typeof MessagesSchema
->;
+export type MessagesSchemaType = z.infer<typeof MessagesSchema>;
+
+export const PostTranslationSchema = z.object({
+  language: z.string().min(2, "Please enter a valid language code."),
+  title: z.string().min(2, "Please enter a translated title."),
+  content: z.string().optional(),
+});
+
+export const PostSchema = z.object({
+  defaultTitle: z
+    .string()
+    .min(2, "Please enter a title.")
+    .regex(
+      /^[A-Za-z0-9\s!@#$%^&*()_+\-=\[\]{}|;:'",.<>/?\\]*$/,
+      "Title cannot contain non-english letters."
+    ),
+  slug: z
+    .string()
+    .min(2, "Please enter a slug.")
+    .regex(
+      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+      "Slug must contain only lowercase letters, numbers, and hyphens, and cannot start or end with a hyphen."
+    ),
+  cover: z.string().optional(),
+  status: z.enum(["DRAFT", "HIDDEN", "PUBLISHED"]),
+  translations: z.array(PostTranslationSchema).optional(),
+});
+
+export type PostSchemaType = z.infer<typeof PostSchema>;

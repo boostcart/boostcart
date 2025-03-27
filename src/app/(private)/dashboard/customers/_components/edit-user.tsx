@@ -5,7 +5,6 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Pencil, SaveIcon } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -57,16 +56,9 @@ const EditUser: React.FC<{ user: User; }> = ({ user }) => {
 	return (
 		<Sheet open={isOpen} onOpenChange={setOpen}>
 			<SheetTrigger asChild>
-				<Tooltip>
-					<TooltipTrigger asChild>
-						<Button variant="ghost" size="icon" disabled={isPending}>
-							<Pencil />
-						</Button>
-					</TooltipTrigger>
-					<TooltipContent>
-						<p>{t("dashboard.customers.editUser.tooltip")}</p>
-					</TooltipContent>
-				</Tooltip>
+				<Button variant="ghost" size="icon" disabled={isPending}>
+					<Pencil />
+				</Button>
 			</SheetTrigger>
 			<SheetContent>
 				<Form {...form}>
