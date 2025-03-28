@@ -28,7 +28,9 @@ export const getPostById = async (id: string) => {
 export const getPosts = async () => {
   try {
     const posts = await prisma.post.findMany({
+      orderBy: { createdAt: "desc" },
       include: {
+        translations: true,
         user: {
           select: {
             name: true,
@@ -106,34 +108,70 @@ export const newPost = async (data: PostSchemaType) => {
   }
 };
 
-// export const editPost = async (postId: string, data: PostSchemaType) => {
-//   const currentUser = await getCurrentUser();
+export const editPost = async (postId: string, data: PostSchemaType) => {
+  const currentUser = await getCurrentUser();
 
-//   if (!currentUser) return { error: "not_logged_in" };
+  if (!currentUser) return { error: "not_logged_in" };
 
-//   if (currentUser.role === "USER") return { error: "unauthorized" };
+  if (currentUser.role === "USER") return { error: "unauthorized" };
 
-//   const post = await prisma.post.findUnique({
-//     where: { id: postId },
-//   });
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+  });
 
-//   if (!post) return { error: "post_not_found" };
+  if (!post) return { error: "post_not_found" };
 
-//   const validatedFields = PostSchema.safeParse(data);
+  const validatedFields = PostSchema.safeParse(data);
 
-//   if (!validatedFields.success) return { error: "invalid_data" };
+  if (!validatedFields.success) return { error: "invalid_data" };
 
-//   try {
-//     await prisma.post.update({
-//       where: { id: postId },
-//       data: validatedFields.data,
-//     });
+  try {
+    // Update post and its translations in a transaction
+    await prisma.$transaction(async (tx) => {
+      // Update the post
+      await tx.post.update({
+        where: { id: postId },
+        data: {
+          defaultTitle: validatedFields.data.defaultTitle,
+          slug: validatedFields.data.slug,
+          cover: validatedFields.data.cover,
+          status: validatedFields.data.status,
+        },
+      });
 
-//     return { success: "post_updated" };
-//   } catch {
-//     return { error: "something_went_wrong" };
-//   }
-// };
+      // If translations array exists, update or create each translation
+      if (
+        validatedFields.data.translations &&
+        Array.isArray(validatedFields.data.translations)
+      ) {
+        for (const translation of validatedFields.data.translations) {
+          await tx.postTranslation.upsert({
+            where: {
+              postId_language: {
+                postId,
+                language: translation.language,
+              },
+            },
+            update: {
+              title: translation.title,
+              content: translation.content,
+            },
+            create: {
+              postId,
+              language: translation.language,
+              title: translation.title,
+              content: translation.content,
+            },
+          });
+        }
+      }
+    });
+
+    return { success: "post_updated" };
+  } catch {
+    return { error: "something_went_wrong" };
+  }
+};
 
 export const deletePost = async (postId: string) => {
   const currentUser = await getCurrentUser();

@@ -46,7 +46,6 @@ const NewPost = () => {
 
 	const onSubmit = (data: PostSchemaType) => {
 		startTransition(() => {
-			console.log(data);
 			newPost(data)
 				.then((callback) => {
 					if (callback.error) {

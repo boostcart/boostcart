@@ -27,7 +27,18 @@ export const getMessageById = async (id: string) => {
 
 export const getMessages = async () => {
   try {
-    const messages = await prisma.message.findMany();
+    const messages = await prisma.message.findMany({
+      orderBy: { createdAt: "desc" },
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+            image: true,
+          },
+        },
+      },
+    });
 
     return messages;
   } catch {
@@ -46,7 +57,7 @@ export const newMessage = async (data: MessagesSchemaType) => {
     await prisma.message.create({
       data: {
         ...validatedFields.data,
-        userId: currentUser?.id,
+        userId: validatedFields.data.userId || currentUser?.id,
       },
     });
 

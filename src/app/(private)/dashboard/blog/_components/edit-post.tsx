@@ -1,44 +1,61 @@
 "use client";
 
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { MessagesSchema, MessagesSchemaType } from "@/schemas";
-import { Pencil, SaveIcon } from "lucide-react";
+import { CircleHelp, Pencil, Save } from "lucide-react";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { PostSchema, PostSchemaType } from "@/schemas";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import type { Message } from "@prisma/client";
-import { Switch } from "@/components/ui/switch";
+import { Post } from "@/types";
 import { Textarea } from "@/components/ui/textarea";
-import { editMessage } from "@/data/message";
+import { editPost } from "@/data/post";
+import { locales } from "@/i18n/config";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const EditMessage: React.FC<{ message: Message; }> = ({ message }) => {
+const languages = locales;
+
+const EditPost: React.FC<{ post: Post; }> = ({ post }) => {
 	const t = useTranslations();
 	const [isPending, startTransition] = useTransition();
 	const [isOpen, setOpen] = useState<boolean>(false);
+	const [activeTab, setActiveTab] = useState("en");
 	const router = useRouter();
 
-	const form = useForm<MessagesSchemaType>({
-		resolver: zodResolver(MessagesSchema),
+	const form = useForm<PostSchemaType>({
+		resolver: zodResolver(PostSchema),
 		defaultValues: {
-			name: message.name,
-			email: message.email,
-			phone: message.phone || "",
-			subject: message.subject,
-			message: message.message,
-			read: message.read,
+			defaultTitle: post.defaultTitle,
+			slug: post.slug,
+			cover: post.cover || "",
+			status: post.status,
+			translations: languages.map((lang) => {
+				// Find existing translation for this language
+				const existingTranslation = post.translations?.find(
+					(t) => t.language === lang
+				);
+				
+				return {
+					language: lang,
+					title: existingTranslation?.title || "",
+					content: existingTranslation?.content || ""
+				};
+			})
 		}
 	});
 
-	const onSubmit = (data: any) => {
+	const onSubmit = (data: PostSchemaType) => {
 		startTransition(() => {
-			editMessage(message.id, data)
+			console.log(data);
+			editPost(post.id, data)
 				.then((callback) => {
 					if (callback.error) {
 						toast.error(t(`dashboard.errors.${callback.error}`));
@@ -53,6 +70,13 @@ const EditMessage: React.FC<{ message: Message; }> = ({ message }) => {
 		});
 	}
 
+	// Helper function to find the translation for a specific language
+	const getTranslationIndex = (lang: string) => {
+		const translations = form.getValues().translations;
+		if (!translations) return -1;
+		return translations.findIndex(t => t.language === lang);
+	}
+
 	return (
 		<Sheet open={isOpen} onOpenChange={setOpen}>
 			<SheetTrigger asChild>
@@ -64,131 +88,194 @@ const EditMessage: React.FC<{ message: Message; }> = ({ message }) => {
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)}>
 						<SheetHeader>
-							<SheetTitle>{t("dashboard.messages.editMessage.title", { subject: message.subject })}</SheetTitle>
+							<SheetTitle>{t("dashboard.blog.editPost.title", { title: post.defaultTitle })}</SheetTitle>
 						</SheetHeader>
 						<div className="flex flex-col my-4 space-y-4">
 							<FormField
 								control={form.control}
-								name="name"
+								name="defaultTitle"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>{t("general.name")}</FormLabel>
-										<FormControl>
-											<Input
-												{...field}
-												placeholder={t("general.name")}
-												disabled={isPending}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
+										<FormLabel>
+											{t("dashboard.blog.newPost.defaultTitle.label")}
+										</FormLabel>
+										<div className="flex items-center space-x-2">
+											<FormControl>
+												<Input
+													{...field}
+													onChange={(e) => {
+														field.onChange(e);
 
-							<FormField
-								control={form.control}
-								name="email"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>{t("general.email")}</FormLabel>
-										<FormControl>
-											<Input
-												{...field}
-												placeholder={t("general.email")}
-												disabled={isPending}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
+														// Convert title to slug format
+														const slug = e.target.value
+															.toLowerCase()
+															.replace(/[^\w\s-]/g, '') // Remove special characters
+															.replace(/\s+/g, '-')     // Replace spaces with hyphens
+															.replace(/_/g, '-')       // Replace underscores with hyphens
+															.replace(/-+/g, '-')      // Replace multiple hyphens with single
+															.replace(/^-+|-+$/g, '')  // Remove hyphens from start and end
+															.trim();
 
-							<FormField
-								control={form.control}
-								name="phone"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>{t("general.phone")}</FormLabel>
-										<FormControl>
-											<Input
-												{...field}
-												placeholder={t("general.phone")}
-												disabled={isPending}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-
-							<FormField
-								control={form.control}
-								name="subject"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>{t("general.subject")}</FormLabel>
-										<FormControl>
-											<Input
-												{...field}
-												placeholder={t("general.subject")}
-												disabled={isPending}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-
-							<FormField
-								control={form.control}
-								name="message"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>{t("general.message")}</FormLabel>
-										<FormControl>
-											<Textarea
-												{...field}
-												placeholder={t("general.message")}
-												disabled={isPending}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-
-							<FormField
-								control={form.control}
-								name="read"
-								render={({ field }) => (
-									<FormItem className="flex flex-row items-center justify-between p-4 border rounded-lg">
-										<div className="space-y-0.5">
-											<FormLabel className="text-base">
-												{t("dashboard.messages.markAsRead")}
-											</FormLabel>
-											<FormDescription>
-												{t("dashboard.messages.markAsReadDescription")}
-											</FormDescription>
+														// Update the slug field
+														form.setValue("slug", slug);
+													}}
+													placeholder="An example title of a post"
+												/>
+											</FormControl>
+											<Tooltip>
+												<TooltipTrigger type="button" className="text-muted-foreground hover:text-black transition-colors">
+													<CircleHelp />
+												</TooltipTrigger>
+												<TooltipContent
+													side="left"
+													avoidCollisions={false}
+													className="max-w-sm"
+												>
+													<p>{t("dashboard.blog.newPost.defaultTitle.description")}</p>
+												</TooltipContent>
+											</Tooltip>
 										</div>
-										<FormControl>
-											<Switch
-												checked={field.value}
-												onCheckedChange={field.onChange}
-												disabled={isPending}
-											/>
-										</FormControl>
+										<FormMessage />
 									</FormItem>
 								)}
 							/>
+
+							<FormField
+								control={form.control}
+								name="slug"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>{t("general.slug")}</FormLabel>
+										<div className="flex items-center space-x-2">
+											<FormControl>
+												<Input
+													{...field}
+													placeholder="an-example-slug-of-a-post"
+												/>
+											</FormControl>
+											<Tooltip>
+												<TooltipTrigger type="button" className="text-muted-foreground hover:text-black transition-colors">
+													<CircleHelp />
+												</TooltipTrigger>
+												<TooltipContent
+													side="left"
+													avoidCollisions={false}
+													className="max-w-sm"
+												>
+													<p>{t("dashboard.blog.newPost.slug.description")}</p>
+												</TooltipContent>
+											</Tooltip>
+										</div>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="status"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>{t("general.status")}</FormLabel>
+										<div className="flex items-center space-x-2">
+											<Select onValueChange={field.onChange} defaultValue={field.value}>
+												<FormControl>
+													<SelectTrigger>
+														<SelectValue placeholder={t("general.status")} />
+													</SelectTrigger>
+												</FormControl>
+												<SelectContent>
+													<SelectItem value="DRAFT">{t("blog.post.status.draft")}</SelectItem>
+													<SelectItem value="HIDDEN">{t("blog.post.status.hidden")}</SelectItem>
+													<SelectItem value="PUBLISHED">{t("blog.post.status.published")}</SelectItem>
+												</SelectContent>
+											</Select>
+											<Tooltip>
+												<TooltipTrigger type="button" className="text-muted-foreground hover:text-black transition-colors">
+													<CircleHelp />
+												</TooltipTrigger>
+												<TooltipContent
+													side="left"
+													avoidCollisions={false}
+													className="max-w-sm"
+												>
+													<p>{t("dashboard.blog.hiddenStatus")}</p>
+												</TooltipContent>
+											</Tooltip>
+										</div>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							{/* Translations section */}
+							<div className="border rounded-md p-4 mt-6">
+								<h3 className="font-medium mb-4">{t("dashboard.blog.newPost.translations.title")}</h3>
+
+								<Tabs value={activeTab} onValueChange={setActiveTab}>
+									<TabsList className="mb-4">
+										{languages.map(lang => (
+											<TabsTrigger key={lang} value={lang} className="uppercase cursor-pointer">
+												{lang}
+											</TabsTrigger>
+										))}
+									</TabsList>
+
+									{languages.map((lang) => {
+										const translationIndex = getTranslationIndex(lang);
+
+										return (
+											<TabsContent key={lang} value={lang} className="space-y-4">
+												<FormField
+													control={form.control}
+													name={`translations.${translationIndex}.title`}
+													render={({ field }) => (
+														<FormItem>
+															<FormLabel>{t("general.title")}</FormLabel>
+															<FormControl>
+																<Input
+																	{...field}
+																	placeholder={t("general.title")}
+																/>
+															</FormControl>
+															<FormMessage />
+														</FormItem>
+													)}
+												/>
+
+												<FormField
+													control={form.control}
+													name={`translations.${translationIndex}.content`}
+													render={({ field }) => (
+														<FormItem>
+															<FormLabel>{t("general.content")}</FormLabel>
+															<FormControl>
+																<Textarea
+																	{...field}
+																	placeholder={t("general.content")}
+																	rows={8}
+																/>
+															</FormControl>
+															<FormMessage />
+														</FormItem>
+													)}
+												/>
+											</TabsContent>
+										);
+									})}
+								</Tabs>
+							</div>
 						</div>
 						<SheetFooter>
 							<SheetClose asChild>
-								<Button onClick={() => form.reset()} variant="secondary" disabled={isPending}>
+								<Button onClick={() => {
+									form.reset();
+								}} variant="secondary" disabled={isPending}>
 									{t("general.cancel")}
 								</Button>
 							</SheetClose>
 							<Button disabled={isPending}>
-								<SaveIcon />
+								<Save />
 								{t("general.saveChanges")}
 							</Button>
 						</SheetFooter>
@@ -199,4 +286,4 @@ const EditMessage: React.FC<{ message: Message; }> = ({ message }) => {
 	)
 }
 
-export default EditMessage;
+export default EditPost;

@@ -4,6 +4,7 @@ import { ChevronRight, Folders, Home, Inbox, LifeBuoy, Mail, Settings, Store, Ta
 import { Collapsible, CollapsibleContent } from "@radix-ui/react-collapsible";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "./ui/sidebar";
 
+import { Badge } from "./ui/badge";
 import { CollapsibleTrigger } from "./ui/collapsible";
 import Link from "next/link";
 import Logo from "./logo";
@@ -159,13 +160,14 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ orderCount, message
 							</Link>
 						</SidebarMenuButton>
 					</SidebarMenuItem>
-					<SidebarMenuItem>
-						<SidebarMenuButton asChild>
-							<Link href="/dashboard/help">
-								<LifeBuoy />
-								<span>{t("general.help")}</span>
-							</Link>
+					<SidebarMenuItem className="flex items-center space-x-2">
+						<SidebarMenuButton disabled>
+							<LifeBuoy />
+							<span>{t("general.help")}</span>
 						</SidebarMenuButton>
+						<Badge variant="outline" className="w-fit whitespace-nowrap">
+							{t("general.comingSoon")}
+						</Badge>
 					</SidebarMenuItem>
 				</SidebarMenu>
 			</SidebarFooter>

@@ -3,6 +3,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { LifeBuoyIcon, LogOutIcon, SettingsIcon, UserIcon } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 import Link from "next/link";
 import type { User } from "@prisma/client";
@@ -47,12 +48,17 @@ const UserMenu: React.FC<{ user: User; }> = ({ user }) => {
 						{t("general.settings")}
 					</Link>
 				</DropdownMenuItem>
-				<DropdownMenuItem asChild>
-					<Link href="/dashboard/help">
-						<LifeBuoyIcon />
-						{t("general.help")}
-					</Link>
-				</DropdownMenuItem>
+				<Tooltip>
+					<TooltipTrigger>
+						<DropdownMenuItem disabled>
+							<LifeBuoyIcon />
+							{t("general.help")}
+						</DropdownMenuItem>
+					</TooltipTrigger>
+					<TooltipContent side="left" sideOffset={8}>
+						<p>{t("general.comingSoon")}</p>
+					</TooltipContent>
+				</Tooltip>
 				<DropdownMenuItem
 					onClick={() => signOut({
 						redirectTo: '/',

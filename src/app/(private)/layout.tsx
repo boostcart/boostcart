@@ -1,4 +1,4 @@
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { forbidden, unauthorized } from "next/navigation";
 
 import DashboardSidebar from "@/components/dashboard-sidebar";
@@ -51,9 +51,13 @@ export default async function DashboardLayout(
 
 					<SidebarInset>
 						<div className="flex flex-col space-y-4 px-4 py-3 overflow-y-auto">
-							<div className="flex items-center space-x-2 justify-end">
-								<LanguageSwitcher />
-								<UserMenu user={user} />
+							<div className="flex items-center space-x-2 justify-between">
+								<SidebarTrigger />
+
+								<div className="flex items-center space-x-2">
+									<LanguageSwitcher />
+									<UserMenu user={user} />
+								</div>
 							</div>
 
 							<main>{children}</main>

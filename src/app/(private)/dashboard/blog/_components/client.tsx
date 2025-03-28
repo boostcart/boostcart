@@ -9,23 +9,16 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import DeletePost from "./delete-post";
+import EditPost from "./edit-post";
 import Link from "next/link";
-import type { Post } from "@prisma/client";
+import { Post } from "@/types";
 import { PostsTable } from "./table";
 import { useTranslations } from "use-intl";
 
-export type PostWithUser = Post & {
-	user: {
-		name: string;
-		email: string;
-		image: string | undefined;
-	};
-};
-
-const PostsTableClient: React.FC<{ posts: PostWithUser[]; }> = ({ posts }) => {
+const PostsTableClient: React.FC<{ posts: Post[]; }> = ({ posts }) => {
 	const t = useTranslations();
 
-	const columns: ColumnDef<PostWithUser>[] = [
+	const columns: ColumnDef<Post>[] = [
 		{
 			id: "select",
 			header: ({ table }) => (
@@ -128,34 +121,30 @@ const PostsTableClient: React.FC<{ posts: PostWithUser[]; }> = ({ posts }) => {
 				const user = row.original.user;
 
 				return (
-					<Tooltip>
-						<TooltipTrigger>
-							<Avatar>
-								<AvatarImage
-									src={user.image as string}
-									alt={user.name as string}
-								/>
-								<AvatarFallback>
-									{user.name ?
-										user.name.split(' ').length > 1
-											? `${user.name.split(' ')[0][0]}${user.name.split(' ')[user.name.split(' ').length - 1][0]}`
-											: user.name.substring(0, 2)
-										: '??'}
-								</AvatarFallback>
-							</Avatar>
-						</TooltipTrigger>
-						<TooltipContent>
-							<div className="flex flex-col items-center">
-								<span>{user.name}</span>
-								<Link
-									href={`mailto:${user.email}`}
-									className="text-xs text-muted-foreground underline hover:no-underline"
-								>
-									{user.email}
-								</Link>
-							</div>
-						</TooltipContent>
-					</Tooltip>
+					<div className="flex items-center space-x-2">
+						<Avatar>
+							<AvatarImage
+								src={user.image as string}
+								alt={user.name as string}
+							/>
+							<AvatarFallback>
+								{user.name ?
+									user.name.split(' ').length > 1
+										? `${user.name.split(' ')[0][0]}${user.name.split(' ')[user.name.split(' ').length - 1][0]}`
+										: user.name.substring(0, 2)
+									: '??'}
+							</AvatarFallback>
+						</Avatar>
+						<div className="flex flex-col">
+							<span>{user.name}</span>
+							<Link
+								href={`mailto:${user.email}`}
+								className="text-xs text-muted-foreground underline hover:no-underline"
+							>
+								{user.email}
+							</Link>
+						</div>
+					</div>
 				)
 			}
 		},
@@ -199,12 +188,13 @@ const PostsTableClient: React.FC<{ posts: PostWithUser[]; }> = ({ posts }) => {
 								</TooltipContent>
 							</Tooltip>
 						) : (
-							<Link href={`/blog/${post.slug}`}>
-								<Button variant="ghost" size="icon" disabled>
+							<Button variant="ghost" size="icon" asChild>
+								<Link href={`/blog/${post.slug}`}>
 									<Eye />
-								</Button>
-							</Link>
+								</Link>
+							</Button>
 						)}
+						<EditPost post={post} />
 						<DeletePost postId={post.id} />
 					</div>
 				)

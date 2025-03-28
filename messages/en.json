@@ -47,7 +47,7 @@
     },
     "account": "Account",
     "settings": "Settings",
-    "help": "Help",
+    "help": "Support",
     "logout": "Logout",
     "title": "Title",
     "author": "Author",
@@ -199,7 +199,8 @@
       "invalid_data": "The data provided is invalid.",
       "unauthorized": "Seems like you don't have the required permissions to do this.",
       "user_not_found": "User not found",
-      "message_not_found": "Message not found"
+      "message_not_found": "Message not found",
+      "post_not_found": "Post not found"
     },
     "success": {
       "email_verification_enforced": "Successfuly enforced email verification!",
@@ -214,7 +215,10 @@
       "message_updated": "Successfuly updated the message!",
       "message_deleted": "Successfuly deleted the message!",
       "message_marked_as_read": "Successfuly marked the message as read!",
-      "message_marked_as_unread": "Successfuly marked the message as unread!"
+      "message_marked_as_unread": "Successfuly marked the message as unread!",
+      "post_created": "Successfuly created a new post!",
+      "post_updated": "Successfuly updated the post!",
+      "post_deleted": "Successfuly deleted the post!"
     },
     "customers": {
       "deleteUser": {
@@ -281,7 +285,10 @@
           "title": "Translations"
         }
       },
-      "previewNotAvailable": "To view this post, change the status from \"Draft\" to \"Hidden\" or \"Published\""
+      "previewNotAvailable": "To view this post, change the status from \"Draft\" to \"Hidden\" or \"Published\"",
+      "editPost": {
+        "title": "Edit post – {title}"
+      }
     }
   },
   "blog": {

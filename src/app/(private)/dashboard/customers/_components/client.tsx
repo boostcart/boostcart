@@ -1,5 +1,6 @@
 "use client";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ChevronsUpDown, Pencil, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -45,21 +46,6 @@ const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ use
 			enableHiding: false,
 		},
 		{
-			accessorKey: "name",
-			header: ({ column }) => {
-				return (
-					<Button
-						variant="invisible"
-						className="h-auto pl-0 w-fit"
-						onClick={() => column.toggleSorting()}
-					>
-						{t("general.name")}
-						<ChevronsUpDown className="size-4" />
-					</Button>
-				)
-			}
-		},
-		{
 			accessorKey: "email",
 			header: ({ column }) => {
 				return (
@@ -68,16 +54,39 @@ const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ use
 						className="h-auto pl-0 w-fit"
 						onClick={() => column.toggleSorting()}
 					>
-						{t("general.email")}
+						{t("general.roles.user")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
 				)
 			},
 			cell: ({ row }) => {
+				const user = row.original;
+
 				return (
-					<Link href={`mailto:${row.original.email}`} className="underline hover:no-underline">
-						{row.original.email}
-					</Link>
+					<div className="flex items-center space-x-2">
+						<Avatar>
+							<AvatarImage
+								src={user.image as string}
+								alt={user.name as string}
+							/>
+							<AvatarFallback>
+								{user.name ?
+									user.name.split(' ').length > 1
+										? `${user.name.split(' ')[0][0]}${user.name.split(' ')[user.name.split(' ').length - 1][0]}`
+										: user.name.substring(0, 2)
+									: '??'}
+							</AvatarFallback>
+						</Avatar>
+						<div className="flex flex-col">
+							<span>{user.name}</span>
+							<Link
+								href={`mailto:${user.email}`}
+								className="text-xs text-muted-foreground underline hover:no-underline"
+							>
+								{user.email}
+							</Link>
+						</div>
+					</div>
 				)
 			}
 		},
