@@ -12,7 +12,12 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Eye, RefreshCw } from "lucide-react";
 import {
 	Table,
@@ -35,7 +40,7 @@ interface DataTableProps<TData, TValue> {
 	data: TData[];
 }
 
-export function MessagesTable<TData, TValue>({
+export function FilesTable<TData, TValue>({
 	columns,
 	data,
 }: DataTableProps<TData, TValue>) {
@@ -70,11 +75,11 @@ export function MessagesTable<TData, TValue>({
 		<div className="flex flex-col space-y-4">
 			<div className="flex flex-col gap-4 w-fit md:flex-row md:items-center">
 				<Input
-					placeholder={t("dashboard.messages.search")}
-					value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+					placeholder={t("dashboard.files.search")}
+					value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
 					onChange={(event) => {
 						const value = event.target.value;
-						table.getColumn("email")?.setFilterValue(value);
+						table.getColumn("name")?.setFilterValue(value);
 					}}
 					className="w-full max-w-sm sm:w-sm"
 				/>
@@ -161,7 +166,7 @@ export function MessagesTable<TData, TValue>({
 						) : (
 							<TableRow>
 								<TableCell colSpan={columns.length} className="h-24 text-center">
-									{t("dashboard.messages.noResults")}
+									{t("dashboard.files.noResults")}
 								</TableCell>
 							</TableRow>
 						)}

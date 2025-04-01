@@ -9,6 +9,7 @@ import {
 
 import { getCurrentUser } from "@/lib/actions";
 import { prisma } from "@/lib/db";
+import { utapi } from "./uploadthing";
 
 export const getGeneralSettings = async () => {
   const settings = await prisma.generalSettings.findFirst();
@@ -175,4 +176,14 @@ export const toggleTwoFactorAuthentication = async () => {
   } catch {
     return { error: "something_went_wrong" };
   }
+};
+
+export const deleteFiles = async (fileId: string | string[]) => {
+  const response = await utapi.deleteFiles(fileId);
+
+  if (response.success) {
+    return { success: true };
+  }
+
+  return { success: false };
 };

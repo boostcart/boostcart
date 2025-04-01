@@ -71,6 +71,10 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ orderCount, message
 				{
 					title: t("dashboard.nav.pages"),
 					url: "/dashboard/pages"
+				},
+				{
+					title: t("dashboard.nav.files"),
+					url: "/dashboard/files"
 				}
 			]
 		},

@@ -13,6 +13,7 @@ import {
 	useReactTable,
 } from "@tanstack/react-table";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Eye, RefreshCw } from "lucide-react";
 import {
 	Table,
 	TableBody,
@@ -24,8 +25,8 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
-import { Eye } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 
@@ -39,6 +40,8 @@ export function PostsTable<TData, TValue>({
 	data,
 }: DataTableProps<TData, TValue>) {
 	const t = useTranslations();
+	const router = useRouter();
+	const [isRefreshing, setIsRefreshing] = useState(false);
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -105,6 +108,20 @@ export function PostsTable<TData, TValue>({
 							})}
 					</DropdownMenuContent>
 				</DropdownMenu>
+
+				<Button
+					onClick={() => {
+						router.refresh();
+						setIsRefreshing(true);
+						setTimeout(() => setIsRefreshing(false), 1000);
+					}}
+					variant="outline"
+					className={isRefreshing ? "[&_svg]:animate-spin" : ""}
+					disabled={isRefreshing}
+				>
+					<RefreshCw />
+					{t("general.refresh")}
+				</Button>
 			</div>
 
 			<div className="border rounded-md">

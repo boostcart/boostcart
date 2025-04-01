@@ -2,6 +2,9 @@
 
 @plugin 'tailwindcss-animate';
 
+@import "uploadthing/tw/v4";
+@source "../../node_modules/@uploadthing/react/dist";
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -117,7 +120,9 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-menu-button-active: var(--sidebar-menu-button-active);
-  --color-sidebar-menu-button-active-hover: var(--sidebar-menu-button-active-hover);
+  --color-sidebar-menu-button-active-hover: var(
+    --sidebar-menu-button-active-hover
+  );
 }
 
 @layer base {
