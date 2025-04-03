@@ -43,7 +43,7 @@ export const getPosts = async () => {
 
     return posts;
   } catch {
-    return null;
+    return [];
   }
 };
 

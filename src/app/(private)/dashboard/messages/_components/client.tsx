@@ -7,11 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ChevronsUpDown } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
+import { DataTable } from "@/components/ui/data-table";
 import DeleteMessage from "./delete-message";
 import EditMessage from "./edit-message";
 import Link from "next/link";
 import type { Message } from "@prisma/client";
-import { MessagesTable } from "./table";
 import ViewMessage from "./view-message";
 import { toast } from "sonner";
 import { toggleMessageStatus } from "@/data/message";
@@ -187,7 +187,13 @@ const MessagesTableClient: React.FC<{ messages: Message[]; }> = ({ messages }) =
 	];
 
 	return (
-		<MessagesTable columns={columns} data={messages} />
+		<DataTable
+			columns={columns}
+			data={messages}
+			searchPlaceholder={t("dashboard.messages.search")}
+			searchFor="email"
+			noResultsText={t("dashboard.messages.noResults")}
+		/>
 	)
 }
 

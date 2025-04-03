@@ -38,7 +38,7 @@ export const getUsers = async () => {
 
     return users;
   } catch {
-    return null;
+    return [];
   }
 };
 

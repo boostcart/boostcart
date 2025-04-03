@@ -42,7 +42,7 @@ export const getMessages = async () => {
 
     return messages;
   } catch {
-    return null;
+    return [];
   }
 };
 

@@ -1,6 +1,6 @@
-import PostsTableClient, { PostWithUser } from "./_components/client";
-
 import NewPost from "./_components/new-post";
+import { Post } from "@/types";
+import PostsTableClient from "./_components/client";
 import { forbidden } from "next/navigation";
 import { getCurrentUser } from "@/lib/actions";
 import { getPosts } from "@/data/post";
@@ -12,7 +12,7 @@ export default async function DashboardBlog() {
 
 	if (!currentUser) return forbidden();
 
-	const posts = await getPosts() as PostWithUser[] || [];
+	const posts = await getPosts() as Post[] || [];
 
 	return (
 		<div className="flex flex-col space-y-4">

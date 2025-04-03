@@ -141,3 +141,25 @@ export const PostSchema = z.object({
 });
 
 export type PostSchemaType = z.infer<typeof PostSchema>;
+
+export const BrandSchema = z.object({
+  name: z
+    .string()
+    .min(2, "Please enter a name.")
+    .regex(
+      /^[A-Za-z0-9\s!@#$%^&*()_+\-=\[\]{}|;:'",.<>/?\\]*$/,
+      "Title cannot contain non-english letters."
+    ),
+  slug: z
+    .string()
+    .min(2, "Please enter a slug.")
+    .regex(
+      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+      "Slug must contain only lowercase letters, numbers, and hyphens, and cannot start or end with a hyphen."
+    ),
+  logo: z.string().optional(),
+  description: z.string().optional(),
+  status: z.enum(["DRAFT", "HIDDEN", "PUBLISHED"]),
+});
+
+export type BrandSchemaType = z.infer<typeof BrandSchema>;

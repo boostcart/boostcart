@@ -8,11 +8,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
+import { DataTable } from "@/components/ui/data-table";
 import DeletePost from "./delete-post";
 import EditPost from "./edit-post";
 import Link from "next/link";
 import { Post } from "@/types";
-import { PostsTable } from "./table";
 import { useTranslations } from "use-intl";
 
 const PostsTableClient: React.FC<{ posts: Post[]; }> = ({ posts }) => {
@@ -93,11 +93,11 @@ const PostsTableClient: React.FC<{ posts: Post[]; }> = ({ posts }) => {
 					<Tooltip>
 						<TooltipTrigger asChild>
 							<Badge variant={post.status === "PUBLISHED" ? "success" : "secondary"}>
-								{post.status === "PUBLISHED" ? t("blog.post.status.published") : (post.status === "HIDDEN" ? t("blog.post.status.hidden") : t("blog.post.status.draft"))}
+								{post.status === "PUBLISHED" ? t("status.published") : (post.status === "HIDDEN" ? t("status.hidden") : t("status.draft"))}
 							</Badge>
 						</TooltipTrigger>
 						<TooltipContent>
-							{post.status === "HIDDEN" ? t("dashboard.blog.hiddenStatus") : (post.status === "PUBLISHED" ? t("blog.post.status.published") : t("blog.post.status.draft"))}
+							{post.status === "HIDDEN" ? t("status.hiddenStatus") : (post.status === "PUBLISHED" ? t("status.published") : t("status.draft"))}
 						</TooltipContent>
 					</Tooltip>
 				)
@@ -184,7 +184,7 @@ const PostsTableClient: React.FC<{ posts: Post[]; }> = ({ posts }) => {
 									</div>
 								</TooltipTrigger>
 								<TooltipContent>
-									<p>{t("dashboard.blog.previewNotAvailable")}</p>
+									<p>{t("status.previewNotAvailable")}</p>
 								</TooltipContent>
 							</Tooltip>
 						) : (
@@ -205,7 +205,13 @@ const PostsTableClient: React.FC<{ posts: Post[]; }> = ({ posts }) => {
 	];
 
 	return (
-		<PostsTable columns={columns} data={posts} />
+		<DataTable
+			columns={columns}
+			data={posts}
+			searchPlaceholder={t("dashboard.blog.search")}
+			searchFor="defaultTitle"
+			noResultsText={t("dashboard.blog.noResults")}
+		/>
 	)
 }
 

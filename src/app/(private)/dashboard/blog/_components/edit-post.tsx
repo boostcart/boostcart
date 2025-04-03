@@ -185,9 +185,9 @@ const EditPost: React.FC<{ post: Post; }> = ({ post }) => {
 													</SelectTrigger>
 												</FormControl>
 												<SelectContent>
-													<SelectItem value="DRAFT">{t("blog.post.status.draft")}</SelectItem>
-													<SelectItem value="HIDDEN">{t("blog.post.status.hidden")}</SelectItem>
-													<SelectItem value="PUBLISHED">{t("blog.post.status.published")}</SelectItem>
+													<SelectItem value="DRAFT">{t("status.draft")}</SelectItem>
+													<SelectItem value="HIDDEN">{t("status.hidden")}</SelectItem>
+													<SelectItem value="PUBLISHED">{t("status.published")}</SelectItem>
 												</SelectContent>
 											</Select>
 											<Tooltip>
@@ -199,7 +199,7 @@ const EditPost: React.FC<{ post: Post; }> = ({ post }) => {
 													avoidCollisions={false}
 													className="max-w-sm"
 												>
-													<p>{t("dashboard.blog.hiddenStatus")}</p>
+													<p>{t("status.hiddenStatus")}</p>
 												</TooltipContent>
 											</Tooltip>
 										</div>

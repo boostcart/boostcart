@@ -12,8 +12,8 @@ export default async function DashboardMessages() {
 
 	if (!currentUser) return forbidden();
 
-	const messages = await getMessages() || [];
-	const users = await getUsers() || [];
+	const messages = await getMessages();
+	const users = await getUsers();
 
 	return (
 		<div className="flex flex-col space-y-4">

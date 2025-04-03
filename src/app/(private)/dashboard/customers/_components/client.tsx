@@ -6,11 +6,11 @@ import { ChevronsUpDown, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
+import { DataTable } from "@/components/ui/data-table";
 import DeleteUser from "./delete-user";
 import EditUser from "./edit-user";
 import Link from "next/link";
 import type { User } from "@prisma/client";
-import { UsersTable } from "./table";
 import { useTranslations } from "use-intl";
 
 const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ users, currentUser }) => {
@@ -170,7 +170,13 @@ const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ use
 	];
 
 	return (
-		<UsersTable columns={columns} data={users} />
+		<DataTable
+			columns={columns}
+			data={users}
+			searchPlaceholder={t("dashboard.customers.search")}
+			searchFor="email"
+			noResultsText={t("dashboard.customers.noResults")}
+		/>
 	)
 }
 

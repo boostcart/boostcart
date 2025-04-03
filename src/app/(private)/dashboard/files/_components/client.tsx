@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ChevronsUpDown } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
+import { DataTable } from "@/components/ui/data-table";
 import DeleteFile from "./delete-file";
-import { FilesTable } from "./table";
 import { UploadedFile } from "../page";
 import ViewFile from "./view-file";
 import { useTranslations } from "use-intl";
@@ -115,7 +115,12 @@ const FilesTableClient: React.FC<{ files: UploadedFile[]; }> = ({ files }) => {
 	];
 
 	return (
-		<FilesTable columns={columns} data={files} />
+		<DataTable
+			columns={columns}
+			data={files}
+			searchPlaceholder={t("dashboard.files.search")}
+			noResultsText={t("dashboard.files.noResults")}
+		/>
 	)
 }
 

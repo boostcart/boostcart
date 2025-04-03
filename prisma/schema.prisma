@@ -31,7 +31,7 @@ enum ShippingAddressType {
   ECONT_OFFICE
 }
 
-enum PostStatus {
+enum Status {
   DRAFT
   HIDDEN
   PUBLISHED
@@ -53,6 +53,7 @@ model User {
   twoFactorConfirmation TwoFactorConfirmation?
   messages              Message[]
   posts                 Post[]
+  productReviews        ProductReview[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -219,9 +220,11 @@ model Post {
   defaultTitle String // Default title for fallback purposes and slug generation
   slug         String            @unique
   cover        String?
-  status       PostStatus        @default(DRAFT)
+  status       Status            @default(DRAFT)
+  views        Int               @default(0)
   userId       String
   translations PostTranslation[]
+  tags         PostTag[]         @relation("PostTags")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -230,7 +233,7 @@ model Post {
 }
 
 model PostTranslation {
-  id       String @id @default(cuid())
+  id       String  @id @default(cuid())
   postId   String
   language String
   title    String
@@ -242,4 +245,270 @@ model PostTranslation {
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([postId, language])
+}
+
+model PostTag {
+  id           String               @id @default(cuid())
+  name         String               @unique
+  translations PostTagTranslation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Post Post[] @relation("PostTags")
+}
+
+model PostTagTranslation {
+  id       String @id @default(cuid())
+  tagId    String
+  language String
+  name     String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  postTag PostTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([tagId, language])
+}
+
+model Brand {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  logo        String?
+  description String?
+  status      Status    @default(DRAFT)
+  products    Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id          String  @id @default(cuid())
+  defaultName String // Default name for fallback and slug generation
+  slug        String  @unique
+  description String?
+  image       String?
+  status      Status  @default(DRAFT)
+
+  // Hierarchical relations
+  parentId      String?
+  parent        Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  subcategories Category[] @relation("CategoryHierarchy")
+
+  // Level information (0 = main, 1 = subcategory, 2 = sub-subcategory)
+  level Int @default(0)
+
+  // Translations
+  translations CategoryTranslation[]
+  products     Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CategoryTranslation {
+  id          String  @id @default(cuid())
+  categoryId  String
+  language    String
+  name        String
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, language])
+}
+
+model Product {
+  id          String  @id @default(cuid())
+  defaultName String // Default name for fallback and slug generation
+  slug        String  @unique
+  description String?
+  price       Float
+  stock       Int     @default(0)
+  sku         String? @unique
+  barcode     String? @unique
+  status      Status  @default(DRAFT)
+  brandId     String?
+  categoryId  String?
+
+  // Translations
+  translations ProductTranslation[]
+
+  // Relations
+  brand         Brand?           @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  category      Category?        @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  shippingInfo  ShippingInfo?
+  technicalInfo TechnicalInfo[]
+  reviews       ProductReview[]
+  tags          ProductTag[]     @relation("ProductTags")
+  images        ProductImage[]
+  variants      ProductVariant[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductTranslation {
+  id               String  @id @default(cuid())
+  productId        String
+  language         String
+  name             String
+  shortDescription String?
+  description      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, language])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  url       String
+  isMain    Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model ProductVariant {
+  id        String  @id @default(cuid())
+  productId String
+  name      String
+  sku       String? @unique
+  barcode   String? @unique
+  price     Float
+  stock     Int     @default(0)
+  status    Status  @default(DRAFT)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product              Product                @relation(fields: [productId], references: [id], onDelete: Cascade)
+  ProductVariantImage  ProductVariantImage[]
+  ProductVariantOption ProductVariantOption[]
+}
+
+model ProductVariantImage {
+  id        String  @id @default(cuid())
+  variantId String
+  url       String
+  isMain    Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  productVariant ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+}
+
+model ProductVariantOption {
+  id        String @id @default(cuid())
+  variantId String
+  name      String
+  value     String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  productVariant            ProductVariant              @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  ProductVariantOptionValue ProductVariantOptionValue[]
+}
+
+model ProductVariantOptionValue {
+  id       String @id @default(cuid())
+  optionId String
+  value    String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  productVariantOption ProductVariantOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+}
+
+model ProductTag {
+  id           String                  @id @default(cuid())
+  name         String                  @unique
+  slug         String                  @unique
+  translations ProductTagTranslation[]
+  products     Product[]               @relation("ProductTags")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductTagTranslation {
+  id       String @id @default(cuid())
+  tagId    String
+  language String
+  name     String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  productTag ProductTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([tagId, language])
+}
+
+model ShippingInfo {
+  id           String  @id @default(cuid())
+  productId    String  @unique
+  weight       Float? // Weight in kg
+  width        Float? // Width in cm
+  height       Float? // Height in cm
+  depth        Float? // Depth in cm
+  isFragile    Boolean @default(false)
+  freeShipping Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model TechnicalInfo {
+  id        String @id @default(cuid())
+  productId String
+  key       String // e.g. "Screen Size", "RAM", "Processor"
+  value     String // e.g. "15.6 inches", "8GB", "Intel i7"
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, key]) // Each technical spec key must be unique per product
+}
+
+model ProductReview {
+  id        String  @id @default(cuid())
+  productId String
+  userId    String?
+  name      String // Name of reviewer (if not a registered user)
+  email     String // Email of reviewer (if not a registered user)
+  rating    Float // 1-5 star rating
+  title     String
+  comment   String
+  status    Status  @default(DRAFT) // For moderation
+  verified  Boolean @default(false) // Flag for verified purchases
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([productId])
+  @@index([userId])
 }
