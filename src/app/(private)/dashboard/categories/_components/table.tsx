@@ -1,11 +1,10 @@
 "use client";
 
-import { ChevronDown, ChevronRight } from "lucide-react";
 import {
 	ColumnDef,
 	ColumnFiltersState,
+	Row,
 	SortingState,
-	VisibilityState,
 	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
@@ -13,7 +12,8 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
-import { Fragment, useState } from "react";
+import { DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Eye, RefreshCw } from "lucide-react";
 import {
 	Table,
 	TableBody,
@@ -25,32 +25,39 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Category } from "@/types";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
+import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 interface DataTableProps<TData, TValue> {
-	columns: ColumnDef<TData, TValue>[];
-	data: TData[];
-	searchPlaceholder?: string;
-	searchFor?: string;
-	noResultsText?: string;
-	expandedRows?: Record<string, boolean>;
-	setExpandedRows?: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+	columns: ColumnDef<TData, TValue>[]
+	data: TData[]
+	searchPlaceholder: string
+	searchFor: string
+	noResultsText: string
+	expandedRows: Record<string, boolean>
+	// setExpandedRows: React.Dispatch<React.SetStateAction<Record<string, boolean>>>
+	getNestedRowId: (parentId: string, childId: string) => string
 }
 
 export function DataTable<TData, TValue>({
 	columns,
 	data,
-	searchPlaceholder = "Search...",
-	searchFor = "name",
-	noResultsText = "No results found.",
-	expandedRows = {},
-	setExpandedRows,
+	searchPlaceholder,
+	searchFor,
+	noResultsText,
+	expandedRows,
+	// setExpandedRows,
+	getNestedRowId
 }: DataTableProps<TData, TValue>) {
+	const t = useTranslations();
+	const router = useRouter();
+	const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-	const [rowSelection, setRowSelection] = useState({});
-	const [nestedExpanded, setNestedExpanded] = useState<Record<string, boolean>>({});
 
 	const table = useReactTable({
 		data,
@@ -61,148 +68,144 @@ export function DataTable<TData, TValue>({
 		getSortedRowModel: getSortedRowModel(),
 		onColumnFiltersChange: setColumnFilters,
 		getFilteredRowModel: getFilteredRowModel(),
-		onColumnVisibilityChange: setColumnVisibility,
-		onRowSelectionChange: setRowSelection,
 		state: {
 			sorting,
 			columnFilters,
-			columnVisibility,
-			rowSelection,
 		},
+		meta: {
+			expandedRows
+		}
 	});
 
-	const toggleNestedExpanded = (id: string) => {
-		setNestedExpanded(prev => ({
-			...prev,
-			[id]: !prev[id]
-		}));
-	};
-
-	// Helper function to render nested subcategories
-	const renderSubcategories = (category: Category, level: number = 1) => {
-		if (!expandedRows[category.id] || !category.subcategories?.length) return null;
-
-		return category.subcategories.map((subcategory) => (
-			<Fragment key={`subcategory-${subcategory.id}`}>
-				<TableRow className={`nested-row level-${level}`}>
-					<TableCell colSpan={1} className="p-0"></TableCell>
-					<TableCell>
-						{subcategory.subcategories?.length > 0 && (
-							<Button
-								variant="ghost"
-								size="sm"
-								className="p-0 h-6 w-6 ml-4"
-								onClick={() => toggleNestedExpanded(subcategory.id)}
-							>
-								{nestedExpanded[subcategory.id] ?
-									<ChevronDown className="size-4" /> :
-									<ChevronRight className="size-4" />
-								}
-							</Button>
-						)}
+	// Function to render a row and its potentially nested children recursively
+	const renderRowRecursive = (row: Row<TData>) => {
+		const rowData = row.original as unknown as Category;
+		const rows = [
+			<TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+				{row.getVisibleCells().map((cell) => (
+					<TableCell key={cell.id}>
+						{flexRender(cell.column.columnDef.cell, cell.getContext())}
 					</TableCell>
-					<TableCell>
-						<div className="ml-4 flex flex-col">
-							<span>{subcategory.defaultName}</span>
-							<span className="text-xs text-muted-foreground">{subcategory.slug}</span>
-						</div>
-					</TableCell>
-					<TableCell>{subcategory.subcategories?.length || 0}</TableCell>
-					<TableCell>
-						{subcategory.status === "PUBLISHED" ? "Published" :
-							(subcategory.status === "HIDDEN" ? "Hidden" : "Draft")}
-					</TableCell>
-					<TableCell>{subcategory.products?.length || 0}</TableCell>
-					<TableCell>
-						{new Date(subcategory.createdAt).toLocaleDateString()}
-					</TableCell>
-					<TableCell>
-						<div className="flex items-center space-x-2">
-							<Button variant="ghost" size="icon">View</Button>
-							<Button variant="ghost" size="icon">Edit</Button>
-							<Button variant="ghost" size="icon">Delete</Button>
-						</div>
-					</TableCell>
-				</TableRow>
-
-				{/* Render sub-subcategories if this subcategory is expanded */}
-				{nestedExpanded[subcategory.id] && subcategory.subcategories?.map((subSubcategory) => (
-					<TableRow key={`subsubcategory-${subSubcategory.id}`} className={`nested-row level-${level + 1}`}>
-						<TableCell colSpan={2} className="p-0"></TableCell>
-						<TableCell>
-							<div className="ml-8 flex flex-col">
-								<span>{subSubcategory.defaultName}</span>
-								<span className="text-xs text-muted-foreground">{subSubcategory.slug}</span>
-							</div>
-						</TableCell>
-						<TableCell>{subSubcategory.subcategories?.length || 0}</TableCell>
-						<TableCell>
-							{subSubcategory.status === "PUBLISHED" ? "Published" :
-								(subSubcategory.status === "HIDDEN" ? "Hidden" : "Draft")}
-						</TableCell>
-						<TableCell>{subSubcategory.products?.length || 0}</TableCell>
-						<TableCell>
-							{new Date(subSubcategory.createdAt).toLocaleDateString()}
-						</TableCell>
-						<TableCell>
-							<div className="flex items-center space-x-2">
-								<Button variant="ghost" size="icon">View</Button>
-								<Button variant="ghost" size="icon">Edit</Button>
-								<Button variant="ghost" size="icon">Delete</Button>
-							</div>
-						</TableCell>
-					</TableRow>
 				))}
-			</Fragment>
-		));
+			</TableRow>
+		];
+
+		// If this row is expanded and has subcategories, render them
+		if (expandedRows[row.id] && rowData.subcategories && rowData.subcategories.length > 0) {
+			rowData.subcategories.forEach((subcategory: Category) => {
+				// Create a composite ID for the nested row
+				const nestedRowId = getNestedRowId(row.id, subcategory.id);
+
+				// Create a dummy row for the subcategory
+				const subRow = {
+					id: nestedRowId,
+					original: subcategory,
+					getIsSelected: () => false,
+					toggleSelected: () => { },
+					getVisibleCells: () => row.getVisibleCells().map(cell => ({
+						...cell,
+						id: `${nestedRowId}:${cell.id}`,
+						getContext: () => ({
+							...cell.getContext(),
+							row: {
+								id: nestedRowId,
+								original: subcategory,
+								getIsSelected: () => false,
+								toggleSelected: () => { }
+							}
+						})
+					}))
+				} as unknown as Row<TData>;
+
+				// Recursively render this row and its potential children
+				rows.push(...renderRowRecursive(subRow));
+			});
+		}
+
+		return rows;
 	};
 
 	return (
-		<div>
-			<div className="flex items-center py-4">
+		<div className="flex flex-col space-y-4">
+			<div className="flex flex-col gap-4 w-fit md:flex-row md:items-center">
 				<Input
 					placeholder={searchPlaceholder}
 					value={(table.getColumn(searchFor)?.getFilterValue() as string) ?? ""}
-					onChange={(event) =>
-						table.getColumn(searchFor)?.setFilterValue(event.target.value)
-					}
-					className="max-w-sm"
+					onChange={(event) => {
+						const value = event.target.value;
+						table.getColumn(searchFor)?.setFilterValue(value);
+					}}
+					className="w-full max-w-sm sm:w-sm"
 				/>
+
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<Button variant="outline" className="w-fit">
+							<Eye />
+							{t("general.columnsVisibility")}
+						</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent align="end">
+						{table
+							.getAllColumns()
+							.filter(
+								(column) => column.getCanHide()
+							)
+							.map((column) => {
+								return (
+									<DropdownMenuCheckboxItem
+										key={column.id}
+										className="capitalize"
+										checked={column.getIsVisible()}
+										onCheckedChange={(value) =>
+											column.toggleVisibility(!!value)
+										}
+									>
+										{column.id}
+									</DropdownMenuCheckboxItem>
+								)
+							})}
+					</DropdownMenuContent>
+				</DropdownMenu>
+
+				<Button
+					onClick={() => {
+						router.refresh();
+						setIsRefreshing(true);
+						setTimeout(() => setIsRefreshing(false), 1000);
+					}}
+					variant="outline"
+					className={isRefreshing ? "[&_svg]:animate-spin" : ""}
+					disabled={isRefreshing}
+				>
+					<RefreshCw />
+					{t("general.refresh")}
+				</Button>
 			</div>
-			<div className="rounded-md border overflow-hidden">
+			
+			<div className="rounded-md border">
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
 							<TableRow key={headerGroup.id}>
-								{headerGroup.headers.map((header) => (
-									<TableHead key={header.id} className={header.id === "expander" ? "w-6" : ""}>
-										{header.isPlaceholder
-											? null
-											: flexRender(
-												header.column.columnDef.header,
-												header.getContext()
-											)}
-									</TableHead>
-								))}
+								{headerGroup.headers.map((header) => {
+									return (
+										<TableHead key={header.id}>
+											{header.isPlaceholder
+												? null
+												: flexRender(
+													header.column.columnDef.header,
+													header.getContext()
+												)}
+										</TableHead>
+									)
+								})}
 							</TableRow>
 						))}
 					</TableHeader>
 					<TableBody>
 						{table.getRowModel().rows?.length ? (
-							table.getRowModel().rows.map((row) => (
-								<Fragment key={`row-${row.id}`}>
-									<TableRow
-										data-state={row.getIsSelected() && "selected"}
-									>
-										{row.getVisibleCells().map((cell) => (
-											<TableCell key={cell.id}>
-												{flexRender(cell.column.columnDef.cell, cell.getContext())}
-											</TableCell>
-										))}
-									</TableRow>
-									{renderSubcategories(row.original as Category)}
-								</Fragment>
-							))
+							table.getRowModel().rows.map(row => renderRowRecursive(row)).flat()
 						) : (
 							<TableRow>
 								<TableCell colSpan={columns.length} className="h-24 text-center">
@@ -213,33 +216,8 @@ export function DataTable<TData, TValue>({
 					</TableBody>
 				</Table>
 			</div>
-			<div className="flex items-center justify-end space-x-2 py-4">
-				<Button
-					variant="outline"
-					size="sm"
-					onClick={() => table.previousPage()}
-					disabled={!table.getCanPreviousPage()}
-				>
-					Previous
-				</Button>
-				<Button
-					variant="outline"
-					size="sm"
-					onClick={() => table.nextPage()}
-					disabled={!table.getCanNextPage()}
-				>
-					Next
-				</Button>
-			</div>
 
-			<style jsx global>{`
-        .nested-row {
-          background-color: #f9fafb;
-        }
-        .nested-row.level-2 {
-          background-color: #f3f4f6;
-        }
-      `}</style>
+			<DataTablePagination table={table} />
 		</div>
-	);
+	)
 }

@@ -1,4 +1,5 @@
 import CategoriesTableClient from "./_components/client";
+import { Category } from "@/types";
 import { forbidden } from "next/navigation";
 import { getCategories } from "@/data/category";
 import { getCurrentUser } from "@/lib/actions";
@@ -10,7 +11,7 @@ export default async function DashboardBrands() {
 
 	if (!currentUser) return forbidden();
 
-	const categories = await getCategories() as any;
+	const categories = await getCategories() as Category[];
 
 	return (
 		<div className="flex flex-col space-y-4">

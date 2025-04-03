@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, ChevronRight, ChevronsUpDown, Eye } from "lucide-react";
+import { ChevronRight, ChevronsUpDown, Eye } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 import { Badge } from "@/components/ui/badge";
@@ -13,10 +13,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 
-// Assume these would be imported or created
-const EditCategory = ({ category }: { category: Category }) => <Button variant="ghost" size="icon">Edit</Button>;
-const DeleteCategory = ({ categoryId }: { categoryId: string }) => <Button variant="ghost" size="icon">Delete</Button>;
-
 const CategoriesTableClient: React.FC<{ categories: Category[]; }> = ({ categories }) => {
 	const t = useTranslations();
 	const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
@@ -28,29 +24,32 @@ const CategoriesTableClient: React.FC<{ categories: Category[]; }> = ({ categori
 		}));
 	};
 
+	// Helper to create a composite ID for nested categories
+	const getNestedRowId = (parentId: string, childId: string) => `${parentId}:${childId}`;
+
 	const columns: ColumnDef<Category>[] = [
 		{
 			id: "expander",
 			header: () => null,
 			cell: ({ row }) => {
 				const category = row.original;
-				const hasSubcategories = (category.subcategories?.length || 0) > 0;
-				
+				const hasSubcategories = category?.subcategories && category.subcategories.length > 0;
+
 				if (!hasSubcategories) return null;
-				
+
 				return (
-					<Button 
-						variant="ghost" 
-						size="sm" 
+					<Button
+						variant="ghost"
+						size="sm"
 						className="p-0 h-6 w-6"
-						onClick={() => toggleRowExpanded(category.id)}
+						onClick={(e) => {
+							e.stopPropagation();
+							toggleRowExpanded(row.id);
+						}}
 					>
-						{expandedRows[category.id] ? 
-							<ChevronDown className="size-4" /> : 
-							<ChevronRight className="size-4" />
-						}
+						<ChevronRight className={`size-4 transition-all duration-200 ${expandedRows[row.id] ? "rotate-90" : "rotate-0"}`} />
 					</Button>
-				);
+				)
 			},
 			enableSorting: false,
 			enableHiding: false,
@@ -70,16 +69,27 @@ const CategoriesTableClient: React.FC<{ categories: Category[]; }> = ({ categori
 					/>
 				</div>
 			),
-			cell: ({ row }) => (
-				<div className="flex items-center">
-					<Checkbox
-						variant="black"
-						checked={row.getIsSelected()}
-						onCheckedChange={(value) => row.toggleSelected(!!value)}
-						aria-label="Select row"
-					/>
-				</div>
-			),
+			cell: ({ row }) => {
+				// Calculate nesting level
+				const nestingLevel = row.id.split(':').length - 1;
+
+				// Only show checkbox if nesting level is 1
+				if (nestingLevel === 0) {
+					return (
+						<div className="flex items-center">
+							<Checkbox
+								variant="black"
+								checked={row.getIsSelected()}
+								onCheckedChange={(value) => row.toggleSelected(!!value)}
+								aria-label="Select row"
+							/>
+						</div>
+					);
+				}
+
+				// Return empty div otherwise
+				return <div className="w-4"></div>;
+			},
 			enableSorting: false,
 			enableHiding: false,
 		},
@@ -104,25 +114,6 @@ const CategoriesTableClient: React.FC<{ categories: Category[]; }> = ({ categori
 						<span className="text-xs text-muted-foreground">{category.slug}</span>
 					</div>
 				);
-			}
-		},
-		{
-			accessorKey: "subcategories",
-			header: ({ column }) => (
-				<Button
-					variant="invisible"
-					className="h-auto pl-0 w-fit"
-					onClick={() => column.toggleSorting()}
-				>
-					{t("general.subcategories")}
-					<ChevronsUpDown className="size-4" />
-				</Button>
-			),
-			cell: ({ row }) => {
-				const category = row.original;
-				const subcategoriesCount = category.subcategories?.length || 0;
-
-				return <span>{subcategoriesCount}</span>;
 			}
 		},
 		{
@@ -171,7 +162,7 @@ const CategoriesTableClient: React.FC<{ categories: Category[]; }> = ({ categori
 				)
 			},
 			cell: ({ row }) => {
-				const productsCount = row.original.products.length;
+				const productsCount = row.original.products?.length || 0;
 
 				return productsCount;
 			}
@@ -222,8 +213,6 @@ const CategoriesTableClient: React.FC<{ categories: Category[]; }> = ({ categori
 								</Link>
 							</Button>
 						)}
-						<EditCategory category={category} />
-						<DeleteCategory categoryId={category.id} />
 					</div>
 				)
 			},
@@ -240,7 +229,8 @@ const CategoriesTableClient: React.FC<{ categories: Category[]; }> = ({ categori
 			searchFor="defaultName"
 			noResultsText={t("dashboard.category.noResults")}
 			expandedRows={expandedRows}
-			setExpandedRows={setExpandedRows}
+			// setExpandedRows={setExpandedRows}
+			getNestedRowId={getNestedRowId}
 		/>
 	)
 }
