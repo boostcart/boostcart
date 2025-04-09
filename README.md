@@ -46,6 +46,7 @@ Here's a list of our main features:
 - PPR (Partial Prerendering) - Combine static and dynamic components together for the best performance
 - Server actions - Use the server, make your life easier
 - PrismaORM - Talk to your database easily
+- Biome - Formater and linter so good it's out of this world.
 - Optimized Images - Using the built-in `next/image` package for optimized images so you don't have to worry about them and if your store will run fast
 - Made for SEO - Our engineers have made SEO a breeze, why - because we know what a pain it is
 
