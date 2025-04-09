@@ -42,13 +42,13 @@ BoostCart is a platform built using [Next.js](https://nextjs.org), made to lower
 
 Here's a list of our main features:
 
-- Multiple languages
-- PPR (Partial Prerendering) - Combine static and dynamic components together for the best performance
-- Server actions - Use the server, make your life easier
-- PrismaORM - Talk to your database easily
-- Biome - Formater and linter so good it's out of this world.
-- Optimized Images - Using the built-in `next/image` package for optimized images so you don't have to worry about them and if your store will run fast
-- Made for SEO - Our engineers have made SEO a breeze, why - because we know what a pain it is
+- Multiple languages using [next-intl](https://next-intl.dev)
+- [PPR (Partial Prerendering)](https://nextjs.org/docs/app/building-your-application/rendering/partial-prerendering) - Combine static and dynamic components together for the best performance
+- [Server actions](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations) - Use the server, make your life easier
+- [Prisma](https://prisma.io) - Talk to your database easily
+- [Biome](https://biomejs.dev) - Formater and linter so good it's out of this world.
+- [Optimized Images](https://nextjs.org/docs/app/building-your-application/optimizing/images) - Using the built-in `next/image` package for optimized images so you don't have to worry about them and if your store will run fast
+- Made for SEO ([next-seo](https://github.com/garmeeh/next-seo)) - Our engineers have made SEO a breeze, why - because we know what a pain it is
 
 ## Requirements
 
