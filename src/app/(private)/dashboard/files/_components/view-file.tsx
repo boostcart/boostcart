@@ -1,13 +1,19 @@
 "use client";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
 
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import Image from "next/image";
 import { UploadedFile } from "../page";
 
-const ViewFile: React.FC<{ file: UploadedFile; }> = ({ file }) => {
+const ViewFile: React.FC<{ file: UploadedFile }> = ({ file }) => {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
@@ -30,7 +36,7 @@ const ViewFile: React.FC<{ file: UploadedFile; }> = ({ file }) => {
 				</div>
 			</DialogContent>
 		</Dialog>
-	)
-}
+	);
+};
 
 export default ViewFile;

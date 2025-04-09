@@ -1,20 +1,23 @@
 "use client";
 
-import { ChevronsUpDown, Eye } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { ChevronsUpDown, Eye, Pencil } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
-import { Brand } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table";
-import DeleteBrand from "./delete-brand";
-import EditBrand from "./edit-brand";
+import { Brand } from "@/types";
+import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { useTranslations } from "use-intl";
+import DeleteBrand from "./delete-brand";
 
-const BrandsTableClient: React.FC<{ brands: Brand[]; }> = ({ brands }) => {
+const BrandsTableClient: React.FC<{ brands: Brand[] }> = ({ brands }) => {
 	const t = useTranslations();
 
 	const columns: ColumnDef<Brand>[] = [
@@ -28,7 +31,9 @@ const BrandsTableClient: React.FC<{ brands: Brand[]; }> = ({ brands }) => {
 							table.getIsAllPageRowsSelected() ||
 							(table.getIsSomePageRowsSelected() && "indeterminate")
 						}
-						onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+						onCheckedChange={(value) =>
+							table.toggleAllPageRowsSelected(!!value)
+						}
 						aria-label="Select all"
 					/>
 				</div>
@@ -58,7 +63,7 @@ const BrandsTableClient: React.FC<{ brands: Brand[]; }> = ({ brands }) => {
 						{t("general.name")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
+				);
 			},
 			cell: ({ row }) => {
 				const brand = row.original;
@@ -68,8 +73,8 @@ const BrandsTableClient: React.FC<{ brands: Brand[]; }> = ({ brands }) => {
 						<span>{brand.name}</span>
 						<span className="text-xs text-muted-foreground">{brand.slug}</span>
 					</div>
-				)
-			}
+				);
+			},
 		},
 		{
 			accessorKey: "status",
@@ -83,7 +88,7 @@ const BrandsTableClient: React.FC<{ brands: Brand[]; }> = ({ brands }) => {
 						{t("general.status")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
+				);
 			},
 			cell: ({ row }) => {
 				const brand = row.original;
@@ -91,16 +96,26 @@ const BrandsTableClient: React.FC<{ brands: Brand[]; }> = ({ brands }) => {
 				return (
 					<Tooltip>
 						<TooltipTrigger asChild>
-							<Badge variant={brand.status === "PUBLISHED" ? "success" : "secondary"}>
-								{brand.status === "PUBLISHED" ? t("status.published") : (brand.status === "HIDDEN" ? t("status.hidden") : t("status.draft"))}
+							<Badge
+								variant={brand.status === "PUBLISHED" ? "success" : "secondary"}
+							>
+								{brand.status === "PUBLISHED"
+									? t("status.published")
+									: brand.status === "HIDDEN"
+										? t("status.hidden")
+										: t("status.draft")}
 							</Badge>
 						</TooltipTrigger>
 						<TooltipContent>
-							{brand.status === "HIDDEN" ? t("status.hiddenStatus") : (brand.status === "PUBLISHED" ? t("status.published") : t("status.draft"))}
+							{brand.status === "HIDDEN"
+								? t("status.hiddenStatus")
+								: brand.status === "PUBLISHED"
+									? t("status.published")
+									: t("status.draft")}
 						</TooltipContent>
 					</Tooltip>
-				)
-			}
+				);
+			},
 		},
 		{
 			accessorKey: "products",
@@ -114,13 +129,13 @@ const BrandsTableClient: React.FC<{ brands: Brand[]; }> = ({ brands }) => {
 						{t("general.products")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
+				);
 			},
 			cell: ({ row }) => {
 				const productsCount = row.original.products.length;
 
 				return productsCount;
-			}
+			},
 		},
 		{
 			accessorKey: "createdAt",
@@ -134,13 +149,15 @@ const BrandsTableClient: React.FC<{ brands: Brand[]; }> = ({ brands }) => {
 						{t("general.createdAt")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
+				);
 			},
 			cell: ({ row }) => {
-				const formattedDate = new Date(row.original.createdAt).toLocaleDateString(t("locale"));
+				const formattedDate = new Date(
+					row.original.createdAt,
+				).toLocaleDateString(t("locale"));
 
 				return formattedDate;
-			}
+			},
 		},
 		{
 			accessorKey: "actions",
@@ -168,14 +185,18 @@ const BrandsTableClient: React.FC<{ brands: Brand[]; }> = ({ brands }) => {
 								</Link>
 							</Button>
 						)}
-						<EditBrand brand={brand} />
+						<Button variant="ghost" size="icon" asChild>
+							<Link href={`/dashboard/brands/${brand.id}`}>
+								<Pencil />
+							</Link>
+						</Button>
 						<DeleteBrand brandId={brand.id} />
 					</div>
-				)
+				);
 			},
 			enableHiding: false,
 			enableSorting: false,
-		}
+		},
 	];
 
 	return (
@@ -185,7 +206,7 @@ const BrandsTableClient: React.FC<{ brands: Brand[]; }> = ({ brands }) => {
 			searchPlaceholder={t("dashboard.brand.search")}
 			noResultsText={t("dashboard.brand.noResults")}
 		/>
-	)
-}
+	);
+};
 
 export default BrandsTableClient;

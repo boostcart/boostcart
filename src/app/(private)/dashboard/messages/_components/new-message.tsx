@@ -1,6 +1,5 @@
 "use client";
 
-import { Check, ChevronsUpDown, MailPlus, Plus } from "lucide-react";
 import {
 	Command,
 	CommandEmpty,
@@ -9,30 +8,47 @@ import {
 	CommandItem,
 	CommandList,
 } from "@/components/ui/command";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { MessagesSchema, MessagesSchemaType } from "@/schemas";
+import {
+	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover";
-import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+	Sheet,
+	SheetClose,
+	SheetContent,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from "@/components/ui/sheet";
+import { MessagesSchema, MessagesSchemaType } from "@/schemas";
+import { Check, ChevronsUpDown, MailPlus, Plus } from "lucide-react";
 import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import type { User } from "@prisma/client";
-import { cn } from "@/lib/utils";
 import { newMessage } from "@/data/message";
-import { toast } from "sonner";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { User } from "@prisma/client";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
-const NewMessage: React.FC<{ users: User[]; }> = ({ users }) => {
+const NewMessage: React.FC<{ users: User[] }> = ({ users }) => {
 	const t = useTranslations();
 	const [isPending, startTransition] = useTransition();
 	const [isOpen, setOpen] = useState<boolean>(false);
@@ -47,26 +63,25 @@ const NewMessage: React.FC<{ users: User[]; }> = ({ users }) => {
 			subject: "",
 			message: "",
 			read: false,
-			userId: undefined
-		}
+			userId: undefined,
+		},
 	});
 
 	const onSubmit = (data: any) => {
 		startTransition(() => {
-			newMessage(data)
-				.then((callback) => {
-					if (callback.error) {
-						toast.error(t(`dashboard.errors.${callback.error}`));
-					}
+			newMessage(data).then((callback) => {
+				if (callback.error) {
+					toast.error(t(`dashboard.errors.${callback.error}`));
+				}
 
-					if (callback.success) {
-						toast.success(t(`dashboard.success.${callback.success}`));
-						router.refresh();
-						setOpen(false);
-					}
-				});
+				if (callback.success) {
+					toast.success(t(`dashboard.success.${callback.success}`));
+					router.refresh();
+					setOpen(false);
+				}
+			});
 		});
-	}
+	};
 
 	return (
 		<Sheet open={isOpen} onOpenChange={setOpen}>
@@ -80,7 +95,9 @@ const NewMessage: React.FC<{ users: User[]; }> = ({ users }) => {
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)}>
 						<SheetHeader>
-							<SheetTitle>{t("dashboard.messages.newMessage.title")}</SheetTitle>
+							<SheetTitle>
+								{t("dashboard.messages.newMessage.title")}
+							</SheetTitle>
 						</SheetHeader>
 						<div className="flex flex-col my-4 space-y-4">
 							<FormField
@@ -88,7 +105,9 @@ const NewMessage: React.FC<{ users: User[]; }> = ({ users }) => {
 								name="userId"
 								render={({ field }) => (
 									<FormItem className="flex flex-col">
-										<FormLabel>{t("dashboard.messages.newMessage.selectUser")}</FormLabel>
+										<FormLabel>
+											{t("dashboard.messages.newMessage.selectUser")}
+										</FormLabel>
 										<Popover>
 											<PopoverTrigger asChild>
 												<FormControl>
@@ -97,13 +116,14 @@ const NewMessage: React.FC<{ users: User[]; }> = ({ users }) => {
 														role="combobox"
 														className={cn(
 															"justify-between",
-															!field.value && "text-muted-foreground"
+															!field.value && "text-muted-foreground",
 														)}
 													>
 														{field.value
 															? users.find(
-																(user) => user.name || user.email === field.value
-															)?.name
+																	(user) =>
+																		user.name || user.email === field.value,
+																)?.name
 															: t("dashboard.messages.newMessage.selectUser")}
 														<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 													</Button>
@@ -111,9 +131,13 @@ const NewMessage: React.FC<{ users: User[]; }> = ({ users }) => {
 											</PopoverTrigger>
 											<PopoverContent className="p-0">
 												<Command>
-													<CommandInput placeholder={t("dashboard.customers.search")} />
+													<CommandInput
+														placeholder={t("dashboard.customers.search")}
+													/>
 													<CommandList>
-														<CommandEmpty>{t("dashboard.customers.noResults")}</CommandEmpty>
+														<CommandEmpty>
+															{t("dashboard.customers.noResults")}
+														</CommandEmpty>
 														<CommandGroup>
 															{users.map((user) => (
 																<CommandItem
@@ -127,14 +151,16 @@ const NewMessage: React.FC<{ users: User[]; }> = ({ users }) => {
 																>
 																	<div className="flex flex-col">
 																		<span>{user.name}</span>
-																		<span className="text-muted-foreground">{user.email}</span>
+																		<span className="text-muted-foreground">
+																			{user.email}
+																		</span>
 																	</div>
 																	<Check
 																		className={cn(
 																			"ml-auto",
 																			user.id === field.value
 																				? "opacity-100"
-																				: "opacity-0"
+																				: "opacity-0",
 																		)}
 																	/>
 																</CommandItem>
@@ -265,10 +291,14 @@ const NewMessage: React.FC<{ users: User[]; }> = ({ users }) => {
 						</div>
 						<SheetFooter>
 							<SheetClose asChild>
-								<Button onClick={() => {
-									form.reset();
-									form.setValue("userId", undefined);
-								}} variant="secondary" disabled={isPending}>
+								<Button
+									onClick={() => {
+										form.reset();
+										form.setValue("userId", undefined);
+									}}
+									variant="secondary"
+									disabled={isPending}
+								>
 									{t("general.cancel")}
 								</Button>
 							</SheetClose>
@@ -281,7 +311,7 @@ const NewMessage: React.FC<{ users: User[]; }> = ({ users }) => {
 				</Form>
 			</SheetContent>
 		</Sheet>
-	)
-}
+	);
+};
 
 export default NewMessage;

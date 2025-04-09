@@ -1,22 +1,50 @@
 "use client";
 
-import { ChevronRight, Folders, Home, Inbox, LifeBuoy, Mail, Settings, Store, Tag, Users } from "lucide-react";
 import { Collapsible, CollapsibleContent } from "@radix-ui/react-collapsible";
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "./ui/sidebar";
+import {
+	ChevronRight,
+	Folders,
+	Home,
+	Inbox,
+	LifeBuoy,
+	Mail,
+	Settings,
+	Store,
+	Tag,
+	Users,
+} from "lucide-react";
+import {
+	Sidebar,
+	SidebarContent,
+	SidebarFooter,
+	SidebarGroup,
+	SidebarGroupContent,
+	SidebarHeader,
+	SidebarMenu,
+	SidebarMenuBadge,
+	SidebarMenuButton,
+	SidebarMenuItem,
+	SidebarMenuSub,
+	SidebarMenuSubButton,
+	SidebarMenuSubItem,
+} from "./ui/sidebar";
 
+import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import Logo from "./logo";
 import { Badge } from "./ui/badge";
 import { CollapsibleTrigger } from "./ui/collapsible";
-import Link from "next/link";
-import Logo from "./logo";
-import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
 
 interface DashboardSidebarProps {
 	orderCount: number;
 	messageCount: number;
 }
 
-const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ orderCount, messageCount }) => {
+const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
+	orderCount,
+	messageCount,
+}) => {
 	const t = useTranslations();
 	const pathname = usePathname();
 
@@ -24,21 +52,21 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ orderCount, message
 		{
 			title: t("dashboard.nav.home"),
 			url: "/dashboard",
-			icon: Home
+			icon: Home,
 		},
 		{
 			title: t("dashboard.nav.orders"),
 			url: "/dashboard/orders",
 			icon: Inbox,
 			hasBadge: true,
-			badgeContent: orderCount
+			badgeContent: orderCount,
 		},
 		{
 			title: t("dashboard.nav.messages"),
 			url: "/dashboard/messages",
 			icon: Mail,
 			hasBadge: true,
-			badgeContent: messageCount
+			badgeContent: messageCount,
 		},
 		{
 			title: t("dashboard.nav.inventory"),
@@ -47,17 +75,17 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ orderCount, message
 			children: [
 				{
 					title: t("dashboard.nav.products"),
-					url: "/dashboard/products"
+					url: "/dashboard/products",
 				},
 				{
 					title: t("dashboard.nav.categories"),
-					url: "/dashboard/categories"
+					url: "/dashboard/categories",
 				},
 				{
 					title: t("dashboard.nav.brands"),
-					url: "/dashboard/brands"
-				}
-			]
+					url: "/dashboard/brands",
+				},
+			],
 		},
 		{
 			title: t("dashboard.nav.content"),
@@ -66,28 +94,32 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ orderCount, message
 			children: [
 				{
 					title: t("dashboard.nav.blog"),
-					url: "/dashboard/blog"
+					url: "/dashboard/blog",
 				},
 				{
 					title: t("dashboard.nav.pages"),
-					url: "/dashboard/pages"
+					url: "/dashboard/pages",
 				},
 				{
 					title: t("dashboard.nav.files"),
-					url: "/dashboard/files"
-				}
-			]
+					url: "/dashboard/files",
+				},
+			],
 		},
 		{
 			title: t("dashboard.nav.customers"),
-			url: "/dashboard/customers",
-			icon: Users
+			url: [
+				"/dashboard/customers",
+				"/dashboard/customers/create",
+				"/dashboard/customers/[id]",
+			],
+			icon: Users,
 		},
 		{
 			title: t("dashboard.nav.settings"),
 			url: "/dashboard/settings",
-			icon: Settings
-		}
+			icon: Settings,
+		},
 	];
 
 	return (
@@ -99,7 +131,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ orderCount, message
 					href="/dashboard"
 					width={150}
 					height={30}
-					className="p-2 hover:opacity-70 transition-opacity"
+					className="p-2 transition-opacity hover:opacity-70"
 				/>
 			</SidebarHeader>
 			<SidebarContent>
@@ -112,7 +144,11 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ orderCount, message
 										<Collapsible defaultOpen className="group/collapsible">
 											<SidebarMenuItem>
 												<CollapsibleTrigger asChild>
-													<SidebarMenuButton isActive={item.children.some((child) => pathname == child.url)}>
+													<SidebarMenuButton
+														isActive={item.children.some((child) =>
+															pathname.includes(child.url),
+														)}
+													>
 														<item.icon />
 														<span>{item.title}</span>
 														<ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
@@ -122,10 +158,11 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ orderCount, message
 													<SidebarMenuSub>
 														{item.children.map((child) => (
 															<SidebarMenuSubItem key={child.title}>
-																<SidebarMenuSubButton asChild isActive={pathname.includes(child.url)}>
-																	<Link href={child.url}>
-																		{child.title}
-																	</Link>
+																<SidebarMenuSubButton
+																	asChild
+																	isActive={pathname.includes(child.url)}
+																>
+																	<Link href={child.url}>{child.title}</Link>
 																</SidebarMenuSubButton>
 															</SidebarMenuSubItem>
 														))}
@@ -135,16 +172,25 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ orderCount, message
 										</Collapsible>
 									) : (
 										<SidebarMenuItem key={item.title}>
-											<SidebarMenuButton asChild isActive={pathname == item.url}>
-												<Link href={item.url}>
+											<SidebarMenuButton
+												asChild
+												isActive={
+													Array.isArray(item.url)
+														? item.url.some((url) => pathname.includes(url))
+														: pathname === item.url
+												}
+											>
+												<Link
+													href={
+														Array.isArray(item.url) ? item.url[0] : item.url
+													}
+												>
 													<item.icon />
 													<span>{item.title}</span>
 												</Link>
 											</SidebarMenuButton>
 											{item.hasBadge && (
-												<SidebarMenuBadge>
-													{item.badgeContent}
-												</SidebarMenuBadge>
+												<SidebarMenuBadge>{item.badgeContent}</SidebarMenuBadge>
 											)}
 										</SidebarMenuItem>
 									)}
@@ -175,8 +221,8 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ orderCount, message
 					</SidebarMenuItem>
 				</SidebarMenu>
 			</SidebarFooter>
-		</Sidebar >
-	)
-}
+		</Sidebar>
+	);
+};
 
 export default DashboardSidebar;

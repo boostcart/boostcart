@@ -1,19 +1,19 @@
+import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
-import { Metadata } from "next";
 import ResetPasswordForm from "./_components/reset-password-form";
-import { getTranslations } from "next-intl/server"
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getTranslations();
 
 	return {
-		title: `${t('auth.resetPassword.meta.title')} 🚀 ${t('app')}`,
+		title: `${t("auth.resetPassword.meta.title")} 🚀 ${t("app")}`,
 		robots: {
 			index: false,
-			follow: false
-		}
-	}
+			follow: false,
+		},
+	};
 }
 
 export default async function ResetPasswordPage() {
@@ -33,10 +33,12 @@ export default async function ResetPasswordPage() {
 
 			<div className="flex flex-col items-center w-full space-y-2">
 				<h1 className="text-4xl font-bold">{t("auth.resetPassword.title")}</h1>
-				<h2 className="font-medium text-neutral-500">{t("auth.resetPassword.subtitle")}</h2>
+				<h2 className="font-medium text-neutral-500">
+					{t("auth.resetPassword.subtitle")}
+				</h2>
 			</div>
 
 			<ResetPasswordForm />
 		</div>
-	)
+	);
 }

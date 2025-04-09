@@ -1,16 +1,11 @@
+import { getMessages } from "@/data/message";
+import { getUsers } from "@/data/user";
+import { getTranslations } from "next-intl/server";
 import MessagesTableClient from "./_components/client";
 import NewMessage from "./_components/new-message";
-import { forbidden } from "next/navigation";
-import { getCurrentUser } from "@/lib/actions";
-import { getMessages } from "@/data/message";
-import { getTranslations } from "next-intl/server";
-import { getUsers } from "@/data/user";
 
 export default async function DashboardMessages() {
 	const t = await getTranslations();
-	const currentUser = await getCurrentUser();
-
-	if (!currentUser) return forbidden();
 
 	const messages = await getMessages();
 	const users = await getUsers();
@@ -25,5 +20,5 @@ export default async function DashboardMessages() {
 
 			<MessagesTableClient messages={messages} />
 		</div>
-	)
+	);
 }

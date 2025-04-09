@@ -1,11 +1,11 @@
 "use client";
 
-import { useTranslations } from 'next-intl';
-import { signIn } from 'next-auth/react';
-import { Button } from './ui/button';
+import { signIn } from "next-auth/react";
+import { useTranslations } from "next-intl";
+import { Button } from "./ui/button";
 
-import { FcGoogle } from 'react-icons/fc';
-import { FaApple, FaFacebook } from 'react-icons/fa6';
+import { FaApple, FaFacebook } from "react-icons/fa6";
+import { FcGoogle } from "react-icons/fc";
 
 const AuthProviders = () => {
 	const t = useTranslations();
@@ -39,7 +39,7 @@ const AuthProviders = () => {
 				<span>{t("auth.general.continueWith")} Apple</span>
 			</Button>
 		</div>
-	)
-}
+	);
+};
 
 export default AuthProviders;

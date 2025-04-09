@@ -1,6 +1,20 @@
 "use client";
 
 import {
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
+import {
 	ColumnDef,
 	ColumnFiltersState,
 	SortingState,
@@ -12,23 +26,14 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Eye, RefreshCw } from "lucide-react";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/components/ui/table";
 
 import { Button } from "@/components/ui/button";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { Input } from "@/components/ui/input";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useTranslations } from "next-intl";
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -70,7 +75,7 @@ export function DataTable<TData, TValue>({
 			columnVisibility,
 			rowSelection,
 		},
-	})
+	});
 
 	return (
 		<div className="flex flex-col space-y-4">
@@ -95,9 +100,7 @@ export function DataTable<TData, TValue>({
 					<DropdownMenuContent align="end">
 						{table
 							.getAllColumns()
-							.filter(
-								(column) => column.getCanHide()
-							)
+							.filter((column) => column.getCanHide())
 							.map((column) => {
 								return (
 									<DropdownMenuCheckboxItem
@@ -110,7 +113,7 @@ export function DataTable<TData, TValue>({
 									>
 										{column.id}
 									</DropdownMenuCheckboxItem>
-								)
+								);
 							})}
 					</DropdownMenuContent>
 				</DropdownMenu>
@@ -141,11 +144,11 @@ export function DataTable<TData, TValue>({
 											{header.isPlaceholder
 												? null
 												: flexRender(
-													header.column.columnDef.header,
-													header.getContext()
-												)}
+														header.column.columnDef.header,
+														header.getContext(),
+													)}
 										</TableHead>
-									)
+									);
 								})}
 							</TableRow>
 						))}
@@ -159,14 +162,20 @@ export function DataTable<TData, TValue>({
 								>
 									{row.getVisibleCells().map((cell) => (
 										<TableCell key={cell.id}>
-											{flexRender(cell.column.columnDef.cell, cell.getContext())}
+											{flexRender(
+												cell.column.columnDef.cell,
+												cell.getContext(),
+											)}
 										</TableCell>
 									))}
 								</TableRow>
 							))
 						) : (
 							<TableRow>
-								<TableCell colSpan={columns.length} className="h-24 text-center">
+								<TableCell
+									colSpan={columns.length}
+									className="h-24 text-center"
+								>
 									{noResultsText}
 								</TableCell>
 							</TableRow>
@@ -177,5 +186,5 @@ export function DataTable<TData, TValue>({
 
 			<DataTablePagination table={table} />
 		</div>
-	)
+	);
 }

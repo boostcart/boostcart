@@ -1,31 +1,39 @@
 "use client";
 
-import { ChevronRight, ChevronsUpDown, Eye } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { ChevronRight, ChevronsUpDown, Eye, Pencil } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Category } from "@/types";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Category } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTable } from "./table";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import DeleteCategory from "./delete-category";
+import { DataTable } from "./table";
 
-const CategoriesTableClient: React.FC<{ categories: Category[]; }> = ({ categories }) => {
+const CategoriesTableClient: React.FC<{ categories: Category[] }> = ({
+	categories,
+}) => {
 	const t = useTranslations();
 	const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
 
 	const toggleRowExpanded = (rowId: string) => {
-		setExpandedRows(prev => ({
+		setExpandedRows((prev) => ({
 			...prev,
-			[rowId]: !prev[rowId]
+			[rowId]: !prev[rowId],
 		}));
 	};
 
 	// Helper to create a composite ID for nested categories
-	const getNestedRowId = (parentId: string, childId: string) => `${parentId}:${childId}`;
+	const getNestedRowId = (parentId: string, childId: string) =>
+		`${parentId}:${childId}`;
 
 	const columns: ColumnDef<Category>[] = [
 		{
@@ -33,7 +41,8 @@ const CategoriesTableClient: React.FC<{ categories: Category[]; }> = ({ categori
 			header: () => null,
 			cell: ({ row }) => {
 				const category = row.original;
-				const hasSubcategories = category?.subcategories && category.subcategories.length > 0;
+				const hasSubcategories =
+					category?.subcategories && category.subcategories.length > 0;
 
 				if (!hasSubcategories) return null;
 
@@ -41,15 +50,17 @@ const CategoriesTableClient: React.FC<{ categories: Category[]; }> = ({ categori
 					<Button
 						variant="ghost"
 						size="sm"
-						className="p-0 h-6 w-6"
+						className="p-0 size-6"
 						onClick={(e) => {
 							e.stopPropagation();
 							toggleRowExpanded(row.id);
 						}}
 					>
-						<ChevronRight className={`size-4 transition-all duration-200 ${expandedRows[row.id] ? "rotate-90" : "rotate-0"}`} />
+						<ChevronRight
+							className={`size-4 ${expandedRows[row.id] && "rotate-90"}`}
+						/>
 					</Button>
-				)
+				);
 			},
 			enableSorting: false,
 			enableHiding: false,
@@ -64,14 +75,16 @@ const CategoriesTableClient: React.FC<{ categories: Category[]; }> = ({ categori
 							table.getIsAllPageRowsSelected() ||
 							(table.getIsSomePageRowsSelected() && "indeterminate")
 						}
-						onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+						onCheckedChange={(value) =>
+							table.toggleAllPageRowsSelected(!!value)
+						}
 						aria-label="Select all"
 					/>
 				</div>
 			),
 			cell: ({ row }) => {
 				// Calculate nesting level
-				const nestingLevel = row.id.split(':').length - 1;
+				const nestingLevel = row.id.split(":").length - 1;
 
 				// Only show checkbox if nesting level is 1
 				if (nestingLevel === 0) {
@@ -111,10 +124,12 @@ const CategoriesTableClient: React.FC<{ categories: Category[]; }> = ({ categori
 				return (
 					<div className="flex flex-col">
 						<span>{category.defaultName}</span>
-						<span className="text-xs text-muted-foreground">{category.slug}</span>
+						<span className="text-xs text-muted-foreground">
+							{category.slug}
+						</span>
 					</div>
 				);
-			}
+			},
 		},
 		{
 			accessorKey: "status",
@@ -128,7 +143,7 @@ const CategoriesTableClient: React.FC<{ categories: Category[]; }> = ({ categori
 						{t("general.status")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
+				);
 			},
 			cell: ({ row }) => {
 				const category = row.original;
@@ -136,16 +151,28 @@ const CategoriesTableClient: React.FC<{ categories: Category[]; }> = ({ categori
 				return (
 					<Tooltip>
 						<TooltipTrigger asChild>
-							<Badge variant={category.status === "PUBLISHED" ? "success" : "secondary"}>
-								{category.status === "PUBLISHED" ? t("status.published") : (category.status === "HIDDEN" ? t("status.hidden") : t("status.draft"))}
+							<Badge
+								variant={
+									category.status === "PUBLISHED" ? "success" : "secondary"
+								}
+							>
+								{category.status === "PUBLISHED"
+									? t("status.published")
+									: category.status === "HIDDEN"
+										? t("status.hidden")
+										: t("status.draft")}
 							</Badge>
 						</TooltipTrigger>
 						<TooltipContent>
-							{category.status === "HIDDEN" ? t("status.hiddenStatus") : (category.status === "PUBLISHED" ? t("status.published") : t("status.draft"))}
+							{category.status === "HIDDEN"
+								? t("status.hiddenStatus")
+								: category.status === "PUBLISHED"
+									? t("status.published")
+									: t("status.draft")}
 						</TooltipContent>
 					</Tooltip>
-				)
-			}
+				);
+			},
 		},
 		{
 			accessorKey: "products",
@@ -159,13 +186,13 @@ const CategoriesTableClient: React.FC<{ categories: Category[]; }> = ({ categori
 						{t("general.products")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
+				);
 			},
 			cell: ({ row }) => {
 				const productsCount = row.original.products?.length || 0;
 
 				return productsCount;
-			}
+			},
 		},
 		{
 			accessorKey: "createdAt",
@@ -179,13 +206,15 @@ const CategoriesTableClient: React.FC<{ categories: Category[]; }> = ({ categori
 						{t("general.createdAt")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
+				);
 			},
 			cell: ({ row }) => {
-				const formattedDate = new Date(row.original.createdAt).toLocaleDateString(t("locale"));
+				const formattedDate = new Date(
+					row.original.createdAt,
+				).toLocaleDateString(t("locale"));
 
 				return formattedDate;
-			}
+			},
 		},
 		{
 			accessorKey: "actions",
@@ -208,17 +237,23 @@ const CategoriesTableClient: React.FC<{ categories: Category[]; }> = ({ categori
 							</Tooltip>
 						) : (
 							<Button variant="ghost" size="icon" asChild>
-								<Link href={`/category/${category.slug}`}>
+								<Link href={`/catalog/${category.slug}`}>
 									<Eye />
 								</Link>
 							</Button>
 						)}
+						<Button variant="ghost" size="icon" asChild>
+							<Link href={`/dashboard/categories/${category.id}`}>
+								<Pencil />
+							</Link>
+						</Button>
+						<DeleteCategory categoryId={category.id} />
 					</div>
-				)
+				);
 			},
 			enableHiding: false,
 			enableSorting: false,
-		}
+		},
 	];
 
 	return (
@@ -232,7 +267,7 @@ const CategoriesTableClient: React.FC<{ categories: Category[]; }> = ({ categori
 			// setExpandedRows={setExpandedRows}
 			getNestedRowId={getNestedRowId}
 		/>
-	)
-}
+	);
+};
 
 export default CategoriesTableClient;

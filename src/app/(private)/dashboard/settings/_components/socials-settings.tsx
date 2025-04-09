@@ -1,22 +1,41 @@
 "use client";
 
-import { DashboardSocialsSettingsSchema, DashboardSocialsSettingsSchemaType } from "@/schemas";
-import { FaFacebook, FaInstagram, FaLinkedinIn, FaTiktok, FaXTwitter, FaYoutube } from "react-icons/fa6";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import {
+	DashboardSocialsSettingsSchema,
+	DashboardSocialsSettingsSchemaType,
+} from "@/schemas";
+import {
+	FaFacebook,
+	FaInstagram,
+	FaLinkedinIn,
+	FaTiktok,
+	FaXTwitter,
+	FaYoutube,
+} from "react-icons/fa6";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SaveIcon } from "lucide-react";
-import type { SocialSettings } from "@prisma/client";
-import { toast } from "sonner";
 import { updateSocials } from "@/server/dashboard";
-import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import type { SocialSettings } from "@prisma/client";
+import { SaveIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
-import { useTranslations } from "next-intl";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
-const SocialsSettings: React.FC<{ settings: SocialSettings }> = ({ settings }) => {
+const SocialsSettings: React.FC<{ settings: SocialSettings }> = ({
+	settings,
+}) => {
 	const t = useTranslations();
 	const [isPending, startTransition] = useTransition();
 	const router = useRouter();
@@ -29,40 +48,42 @@ const SocialsSettings: React.FC<{ settings: SocialSettings }> = ({ settings }) =
 			tiktok: settings.tiktok,
 			youtube: settings.youtube,
 			twitter: settings.twitter,
-			linkedin: settings.linkedin
-		}
+			linkedin: settings.linkedin,
+		},
 	});
 
 	const onSubmit = (data: DashboardSocialsSettingsSchemaType) => {
 		startTransition(() => {
-			updateSocials(data)
-				.then((callback) => {
-					if (callback.error) {
-						toast.error(t(`dashboard.errors.${callback.error}`));
-					}
+			updateSocials(data).then((callback) => {
+				if (callback.error) {
+					toast.error(t(`dashboard.errors.${callback.error}`));
+				}
 
-					if (callback.success) {
-						toast.success(t(`dashboard.success.${callback.success}`));
-						router.refresh();
-					}
-				});
+				if (callback.success) {
+					toast.success(t(`dashboard.success.${callback.success}`));
+					router.refresh();
+				}
+			});
 		});
 	};
 
 	return (
 		<div className="flex flex-col space-y-4">
-			<h2 className="text-xl font-medium">{t("dashboard.settings.nav.socials")}</h2>
+			<h2 className="text-xl font-medium">
+				{t("dashboard.settings.nav.socials")}
+			</h2>
 
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-2">
+				<form
+					onSubmit={form.handleSubmit(onSubmit)}
+					className="flex flex-col space-y-2"
+				>
 					<FormField
 						control={form.control}
 						name="facebook"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>
-									Facebook
-								</FormLabel>
+								<FormLabel>Facebook</FormLabel>
 								<FormControl>
 									<Input
 										placeholder="https://facebook.com/your-page"
@@ -81,9 +102,7 @@ const SocialsSettings: React.FC<{ settings: SocialSettings }> = ({ settings }) =
 						name="instagram"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>
-									Instagram
-								</FormLabel>
+								<FormLabel>Instagram</FormLabel>
 								<FormControl>
 									<Input
 										placeholder="https://instagram.com/your-page"
@@ -102,9 +121,7 @@ const SocialsSettings: React.FC<{ settings: SocialSettings }> = ({ settings }) =
 						name="tiktok"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>
-									TikTok
-								</FormLabel>
+								<FormLabel>TikTok</FormLabel>
 								<FormControl>
 									<Input
 										placeholder="https://tiktok.com/@your-page"
@@ -123,9 +140,7 @@ const SocialsSettings: React.FC<{ settings: SocialSettings }> = ({ settings }) =
 						name="youtube"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>
-									YouTube
-								</FormLabel>
+								<FormLabel>YouTube</FormLabel>
 								<FormControl>
 									<Input
 										placeholder="https://youtube.com/@your-page"
@@ -144,9 +159,7 @@ const SocialsSettings: React.FC<{ settings: SocialSettings }> = ({ settings }) =
 						name="twitter"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>
-									X (Twitter)
-								</FormLabel>
+								<FormLabel>X (Twitter)</FormLabel>
 								<FormControl>
 									<Input
 										placeholder="https://x.com/your-page"
@@ -165,9 +178,7 @@ const SocialsSettings: React.FC<{ settings: SocialSettings }> = ({ settings }) =
 						name="linkedin"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>
-									LinkedIn
-								</FormLabel>
+								<FormLabel>LinkedIn</FormLabel>
 								<FormControl>
 									<Input
 										placeholder="https://linkedin.com/in/your-page"
@@ -191,10 +202,7 @@ const SocialsSettings: React.FC<{ settings: SocialSettings }> = ({ settings }) =
 							{t("general.cancel")}
 						</Button>
 
-						<Button
-							type="submit"
-							disabled={isPending}
-						>
+						<Button type="submit" disabled={isPending}>
 							<SaveIcon />
 							{t("general.saveChanges")}
 						</Button>
@@ -202,7 +210,7 @@ const SocialsSettings: React.FC<{ settings: SocialSettings }> = ({ settings }) =
 				</form>
 			</Form>
 		</div>
-	)
-}
+	);
+};
 
 export default SocialsSettings;

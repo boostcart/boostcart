@@ -1,44 +1,49 @@
 "use client";
 
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ChevronsUpDown } from "lucide-react";
-import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table";
-import DeleteMessage from "./delete-message";
-import EditMessage from "./edit-message";
-import Link from "next/link";
-import type { Message } from "@prisma/client";
-import ViewMessage from "./view-message";
-import { toast } from "sonner";
 import { toggleMessageStatus } from "@/data/message";
+import type { Message } from "@prisma/client";
+import { ColumnDef } from "@tanstack/react-table";
+import { ChevronsUpDown } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
+import { toast } from "sonner";
 import { useTranslations } from "use-intl";
+import DeleteMessage from "./delete-message";
+import EditMessage from "./edit-message";
+import ViewMessage from "./view-message";
 
-const MessagesTableClient: React.FC<{ messages: Message[]; }> = ({ messages }) => {
+const MessagesTableClient: React.FC<{ messages: Message[] }> = ({
+	messages,
+}) => {
 	const t = useTranslations();
 	const [isPending, startTransition] = useTransition();
 	const router = useRouter();
 
 	const handleRead = (messageId: string) => {
 		startTransition(() => {
-			toggleMessageStatus(messageId)
-				.then((callback) => {
-					if (callback.error) {
-						toast.error(t(`dashboard.error.${callback.error}`));
-					}
+			toggleMessageStatus(messageId).then((callback) => {
+				if (callback.error) {
+					toast.error(t(`dashboard.error.${callback.error}`));
+				}
 
-					if (callback.success) {
-						toast.success(t(`dashboard.success.${callback.success}`));
-						router.refresh();
-					}
-				});
+				if (callback.success) {
+					toast.success(t(`dashboard.success.${callback.success}`));
+					router.refresh();
+				}
+			});
 		});
-	}
+	};
 
 	const columns: ColumnDef<Message>[] = [
 		{
@@ -51,7 +56,9 @@ const MessagesTableClient: React.FC<{ messages: Message[]; }> = ({ messages }) =
 							table.getIsAllPageRowsSelected() ||
 							(table.getIsSomePageRowsSelected() && "indeterminate")
 						}
-						onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+						onCheckedChange={(value) =>
+							table.toggleAllPageRowsSelected(!!value)
+						}
 						aria-label="Select all"
 					/>
 				</div>
@@ -81,8 +88,8 @@ const MessagesTableClient: React.FC<{ messages: Message[]; }> = ({ messages }) =
 						{t("general.name")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
-			}
+				);
+			},
 		},
 		{
 			accessorKey: "email",
@@ -96,15 +103,18 @@ const MessagesTableClient: React.FC<{ messages: Message[]; }> = ({ messages }) =
 						{t("general.email")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
+				);
 			},
 			cell: ({ row }) => {
 				return (
-					<Link href={`mailto:${row.original.email}`} className="underline hover:no-underline">
+					<Link
+						href={`mailto:${row.original.email}`}
+						className="underline hover:no-underline"
+					>
 						{row.original.email}
 					</Link>
-				)
-			}
+				);
+			},
 		},
 		{
 			accessorKey: "subject",
@@ -118,7 +128,7 @@ const MessagesTableClient: React.FC<{ messages: Message[]; }> = ({ messages }) =
 						{t("general.subject")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
+				);
 			},
 		},
 		{
@@ -133,13 +143,15 @@ const MessagesTableClient: React.FC<{ messages: Message[]; }> = ({ messages }) =
 						{t("general.createdAt")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
+				);
 			},
 			cell: ({ row }) => {
-				const formattedDate = new Date(row.original.createdAt).toLocaleDateString(t("locale"));
+				const formattedDate = new Date(
+					row.original.createdAt,
+				).toLocaleDateString(t("locale"));
 
 				return formattedDate;
-			}
+			},
 		},
 		{
 			accessorKey: "read",
@@ -161,11 +173,13 @@ const MessagesTableClient: React.FC<{ messages: Message[]; }> = ({ messages }) =
 							</Button>
 						</TooltipTrigger>
 						<TooltipContent>
-							{message.read ? t("dashboard.messages.markAsUnread") : t("dashboard.messages.markAsRead")}
+							{message.read
+								? t("dashboard.messages.markAsUnread")
+								: t("dashboard.messages.markAsRead")}
 						</TooltipContent>
 					</Tooltip>
-				)
-			}
+				);
+			},
 		},
 		{
 			accessorKey: "actions",
@@ -179,11 +193,11 @@ const MessagesTableClient: React.FC<{ messages: Message[]; }> = ({ messages }) =
 						<EditMessage message={message} />
 						<DeleteMessage messageId={message.id} />
 					</div>
-				)
+				);
 			},
 			enableHiding: false,
 			enableSorting: false,
-		}
+		},
 	];
 
 	return (
@@ -194,7 +208,7 @@ const MessagesTableClient: React.FC<{ messages: Message[]; }> = ({ messages }) =
 			searchFor="email"
 			noResultsText={t("dashboard.messages.noResults")}
 		/>
-	)
-}
+	);
+};
 
 export default MessagesTableClient;

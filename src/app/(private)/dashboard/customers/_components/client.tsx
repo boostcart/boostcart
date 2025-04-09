@@ -5,15 +5,17 @@ import { ChevronsUpDown, Pencil, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table";
-import DeleteUser from "./delete-user";
-import EditUser from "./edit-user";
-import Link from "next/link";
 import type { User } from "@prisma/client";
+import { ColumnDef } from "@tanstack/react-table";
+import Link from "next/link";
 import { useTranslations } from "use-intl";
+import DeleteUser from "./delete-user";
 
-const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ users, currentUser }) => {
+const UsersTableClient: React.FC<{ users: User[]; currentUser: User }> = ({
+	users,
+	currentUser,
+}) => {
 	const t = useTranslations();
 
 	const columns: ColumnDef<User>[] = [
@@ -27,7 +29,9 @@ const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ use
 							table.getIsAllPageRowsSelected() ||
 							(table.getIsSomePageRowsSelected() && "indeterminate")
 						}
-						onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+						onCheckedChange={(value) =>
+							table.toggleAllPageRowsSelected(!!value)
+						}
 						aria-label="Select all"
 					/>
 				</div>
@@ -57,7 +61,7 @@ const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ use
 						{t("general.roles.user")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
+				);
 			},
 			cell: ({ row }) => {
 				const user = row.original;
@@ -70,25 +74,25 @@ const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ use
 								alt={user.name as string}
 							/>
 							<AvatarFallback>
-								{user.name ?
-									user.name.split(' ').length > 1
-										? `${user.name.split(' ')[0][0]}${user.name.split(' ')[user.name.split(' ').length - 1][0]}`
+								{user.name
+									? user.name.split(" ").length > 1
+										? `${user.name.split(" ")[0][0]}${user.name.split(" ")[user.name.split(" ").length - 1][0]}`
 										: user.name.substring(0, 2)
-									: '??'}
+									: "??"}
 							</AvatarFallback>
 						</Avatar>
 						<div className="flex flex-col">
 							<span>{user.name}</span>
 							<Link
 								href={`mailto:${user.email}`}
-								className="text-xs text-muted-foreground underline hover:no-underline"
+								className="text-xs underline text-muted-foreground hover:no-underline"
 							>
 								{user.email}
 							</Link>
 						</div>
 					</div>
-				)
-			}
+				);
+			},
 		},
 		{
 			accessorKey: "role",
@@ -102,7 +106,7 @@ const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ use
 						{t("general.role")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
+				);
 			},
 			cell: ({ row }) => {
 				if (row.original.role === "USER") {
@@ -116,7 +120,7 @@ const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ use
 				if (row.original.role === "SUPER_ADMIN") {
 					return t("general.roles.superAdmin");
 				}
-			}
+			},
 		},
 		{
 			accessorKey: "createdAt",
@@ -130,13 +134,15 @@ const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ use
 						{t("general.createdAt")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
+				);
 			},
 			cell: ({ row }) => {
-				const formattedDate = new Date(row.original.createdAt).toLocaleDateString(t("locale"));
+				const formattedDate = new Date(
+					row.original.createdAt,
+				).toLocaleDateString(t("locale"));
 
 				return formattedDate;
-			}
+			},
 		},
 		{
 			accessorKey: "actions",
@@ -144,7 +150,10 @@ const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ use
 			cell: ({ row }) => {
 				const user = row.original;
 
-				if (currentUser.id === user.id || (currentUser.role === "ADMIN" && user.role === "SUPER_ADMIN")) {
+				if (
+					currentUser.id === user.id ||
+					(currentUser.role === "ADMIN" && user.role === "SUPER_ADMIN")
+				) {
 					return (
 						<div className="flex items-center space-x-2">
 							<Button variant="ghost" size="icon" disabled>
@@ -154,15 +163,19 @@ const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ use
 								<Trash2 />
 							</Button>
 						</div>
-					)
+					);
 				}
 
 				return (
 					<div className="flex items-center space-x-2">
-						<EditUser user={user} />
+						<Button variant="ghost" size="icon" asChild>
+							<Link href={`/dashboard/customers/${user.id}`}>
+								<Pencil />
+							</Link>
+						</Button>
 						<DeleteUser userId={user.id} />
 					</div>
-				)
+				);
 			},
 			enableHiding: false,
 			enableSorting: false,
@@ -177,7 +190,7 @@ const UsersTableClient: React.FC<{ users: User[]; currentUser: User; }> = ({ use
 			searchFor="email"
 			noResultsText={t("dashboard.customers.noResults")}
 		/>
-	)
-}
+	);
+};
 
 export default UsersTableClient;

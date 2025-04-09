@@ -1,21 +1,24 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ChevronsUpDown, Eye } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { ChevronsUpDown, Eye, Pencil } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table";
-import DeletePost from "./delete-post";
-import EditPost from "./edit-post";
-import Link from "next/link";
 import { Post } from "@/types";
+import { ColumnDef } from "@tanstack/react-table";
+import Link from "next/link";
 import { useTranslations } from "use-intl";
+import DeletePost from "./delete-post";
 
-const PostsTableClient: React.FC<{ posts: Post[]; }> = ({ posts }) => {
+const PostsTableClient: React.FC<{ posts: Post[] }> = ({ posts }) => {
 	const t = useTranslations();
 
 	const columns: ColumnDef<Post>[] = [
@@ -29,7 +32,9 @@ const PostsTableClient: React.FC<{ posts: Post[]; }> = ({ posts }) => {
 							table.getIsAllPageRowsSelected() ||
 							(table.getIsSomePageRowsSelected() && "indeterminate")
 						}
-						onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+						onCheckedChange={(value) =>
+							table.toggleAllPageRowsSelected(!!value)
+						}
 						aria-label="Select all"
 					/>
 				</div>
@@ -59,7 +64,7 @@ const PostsTableClient: React.FC<{ posts: Post[]; }> = ({ posts }) => {
 						{t("general.title")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
+				);
 			},
 			cell: ({ row }) => {
 				const post = row.original;
@@ -69,8 +74,8 @@ const PostsTableClient: React.FC<{ posts: Post[]; }> = ({ posts }) => {
 						<span>{post.defaultTitle}</span>
 						<span className="text-xs text-muted-foreground">{post.slug}</span>
 					</div>
-				)
-			}
+				);
+			},
 		},
 		{
 			accessorKey: "status",
@@ -84,7 +89,7 @@ const PostsTableClient: React.FC<{ posts: Post[]; }> = ({ posts }) => {
 						{t("general.status")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
+				);
 			},
 			cell: ({ row }) => {
 				const post = row.original;
@@ -92,16 +97,26 @@ const PostsTableClient: React.FC<{ posts: Post[]; }> = ({ posts }) => {
 				return (
 					<Tooltip>
 						<TooltipTrigger asChild>
-							<Badge variant={post.status === "PUBLISHED" ? "success" : "secondary"}>
-								{post.status === "PUBLISHED" ? t("status.published") : (post.status === "HIDDEN" ? t("status.hidden") : t("status.draft"))}
+							<Badge
+								variant={post.status === "PUBLISHED" ? "success" : "secondary"}
+							>
+								{post.status === "PUBLISHED"
+									? t("status.published")
+									: post.status === "HIDDEN"
+										? t("status.hidden")
+										: t("status.draft")}
 							</Badge>
 						</TooltipTrigger>
 						<TooltipContent>
-							{post.status === "HIDDEN" ? t("status.hiddenStatus") : (post.status === "PUBLISHED" ? t("status.published") : t("status.draft"))}
+							{post.status === "HIDDEN"
+								? t("status.hiddenStatus")
+								: post.status === "PUBLISHED"
+									? t("status.published")
+									: t("status.draft")}
 						</TooltipContent>
 					</Tooltip>
-				)
-			}
+				);
+			},
 		},
 		{
 			accessorKey: "user",
@@ -115,7 +130,7 @@ const PostsTableClient: React.FC<{ posts: Post[]; }> = ({ posts }) => {
 						{t("general.author")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
+				);
 			},
 			cell: ({ row }) => {
 				const user = row.original.user;
@@ -128,25 +143,25 @@ const PostsTableClient: React.FC<{ posts: Post[]; }> = ({ posts }) => {
 								alt={user.name as string}
 							/>
 							<AvatarFallback>
-								{user.name ?
-									user.name.split(' ').length > 1
-										? `${user.name.split(' ')[0][0]}${user.name.split(' ')[user.name.split(' ').length - 1][0]}`
+								{user.name
+									? user.name.split(" ").length > 1
+										? `${user.name.split(" ")[0][0]}${user.name.split(" ")[user.name.split(" ").length - 1][0]}`
 										: user.name.substring(0, 2)
-									: '??'}
+									: "??"}
 							</AvatarFallback>
 						</Avatar>
 						<div className="flex flex-col">
 							<span>{user.name}</span>
 							<Link
 								href={`mailto:${user.email}`}
-								className="text-xs text-muted-foreground underline hover:no-underline"
+								className="text-xs underline text-muted-foreground hover:no-underline"
 							>
 								{user.email}
 							</Link>
 						</div>
 					</div>
-				)
-			}
+				);
+			},
 		},
 		{
 			accessorKey: "createdAt",
@@ -160,13 +175,15 @@ const PostsTableClient: React.FC<{ posts: Post[]; }> = ({ posts }) => {
 						{t("general.createdAt")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
+				);
 			},
 			cell: ({ row }) => {
-				const formattedDate = new Date(row.original.createdAt).toLocaleDateString(t("locale"));
+				const formattedDate = new Date(
+					row.original.createdAt,
+				).toLocaleDateString(t("locale"));
 
 				return formattedDate;
-			}
+			},
 		},
 		{
 			accessorKey: "actions",
@@ -194,14 +211,18 @@ const PostsTableClient: React.FC<{ posts: Post[]; }> = ({ posts }) => {
 								</Link>
 							</Button>
 						)}
-						<EditPost post={post} />
+						<Button variant="ghost" size="icon" asChild>
+							<Link href={`/dashboard/blog/post/${post.id}`}>
+								<Pencil />
+							</Link>
+						</Button>
 						<DeletePost postId={post.id} />
 					</div>
-				)
+				);
 			},
 			enableHiding: false,
 			enableSorting: false,
-		}
+		},
 	];
 
 	return (
@@ -212,7 +233,7 @@ const PostsTableClient: React.FC<{ posts: Post[]; }> = ({ posts }) => {
 			searchFor="defaultTitle"
 			noResultsText={t("dashboard.blog.noResults")}
 		/>
-	)
-}
+	);
+};
 
 export default PostsTableClient;

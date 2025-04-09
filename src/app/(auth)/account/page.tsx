@@ -11,6 +11,8 @@ export default async function AccountPage() {
 	const user = session.user;
 
 	return (
-		<div>{user.name} - {user.role}</div>
-	)
+		<div>
+			{user.name} - {user.role}
+		</div>
+	);
 }

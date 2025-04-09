@@ -1,30 +1,39 @@
 "use client";
 
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
 import { ForgotPasswordSchema, ForgotPasswordSchemaType } from "@/schemas";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import { MailIcon } from "lucide-react";
 import { sendResetLink } from "@/server/auth";
-import { toast } from "sonner";
-import { useForm } from "react-hook-form";
-import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { MailIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const ForgotPasswordForm = () => {
 	const t = useTranslations();
 	const [isPending, startTransition] = useTransition();
 	const [isCompleted, setIsCompleted] = useState<boolean>(false);
-	const [emailAppUrl, setEmailAppUrl] = useState<string>("https://mail.google.com/");
+	const [emailAppUrl, setEmailAppUrl] = useState<string>(
+		"https://mail.google.com/",
+	);
 
 	const form = useForm<ForgotPasswordSchemaType>({
 		resolver: zodResolver(ForgotPasswordSchema),
 		defaultValues: {
-			email: ""
-		}
+			email: "",
+		},
 	});
 
 	const onSubmit = (data: ForgotPasswordSchemaType) => {
@@ -32,11 +41,19 @@ const ForgotPasswordForm = () => {
 			sendResetLink(data)
 				.then((callback) => {
 					if (callback?.error) {
-						toast.error(t(`auth.errors.${callback.error as keyof IntlMessages["auth"]["errors"]}`));
+						toast.error(
+							t(
+								`auth.errors.${callback.error as keyof IntlMessages["auth"]["errors"]}`,
+							),
+						);
 					}
 
 					if (callback?.success) {
-						toast.success(t(`auth.success.${callback.success as keyof IntlMessages["auth"]["success"]}`));
+						toast.success(
+							t(
+								`auth.success.${callback.success as keyof IntlMessages["auth"]["success"]}`,
+							),
+						);
 						setIsCompleted(true);
 
 						if (data.email.search(/@gmail\.com$/) !== -1) {
@@ -58,7 +75,9 @@ const ForgotPasswordForm = () => {
 						setEmailAppUrl("https://mail.google.com/");
 					}
 				})
-				.catch(() => { toast.error(t(`auth.errors.something_went_wrong`)); });
+				.catch(() => {
+					toast.error(t(`auth.errors.something_went_wrong`));
+				});
 		});
 	};
 
@@ -67,12 +86,19 @@ const ForgotPasswordForm = () => {
 			{!isCompleted ? (
 				<>
 					<div className="flex flex-col items-center w-full space-y-2">
-						<h1 className="text-4xl font-bold">{t("auth.forgotPassword.title")}</h1>
-						<h2 className="font-medium text-neutral-500">{t("auth.forgotPassword.subtitle")}</h2>
+						<h1 className="text-4xl font-bold">
+							{t("auth.forgotPassword.title")}
+						</h1>
+						<h2 className="font-medium text-neutral-500">
+							{t("auth.forgotPassword.subtitle")}
+						</h2>
 					</div>
 
 					<Form {...form}>
-						<form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col items-center w-full space-y-4 lg:max-w-xl">
+						<form
+							onSubmit={form.handleSubmit(onSubmit)}
+							className="flex flex-col items-center w-full space-y-4 lg:max-w-xl"
+						>
 							<FormField
 								control={form.control}
 								name="email"
@@ -93,14 +119,16 @@ const ForgotPasswordForm = () => {
 								)}
 							/>
 
-							<Button type="submit" className="w-full h-10 px-4 py-2 text-sm rounded-md md:px-8 md:h-11 text-md" disabled={isPending}>
+							<Button
+								type="submit"
+								className="w-full h-10 px-4 py-2 text-sm rounded-md md:px-8 md:h-11 text-md"
+								disabled={isPending}
+							>
 								{t("general.send")}
 							</Button>
 
 							<Button variant="link" asChild>
-								<Link href="/login">
-									{t("auth.general.rememberPassword")}
-								</Link>
+								<Link href="/login">{t("auth.general.rememberPassword")}</Link>
 							</Button>
 						</form>
 					</Form>
@@ -108,7 +136,9 @@ const ForgotPasswordForm = () => {
 			) : (
 				<div className="flex flex-col items-center w-full space-y-8 lg:max-w-xl">
 					<div className="flex flex-col items-center w-full space-y-2">
-						<h1 className="text-4xl font-bold">{t("auth.forgotPassword.successTitle")}</h1>
+						<h1 className="text-4xl font-bold">
+							{t("auth.forgotPassword.successTitle")}
+						</h1>
 						<h2 className="flex flex-col items-center font-medium text-neutral-500">
 							<span>{t("auth.forgotPassword.successSubtitle")}</span>
 							<strong>{form.getValues("email")}</strong>
@@ -123,14 +153,17 @@ const ForgotPasswordForm = () => {
 
 					<div className="flex flex-row space-x-1 text-neutral-500">
 						<span>{t("auth.forgotPassword.didntReceiveEmail")}</span>
-						<button className="font-bold hover:text-primary transition cursor-pointer" onClick={form.handleSubmit(onSubmit)}>
+						<button
+							className="font-bold hover:text-primary transition cursor-pointer"
+							onClick={form.handleSubmit(onSubmit)}
+						>
 							{t("auth.forgotPassword.clickToResend")}
 						</button>
 					</div>
 				</div>
 			)}
 		</>
-	)
-}
+	);
+};
 
 export default ForgotPasswordForm;

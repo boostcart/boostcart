@@ -289,7 +289,6 @@ model Category {
   id          String  @id @default(cuid())
   defaultName String // Default name for fallback and slug generation
   slug        String  @unique
-  description String?
   image       String?
   status      Status  @default(DRAFT)
 

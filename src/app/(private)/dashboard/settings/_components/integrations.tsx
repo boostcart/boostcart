@@ -5,11 +5,11 @@ import { Plus, Search } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
+import { useState } from "react";
 
 type Integration = {
 	name: string;
@@ -28,12 +28,14 @@ const Integrations = () => {
 	const integrations = [
 		{
 			name: "Google Authentication",
-			description: "Enhance security and make authentication easier for your users with Google integration.",
+			description:
+				"Enhance security and make authentication easier for your users with Google integration.",
 			tags: ["Authentication"],
 			new: false,
 			comingSoon: true,
 			featured: true,
-			image: "https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA"
+			image:
+				"https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA",
 		},
 		{
 			name: "Stripe",
@@ -42,25 +44,30 @@ const Integrations = () => {
 			new: false,
 			comingSoon: true,
 			featured: true,
-			image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQGluJhW7I1NYU7jF77E-9K9I46_ib_DUNHw&s"
+			image:
+				"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQGluJhW7I1NYU7jF77E-9K9I46_ib_DUNHw&s",
 		},
 		{
 			name: "Facebook Authentication",
-			description: "Enhance security and make authentication easier for your users with Facebook integration.",
+			description:
+				"Enhance security and make authentication easier for your users with Facebook integration.",
 			tags: ["Authentication"],
 			new: false,
 			comingSoon: true,
 			featured: false,
-			image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/1200px-Facebook_f_logo_%282019%29.svg.png"
+			image:
+				"https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/1200px-Facebook_f_logo_%282019%29.svg.png",
 		},
 		{
 			name: "Google Analytics",
-			description: "Track and analyze your website traffic with Google Analytics integration.",
+			description:
+				"Track and analyze your website traffic with Google Analytics integration.",
 			tags: ["Analytics"],
 			new: false,
 			comingSoon: true,
 			featured: false,
-			image: "https://images.icon-icons.com/2699/PNG/512/google_analytics_logo_icon_171061.png"
+			image:
+				"https://images.icon-icons.com/2699/PNG/512/google_analytics_logo_icon_171061.png",
 		},
 		{
 			name: "PayPal",
@@ -69,7 +76,8 @@ const Integrations = () => {
 			new: false,
 			comingSoon: true,
 			featured: false,
-			image: "https://w7.pngwing.com/pngs/665/281/png-transparent-logo-computer-icons-paypal-paypal-blue-angle-rectangle.png"
+			image:
+				"https://w7.pngwing.com/pngs/665/281/png-transparent-logo-computer-icons-paypal-paypal-blue-angle-rectangle.png",
 		},
 		{
 			name: "myPOS",
@@ -78,7 +86,8 @@ const Integrations = () => {
 			new: false,
 			comingSoon: true,
 			featured: true,
-			image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/MyPOS_Logo.svg/1200px-MyPOS_Logo.svg.png"
+			image:
+				"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/MyPOS_Logo.svg/1200px-MyPOS_Logo.svg.png",
 		},
 		{
 			name: "Speedy",
@@ -87,7 +96,8 @@ const Integrations = () => {
 			new: false,
 			comingSoon: true,
 			featured: false,
-			image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuRZm6Hg0JbLbxDEVM2SF_8wF4m_cSmy8Q0A&s"
+			image:
+				"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuRZm6Hg0JbLbxDEVM2SF_8wF4m_cSmy8Q0A&s",
 		},
 		{
 			name: "Econt",
@@ -96,19 +106,23 @@ const Integrations = () => {
 			new: false,
 			comingSoon: true,
 			featured: false,
-			image: "https://www.econt.com/images/main/econt_eng.png"
-		}
+			image: "https://www.econt.com/images/main/econt_eng.png",
+		},
 	] as Integration[];
 
 	return (
 		<div className="flex flex-col space-y-8">
 			<div className="flex flex-col space-y-4">
-				<h2 className="text-xl font-medium">{t("dashboard.settings.integrations.featured")}</h2>
+				<h2 className="text-xl font-medium">
+					{t("dashboard.settings.integrations.featured")}
+				</h2>
 
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-					{integrations.filter(integration => integration.featured).map((integration, index) => (
-						<IntegrationCard key={index} integration={integration} />
-					))}
+					{integrations
+						.filter((integration) => integration.featured)
+						.map((integration, index) => (
+							<IntegrationCard key={index} integration={integration} />
+						))}
 				</div>
 			</div>
 
@@ -117,40 +131,46 @@ const Integrations = () => {
 			<div className="flex flex-col space-y-4">
 				<div className="flex flex-col items-center justify-between sm:flex-row">
 					<div className="flex items-center space-x-2">
-						<h2 className="text-xl font-medium">{t("dashboard.settings.integrations.allIntegrations")}</h2>
+						<h2 className="text-xl font-medium">
+							{t("dashboard.settings.integrations.allIntegrations")}
+						</h2>
 						<Badge variant="outline">{integrations.length}</Badge>
 					</div>
 
 					<div>
 						<Input
-							placeholder={t("dashboard.settings.integrations.searchIntegrations")}
+							placeholder={t(
+								"dashboard.settings.integrations.searchIntegrations",
+							)}
 							startIcon={Search}
 							className="sm:min-w-sm"
 							value={search}
-							onChange={e => setSearch(e.target.value)}
+							onChange={(e) => setSearch(e.target.value)}
 						/>
 					</div>
 				</div>
 
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 					{integrations
-						.filter(integration =>
-							integration.name.toLowerCase().includes(search.toLowerCase()) ||
-							integration.tags.some(tag => tag.toLowerCase().includes(search.toLowerCase()))
+						.filter(
+							(integration) =>
+								integration.name.toLowerCase().includes(search.toLowerCase()) ||
+								integration.tags.some((tag) =>
+									tag.toLowerCase().includes(search.toLowerCase()),
+								),
 						)
 						.map((integration, index) => (
 							<IntegrationCard key={index} integration={integration} />
-						))
-					}
+						))}
 				</div>
 			</div>
 		</div>
-	)
-}
+	);
+};
 
 const IntegrationCard = ({ integration }: { integration: Integration }) => {
 	const t = useTranslations();
-	
+
 	return (
 		<Card>
 			<CardContent className="p-6">
@@ -165,7 +185,9 @@ const IntegrationCard = ({ integration }: { integration: Integration }) => {
 						/>
 
 						<Button variant="outline" disabled={integration.comingSoon}>
-							{integration.comingSoon ? t("general.comingSoon") : (
+							{integration.comingSoon ? (
+								t("general.comingSoon")
+							) : (
 								<>
 									<Plus />
 									<span>{t("general.connect")}</span>
@@ -180,18 +202,22 @@ const IntegrationCard = ({ integration }: { integration: Integration }) => {
 							{integration.new && <Badge>{t("general.new")}</Badge>}
 						</div>
 
-						<p className="text-sm text-muted-foreground">{integration.description}</p>
+						<p className="text-sm text-muted-foreground">
+							{integration.description}
+						</p>
 					</div>
 
 					<div className="flex items-center space-x-2">
 						{integration.tags.map((tag, index) => (
-							<Badge key={index} variant="secondary">{tag}</Badge>
+							<Badge key={index} variant="secondary">
+								{tag}
+							</Badge>
 						))}
 					</div>
 				</div>
 			</CardContent>
 		</Card>
-	)
-}
+	);
+};
 
 export default Integrations;

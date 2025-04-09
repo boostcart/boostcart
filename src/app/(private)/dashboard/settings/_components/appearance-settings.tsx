@@ -1,9 +1,5 @@
-
-
 const AppearanceSettings = () => {
-	return (
-		<div>AppearanceSettings</div>
-	)
-}
+	return <div>AppearanceSettings</div>;
+};
 
 export default AppearanceSettings;

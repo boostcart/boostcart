@@ -1,12 +1,12 @@
 "use client";
 
 import { sendVerificationLink, verifyEmail } from "@/server/auth";
-import { useCallback, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect } from "react";
 
 import Loader from "@/components/loader";
-import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 const VerifyEmailClient = () => {
 	const router = useRouter();
@@ -21,15 +21,26 @@ const VerifyEmailClient = () => {
 			sendVerificationLink(email)
 				.then((callback) => {
 					if (callback.error) {
-						toast.error(t(`auth.errors.${callback.error as keyof IntlMessages["auth"]["errors"]}`));
+						toast.error(
+							t(
+								`auth.errors.${callback.error as keyof IntlMessages["auth"]["errors"]}`,
+							),
+						);
 						router.push("/");
 					}
 
 					if (callback.success) {
-						toast.success(t(`auth.success.${callback.success as keyof IntlMessages["auth"]["success"]}`));
+						toast.success(
+							t(
+								`auth.success.${callback.success as keyof IntlMessages["auth"]["success"]}`,
+							),
+						);
 						router.push("/");
 					}
-				}).catch(() => { toast.error(t("auth.errors.something_went_wrong")); });
+				})
+				.catch(() => {
+					toast.error(t("auth.errors.something_went_wrong"));
+				});
 		} else if (resend === "true" && !email) {
 			toast.error(t("auth.errors.email_not_provided"));
 			router.push("/");
@@ -47,15 +58,26 @@ const VerifyEmailClient = () => {
 			verifyEmail(token)
 				.then((callback) => {
 					if (callback.error) {
-						toast.error(t(`auth.errors.${callback.error as keyof IntlMessages["auth"]["errors"]}`));
+						toast.error(
+							t(
+								`auth.errors.${callback.error as keyof IntlMessages["auth"]["errors"]}`,
+							),
+						);
 						router.push("/");
 					}
 
 					if (callback.success) {
-						toast.success(t(`auth.success.${callback.success as keyof IntlMessages["auth"]["success"]}`));
+						toast.success(
+							t(
+								`auth.success.${callback.success as keyof IntlMessages["auth"]["success"]}`,
+							),
+						);
 						router.push("/login");
 					}
-				}).catch(() => { toast.error(t("auth.errors.something_went_wrong")); });
+				})
+				.catch(() => {
+					toast.error(t("auth.errors.something_went_wrong"));
+				});
 		}
 	}, [token, router, resend, t]);
 
@@ -74,6 +96,6 @@ const VerifyEmailClient = () => {
 			<span className="text-neutral-700">{t("auth.verifyEmail.loading")}</span>
 		</div>
 	);
-}
+};
 
 export default VerifyEmailClient;

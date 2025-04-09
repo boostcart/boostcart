@@ -1,5 +1,21 @@
-import { CategoryTranslation, Brand as PBrand, Category as PCategory, Post as PPost, Product as PProduct, ProductVariant as PProductVariant, ProductImage, ProductReview, ProductTag, ProductTranslation, TechnicalInfo } from "@prisma/client";
-import { PostTranslation, User } from "@prisma/client";
+import {
+	CategoryTranslation,
+	Brand as PBrand,
+	Category as PCategory,
+	Message as PMessage,
+	Post as PPost,
+	Product as PProduct,
+	ProductReview as PProductReview,
+	ProductVariant as PProductVariant,
+	User as PUser,
+	PasswordChange,
+	PostTranslation,
+	ProductImage,
+	ProductTag,
+	ProductTranslation,
+	ShippingAddress,
+	TechnicalInfo,
+} from "@prisma/client";
 
 import { ClientUploadedFileData } from "uploadthing/types";
 
@@ -7,34 +23,50 @@ export type Roles = "USER" | "ADMIN" | "SUPER_ADMIN";
 
 export type UploadedFile<T = unknown> = ClientUploadedFileData<T>;
 
+export type User = PUser & {
+	shippingAddresses: ShippingAddress[];
+	passwordChanges: PasswordChange[];
+	messages: Message[];
+	posts: Post[];
+	productReviews: PProductReview[];
+};
+
+export type Message = PMessage & {
+	user: User;
+};
+
 export type Post = PPost & {
-  translations: PostTranslation[];
-  user: User;
+	translations: PostTranslation[];
+	user: Pick<PUser, "name" | "email" | "image">;
 };
 
 export type Brand = PBrand & {
-  products: PProduct[];
+	products: Product[];
 };
 
 export type Category = PCategory & {
-  parent: Category | null;
-  subcategories: Category[];
-  translations: CategoryTranslation[];
-  products: PProduct[];
+	parent: Category | null;
+	subcategories: Category[];
+	translations: CategoryTranslation[];
+	products: Product[];
+};
+
+export type ProductReview = PProductReview & {
+	product: Product;
+	user: User;
 };
 
 export type Product = PProduct & {
-  translations: ProductTranslation[];
-  brand: Brand;
-  category: Category;
-  technicalInfo: TechnicalInfo[];
-  reviews: ProductReview[];
-  tags: ProductTag[];
-  images: ProductImage[];
-  variatns: ProductVariant[];
+	translations: ProductTranslation[];
+	brand: Brand;
+	category: Category;
+	technicalInfo: TechnicalInfo[];
+	reviews: PProductReview[];
+	tags: ProductTag[];
+	images: ProductImage[];
+	variatns: ProductVariant[];
 };
 
 export type ProductVariant = PProductVariant & {
-  product: Product;
+	product: Product;
 };
-

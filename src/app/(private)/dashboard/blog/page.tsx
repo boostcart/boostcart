@@ -1,28 +1,28 @@
-import NewPost from "./_components/new-post";
-import { Post } from "@/types";
-import PostsTableClient from "./_components/client";
-import { forbidden } from "next/navigation";
-import { getCurrentUser } from "@/lib/actions";
+import { Button } from "@/components/ui/button";
+import Header from "@/components/ui/header";
 import { getPosts } from "@/data/post";
+import { Post } from "@/types";
+import { FilePlus2 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
+import PostsTableClient from "./_components/client";
 
 export default async function DashboardBlog() {
 	const t = await getTranslations();
-	const currentUser = await getCurrentUser();
-
-	if (!currentUser) return forbidden();
-
-	const posts = await getPosts() as Post[] || [];
+	const posts = ((await getPosts()) as Post[]) || [];
 
 	return (
 		<div className="flex flex-col space-y-4">
-			<div className="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-center">
-				<h1 className="text-2xl font-bold">{t("dashboard.nav.blog")}</h1>
-
-				<NewPost />
-			</div>
+			<Header title={t("dashboard.nav.blog")}>
+				<Button asChild>
+					<Link href="/dashboard/blog/post/create">
+						<FilePlus2 />
+						{t("dashboard.blog.newPost.button")}
+					</Link>
+				</Button>
+			</Header>
 
 			<PostsTableClient posts={posts} />
 		</div>
-	)
+	);
 }

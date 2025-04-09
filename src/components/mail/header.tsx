@@ -15,7 +15,7 @@ const MailHeader = () => {
 				</Column>
 			</Row>
 		</Section>
-	)
-}
+	);
+};
 
 export default MailHeader;

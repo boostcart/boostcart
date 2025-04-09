@@ -1,21 +1,21 @@
-import ForgotPasswordForm from "./_components/forgot-password-form";
+import { auth } from "@/auth";
+import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
-import { Metadata } from "next";
-import { auth } from "@/auth";
-import { getTranslations } from "next-intl/server"
 import { redirect } from "next/navigation";
+import ForgotPasswordForm from "./_components/forgot-password-form";
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getTranslations();
 
 	return {
-		title: `${t('auth.forgotPassword.meta.title')} 🚀 ${t('app')}`,
+		title: `${t("auth.forgotPassword.meta.title")} 🚀 ${t("app")}`,
 		robots: {
 			index: false,
-			follow: false
-		}
-	}
+			follow: false,
+		},
+	};
 }
 
 export default async function ForgotPasswordPage() {
@@ -39,5 +39,5 @@ export default async function ForgotPasswordPage() {
 
 			<ForgotPasswordForm />
 		</div>
-	)
+	);
 }

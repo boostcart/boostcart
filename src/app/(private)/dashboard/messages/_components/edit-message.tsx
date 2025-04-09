@@ -1,24 +1,40 @@
 "use client";
 
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import {
+	Sheet,
+	SheetClose,
+	SheetContent,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from "@/components/ui/sheet";
 import { MessagesSchema, MessagesSchemaType } from "@/schemas";
 import { Pencil, SaveIcon } from "lucide-react";
-import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import type { Message } from "@prisma/client";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { editMessage } from "@/data/message";
-import { toast } from "sonner";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { Message } from "@prisma/client";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
-const EditMessage: React.FC<{ message: Message; }> = ({ message }) => {
+const EditMessage: React.FC<{ message: Message }> = ({ message }) => {
 	const t = useTranslations();
 	const [isPending, startTransition] = useTransition();
 	const [isOpen, setOpen] = useState<boolean>(false);
@@ -33,25 +49,24 @@ const EditMessage: React.FC<{ message: Message; }> = ({ message }) => {
 			subject: message.subject,
 			message: message.message,
 			read: message.read,
-		}
+		},
 	});
 
 	const onSubmit = (data: any) => {
 		startTransition(() => {
-			editMessage(message.id, data)
-				.then((callback) => {
-					if (callback.error) {
-						toast.error(t(`dashboard.errors.${callback.error}`));
-					}
+			editMessage(message.id, data).then((callback) => {
+				if (callback.error) {
+					toast.error(t(`dashboard.errors.${callback.error}`));
+				}
 
-					if (callback.success) {
-						toast.success(t(`dashboard.success.${callback.success}`));
-						router.refresh();
-						setOpen(false);
-					}
-				});
+				if (callback.success) {
+					toast.success(t(`dashboard.success.${callback.success}`));
+					router.refresh();
+					setOpen(false);
+				}
+			});
 		});
-	}
+	};
 
 	return (
 		<Sheet open={isOpen} onOpenChange={setOpen}>
@@ -64,7 +79,11 @@ const EditMessage: React.FC<{ message: Message; }> = ({ message }) => {
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)}>
 						<SheetHeader>
-							<SheetTitle>{t("dashboard.messages.editMessage.title", { subject: message.subject })}</SheetTitle>
+							<SheetTitle>
+								{t("dashboard.messages.editMessage.title", {
+									subject: message.subject,
+								})}
+							</SheetTitle>
 						</SheetHeader>
 						<div className="flex flex-col my-4 space-y-4">
 							<FormField
@@ -183,7 +202,11 @@ const EditMessage: React.FC<{ message: Message; }> = ({ message }) => {
 						</div>
 						<SheetFooter>
 							<SheetClose asChild>
-								<Button onClick={() => form.reset()} variant="secondary" disabled={isPending}>
+								<Button
+									onClick={() => form.reset()}
+									variant="secondary"
+									disabled={isPending}
+								>
 									{t("general.cancel")}
 								</Button>
 							</SheetClose>
@@ -196,7 +219,7 @@ const EditMessage: React.FC<{ message: Message; }> = ({ message }) => {
 				</Form>
 			</SheetContent>
 		</Sheet>
-	)
-}
+	);
+};
 
 export default EditMessage;

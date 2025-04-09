@@ -1,29 +1,40 @@
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import {
+	SidebarInset,
+	SidebarProvider,
+	SidebarTrigger,
+} from "@/components/ui/sidebar";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { forbidden, unauthorized } from "next/navigation";
 
+import { auth } from "@/auth";
 import DashboardSidebar from "@/components/dashboard-sidebar";
 import LanguageSwitcher from "@/components/language-switcher";
-import { Metadata } from "next";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import UserMenu from "./dashboard/_components/user-menu-dropdown";
-import { UserRole } from "@prisma/client";
-import { auth } from "@/auth";
 import { getMessages } from "@/data/message";
 import { getUserById } from "@/data/user";
+import { UserRole } from "@prisma/client";
+import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+import UserMenu from "./dashboard/_components/user-menu-dropdown";
 
 export const metadata: Metadata = {
 	title: "Dashboard 🚀 BoostCart",
 	robots: {
 		index: false,
-		follow: false
-	}
+		follow: false,
+	},
 };
 
 export default async function DashboardLayout(
 	props: Readonly<{
 		children: React.ReactNode;
-	}>
+	}>,
 ) {
+	const t = await getTranslations();
 	const { children } = props;
 	const session = await auth();
 
@@ -41,7 +52,9 @@ export default async function DashboardLayout(
 		return unauthorized();
 	}
 
-	const messageCount = await getMessages().then((messages) => messages?.filter(message => !message.read).length || 0);
+	const messageCount = await getMessages().then(
+		(messages) => messages?.filter((message) => !message.read).length || 0,
+	);
 
 	return (
 		<div className="flex flex-col flex-1 w-full h-screen overflow-hidden md:flex-row bg-background">
@@ -50,9 +63,16 @@ export default async function DashboardLayout(
 					<DashboardSidebar messageCount={messageCount} orderCount={3} />
 
 					<SidebarInset>
-						<div className="flex flex-col space-y-4 px-4 py-3 overflow-y-auto">
-							<div className="flex items-center space-x-2 justify-between">
-								<SidebarTrigger />
+						<div className="flex flex-col px-4 py-3 space-y-4 overflow-y-auto">
+							<div className="flex items-center justify-between space-x-2">
+								<Tooltip>
+									<TooltipTrigger asChild>
+										<SidebarTrigger />
+									</TooltipTrigger>
+									<TooltipContent side="right">
+										<p>{t("general.toggleSidebar")}</p>
+									</TooltipContent>
+								</Tooltip>
 
 								<div className="flex items-center space-x-2">
 									<LanguageSwitcher />
@@ -66,5 +86,5 @@ export default async function DashboardLayout(
 				</SidebarProvider>
 			</TooltipProvider>
 		</div>
-	)
+	);
 }

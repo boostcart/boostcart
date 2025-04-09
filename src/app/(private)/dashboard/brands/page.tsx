@@ -1,9 +1,12 @@
-import BrandsTableClient from "./_components/client";
-import NewBrand from "./_components/new-brand";
-import { forbidden } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import Header from "@/components/ui/header";
 import { getBrands } from "@/data/brand";
 import { getCurrentUser } from "@/lib/actions";
+import { Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
+import { forbidden } from "next/navigation";
+import BrandsTableClient from "./_components/client";
 
 export default async function DashboardBrands() {
 	const t = await getTranslations();
@@ -15,13 +18,16 @@ export default async function DashboardBrands() {
 
 	return (
 		<div className="flex flex-col space-y-4">
-			<div className="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-center">
-				<h1 className="text-2xl font-bold">{t("dashboard.nav.brands")}</h1>
-
-				<NewBrand />
-			</div>
+			<Header title={t("dashboard.nav.brands")}>
+				<Button asChild>
+					<Link href="/dashboard/brands/create">
+						<Plus />
+						{t("dashboard.brand.newBrand.button")}
+					</Link>
+				</Button>
+			</Header>
 
 			<BrandsTableClient brands={brands} />
 		</div>
-	)
+	);
 }

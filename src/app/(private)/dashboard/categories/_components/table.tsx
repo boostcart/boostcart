@@ -1,6 +1,19 @@
 "use client";
 
 import {
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
+import {
 	ColumnDef,
 	ColumnFiltersState,
 	Row,
@@ -12,35 +25,26 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
-import { DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Eye, RefreshCw } from "lucide-react";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/components/ui/table";
 
 import { Button } from "@/components/ui/button";
-import { Category } from "@/types";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
-import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Category } from "@/types";
+import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useTranslations } from "next-intl";
 
 interface DataTableProps<TData, TValue> {
-	columns: ColumnDef<TData, TValue>[]
-	data: TData[]
-	searchPlaceholder: string
-	searchFor: string
-	noResultsText: string
-	expandedRows: Record<string, boolean>
+	columns: ColumnDef<TData, TValue>[];
+	data: TData[];
+	searchPlaceholder: string;
+	searchFor: string;
+	noResultsText: string;
+	expandedRows: Record<string, boolean>;
 	// setExpandedRows: React.Dispatch<React.SetStateAction<Record<string, boolean>>>
-	getNestedRowId: (parentId: string, childId: string) => string
+	getNestedRowId: (parentId: string, childId: string) => string;
 }
 
 export function DataTable<TData, TValue>({
@@ -51,7 +55,7 @@ export function DataTable<TData, TValue>({
 	noResultsText,
 	expandedRows,
 	// setExpandedRows,
-	getNestedRowId
+	getNestedRowId,
 }: DataTableProps<TData, TValue>) {
 	const t = useTranslations();
 	const router = useRouter();
@@ -73,8 +77,8 @@ export function DataTable<TData, TValue>({
 			columnFilters,
 		},
 		meta: {
-			expandedRows
-		}
+			expandedRows,
+		},
 	});
 
 	// Function to render a row and its potentially nested children recursively
@@ -87,11 +91,15 @@ export function DataTable<TData, TValue>({
 						{flexRender(cell.column.columnDef.cell, cell.getContext())}
 					</TableCell>
 				))}
-			</TableRow>
+			</TableRow>,
 		];
 
 		// If this row is expanded and has subcategories, render them
-		if (expandedRows[row.id] && rowData.subcategories && rowData.subcategories.length > 0) {
+		if (
+			expandedRows[row.id] &&
+			rowData.subcategories &&
+			rowData.subcategories.length > 0
+		) {
 			rowData.subcategories.forEach((subcategory: Category) => {
 				// Create a composite ID for the nested row
 				const nestedRowId = getNestedRowId(row.id, subcategory.id);
@@ -101,20 +109,21 @@ export function DataTable<TData, TValue>({
 					id: nestedRowId,
 					original: subcategory,
 					getIsSelected: () => false,
-					toggleSelected: () => { },
-					getVisibleCells: () => row.getVisibleCells().map(cell => ({
-						...cell,
-						id: `${nestedRowId}:${cell.id}`,
-						getContext: () => ({
-							...cell.getContext(),
-							row: {
-								id: nestedRowId,
-								original: subcategory,
-								getIsSelected: () => false,
-								toggleSelected: () => { }
-							}
-						})
-					}))
+					toggleSelected: () => {},
+					getVisibleCells: () =>
+						row.getVisibleCells().map((cell) => ({
+							...cell,
+							id: `${nestedRowId}:${cell.id}`,
+							getContext: () => ({
+								...cell.getContext(),
+								row: {
+									id: nestedRowId,
+									original: subcategory,
+									getIsSelected: () => false,
+									toggleSelected: () => {},
+								},
+							}),
+						})),
 				} as unknown as Row<TData>;
 
 				// Recursively render this row and its potential children
@@ -148,9 +157,7 @@ export function DataTable<TData, TValue>({
 					<DropdownMenuContent align="end">
 						{table
 							.getAllColumns()
-							.filter(
-								(column) => column.getCanHide()
-							)
+							.filter((column) => column.getCanHide())
 							.map((column) => {
 								return (
 									<DropdownMenuCheckboxItem
@@ -163,7 +170,7 @@ export function DataTable<TData, TValue>({
 									>
 										{column.id}
 									</DropdownMenuCheckboxItem>
-								)
+								);
 							})}
 					</DropdownMenuContent>
 				</DropdownMenu>
@@ -182,7 +189,7 @@ export function DataTable<TData, TValue>({
 					{t("general.refresh")}
 				</Button>
 			</div>
-			
+
 			<div className="rounded-md border">
 				<Table>
 					<TableHeader>
@@ -194,21 +201,27 @@ export function DataTable<TData, TValue>({
 											{header.isPlaceholder
 												? null
 												: flexRender(
-													header.column.columnDef.header,
-													header.getContext()
-												)}
+														header.column.columnDef.header,
+														header.getContext(),
+													)}
 										</TableHead>
-									)
+									);
 								})}
 							</TableRow>
 						))}
 					</TableHeader>
 					<TableBody>
 						{table.getRowModel().rows?.length ? (
-							table.getRowModel().rows.map(row => renderRowRecursive(row)).flat()
+							table
+								.getRowModel()
+								.rows.map((row) => renderRowRecursive(row))
+								.flat()
 						) : (
 							<TableRow>
-								<TableCell colSpan={columns.length} className="h-24 text-center">
+								<TableCell
+									colSpan={columns.length}
+									className="h-24 text-center"
+								>
 									{noResultsText}
 								</TableCell>
 							</TableRow>
@@ -219,5 +232,5 @@ export function DataTable<TData, TValue>({
 
 			<DataTablePagination table={table} />
 		</div>
-	)
+	);
 }

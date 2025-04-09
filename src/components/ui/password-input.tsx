@@ -1,62 +1,75 @@
-'use client'
+"use client";
 
-import * as React from 'react'
+import * as React from "react";
 
-import { EyeIcon, EyeOffIcon, LockIcon } from 'lucide-react'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './tooltip'
+import { EyeIcon, EyeOffIcon, LockIcon } from "lucide-react";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "./tooltip";
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { cn } from '@/lib/utils'
-import { useTranslations } from 'next-intl'
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
-interface PasswordInputProps extends React.ComponentProps<'input'> {
+interface PasswordInputProps extends React.ComponentProps<"input"> {
 	showIcon?: boolean;
 }
 
-const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(({ className, showIcon, ...props }, ref) => {
-	const [showPassword, setShowPassword] = React.useState(false)
-	const disabled = props.value === '' || props.value === undefined || props.disabled
-	const t = useTranslations()
+const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
+	({ className, showIcon, ...props }, ref) => {
+		const [showPassword, setShowPassword] = React.useState(false);
+		const disabled =
+			props.value === "" || props.value === undefined || props.disabled;
+		const t = useTranslations();
 
-	return (
-		<div className="relative">
-			<Input
-				type={showPassword ? 'text' : 'password'}
-				className={cn('hide-password-toggle pr-10', className)}
-				ref={ref}
-				startIcon={showIcon ? LockIcon : undefined}
-				{...props}
-			/>
-			<TooltipProvider>
-				<Tooltip>
-					<TooltipTrigger asChild>
-						<Button
-							type="button"
-							variant="ghost"
-							size="sm"
-							className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
-							onClick={() => setShowPassword((prev) => !prev)}
-							disabled={disabled}
-						>
-							{showPassword && !disabled ? (
-								<EyeIcon className="w-4 h-4" aria-hidden="true" />
-							) : (
-								<EyeOffIcon className="w-4 h-4" aria-hidden="true" />
-							)}
-						</Button>
-					</TooltipTrigger>
-					<TooltipContent>
-						<p>
-							{showPassword ? t('auth.general.hidePassword') : t('auth.general.showPassword')}
-						</p>
-					</TooltipContent>
-					<span className="sr-only">{showPassword ? t('auth.general.hidePassword') : t('auth.general.showPassword')}</span>
-				</Tooltip>
-			</TooltipProvider>
+		return (
+			<div className="relative">
+				<Input
+					type={showPassword ? "text" : "password"}
+					className={cn("hide-password-toggle pr-10", className)}
+					ref={ref}
+					startIcon={showIcon ? LockIcon : undefined}
+					{...props}
+				/>
+				<TooltipProvider>
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<Button
+								type="button"
+								variant="ghost"
+								size="sm"
+								className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
+								onClick={() => setShowPassword((prev) => !prev)}
+								disabled={disabled}
+							>
+								{showPassword && !disabled ? (
+									<EyeIcon className="w-4 h-4" aria-hidden="true" />
+								) : (
+									<EyeOffIcon className="w-4 h-4" aria-hidden="true" />
+								)}
+							</Button>
+						</TooltipTrigger>
+						<TooltipContent>
+							<p>
+								{showPassword
+									? t("auth.general.hidePassword")
+									: t("auth.general.showPassword")}
+							</p>
+						</TooltipContent>
+						<span className="sr-only">
+							{showPassword
+								? t("auth.general.hidePassword")
+								: t("auth.general.showPassword")}
+						</span>
+					</Tooltip>
+				</TooltipProvider>
 
-			{/* hides browsers password toggles */}
-			<style>{`
+				{/* hides browsers password toggles */}
+				<style>{`
 					.hide-password-toggle::-ms-reveal,
 					.hide-password-toggle::-ms-clear {
 						visibility: hidden;
@@ -64,9 +77,10 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(({ 
 						display: none;
 					}
 				`}</style>
-		</div>
-	)
-})
-PasswordInput.displayName = 'PasswordInput'
+			</div>
+		);
+	},
+);
+PasswordInput.displayName = "PasswordInput";
 
-export { PasswordInput }
+export { PasswordInput };

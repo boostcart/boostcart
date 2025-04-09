@@ -1,19 +1,19 @@
+import { auth } from "@/auth";
 import AuthProviders from "@/components/auth-providers";
+import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
-import LoginForm from "./_components/login-form";
-import { Metadata } from "next";
-import { auth } from "@/auth";
-import { getTranslations } from "next-intl/server"
 import { redirect } from "next/navigation";
+import LoginForm from "./_components/login-form";
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getTranslations();
 
 	return {
-		title: `${t('auth.login.meta.title')} 🚀 ${t('app')}`,
-		description: t('auth.login.meta.description')
-	}
+		title: `${t("auth.login.meta.title")} 🚀 ${t("app")}`,
+		description: t("auth.login.meta.description"),
+	};
 }
 
 export default async function LoginPage() {
@@ -38,17 +38,21 @@ export default async function LoginPage() {
 
 			<div className="flex flex-col items-center w-full space-y-2">
 				<h1 className="text-4xl font-bold">{t("auth.login.title")}</h1>
-				<h2 className="font-medium text-neutral-500">{t("auth.login.subtitle")}</h2>
+				<h2 className="font-medium text-neutral-500">
+					{t("auth.login.subtitle")}
+				</h2>
 			</div>
 
 			<AuthProviders />
 
 			<div className="relative flex flex-col items-center justify-center w-full">
 				<span className="h-[2px] w-96 bg-linear-to-r from-transparent via-neutral-300 to-transparent"></span>
-				<span className="absolute px-1 text-sm font-semibold uppercase bg-white text-neutral-500">{t('general.or')}</span>
+				<span className="absolute px-1 text-sm font-semibold uppercase bg-white text-neutral-500">
+					{t("general.or")}
+				</span>
 			</div>
 
 			<LoginForm />
 		</div>
-	)
+	);
 }

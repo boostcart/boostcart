@@ -1,9 +1,12 @@
-import NewUser from "./_components/new-user";
-import UsersTableClient from "./_components/client";
-import { forbidden } from "next/navigation";
-import { getCurrentUser } from "@/lib/actions";
-import { getTranslations } from "next-intl/server";
+import { Button } from "@/components/ui/button";
+import Header from "@/components/ui/header";
 import { getUsers } from "@/data/user";
+import { getCurrentUser } from "@/lib/actions";
+import { UserPlus } from "lucide-react";
+import { getTranslations } from "next-intl/server";
+import Link from "next/link";
+import { forbidden } from "next/navigation";
+import UsersTableClient from "./_components/client";
 
 export default async function DashboardCustomers() {
 	const t = await getTranslations();
@@ -15,13 +18,16 @@ export default async function DashboardCustomers() {
 
 	return (
 		<div className="flex flex-col space-y-4">
-			<div className="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-center">
-				<h1 className="text-2xl font-bold">{t("dashboard.nav.customers")}</h1>
-
-				<NewUser />
-			</div>
+			<Header title={t("dashboard.nav.customers")}>
+				<Button asChild>
+					<Link href="/dashboard/customers/create">
+						<UserPlus />
+						{t("dashboard.customers.newUser.button")}
+					</Link>
+				</Button>
+			</Header>
 
 			<UsersTableClient users={users} currentUser={currentUser} />
 		</div>
-	)
+	);
 }

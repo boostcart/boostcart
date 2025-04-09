@@ -1,25 +1,50 @@
 "use client";
 
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import {
+	Sheet,
+	SheetClose,
+	SheetContent,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from "@/components/ui/sheet";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { BrandSchema, BrandSchemaType } from "@/schemas";
 import { CircleHelp, Pencil, Save } from "lucide-react";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import React, { useState, useTransition } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-import { Brand } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { editBrand } from "@/data/brand";
-import { toast } from "sonner";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Brand } from "@prisma/client";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
-const EditBrand: React.FC<{ brand: Brand; }> = ({ brand }) => {
+const EditBrand: React.FC<{ brand: Brand }> = ({ brand }) => {
 	const t = useTranslations();
 	const [isPending, startTransition] = useTransition();
 	const [isOpen, setOpen] = useState<boolean>(false);
@@ -33,25 +58,24 @@ const EditBrand: React.FC<{ brand: Brand; }> = ({ brand }) => {
 			logo: brand.logo || "",
 			description: brand.description || "",
 			status: brand.status,
-		}
+		},
 	});
 
 	const onSubmit = (data: BrandSchemaType) => {
 		startTransition(() => {
-			editBrand(brand.id, data)
-				.then((callback) => {
-					if (callback.error) {
-						toast.error(t(`dashboard.errors.${callback.error}`));
-					}
+			editBrand(brand.id, data).then((callback) => {
+				if (callback.error) {
+					toast.error(t(`dashboard.errors.${callback.error}`));
+				}
 
-					if (callback.success) {
-						toast.success(t(`dashboard.success.${callback.success}`));
-						router.refresh();
-						setOpen(false);
-					}
-				});
+				if (callback.success) {
+					toast.success(t(`dashboard.success.${callback.success}`));
+					router.refresh();
+					setOpen(false);
+				}
+			});
 		});
-	}
+	};
 
 	return (
 		<Sheet open={isOpen} onOpenChange={setOpen}>
@@ -65,7 +89,9 @@ const EditBrand: React.FC<{ brand: Brand; }> = ({ brand }) => {
 					<form onSubmit={form.handleSubmit(onSubmit)}>
 						<SheetHeader>
 							<SheetTitle>
-								{t("dashboard.brand.editBrand.title", { brandName: brand.name })}
+								{t("dashboard.brand.editBrand.title", {
+									brandName: brand.name,
+								})}
 							</SheetTitle>
 						</SheetHeader>
 						<div className="flex flex-col my-4 space-y-4">
@@ -74,9 +100,7 @@ const EditBrand: React.FC<{ brand: Brand; }> = ({ brand }) => {
 								name="name"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>
-											{t("general.name")}
-										</FormLabel>
+										<FormLabel>{t("general.name")}</FormLabel>
 										<FormControl>
 											<Input
 												{...field}
@@ -86,11 +110,11 @@ const EditBrand: React.FC<{ brand: Brand; }> = ({ brand }) => {
 													// Convert title to slug format
 													const slug = e.target.value
 														.toLowerCase()
-														.replace(/[^\w\s-]/g, '') // Remove special characters
-														.replace(/\s+/g, '-')     // Replace spaces with hyphens
-														.replace(/_/g, '-')       // Replace underscores with hyphens
-														.replace(/-+/g, '-')      // Replace multiple hyphens with single
-														.replace(/^-+|-+$/g, '')  // Remove hyphens from start and end
+														.replace(/[^\w\s-]/g, "") // Remove special characters
+														.replace(/\s+/g, "-") // Replace spaces with hyphens
+														.replace(/_/g, "-") // Replace underscores with hyphens
+														.replace(/-+/g, "-") // Replace multiple hyphens with single
+														.replace(/^-+|-+$/g, "") // Remove hyphens from start and end
 														.trim();
 
 													// Update the slug field
@@ -118,7 +142,10 @@ const EditBrand: React.FC<{ brand: Brand; }> = ({ brand }) => {
 												/>
 											</FormControl>
 											<Tooltip>
-												<TooltipTrigger type="button" className="text-muted-foreground hover:text-black transition-colors">
+												<TooltipTrigger
+													type="button"
+													className="text-muted-foreground hover:text-black transition-colors"
+												>
 													<CircleHelp />
 												</TooltipTrigger>
 												<TooltipContent
@@ -126,7 +153,9 @@ const EditBrand: React.FC<{ brand: Brand; }> = ({ brand }) => {
 													avoidCollisions={false}
 													className="max-w-sm"
 												>
-													<p>{t("dashboard.brand.newBrand.slug.description")}</p>
+													<p>
+														{t("dashboard.brand.newBrand.slug.description")}
+													</p>
 												</TooltipContent>
 											</Tooltip>
 										</div>
@@ -142,7 +171,9 @@ const EditBrand: React.FC<{ brand: Brand; }> = ({ brand }) => {
 									<FormItem>
 										<FormLabel className="flex items-center space-x-2">
 											<span>{t("general.description")}</span>
-											<span className="text-muted-foreground text-xs">({t("general.optional")})</span>
+											<span className="text-muted-foreground text-xs">
+												({t("general.optional")})
+											</span>
 										</FormLabel>
 										<FormControl>
 											<Textarea
@@ -162,20 +193,32 @@ const EditBrand: React.FC<{ brand: Brand; }> = ({ brand }) => {
 									<FormItem>
 										<FormLabel>{t("general.status")}</FormLabel>
 										<div className="flex items-center space-x-2">
-											<Select onValueChange={field.onChange} defaultValue={field.value}>
+											<Select
+												onValueChange={field.onChange}
+												defaultValue={field.value}
+											>
 												<FormControl>
 													<SelectTrigger>
 														<SelectValue placeholder={t("general.status")} />
 													</SelectTrigger>
 												</FormControl>
 												<SelectContent>
-													<SelectItem value="DRAFT">{t("status.draft")}</SelectItem>
-													<SelectItem value="HIDDEN">{t("status.hidden")}</SelectItem>
-													<SelectItem value="PUBLISHED">{t("status.published")}</SelectItem>
+													<SelectItem value="DRAFT">
+														{t("status.draft")}
+													</SelectItem>
+													<SelectItem value="HIDDEN">
+														{t("status.hidden")}
+													</SelectItem>
+													<SelectItem value="PUBLISHED">
+														{t("status.published")}
+													</SelectItem>
 												</SelectContent>
 											</Select>
 											<Tooltip>
-												<TooltipTrigger type="button" className="text-muted-foreground hover:text-black transition-colors">
+												<TooltipTrigger
+													type="button"
+													className="text-muted-foreground hover:text-black transition-colors"
+												>
 													<CircleHelp />
 												</TooltipTrigger>
 												<TooltipContent
@@ -194,9 +237,13 @@ const EditBrand: React.FC<{ brand: Brand; }> = ({ brand }) => {
 						</div>
 						<SheetFooter>
 							<SheetClose asChild>
-								<Button onClick={() => {
-									form.reset();
-								}} variant="secondary" disabled={isPending}>
+								<Button
+									onClick={() => {
+										form.reset();
+									}}
+									variant="secondary"
+									disabled={isPending}
+								>
 									{t("general.cancel")}
 								</Button>
 							</SheetClose>
@@ -209,7 +256,7 @@ const EditBrand: React.FC<{ brand: Brand; }> = ({ brand }) => {
 				</Form>
 			</SheetContent>
 		</Sheet>
-	)
-}
+	);
+};
 
 export default EditBrand;

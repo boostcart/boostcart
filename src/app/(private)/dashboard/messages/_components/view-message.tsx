@@ -1,20 +1,28 @@
 "use client";
 
+import {
+	Sheet,
+	SheetClose,
+	SheetContent,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from "@/components/ui/sheet";
 import { Eye, EyeClosed } from "lucide-react";
-import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { Message } from "@prisma/client";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
 import { toggleMessageStatus } from "@/data/message";
-import { useRouter } from "next/navigation";
+import type { Message } from "@prisma/client";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
-const ViewMessage: React.FC<{ message: Message; }> = ({ message }) => {
+const ViewMessage: React.FC<{ message: Message }> = ({ message }) => {
 	const t = useTranslations();
 	const [isPending, startTransition] = useTransition();
 	const [isOpen, setOpen] = useState<boolean>(false);
@@ -22,20 +30,19 @@ const ViewMessage: React.FC<{ message: Message; }> = ({ message }) => {
 
 	const handleRead = (messageId: string) => {
 		startTransition(() => {
-			toggleMessageStatus(messageId)
-				.then((callback) => {
-					if (callback.error) {
-						toast.error(t(`dashboard.error.${callback.error}`));
-					}
+			toggleMessageStatus(messageId).then((callback) => {
+				if (callback.error) {
+					toast.error(t(`dashboard.error.${callback.error}`));
+				}
 
-					if (callback.success) {
-						toast.success(t(`dashboard.success.${callback.success}`));
-						router.refresh();
-						setOpen(false);
-					}
-				});
+				if (callback.success) {
+					toast.success(t(`dashboard.success.${callback.success}`));
+					router.refresh();
+					setOpen(false);
+				}
+			});
 		});
-	}
+	};
 
 	return (
 		<Sheet open={isOpen} onOpenChange={setOpen}>
@@ -115,8 +122,8 @@ const ViewMessage: React.FC<{ message: Message; }> = ({ message }) => {
 					</Button>
 				</SheetFooter>
 			</SheetContent>
-		</Sheet >
-	)
-}
+		</Sheet>
+	);
+};
 
 export default ViewMessage;

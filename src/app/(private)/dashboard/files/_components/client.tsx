@@ -2,15 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ChevronsUpDown } from "lucide-react";
-import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table";
-import DeleteFile from "./delete-file";
-import { UploadedFile } from "../page";
-import ViewFile from "./view-file";
+import { ColumnDef } from "@tanstack/react-table";
+import { ChevronsUpDown } from "lucide-react";
 import { useTranslations } from "use-intl";
+import { UploadedFile } from "../page";
+import DeleteFile from "./delete-file";
+import ViewFile from "./view-file";
 
-const FilesTableClient: React.FC<{ files: UploadedFile[]; }> = ({ files }) => {
+const FilesTableClient: React.FC<{ files: UploadedFile[] }> = ({ files }) => {
 	const t = useTranslations();
 
 	const columns: ColumnDef<UploadedFile>[] = [
@@ -24,7 +24,9 @@ const FilesTableClient: React.FC<{ files: UploadedFile[]; }> = ({ files }) => {
 							table.getIsAllPageRowsSelected() ||
 							(table.getIsSomePageRowsSelected() && "indeterminate")
 						}
-						onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+						onCheckedChange={(value) =>
+							table.toggleAllPageRowsSelected(!!value)
+						}
 						aria-label="Select all"
 					/>
 				</div>
@@ -54,8 +56,8 @@ const FilesTableClient: React.FC<{ files: UploadedFile[]; }> = ({ files }) => {
 						{t("general.name")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
-			}
+				);
+			},
 		},
 		{
 			accessorKey: "size",
@@ -69,12 +71,12 @@ const FilesTableClient: React.FC<{ files: UploadedFile[]; }> = ({ files }) => {
 						{t("general.size")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
+				);
 			},
 			cell: ({ row }) => {
 				const sizeInMB = (row.original.size / 1024 / 1024).toFixed(2);
 				return `${sizeInMB} MB`;
-			}
+			},
 		},
 		{
 			accessorKey: "uploadedAt",
@@ -88,13 +90,15 @@ const FilesTableClient: React.FC<{ files: UploadedFile[]; }> = ({ files }) => {
 						{t("general.uploadedAt")}
 						<ChevronsUpDown className="size-4" />
 					</Button>
-				)
+				);
 			},
 			cell: ({ row }) => {
-				const formattedDate = new Date(row.original.uploadedAt).toLocaleDateString(t("locale"));
+				const formattedDate = new Date(
+					row.original.uploadedAt,
+				).toLocaleDateString(t("locale"));
 
 				return formattedDate;
-			}
+			},
 		},
 		{
 			accessorKey: "actions",
@@ -107,7 +111,7 @@ const FilesTableClient: React.FC<{ files: UploadedFile[]; }> = ({ files }) => {
 						<ViewFile file={file} />
 						<DeleteFile fileId={file.key} />
 					</div>
-				)
+				);
 			},
 			enableHiding: false,
 			enableSorting: false,
@@ -121,7 +125,7 @@ const FilesTableClient: React.FC<{ files: UploadedFile[]; }> = ({ files }) => {
 			searchPlaceholder={t("dashboard.files.search")}
 			noResultsText={t("dashboard.files.noResults")}
 		/>
-	)
-}
+	);
+};
 
 export default FilesTableClient;

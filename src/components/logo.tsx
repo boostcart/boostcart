@@ -18,7 +18,7 @@ const Logo: React.FC<LogoProps> = ({
 	width,
 	height,
 	href,
-	className
+	className,
 }) => {
 	return (
 		<>
@@ -29,8 +29,12 @@ const Logo: React.FC<LogoProps> = ({
 							variant === "icon"
 								? "/icon.png"
 								: variant === "logo"
-									? (color === "white" ? "/logo-white.png" : "/logo-black.png")
-									: (color === "white" ? "/wordmark-white.png" : "/wordmark-black.png")
+									? color === "white"
+										? "/logo-white.png"
+										: "/logo-black.png"
+									: color === "white"
+										? "/wordmark-white.png"
+										: "/wordmark-black.png"
 						}
 						alt="BoostCart"
 						width={width || 40}
@@ -49,8 +53,12 @@ const Logo: React.FC<LogoProps> = ({
 						variant === "icon"
 							? "/icon.png"
 							: variant === "logo"
-								? (color === "white" ? "/logo-white.png" : "/logo-black.png")
-								: (color === "white" ? "/wordmark-white.png" : "/wordmark-black.png")
+								? color === "white"
+									? "/logo-white.png"
+									: "/logo-black.png"
+								: color === "white"
+									? "/wordmark-white.png"
+									: "/wordmark-black.png"
 					}
 					alt="BoostCart"
 					width={width || 40}
@@ -64,7 +72,7 @@ const Logo: React.FC<LogoProps> = ({
 				/>
 			)}
 		</>
-	)
-}
+	);
+};
 
 export default Logo;

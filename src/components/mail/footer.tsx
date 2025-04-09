@@ -16,17 +16,23 @@ const MailFooter = () => {
 				</tr>
 				<tr>
 					<td align="center">
-						<Link href="https://boostcart.dev" className="my-[8px] mx-2 text-[16px] font-semibold leading-[24px] text-[#f03d7e]">
+						<Link
+							href="https://boostcart.dev"
+							className="my-[8px] mx-2 text-[16px] font-semibold leading-[24px] text-[#f03d7e]"
+						>
 							boostcart.dev
 						</Link>
-						<Link href="mailto:support@boostcart.dev" className="mb-0 mx-2 mt-[4px] text-[16px] font-semibold leading-[24px] text-[#f03d7e]">
+						<Link
+							href="mailto:support@boostcart.dev"
+							className="mb-0 mx-2 mt-[4px] text-[16px] font-semibold leading-[24px] text-[#f03d7e]"
+						>
 							support@boostcart.dev
 						</Link>
 					</td>
 				</tr>
 			</table>
 		</Section>
-	)
-}
+	);
+};
 
 export default MailFooter;
