@@ -24,6 +24,7 @@ const nextConfig: NextConfig = {
 			bodySizeLimit: "100mb",
 		},
 		authInterrupts: true,
+		useLightningcss: true,
 	},
 	productionBrowserSourceMaps: false,
 	serverExternalPackages: ["yjs"],
