@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  output   = "app/generated/prisma/client"
 }
 
 datasource db {
@@ -35,6 +36,11 @@ enum Status {
   DRAFT
   HIDDEN
   PUBLISHED
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED
 }
 
 model User {
@@ -253,7 +259,7 @@ model PostTag {
   translations PostTagTranslation[]
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
 
   Post Post[] @relation("PostTags")
 }
@@ -265,7 +271,7 @@ model PostTagTranslation {
   name     String
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
 
   postTag PostTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
@@ -316,7 +322,7 @@ model CategoryTranslation {
   description String?
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
 
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
@@ -324,30 +330,36 @@ model CategoryTranslation {
 }
 
 model Product {
-  id          String  @id @default(cuid())
-  defaultName String // Default name for fallback and slug generation
-  slug        String  @unique
-  description String?
-  price       Float
-  stock       Int     @default(0)
-  sku         String? @unique
-  barcode     String? @unique
-  status      Status  @default(DRAFT)
-  brandId     String?
-  categoryId  String?
+  id            String        @id @default(cuid())
+  defaultName   String // Default name for fallback and slug generation
+  slug          String        @unique
+  price         Float
+  stock         Int           @default(0)
+  sku           String        @unique
+  barcode       String?       @unique
+  status        Status        @default(DRAFT)
+  discountType  DiscountType? // PERCENTAGE or FIXED
+  discountValue Float? // e.g. 10 for 10% or 10 for $10 off
+  discountStart DateTime? // Start date for the discount
+  discountEnd   DateTime? // End date for the discount
+  brandId       String
+  categoryId    String
+  ignoreStock   Boolean       @default(false) // Option to ignore stock checking
 
   // Translations
   translations ProductTranslation[]
 
   // Relations
-  brand         Brand?           @relation(fields: [brandId], references: [id], onDelete: SetNull)
-  category      Category?        @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  shippingInfo  ShippingInfo?
-  technicalInfo TechnicalInfo[]
-  reviews       ProductReview[]
-  tags          ProductTag[]     @relation("ProductTags")
-  images        ProductImage[]
-  variants      ProductVariant[]
+  brand             Brand            @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  category          Category         @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  shippingInfo      ShippingInfo?
+  technicalInfo     TechnicalInfo[]
+  reviews           ProductReview[]
+  tags              ProductTag[]     @relation("ProductTags")
+  images            ProductImage[]
+  variants          ProductVariant[]
+  relatedProducts   Product[]        @relation("RelatedProducts")
+  relatedToProducts Product[]        @relation("RelatedProducts")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -378,7 +390,7 @@ model ProductImage {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
 }
 
 model ProductVariant {
@@ -394,9 +406,10 @@ model ProductVariant {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  product              Product                @relation(fields: [productId], references: [id], onDelete: Cascade)
-  ProductVariantImage  ProductVariantImage[]
-  ProductVariantOption ProductVariantOption[]
+  product                 Product                  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  ProductVariantImage     ProductVariantImage[]
+  ProductVariantOption    ProductVariantOption[]
+  ProductVariantTranslation ProductVariantTranslation[]
 }
 
 model ProductVariantImage {
@@ -422,6 +435,22 @@ model ProductVariantOption {
 
   productVariant            ProductVariant              @relation(fields: [variantId], references: [id], onDelete: Cascade)
   ProductVariantOptionValue ProductVariantOptionValue[]
+  translations              ProductVariantOptionTranslation[]
+}
+
+model ProductVariantOptionTranslation {
+  id        String @id @default(cuid())
+  optionId  String
+  language  String
+  name      String
+  value     String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  productVariantOption ProductVariantOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+
+  @@unique([optionId, language])
 }
 
 model ProductVariantOptionValue {
@@ -430,7 +459,7 @@ model ProductVariantOptionValue {
   value    String
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
 
   productVariantOption ProductVariantOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
 }
@@ -469,6 +498,7 @@ model ShippingInfo {
   depth        Float? // Depth in cm
   isFragile    Boolean @default(false)
   freeShipping Boolean @default(false)
+  requiresPallet Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -486,8 +516,24 @@ model TechnicalInfo {
   updatedAt DateTime @updatedAt
 
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  translations TechnicalInfoTranslation[]
 
   @@unique([productId, key]) // Each technical spec key must be unique per product
+}
+
+model TechnicalInfoTranslation {
+  id        String @id @default(cuid())
+  infoId    String
+  language  String
+  key       String
+  value     String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  technicalInfo TechnicalInfo @relation(fields: [infoId], references: [id], onDelete: Cascade)
+
+  @@unique([infoId, language])
 }
 
 model ProductReview {
@@ -510,4 +556,18 @@ model ProductReview {
 
   @@index([productId])
   @@index([userId])
+}
+
+model ProductVariantTranslation {
+  id        String @id @default(cuid())
+  variantId String
+  language  String
+  name      String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  productVariant ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@unique([variantId, language])
 }

@@ -18,7 +18,7 @@ import { getCurrentUser } from "@/lib/actions";
 import { prisma } from "@/lib/db";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import bcrypt from "bcryptjs";
-import { AuthError } from "next-auth";
+import { CredentialsSignin } from "next-auth";
 
 export async function signUp(data: SignUpSchemaType) {
 	if (!data) return { error: "no_data" };
@@ -97,8 +97,8 @@ export async function login(data: LoginSchemaType) {
 
 		return { success: "signed_in" };
 	} catch (error) {
-		if (error instanceof AuthError) {
-			if (error.type == "CredentialsSignin") {
+		if (error instanceof CredentialsSignin) {
+			if (error.code == "credentials") {
 				return { error: "invalid_password" };
 			}
 

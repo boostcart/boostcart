@@ -69,7 +69,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
 			badgeContent: messageCount,
 		},
 		{
-			title: t("dashboard.nav.inventory"),
+			title: t("dashboard.nav.catalog"),
 			url: "#",
 			icon: Tag,
 			children: [

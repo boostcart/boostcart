@@ -8,7 +8,7 @@ export default function Loading() {
 			<div className="flex flex-col items-center mx-auto space-y-4">
 				<Loader />
 
-				<span className="text-neutral-700">{t("loading")}</span>
+				<span className="text-neutral-700 text-sm">{t("loading")}</span>
 			</div>
 		</div>
 	);

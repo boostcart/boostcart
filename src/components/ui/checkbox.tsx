@@ -11,7 +11,7 @@ const checkboxVariants = cva(
 	{
 		variants: {
 			variant: {
-				default: "border-primary data-[state=checked]:bg-primary",
+				default: "border-input data-[state=checked]:border-primary data-[state=checked]:bg-primary",
 				black:
 					"border-black data-[state=checked]:bg-black data-[state=checked]:text-white",
 			},

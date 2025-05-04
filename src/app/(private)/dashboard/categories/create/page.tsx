@@ -66,7 +66,7 @@ export default function CreateCategoryPage() {
 			image: "",
 			status: "DRAFT",
 			parentId: undefined,
-			level: 0,
+			level: 0, // Ensure this is always a number as required by the schema
 			translations: languages.map((lang) => ({
 				language: lang,
 				name: "",
@@ -271,6 +271,7 @@ export default function CreateCategoryPage() {
 														value="null"
 														onSelect={() => {
 															form.setValue("parentId", undefined);
+															form.setValue("level", 0); // Reset to top-level when no parent
 														}}
 													>
 														<Check

@@ -1,9 +1,9 @@
 "use client";
 
-import GridLoader from "react-spinners/GridLoader";
+import { LoaderIcon } from "lucide-react";
 
 const Loader = () => {
-	return <GridLoader color="#f03d7e" loading={true} speedMultiplier={1.7} />;
+	return <LoaderIcon className="size-8 text-muted-foreground animate-spin" />;
 };
 
 export default Loader;

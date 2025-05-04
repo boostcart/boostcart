@@ -11,10 +11,12 @@ import {
 	PasswordChange,
 	PostTranslation,
 	ProductImage,
-	ProductTag,
+	ProductTag as PProductTag,
+	ProductTagTranslation,
 	ProductTranslation,
 	ShippingAddress,
-	TechnicalInfo,
+	TechnicalInfo as PTechnicalInfo,
+	TechnicalInfoTranslation,
 } from "@prisma/client";
 
 import { ClientUploadedFileData } from "uploadthing/types";
@@ -64,9 +66,20 @@ export type Product = PProduct & {
 	reviews: PProductReview[];
 	tags: ProductTag[];
 	images: ProductImage[];
-	variatns: ProductVariant[];
+	variants: ProductVariant[];
+};
+
+export type ProductTag = PProductTag & {
+	translations: ProductTagTranslation[];
+	products: Product[];
 };
 
 export type ProductVariant = PProductVariant & {
 	product: Product;
 };
+
+export type TechnicalInfo = PTechnicalInfo & {
+	translations: TechnicalInfoTranslation[];
+	product: Product;
+};
+

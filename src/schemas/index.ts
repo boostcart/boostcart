@@ -196,3 +196,187 @@ export type CategorySchemaType = z.infer<typeof CategorySchema>;
 export type CategoryTranslationSchemaType = z.infer<
 	typeof CategoryTranslationSchema
 >;
+
+export const ProductTranslationSchema = z.object({
+	language: z.string().min(2, "Please enter a valid language code."),
+	name: z.string().min(2, "Please enter a translated name."),
+	shortDescription: z.string().optional(),
+	description: z.string().optional(),
+});
+
+export type ProductTranslationSchemaType = z.infer<typeof ProductTranslationSchema>;
+
+export const ProductImageSchema = z.object({
+	url: z.string().url("Please enter a valid image URL."),
+	isMain: z.boolean().default(false),
+});
+
+export type ProductImageSchemaType = z.infer<typeof ProductImageSchema>;
+
+export const TechnicalInfoTranslationSchema = z.object({
+	language: z.string().min(2, "Please enter a valid language code."),
+	key: z.string().min(2, "Please enter a translated specification key."),
+	value: z.string().min(1, "Please enter a translated specification value."),
+});
+
+export type TechnicalInfoTranslationSchemaType = z.infer<typeof TechnicalInfoTranslationSchema>;
+
+export const TechnicalInfoSchema = z.object({
+	key: z.string().min(2, "Please enter a specification key."),
+	value: z.string().min(1, "Please enter a specification value."),
+	translations: z.array(TechnicalInfoTranslationSchema).optional(),
+});
+
+export type TechnicalInfoSchemaType = z.infer<typeof TechnicalInfoSchema>;
+
+export const ShippingInfoSchema = z.object({
+	weight: z.number().min(0).optional(),
+	width: z.number().min(0).optional(),
+	height: z.number().min(0).optional(),
+	depth: z.number().min(0).optional(),
+	isFragile: z.boolean().default(false),
+	freeShipping: z.boolean().default(false),
+	requiresPallet: z.boolean().default(false),
+});
+
+export type ShippingInfoSchemaType = z.infer<typeof ShippingInfoSchema>;
+
+export const ProductVariantOptionValueSchema = z.object({
+	value: z.string().min(1, "Please enter an option value."),
+});
+
+export type ProductVariantOptionValueSchemaType = z.infer<
+	typeof ProductVariantOptionValueSchema
+>;
+
+export const ProductVariantOptionTranslationSchema = z.object({
+	language: z.string().min(2, "Please enter a valid language code."),
+	name: z.string().min(2, "Please enter a translated option name."),
+	value: z.string().min(1, "Please enter a translated option value."),
+});
+
+export type ProductVariantOptionTranslationSchemaType = z.infer<
+	typeof ProductVariantOptionTranslationSchema
+>;
+
+export const ProductVariantTranslationSchema = z.object({
+	language: z.string().min(2, "Please enter a valid language code."),
+	name: z.string().min(2, "Please enter a translated name."),
+});
+
+export type ProductVariantTranslationSchemaType = z.infer<
+	typeof ProductVariantTranslationSchema
+>;
+
+export const ProductVariantOptionSchema = z.object({
+	name: z.string().min(2, "Please enter an option name."),
+	value: z.string().min(1, "Please enter an option value."),
+	values: z.array(ProductVariantOptionValueSchema).optional(),
+	translations: z.array(ProductVariantOptionTranslationSchema).optional(),
+});
+
+export type ProductVariantOptionSchemaType = z.infer<
+	typeof ProductVariantOptionSchema
+>;
+
+export const ProductVariantImageSchema = z.object({
+	url: z.string().url("Please enter a valid image URL."),
+	isMain: z.boolean().default(false),
+});
+
+export type ProductVariantImageSchemaType = z.infer<
+	typeof ProductVariantImageSchema
+>;
+
+export const ProductVariantSchema = z.object({
+	name: z.string().min(2, "Please enter a variant name."),
+	sku: z.string().optional(),
+	barcode: z.string().optional(),
+	price: z.number().min(0, "Price must be a positive number."),
+	stock: z.number().int().min(0, "Stock must be a non-negative integer.").default(0),
+	status: z.enum(["DRAFT", "HIDDEN", "PUBLISHED"]).default("DRAFT"),
+	images: z.array(ProductVariantImageSchema).optional(),
+	options: z.array(ProductVariantOptionSchema).optional(),
+	translations: z.array(ProductVariantTranslationSchema).optional(),
+});
+
+export type ProductVariantSchemaType = z.infer<typeof ProductVariantSchema>;
+
+export const ProductTagTranslationSchema = z.object({
+	language: z.string().min(2, "Please enter a valid language code."),
+	name: z.string().min(2, "Please enter a translated name."),
+});
+
+export type ProductTagTranslationSchemaType = z.infer<
+	typeof ProductTagTranslationSchema
+>;
+
+export const ProductTagSchema = z.object({
+	name: z
+		.string()
+		.min(2, "Please enter a name.")
+		.regex(
+			/^[A-Za-z0-9\s!@#$%^&*()_+\-=\[\]{}|;:'",.<>/?\\]*$/,
+			"Name cannot contain non-english letters.",
+		),
+	slug: z
+		.string()
+		.min(2, "Please enter a slug.")
+		.regex(
+			/^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+			"Slug must contain only lowercase letters, numbers, and hyphens, and cannot start or end with a hyphen.",
+		),
+	translations: z.array(ProductTagTranslationSchema).optional(),
+});
+
+export type ProductTagSchemaType = z.infer<typeof ProductTagSchema>;
+
+export const ProductReviewSchema = z.object({
+	name: z.string().min(2, "Please enter a name."),
+	email: z.string().email("Please enter a valid email address."),
+	rating: z.number().min(1).max(5),
+	title: z.string().min(2, "Please enter a review title."),
+	comment: z.string().min(2, "Please enter a review comment."),
+	status: z.enum(["DRAFT", "HIDDEN", "PUBLISHED"]).default("DRAFT"),
+	verified: z.boolean().default(false),
+});
+
+export type ProductReviewSchemaType = z.infer<typeof ProductReviewSchema>;
+
+export const ProductSchema = z.object({
+	defaultName: z
+		.string()
+		.min(2, "Please enter a name.")
+		.regex(
+			/^[A-Za-z0-9\s!@#$%^&*()_+\-=\[\]{}|;:'",.<>/?\\]*$/,
+			"Name cannot contain non-english letters.",
+		),
+	slug: z
+		.string()
+		.min(2, "Please enter a slug.")
+		.regex(
+			/^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+			"Slug must contain only lowercase letters, numbers, and hyphens, and cannot start or end with a hyphen.",
+		),
+	price: z.number().min(0, "Price must be a positive number."),
+	stock: z.number().int().min(0, "Stock must be a non-negative integer.").default(0),
+	sku: z.string(),
+	barcode: z.string().optional(),
+	status: z.enum(["DRAFT", "HIDDEN", "PUBLISHED"]).default("DRAFT"),
+	discountType: z.enum(["PERCENTAGE", "FIXED"]).optional(),
+	discountValue: z.number().min(0, "Discount value must be a positive number.").optional(),
+	discountStart: z.date().optional(),
+	discountEnd: z.date().optional(),
+	brandId: z.string(),
+	categoryId: z.string(),
+	translations: z.array(ProductTranslationSchema).optional(),
+	images: z.array(ProductImageSchema).optional(),
+	technicalInfo: z.array(TechnicalInfoSchema).optional(),
+	shippingInfo: ShippingInfoSchema.optional(),
+	variants: z.array(ProductVariantSchema).optional(),
+	tagIds: z.array(z.string()).optional(),
+	relatedProductIds: z.array(z.string()).optional(),
+	ignoreStock: z.boolean().default(false),
+});
+
+export type ProductSchemaType = z.infer<typeof ProductSchema>;
