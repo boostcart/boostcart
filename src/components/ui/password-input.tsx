@@ -19,68 +19,65 @@ interface PasswordInputProps extends React.ComponentProps<"input"> {
 	showIcon?: boolean;
 }
 
-const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
-	({ className, showIcon, ...props }, ref) => {
-		const [showPassword, setShowPassword] = React.useState(false);
-		const disabled =
-			props.value === "" || props.value === undefined || props.disabled;
-		const t = useTranslations();
+function PasswordInput({ className, showIcon, ...props }: PasswordInputProps) {
+	const [showPassword, setShowPassword] = React.useState(false);
+	const disabled =
+		props.value === "" || props.value === undefined || props.disabled;
+	const t = useTranslations();
 
-		return (
-			<div className="relative">
-				<Input
-					type={showPassword ? "text" : "password"}
-					className={cn("hide-password-toggle pr-10", className)}
-					ref={ref}
-					startIcon={showIcon ? LockIcon : undefined}
-					{...props}
-				/>
-				<TooltipProvider>
-					<Tooltip>
-						<TooltipTrigger asChild>
-							<Button
-								type="button"
-								variant="ghost"
-								size="sm"
-								className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
-								onClick={() => setShowPassword((prev) => !prev)}
-								disabled={disabled}
-							>
-								{showPassword && !disabled ? (
-									<EyeIcon className="w-4 h-4" aria-hidden="true" />
-								) : (
-									<EyeOffIcon className="w-4 h-4" aria-hidden="true" />
-								)}
-							</Button>
-						</TooltipTrigger>
-						<TooltipContent>
-							<p>
-								{showPassword
-									? t("auth.general.hidePassword")
-									: t("auth.general.showPassword")}
-							</p>
-						</TooltipContent>
-						<span className="sr-only">
+	return (
+		<div className="relative">
+			<Input
+				type={showPassword ? "text" : "password"}
+				className={cn("hide-password-toggle pr-10", className)}
+				data-slot="input"
+				startIcon={showIcon ? LockIcon : undefined}
+				{...props}
+			/>
+			<TooltipProvider>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<Button
+							type="button"
+							variant="ghost"
+							size="sm"
+							className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
+							onClick={() => setShowPassword((prev) => !prev)}
+							disabled={disabled}
+						>
+							{showPassword && !disabled ? (
+								<EyeIcon className="w-4 h-4" aria-hidden="true" />
+							) : (
+								<EyeOffIcon className="w-4 h-4" aria-hidden="true" />
+							)}
+						</Button>
+					</TooltipTrigger>
+					<TooltipContent>
+						<p>
 							{showPassword
 								? t("auth.general.hidePassword")
 								: t("auth.general.showPassword")}
-						</span>
-					</Tooltip>
-				</TooltipProvider>
+						</p>
+					</TooltipContent>
+					<span className="sr-only">
+						{showPassword
+							? t("auth.general.hidePassword")
+							: t("auth.general.showPassword")}
+					</span>
+				</Tooltip>
+			</TooltipProvider>
 
-				{/* hides browsers password toggles */}
-				<style>{`
-					.hide-password-toggle::-ms-reveal,
-					.hide-password-toggle::-ms-clear {
-						visibility: hidden;
-						pointer-events: none;
-						display: none;
-					}
-				`}</style>
-			</div>
-		);
-	},
-);
-PasswordInput.displayName = "PasswordInput";
+			{/* hides browsers password toggles */}
+			<style>{`
+				.hide-password-toggle::-ms-reveal,
+				.hide-password-toggle::-ms-clear {
+					visibility: hidden;
+					pointer-events: none;
+					display: none;
+				}
+			`}</style>
+		</div>
+	);
+}
 
 export { PasswordInput };
