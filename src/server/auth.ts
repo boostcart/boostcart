@@ -16,7 +16,7 @@ import { getVerificationTokenByToken } from "@/data/email-verification-token";
 import { getUserByEmail } from "@/data/user";
 import { getCurrentUser } from "@/lib/actions";
 import { prisma } from "@/lib/db";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { PrismaClientKnownRequestError } from "@/app/generated/prisma/client/runtime/library";
 import bcrypt from "bcryptjs";
 import { CredentialsSignin } from "next-auth";
 

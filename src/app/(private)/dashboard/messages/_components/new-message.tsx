@@ -42,7 +42,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { newMessage } from "@/data/message";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { User } from "@prisma/client";
+import type { User } from "@/app/generated/prisma/client";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";

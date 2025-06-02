@@ -38,7 +38,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { editBrand } from "@/data/brand";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Brand } from "@prisma/client";
+import { Brand } from "@/app/generated/prisma/client";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";

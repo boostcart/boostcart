@@ -14,7 +14,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { X, Plus, Globe } from "lucide-react";
 import { FormDescription } from "@/components/ui/form";
-import { ProductTagTranslation } from "@prisma/client";
+import { ProductTagTranslation } from "@/app/generated/prisma/client";
 
 interface TagTranslationManagerProps {
   translations: ProductTagTranslation[];

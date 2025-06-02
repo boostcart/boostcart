@@ -63,7 +63,13 @@
     "optional": "Optional",
     "products": "Products",
     "subcategories": "Subcategories",
-    "toggleSidebar": "Toggle sidebar"
+    "toggleSidebar": "Toggle sidebar",
+    "wishlist": "Wishlist",
+    "viewAll": "View all",
+    "checkout": "Checkout",
+    "total": "Total",
+    "dashboard": "Dashboard",
+    "orders": "Orders"
   },
   "auth": {
     "errors": {

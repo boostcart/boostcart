@@ -2,7 +2,7 @@ import { getUserByEmail, getUserById } from "@/data/user";
 
 import { prisma } from "@/lib/db";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { UserRole } from "@prisma/client";
+import { UserRole } from "@/app/generated/prisma/client";
 import bcrypt from "bcryptjs";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";

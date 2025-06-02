@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@prisma/client";
+import type { PrismaClient } from "@/app/generated/prisma/client";
 
 const seedSettings = async (prisma: PrismaClient) => {
 	const start = Date.now();

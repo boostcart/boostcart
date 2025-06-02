@@ -6,7 +6,6 @@ import {
 import {
 	Tooltip,
 	TooltipContent,
-	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { forbidden, unauthorized } from "next/navigation";
@@ -16,7 +15,7 @@ import DashboardSidebar from "@/components/dashboard-sidebar";
 import LanguageSwitcher from "@/components/language-switcher";
 import { getMessages } from "@/data/message";
 import { getUserById } from "@/data/user";
-import { UserRole } from "@prisma/client";
+import { UserRole } from "@/app/generated/prisma/client";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import UserMenu from "./dashboard/_components/user-menu-dropdown";
@@ -58,33 +57,31 @@ export default async function DashboardLayout(
 
 	return (
 		<div className="flex flex-col flex-1 w-full h-screen overflow-hidden md:flex-row bg-background">
-			<TooltipProvider>
-				<SidebarProvider>
-					<DashboardSidebar messageCount={messageCount} orderCount={3} />
+			<SidebarProvider>
+				<DashboardSidebar messageCount={messageCount} orderCount={3} />
 
-					<SidebarInset>
-						<div className="flex flex-col px-4 py-3 space-y-4 overflow-y-auto">
-							<div className="flex items-center justify-between space-x-2">
-								<Tooltip>
-									<TooltipTrigger asChild>
-										<SidebarTrigger />
-									</TooltipTrigger>
-									<TooltipContent side="right">
-										<p>{t("general.toggleSidebar")}</p>
-									</TooltipContent>
-								</Tooltip>
+				<SidebarInset>
+					<div className="flex flex-col px-4 py-3 space-y-4 overflow-y-auto">
+						<div className="flex items-center justify-between space-x-2">
+							<Tooltip>
+								<TooltipTrigger asChild>
+									<SidebarTrigger />
+								</TooltipTrigger>
+								<TooltipContent side="right">
+									<p>{t("general.toggleSidebar")}</p>
+								</TooltipContent>
+							</Tooltip>
 
-								<div className="flex items-center space-x-2">
-									<LanguageSwitcher />
-									<UserMenu user={user} />
-								</div>
+							<div className="flex items-center space-x-2">
+								<LanguageSwitcher />
+								<UserMenu user={user} />
 							</div>
-
-							<main>{children}</main>
 						</div>
-					</SidebarInset>
-				</SidebarProvider>
-			</TooltipProvider>
+
+						<main>{children}</main>
+					</div>
+				</SidebarInset>
+			</SidebarProvider>
 		</div>
 	);
 }

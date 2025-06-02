@@ -63,7 +63,13 @@
     "optional": "Незадължително",
     "products": "Продукти",
     "subcategories": "Подкатегории",
-    "toggleSidebar": "Превключване на менюто"
+    "toggleSidebar": "Превключване на менюто",
+    "wishlist": "Любими",
+    "viewAll": "Вижте всички",
+    "checkout": "Към количката",
+    "total": "Общо",
+    "dashboard": "Администрация",
+    "orders": "Поръчки"
   },
   "auth": {
     "errors": {

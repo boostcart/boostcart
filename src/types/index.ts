@@ -17,7 +17,7 @@ import {
 	ShippingAddress,
 	TechnicalInfo as PTechnicalInfo,
 	TechnicalInfoTranslation,
-} from "@prisma/client";
+} from "@/app/generated/prisma/client";
 
 import { ClientUploadedFileData } from "uploadthing/types";
 

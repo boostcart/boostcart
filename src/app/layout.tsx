@@ -1,3 +1,4 @@
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
 import type { Metadata } from "next";
@@ -26,7 +27,11 @@ export default async function RootLayout({
 		<html lang={locale}>
 			<body className={`${font.className} antialiased scheme-light`}>
 				<NextTopLoader color="#f03d7e" showSpinner={false} />
-				<NextIntlClientProvider>{children}</NextIntlClientProvider>
+				<NextIntlClientProvider>
+					<TooltipProvider>
+						{children}
+					</TooltipProvider>
+				</NextIntlClientProvider>
 				<Toaster richColors />
 			</body>
 		</html>

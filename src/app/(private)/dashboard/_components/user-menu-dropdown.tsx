@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/tooltip";
 import { LifeBuoyIcon, LogOutIcon, SettingsIcon, UserIcon } from "lucide-react";
 
-import type { User } from "@prisma/client";
+import type { User } from "@/app/generated/prisma/client";
 import { signOut } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -50,12 +50,6 @@ const UserMenu: React.FC<{ user: User }> = ({ user }) => {
 					<Link href="/account">
 						<UserIcon />
 						{t("general.account")}
-					</Link>
-				</DropdownMenuItem>
-				<DropdownMenuItem asChild>
-					<Link href="/settings">
-						<SettingsIcon />
-						{t("general.settings")}
 					</Link>
 				</DropdownMenuItem>
 				<Tooltip>

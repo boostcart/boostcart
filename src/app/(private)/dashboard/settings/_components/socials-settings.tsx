@@ -25,7 +25,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { updateSocials } from "@/server/dashboard";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { SocialSettings } from "@prisma/client";
+import type { SocialSettings } from "@/app/generated/prisma/client";
 import { SaveIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";

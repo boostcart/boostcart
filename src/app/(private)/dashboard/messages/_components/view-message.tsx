@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toggleMessageStatus } from "@/data/message";
-import type { Message } from "@prisma/client";
+import type { Message } from "@/app/generated/prisma/client";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";

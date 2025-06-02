@@ -28,7 +28,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { editMessage } from "@/data/message";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Message } from "@prisma/client";
+import type { Message } from "@/app/generated/prisma/client";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";

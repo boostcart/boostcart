@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTable } from "@/components/ui/data-table";
 import { toggleMessageStatus } from "@/data/message";
-import type { Message } from "@prisma/client";
+import type { Message } from "@/app/generated/prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronsUpDown } from "lucide-react";
 import Link from "next/link";

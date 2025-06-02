@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { updateGeneral } from "@/server/dashboard";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { GeneralSettings } from "@prisma/client";
+import type { GeneralSettings } from "@/app/generated/prisma/client";
 import { SaveIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
