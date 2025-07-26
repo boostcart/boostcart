@@ -23,6 +23,11 @@ export const Navigation = () => {
 			href: "/account/orders",
 			active: pathname === "/account/orders",
 		},
+		{
+			name: "Settings",
+			href: "/account/settings",
+			active: pathname === "/account/settings",
+		}
 	];
 
 	return (

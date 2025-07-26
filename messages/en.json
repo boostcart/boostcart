@@ -69,7 +69,12 @@
     "checkout": "Checkout",
     "total": "Total",
     "dashboard": "Dashboard",
-    "orders": "Orders"
+    "orders": "Orders",
+    "saving": "Saving...",
+    "saved": "Saved!",
+    "errors": {
+      "generic": "Something went wrong! Try again."
+    }
   },
   "auth": {
     "errors": {
@@ -385,5 +390,20 @@
     "draft": "Draft",
     "hiddenStatus": "When the status is set to \"Hidden\" it'll be shown only to people that have admin permissions",
     "previewNotAvailable": "To view this, change the status from \"Draft\" to \"Hidden\" or \"Published\""
+  },
+  "account": {
+    "marketingEmails": {
+      "title": "Marketing emails",
+      "description": "Check this if you'd like to be first when promos arrive"
+    },
+    "detailsChange": {
+      "success": "Successfuly changed your details!",
+      "title": "Update your details",
+      "description": "You entered something wrong? Feel free to update it here"
+    },
+    "passwordChange": {
+      "title": "Change your password",
+      "description": "You don't feel safe with your current password? Change it here"
+    }
   }
 }

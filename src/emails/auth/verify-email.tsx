@@ -66,7 +66,7 @@ export default function VerifyEmail(props: any) {
 							<Column align="center">
 								<Button
 									href={verifyLink}
-									className="bg-[#f03d7e] text-[#fff5f5] h-10 px-5 py-2 text-md inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-semibold ring-offset-background transition focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+									className="bg-[#f03d7e] text-[#fff5f5] h-10 px-5 py-2 text-base inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-semibold ring-offset-background transition focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
 								>
 									Verify your email
 								</Button>

@@ -204,7 +204,9 @@ export const ProductTranslationSchema = z.object({
 	description: z.string().optional(),
 });
 
-export type ProductTranslationSchemaType = z.infer<typeof ProductTranslationSchema>;
+export type ProductTranslationSchemaType = z.infer<
+	typeof ProductTranslationSchema
+>;
 
 export const ProductImageSchema = z.object({
 	url: z.string().url("Please enter a valid image URL."),
@@ -219,7 +221,9 @@ export const TechnicalInfoTranslationSchema = z.object({
 	value: z.string().min(1, "Please enter a translated specification value."),
 });
 
-export type TechnicalInfoTranslationSchemaType = z.infer<typeof TechnicalInfoTranslationSchema>;
+export type TechnicalInfoTranslationSchemaType = z.infer<
+	typeof TechnicalInfoTranslationSchema
+>;
 
 export const TechnicalInfoSchema = z.object({
 	key: z.string().min(2, "Please enter a specification key."),
@@ -293,7 +297,11 @@ export const ProductVariantSchema = z.object({
 	sku: z.string().optional(),
 	barcode: z.string().optional(),
 	price: z.number().min(0, "Price must be a positive number."),
-	stock: z.number().int().min(0, "Stock must be a non-negative integer.").default(0),
+	stock: z
+		.number()
+		.int()
+		.min(0, "Stock must be a non-negative integer.")
+		.default(0),
 	status: z.enum(["DRAFT", "HIDDEN", "PUBLISHED"]).default("DRAFT"),
 	images: z.array(ProductVariantImageSchema).optional(),
 	options: z.array(ProductVariantOptionSchema).optional(),
@@ -359,12 +367,19 @@ export const ProductSchema = z.object({
 			"Slug must contain only lowercase letters, numbers, and hyphens, and cannot start or end with a hyphen.",
 		),
 	price: z.number().min(0, "Price must be a positive number."),
-	stock: z.number().int().min(0, "Stock must be a non-negative integer.").default(0),
+	stock: z
+		.number()
+		.int()
+		.min(0, "Stock must be a non-negative integer.")
+		.default(0),
 	sku: z.string(),
 	barcode: z.string().optional(),
 	status: z.enum(["DRAFT", "HIDDEN", "PUBLISHED"]).default("DRAFT"),
 	discountType: z.enum(["PERCENTAGE", "FIXED"]).optional(),
-	discountValue: z.number().min(0, "Discount value must be a positive number.").optional(),
+	discountValue: z
+		.number()
+		.min(0, "Discount value must be a positive number.")
+		.optional(),
 	discountStart: z.date().optional(),
 	discountEnd: z.date().optional(),
 	brandId: z.string(),
@@ -380,3 +395,31 @@ export const ProductSchema = z.object({
 });
 
 export type ProductSchemaType = z.infer<typeof ProductSchema>;
+
+export const AccountDetailsChangeSchema = z.object({
+	name: z.string().min(2, "Please enter your name."),
+	email: z.string().email("Please enter a valid email address."),
+});
+
+export type AccountDetailsChangeSchemaType = z.infer<
+	typeof AccountDetailsChangeSchema
+>;
+
+export const AccountPasswordChangeSchema = z
+	.object({
+		password: z
+			.string()
+			.regex(
+				passwordRegex,
+				"Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one number.",
+			),
+		confirmPassword: z.string().min(1, "Please confirm your password."),
+	})
+	.refine((data) => data.password === data.confirmPassword, {
+		message: "Passwords do not match.",
+		path: ["confirmPassword"],
+	});
+
+export type AccountPasswordChangeSchemaType = z.infer<
+	typeof AccountPasswordChangeSchema
+>;

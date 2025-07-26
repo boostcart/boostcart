@@ -1,6 +1,10 @@
 "use server";
 
 import {
+	AccountDetailsChangeSchema,
+	AccountDetailsChangeSchemaType,
+	AccountPasswordChangeSchema,
+	AccountPasswordChangeSchemaType,
 	DashboardCustomersEditUserSchema,
 	DashboardCustomersEditUserSchemaType,
 	DashboardCustomersNewUserSchema,
@@ -136,6 +140,70 @@ export const deleteUser = async (userId: string) => {
 		});
 
 		return { success: "user_deleted" };
+	} catch {
+		return { error: "something_went_wrong" };
+	}
+};
+
+export const userChangeDetails = async (
+	data: AccountDetailsChangeSchemaType,
+) => {
+	const currentUser = await getCurrentUser();
+
+	if (!currentUser) return { error: "not_logged_in" };
+
+	const validatedFields = AccountDetailsChangeSchema.safeParse(data);
+
+	if (!validatedFields.success) return { error: "invalid_data" };
+
+	const user = await prisma.user.findUnique({
+		where: { id: currentUser.id },
+	});
+
+	if (!user) return { error: "user_not_found" };
+
+	try {
+		await prisma.user.update({
+			where: { id: currentUser.id },
+			data: validatedFields.data,
+		});
+
+		return { success: "user_details_changed" };
+	} catch {
+		return { error: "something_went_wrong" };
+	}
+};
+
+export const userChangePassword = async (
+	userId: string,
+	data: AccountPasswordChangeSchemaType,
+) => {
+	const currentUser = await getCurrentUser();
+
+	if (!currentUser) return { error: "not_logged_in" };
+
+	const validatedFields = AccountPasswordChangeSchema.safeParse(data);
+
+	if (!validatedFields.success) return { error: "invalid_data" };
+
+	const user = await getUserById(currentUser.id);
+
+	if (!user) return { error: "user_not_found" };
+
+	if (user.id !== userId) return { error: "unauthorized" };
+
+	if (validatedFields.data.password !== validatedFields.data.confirmPassword)
+		return { error: "passwords_do_not_match" };
+
+	try {
+		await prisma.user.update({
+			where: { id: currentUser.id },
+			data: {
+				password: validatedFields.data.password,
+			},
+		});
+
+		return { success: "password_changed" };
 	} catch {
 		return { error: "something_went_wrong" };
 	}

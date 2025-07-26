@@ -15,7 +15,7 @@ const AuthProviders = () => {
 			<Button
 				variant="google"
 				onClick={() => signIn("google")}
-				className="w-full h-10 px-4 py-2 text-sm rounded-md md:px-8 md:h-11 text-md"
+				className="w-full h-10 px-4 py-2 text-sm rounded-md md:px-8 md:h-11 text-base"
 			>
 				<FcGoogle style={{ width: "24px", height: "24px" }} />
 				<span>{t("auth.general.continueWith")} Google</span>
@@ -24,7 +24,7 @@ const AuthProviders = () => {
 			<Button
 				variant="facebook"
 				onClick={() => signIn("facebook")}
-				className="w-full h-10 px-4 py-2 text-sm rounded-md md:px-8 md:h-11 text-md"
+				className="w-full h-10 px-4 py-2 text-sm rounded-md md:px-8 md:h-11 text-base"
 			>
 				<FaFacebook style={{ width: "24px", height: "24px" }} />
 				<span>{t("auth.general.continueWith")} Facebook</span>
@@ -33,7 +33,7 @@ const AuthProviders = () => {
 			<Button
 				variant="apple"
 				onClick={() => signIn("apple")}
-				className="w-full h-10 px-4 py-2 text-sm rounded-md md:px-8 md:h-11 text-md"
+				className="w-full h-10 px-4 py-2 text-sm rounded-md md:px-8 md:h-11 text-base"
 			>
 				<FaApple style={{ width: "24px", height: "24px" }} />
 				<span>{t("auth.general.continueWith")} Apple</span>

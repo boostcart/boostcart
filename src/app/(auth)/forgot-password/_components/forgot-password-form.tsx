@@ -121,7 +121,7 @@ const ForgotPasswordForm = () => {
 
 							<Button
 								type="submit"
-								className="w-full h-10 px-4 py-2 text-sm rounded-md md:px-8 md:h-11 text-md"
+								className="w-full h-10 px-4 py-2 text-sm rounded-md md:px-8 md:h-11 text-base"
 								disabled={isPending}
 							>
 								{t("general.send")}
