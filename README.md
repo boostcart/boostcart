@@ -1,66 +1,29 @@
-# BoostCart
+# Create T3 App
 
-Supercharge your online presence with BoostCart, the solution for selling online.
+This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 
-## Getting Started
+## What's next? How do I make an app with this?
 
-First, clone the repo
+We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
 
-```shell
-$ git clone https://github.com/boostcart/boostcart
-Cloning into boostcart...
-```
+If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
 
-Second, install the depenencies (we recommend using `bun`, however you can use any other package manager)
+- [Next.js](https://nextjs.org)
+- [NextAuth.js](https://next-auth.js.org)
+- [Prisma](https://prisma.io)
+- [Drizzle](https://orm.drizzle.team)
+- [Tailwind CSS](https://tailwindcss.com)
+- [tRPC](https://trpc.io)
 
-```shell
-$ bun install
-Running bun install...
-```
+## Learn More
 
-Third, add the connection strings for your database in the `.env` file and run the migrations
+To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
 
-```shell
-$ bunx prisma migrate
-Migrating the database schema...
-```
+- [Documentation](https://create.t3.gg/)
+- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
 
-Finally, start the development server
+You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
 
-```shell
-$ bun dev
-Starting next development server...
-```
+## How do I deploy this?
 
-Open your new online store in your browser at [http://localhost:3000](http://localhost:3000)
-
-## About
-
-BoostCart is a platform built using [Next.js](https://nextjs.org), made to lower difficulty of creating online stores.
-
-## Features
-
-Here's a list of our main features:
-
-- Multiple languages using [next-intl](https://next-intl.dev)
-- [PPR (Partial Prerendering)](https://nextjs.org/docs/app/building-your-application/rendering/partial-prerendering) - Combine static and dynamic components together for the best performance
-- [Server actions](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations) - Use the server, make your life easier
-- [Prisma](https://prisma.io) - Talk to your database easily
-- [Biome](https://biomejs.dev) - Formater and linter so good it's out of this world.
-- [Optimized Images](https://nextjs.org/docs/app/building-your-application/optimizing/images) - Using the built-in `next/image` package for optimized images so you don't have to worry about them and if your store will run fast
-- Made for SEO ([next-seo](https://github.com/garmeeh/next-seo)) - Our engineers have made SEO a breeze, why - because we know what a pain it is
-
-## Requirements
-
-- [Node.js](https://nodejs.org) 22
-- [Bun](https://bun.sh) or your preferred package manager. (We recommend using Bun as it's faster, more stable and we know that our app WILL build and run smoothly!)
-
-## Learn more
-
-If you want to learn more about BoostCart and how it works feel free to open our [documentation](https://docs.boostcart.dev). (Coming soon)
-Here's the [Next.js documentation](https://nextjs.org/docs/) aswell.
-
-## Deploying
-
-We recommend using [Vercel](https://vercel.com) as your hosting provider.
-Why? Because after all they are the creators of [Next.js](https://nextjs.org) and they do know what's best for hosting your Next app.
+Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.

@@ -1,573 +1,74 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/app/generated/prisma/client"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
-}
-
-enum UserRole {
-  USER
-  ADMIN
-  SUPER_ADMIN
-}
-
-enum PreferredShippingProvider {
-  SPEEDY
-  ECONT
-}
-
-enum ShippingAddressType {
-  ADDRESS
-  SPEEDY_OFFICE
-  ECONT_OFFICE
-}
-
-enum Status {
-  DRAFT
-  HIDDEN
-  PUBLISHED
-}
-
-enum DiscountType {
-  PERCENTAGE
-  FIXED
-}
-
-model User {
-  id                    String                 @id @default(cuid())
-  name                  String
-  email                 String                 @unique
-  emailVerified         DateTime?
-  image                 String?
-  password              String?
-  isTwoFactorEnabled    Boolean                @default(false)
-  marketingEmails       Boolean                @default(false)
-  role                  UserRole               @default(USER)
-  accounts              Account[]
-  shippingAddresses     ShippingAddress[]
-  passwordChanges       PasswordChange[]
-  twoFactorConfirmation TwoFactorConfirmation?
-  messages              Message[]
-  posts                 Post[]
-  productReviews        ProductReview[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Account {
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@id([provider, providerAccountId])
-}
-
-model EmailVerificationToken {
-  id      String   @id @default(cuid())
-  email   String
-  token   String   @unique
-  expires DateTime
-
-  @@unique([email, token])
-}
-
-model PasswordResetToken {
-  id      String   @id @default(cuid())
-  email   String
-  token   String   @unique
-  expires DateTime
-
-  @@unique([email, token])
-}
-
-model TwoFactorToken {
-  id      String   @id @default(cuid())
-  email   String
-  token   String
-  expires DateTime
-
-  @@unique([email, token])
-}
-
-model TwoFactorConfirmation {
-  id     String @id @default(cuid())
-  userId String
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId])
-}
-
-model ShippingAddress {
-  id         String                    @id @default(cuid())
-  userId     String
-  type       ShippingAddressType       @default(ADDRESS)
-  preference PreferredShippingProvider @default(SPEEDY)
-  name       String
-  address    String
-  city       String
-  state      String
-  postalCode String
-  country    String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model PasswordChange {
-  id        String   @id @default(cuid())
-  userId    String
-  location  String
-  ip        String
-  userAgent String
-  createdAt DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model GeneralSettings {
-  id          String  @id @default(cuid())
-  appName     String
-  appUrl      String
-  appLogo     String
-  appFavicon  String
-  maintenance Boolean @default(false)
-}
-
-model SocialSettings {
-  id        String @id @default(cuid())
-  facebook  String @default("")
-  instagram String @default("")
-  tiktok    String @default("")
-  youtube   String @default("")
-  twitter   String @default("")
-  linkedin  String @default("")
-}
-
-model AppearanceSettings {
-  id                  String  @id @default(cuid())
-  theme               String  @default("light")
-  primaryColor        String  @default("f03d7e")
-  primaryForeground   String  @default("fafafa")
-  secondaryColor      String  @default("ededed")
-  secondaryForeground String  @default("171717")
-  mutedColor          String  @default("f5f5f5")
-  mutedForeground     String  @default("737373")
-  accentColor         String  @default("f5f5f5")
-  accentForeground    String  @default("171717")
-  darkMode            Boolean @default(false)
-}
-
-model PaymentSettings {
-  id             String  @id @default(cuid())
-  currencies     Json[]
-  cashOnDelivery Boolean @default(false)
-  stripe         Boolean @default(false)
-  stripeKey      String?
-  myPos          Boolean @default(false)
-  myPosKey       String?
-}
-
-model SecuritySettings {
-  id                       String  @id @default(cuid())
-  appPasswordProtected     Boolean @default(false)
-  appPassword              String?
-  requireVerifiedEmail     Boolean @default(false)
-  requireTwoFactor         Boolean @default(false)
-  passwordLength           Int     @default(8)
-  passwordUppercase        Boolean @default(true)
-  passwordLowercase        Boolean @default(true)
-  passwordNumber           Boolean @default(true)
-  passwordSpecialCharacter Boolean @default(false)
-}
-
-model Message {
-  id        String   @id @default(cuid())
-  userId    String?
-  name      String
-  email     String
-  phone     String?
-  subject   String
-  message   String
-  read      Boolean  @default(false)
-  createdAt DateTime @default(now())
-
-  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+    provider = "postgresql"
+    // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
+    // Further reading:
+    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
+    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+    url      = env("DATABASE_URL")
 }
 
 model Post {
-  id           String            @id @default(cuid())
-  defaultTitle String // Default title for fallback purposes and slug generation
-  slug         String            @unique
-  cover        String?
-  status       Status            @default(DRAFT)
-  views        Int               @default(0)
-  userId       String
-  translations PostTranslation[]
-  tags         PostTag[]         @relation("PostTags")
+    id        Int      @id @default(autoincrement())
+    name      String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdBy   User   @relation(fields: [createdById], references: [id])
+    createdById String
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    @@index([name])
 }
 
-model PostTranslation {
-  id       String  @id @default(cuid())
-  postId   String
-  language String
-  title    String
-  content  String?
+// Necessary for Next auth
+model Account {
+    id                       String  @id @default(cuid())
+    userId                   String
+    type                     String
+    provider                 String
+    providerAccountId        String
+    refresh_token            String? // @db.Text
+    access_token             String? // @db.Text
+    expires_at               Int?
+    token_type               String?
+    scope                    String?
+    id_token                 String? // @db.Text
+    session_state            String?
+    user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    refresh_token_expires_in Int?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-
-  @@unique([postId, language])
+    @@unique([provider, providerAccountId])
 }
 
-model PostTag {
-  id           String               @id @default(cuid())
-  name         String               @unique
-  translations PostTagTranslation[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-
-  Post Post[] @relation("PostTags")
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique
+    userId       String
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model PostTagTranslation {
-  id       String @id @default(cuid())
-  tagId    String
-  language String
-  name     String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-
-  postTag PostTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
-
-  @@unique([tagId, language])
+model User {
+    id            String    @id @default(cuid())
+    name          String?
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
+    accounts      Account[]
+    sessions      Session[]
+    posts         Post[]
 }
 
-model Brand {
-  id          String    @id @default(cuid())
-  name        String    @unique
-  slug        String    @unique
-  logo        String?
-  description String?
-  status      Status    @default(DRAFT)
-  products    Product[]
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Category {
-  id          String  @id @default(cuid())
-  defaultName String // Default name for fallback and slug generation
-  slug        String  @unique
-  image       String?
-  status      Status  @default(DRAFT)
-
-  // Hierarchical relations
-  parentId      String?
-  parent        Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
-  subcategories Category[] @relation("CategoryHierarchy")
-
-  // Level information (0 = main, 1 = subcategory, 2 = sub-subcategory)
-  level Int @default(0)
-
-  // Translations
-  translations CategoryTranslation[]
-  products     Product[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model CategoryTranslation {
-  id          String  @id @default(cuid())
-  categoryId  String
-  language    String
-  name        String
-  description String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-
-  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-
-  @@unique([categoryId, language])
-}
-
-model Product {
-  id            String        @id @default(cuid())
-  defaultName   String // Default name for fallback and slug generation
-  slug          String        @unique
-  price         Float
-  stock         Int           @default(0)
-  sku           String        @unique
-  barcode       String?       @unique
-  status        Status        @default(DRAFT)
-  discountType  DiscountType? // PERCENTAGE or FIXED
-  discountValue Float? // e.g. 10 for 10% or 10 for $10 off
-  discountStart DateTime? // Start date for the discount
-  discountEnd   DateTime? // End date for the discount
-  brandId       String
-  categoryId    String
-  ignoreStock   Boolean       @default(false) // Option to ignore stock checking
-
-  // Translations
-  translations ProductTranslation[]
-
-  // Relations
-  brand             Brand            @relation(fields: [brandId], references: [id], onDelete: Cascade)
-  category          Category         @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  shippingInfo      ShippingInfo?
-  technicalInfo     TechnicalInfo[]
-  reviews           ProductReview[]
-  tags              ProductTag[]     @relation("ProductTags")
-  images            ProductImage[]
-  variants          ProductVariant[]
-  relatedProducts   Product[]        @relation("RelatedProducts")
-  relatedToProducts Product[]        @relation("RelatedProducts")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model ProductTranslation {
-  id               String  @id @default(cuid())
-  productId        String
-  language         String
-  name             String
-  shortDescription String?
-  description      String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  @@unique([productId, language])
-}
-
-model ProductImage {
-  id        String  @id @default(cuid())
-  productId String
-  url       String
-  isMain    Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  product Product @relation(fields: [productId], references: [id])
-}
-
-model ProductVariant {
-  id        String  @id @default(cuid())
-  productId String
-  name      String
-  sku       String? @unique
-  barcode   String? @unique
-  price     Float
-  stock     Int     @default(0)
-  status    Status  @default(DRAFT)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  product                 Product                  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  ProductVariantImage     ProductVariantImage[]
-  ProductVariantOption    ProductVariantOption[]
-  ProductVariantTranslation ProductVariantTranslation[]
-}
-
-model ProductVariantImage {
-  id        String  @id @default(cuid())
-  variantId String
-  url       String
-  isMain    Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  productVariant ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
-}
-
-model ProductVariantOption {
-  id        String @id @default(cuid())
-  variantId String
-  name      String
-  value     String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  productVariant            ProductVariant              @relation(fields: [variantId], references: [id], onDelete: Cascade)
-  ProductVariantOptionValue ProductVariantOptionValue[]
-  translations              ProductVariantOptionTranslation[]
-}
-
-model ProductVariantOptionTranslation {
-  id        String @id @default(cuid())
-  optionId  String
-  language  String
-  name      String
-  value     String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  productVariantOption ProductVariantOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
-
-  @@unique([optionId, language])
-}
-
-model ProductVariantOptionValue {
-  id       String @id @default(cuid())
-  optionId String
-  value    String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-
-  productVariantOption ProductVariantOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
-}
-
-model ProductTag {
-  id           String                  @id @default(cuid())
-  name         String                  @unique
-  slug         String                  @unique
-  translations ProductTagTranslation[]
-  products     Product[]               @relation("ProductTags")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model ProductTagTranslation {
-  id       String @id @default(cuid())
-  tagId    String
-  language String
-  name     String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  productTag ProductTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
-
-  @@unique([tagId, language])
-}
-
-model ShippingInfo {
-  id           String  @id @default(cuid())
-  productId    String  @unique
-  weight       Float? // Weight in kg
-  width        Float? // Width in cm
-  height       Float? // Height in cm
-  depth        Float? // Depth in cm
-  isFragile    Boolean @default(false)
-  freeShipping Boolean @default(false)
-  requiresPallet Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-}
-
-model TechnicalInfo {
-  id        String @id @default(cuid())
-  productId String
-  key       String // e.g. "Screen Size", "RAM", "Processor"
-  value     String // e.g. "15.6 inches", "8GB", "Intel i7"
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  translations TechnicalInfoTranslation[]
-
-  @@unique([productId, key]) // Each technical spec key must be unique per product
-}
-
-model TechnicalInfoTranslation {
-  id        String @id @default(cuid())
-  infoId    String
-  language  String
-  key       String
-  value     String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  technicalInfo TechnicalInfo @relation(fields: [infoId], references: [id], onDelete: Cascade)
-
-  @@unique([infoId, language])
-}
-
-model ProductReview {
-  id        String  @id @default(cuid())
-  productId String
-  userId    String?
-  name      String // Name of reviewer (if not a registered user)
-  email     String // Email of reviewer (if not a registered user)
-  rating    Float // 1-5 star rating
-  title     String
-  comment   String
-  status    Status  @default(DRAFT) // For moderation
-  verified  Boolean @default(false) // Flag for verified purchases
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  user    User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
-
-  @@index([productId])
-  @@index([userId])
-}
-
-model ProductVariantTranslation {
-  id        String @id @default(cuid())
-  variantId String
-  language  String
-  name      String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  productVariant ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
-
-  @@unique([variantId, language])
+    @@unique([identifier, token])
 }
