@@ -1,0 +1,46 @@
+import * as z from "zod";
+
+const passwordRegex =
+	/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?#^();'<>\\/|_\-&]{8,}$/;
+
+export const SignUpSchema = z.object({
+	firstName: z.string().min(2, "Please enter your first name."),
+	lastName: z.string().min(2, "Please enter your last name."),
+	email: z.email("Please enter a valid email address."),
+	password: z
+		.string()
+		.regex(
+			passwordRegex,
+			"Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one number.",
+		),
+});
+
+export const SignInSchema = z.object({
+	email: z.email("Please enter a valid email address."),
+	password: z.string().min(8, "Password must be at least 8 characters long."),
+});
+
+export const ForgotPasswordSchema = z.object({
+	email: z.email("Please enter a valid email address."),
+});
+
+export const ResetPasswordSchema = z.object({
+	token: z.string().min(1, "Token is required."),
+	email: z.email("Please enter a valid email address."),
+	password: z
+		.string()
+		.regex(
+			passwordRegex,
+			"Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one number.",
+		),
+	confirmPassword: z.string(),
+}).refine((data) => data.password === data.confirmPassword, {
+	message: "Passwords do not match.",
+	path: ["confirmPassword"],
+});
+
+// Exporting schema types for use in other parts of the application
+export type SignUpSchemaType = z.infer<typeof SignUpSchema>;
+export type SignInSchemaType = z.infer<typeof SignInSchema>;
+export type ForgotPasswordSchemaType = z.infer<typeof ForgotPasswordSchema>;
+export type ResetPasswordSchemaType = z.infer<typeof ResetPasswordSchema>;

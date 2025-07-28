@@ -15,9 +15,9 @@ datasource db {
 // ======================================================================
 
 enum UserRole {
-  USER   // Regular customer
-  STAFF  // Can view some internal data, not full admin
-  ADMIN  // Full administrative access
+    USER // Regular customer
+    // STAFF  // Can view some internal data, not full admin
+    ADMIN // Full administrative access
 }
 
 enum OrderStatus {
@@ -94,11 +94,13 @@ enum PageType {
 model User {
     id            String    @id @default(cuid())
     name          String?
+    firstName     String?
+    lastName      String?
     email         String?   @unique
     emailVerified DateTime?
     image         String?
     password      String? // For email/password sign-in
-    role          UserRole @default(USER) // Default to regular user
+    role          UserRole  @default(USER) // Default to regular user
 
     accounts Account[]
     sessions Session[]
@@ -154,9 +156,27 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
+model EmailVerificationToken {
+    id      String   @id @default(cuid())
+    email   String
+    token   String   @unique
+    expires DateTime
+
+    @@unique([email, token])
+}
+
+model PasswordResetToken {
+    id      String   @id @default(cuid())
+    email   String
+    token   String   @unique
+    expires DateTime
+
+    @@unique([email, token])
+}
+
 // --- LOCALIZATION & INTERNATIONALIZATION ---
 model Locale {
-    id        String  @id @default(uuid())
+    id        String  @id @default(cuid())
     code      String  @unique // e.g., "en-US", "bg-BG"
     name      String // e.g., "English (US)", "Български"
     isDefault Boolean @default(false)
@@ -174,7 +194,7 @@ model Locale {
 
 // --- CURRENCIES ---
 model Currency {
-    id        String     @id @default(uuid())
+    id        String     @id @default(cuid())
     code      String     @unique // e.g., "BGN", "EUR", "USD"
     symbol    String // e.g., "leva", "€", "$"
     name      String // e.g., "Bulgarian Lev", "Euro", "US Dollar"
@@ -190,7 +210,7 @@ model Currency {
 
 // --- BRANDS ---
 model Brand {
-    id           String             @id @default(uuid())
+    id           String             @id @default(cuid())
     slug         String             @unique
     name         String
     logoUrl      String?
@@ -205,7 +225,7 @@ model Brand {
 }
 
 model BrandTranslation {
-    id          String  @id @default(uuid())
+    id          String  @id @default(cuid())
     brandId     String
     brand       Brand   @relation(fields: [brandId], references: [id], onDelete: Cascade)
     localeId    String
@@ -218,7 +238,7 @@ model BrandTranslation {
 
 // --- CATEGORIES ---
 model Category {
-    id            String                @id @default(uuid())
+    id            String                @id @default(cuid())
     slug          String                @unique
     iconUrl       String?
     coverImageUrl String?
@@ -236,7 +256,7 @@ model Category {
 }
 
 model CategoryTranslation {
-    id          String   @id @default(uuid())
+    id          String   @id @default(cuid())
     categoryId  String
     category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
     localeId    String
@@ -249,7 +269,7 @@ model CategoryTranslation {
 
 // --- PRODUCTS ---
 model Product {
-    id         String  @id @default(uuid())
+    id         String  @id @default(cuid())
     slug       String  @unique
     price      Decimal @db.Decimal(10, 2)
     sku        String? @unique
@@ -285,7 +305,7 @@ model Product {
 }
 
 model ProductTranslation {
-    id          String  @id @default(uuid())
+    id          String  @id @default(cuid())
     productId   String
     product     Product @relation(fields: [productId], references: [id], onDelete: Cascade)
     localeId    String
@@ -297,7 +317,7 @@ model ProductTranslation {
 }
 
 model ProductImage {
-    id        String  @id @default(uuid())
+    id        String  @id @default(cuid())
     productId String
     product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
     url       String
@@ -309,7 +329,7 @@ model ProductImage {
 }
 
 model ProductSpecification {
-    id           String                            @id @default(uuid())
+    id           String                            @id @default(cuid())
     productId    String
     product      Product                           @relation(fields: [productId], references: [id], onDelete: Cascade)
     order        Int                               @default(0)
@@ -317,7 +337,7 @@ model ProductSpecification {
 }
 
 model ProductSpecificationTranslation {
-    id       String               @id @default(uuid())
+    id       String               @id @default(cuid())
     specId   String
     spec     ProductSpecification @relation(fields: [specId], references: [id], onDelete: Cascade)
     localeId String
@@ -329,7 +349,7 @@ model ProductSpecificationTranslation {
 }
 
 model ProductShippingInfo {
-    id             String   @id @default(uuid())
+    id             String   @id @default(cuid())
     productId      String   @unique
     product        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
     weightKg       Decimal? @db.Decimal(10, 2)
@@ -342,7 +362,7 @@ model ProductShippingInfo {
 }
 
 model ProductDownload {
-    id         String  @id @default(uuid())
+    id         String  @id @default(cuid())
     productId  String
     product    Product @relation(fields: [productId], references: [id], onDelete: Cascade)
     name       String // e.g., "User Manual", "Drivers"
@@ -354,7 +374,7 @@ model ProductDownload {
 
 // --- FILTERS ---
 model Filter {
-    id         String            @id @default(uuid())
+    id         String            @id @default(cuid())
     name       String            @unique // e.g., "Color", "RAM"
     attributes FilterAttribute[]
     categories CategoryFilter[]
@@ -364,7 +384,7 @@ model Filter {
 }
 
 model FilterAttribute {
-    id             String                       @id @default(uuid())
+    id             String                       @id @default(cuid())
     filterId       String
     filter         Filter                       @relation(fields: [filterId], references: [id], onDelete: Cascade)
     translations   FilterAttributeTranslation[]
@@ -375,7 +395,7 @@ model FilterAttribute {
 }
 
 model FilterAttributeTranslation {
-    id          String          @id @default(uuid())
+    id          String          @id @default(cuid())
     attributeId String
     attribute   FilterAttribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
     localeId    String
@@ -407,7 +427,7 @@ model CategoryFilter {
 
 // --- PRODUCT VARIANTS & CUSTOMIZATION OPTIONS ---
 model ProductVariant {
-    id              String      @id @default(uuid())
+    id              String      @id @default(cuid())
     productId       String
     product         Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
     sku             String?     @unique // Optional SKU per variant
@@ -423,7 +443,7 @@ model ProductVariant {
 }
 
 model ProductCustomizationOption {
-    id           String                                  @id @default(uuid())
+    id           String                                  @id @default(cuid())
     productId    String
     product      Product                                 @relation(fields: [productId], references: [id], onDelete: Cascade)
     type         CustomizationOptionType
@@ -439,7 +459,7 @@ model ProductCustomizationOption {
 }
 
 model ProductCustomizationOptionTranslation {
-    id          String                     @id @default(uuid())
+    id          String                     @id @default(cuid())
     optionId    String
     option      ProductCustomizationOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
     localeId    String
@@ -451,7 +471,7 @@ model ProductCustomizationOptionTranslation {
 }
 
 model ProductCustomizationOptionValue {
-    id              String                     @id @default(uuid())
+    id              String                     @id @default(cuid())
     optionId        String
     option          ProductCustomizationOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
     value           String // e.g., "M1 Pro", "16GB", "512GB SSD"
@@ -466,7 +486,7 @@ model ProductCustomizationOptionValue {
 }
 
 model ProductCustomizationOptionValueTranslation {
-    id       String                          @id @default(uuid())
+    id       String                          @id @default(cuid())
     valueId  String
     value    ProductCustomizationOptionValue @relation(fields: [valueId], references: [id], onDelete: Cascade)
     localeId String
@@ -478,7 +498,7 @@ model ProductCustomizationOptionValueTranslation {
 
 // --- DISCOUNTS ---
 model Discount {
-    id          String             @id @default(uuid())
+    id          String             @id @default(cuid())
     name        String
     description String?
     type        DiscountType
@@ -525,7 +545,7 @@ model DiscountBrand {
 
 // --- PROMO CODES ---
 model PromoCode {
-    id          String              @id @default(uuid())
+    id          String              @id @default(cuid())
     code        String              @unique // The actual code (e.g., "SAVE10")
     description String?
     type        DiscountType // PERCENTAGE or FIXED_AMOUNT
@@ -574,7 +594,7 @@ model PromoCodeBrand {
 
 // --- GIFT CARDS ---
 model GiftCard {
-    id             String    @id @default(uuid())
+    id             String    @id @default(cuid())
     code           String    @unique // Unique code for the gift card
     initialValue   Decimal   @db.Decimal(10, 2)
     currentValue   Decimal   @db.Decimal(10, 2)
@@ -594,7 +614,7 @@ model GiftCard {
 
 // --- CART ---
 model Cart {
-    id        String     @id @default(uuid())
+    id        String     @id @default(cuid())
     userId    String?    @unique // Null if anonymous user, unique for registered
     user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
     expiresAt DateTime? // For anonymous carts (e.g., 30 days)
@@ -605,7 +625,7 @@ model Cart {
 }
 
 model CartItem {
-    id                           String          @id @default(uuid())
+    id                           String          @id @default(cuid())
     cartId                       String
     cart                         Cart            @relation(fields: [cartId], references: [id], onDelete: Cascade)
     productId                    String
@@ -621,7 +641,7 @@ model CartItem {
 
 // --- CHECKOUT & ORDERS ---
 model Order {
-    id             String        @id @default(uuid())
+    id             String        @id @default(cuid())
     userId         String? // Null if anonymous
     user           User?         @relation(fields: [userId], references: [id])
     guestEmail     String? // For anonymous orders
@@ -682,7 +702,7 @@ model Order {
 }
 
 model OrderItem {
-    id                           String          @id @default(uuid())
+    id                           String          @id @default(cuid())
     orderId                      String
     order                        Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
     productId                    String
@@ -700,7 +720,7 @@ model OrderItem {
 }
 
 model OrderHistory {
-    id        String      @id @default(uuid())
+    id        String      @id @default(cuid())
     orderId   String
     order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
     status    OrderStatus
@@ -711,7 +731,7 @@ model OrderHistory {
 }
 
 model ShippingMethod {
-    id          String             @id @default(uuid())
+    id          String             @id @default(cuid())
     name        String
     type        ShippingMethodType
     cost        Decimal            @db.Decimal(10, 2)
@@ -724,7 +744,7 @@ model ShippingMethod {
 }
 
 model PaymentMethod {
-    id          String            @id @default(uuid())
+    id          String            @id @default(cuid())
     name        String
     type        PaymentMethodType
     isActive    Boolean           @default(true)
@@ -737,7 +757,7 @@ model PaymentMethod {
 
 // --- USER MANAGEMENT ---
 model UserAddress {
-    id           String  @id @default(uuid())
+    id           String  @id @default(cuid())
     userId       String
     user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
     name         String? // e.g., "Home", "Work"
@@ -760,7 +780,7 @@ model UserAddress {
 
 // --- WISHLIST ---
 model WishlistItem {
-    id        String  @id @default(uuid())
+    id        String  @id @default(cuid())
     userId    String
     user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
     productId String
@@ -773,7 +793,7 @@ model WishlistItem {
 
 // --- REVIEWS ---
 model Review {
-    id         String  @id @default(uuid())
+    id         String  @id @default(cuid())
     productId  String
     product    Product @relation(fields: [productId], references: [id], onDelete: Cascade)
     userId     String
@@ -789,7 +809,7 @@ model Review {
 
 // --- STATIC PAGES (FAQ, CONTACT, ETC.) ---
 model Page {
-    id           String            @id @default(uuid())
+    id           String            @id @default(cuid())
     slug         String            @unique
     type         PageType
     isActive     Boolean           @default(true)
@@ -800,7 +820,7 @@ model Page {
 }
 
 model PageTranslation {
-    id       String @id @default(uuid())
+    id       String @id @default(cuid())
     pageId   String
     page     Page   @relation(fields: [pageId], references: [id], onDelete: Cascade)
     localeId String
@@ -813,7 +833,7 @@ model PageTranslation {
 
 // --- COLLECTIONS ---
 model Collection {
-    id           String                  @id @default(uuid())
+    id           String                  @id @default(cuid())
     slug         String                  @unique
     imageUrl     String? // Banner or cover image for the collection
     products     CollectionProduct[] // Many-to-many
@@ -825,7 +845,7 @@ model Collection {
 }
 
 model CollectionTranslation {
-    id           String     @id @default(uuid())
+    id           String     @id @default(cuid())
     collectionId String
     collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
     localeId     String

@@ -2,8 +2,13 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { UserRole } from "@prisma/client";
 import type { DefaultSession, NextAuthConfig } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import ResendProvider from "next-auth/providers/resend";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 import { db } from "@/server/db";
+import { SignInSchema } from "@/schemas";
+import { getUserByEmail } from "../api/helpers";
+import bcrypt from "bcrypt";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -30,8 +35,49 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authConfig = {
-	providers: [GoogleProvider],
-	// @ts-ignore I don't know why the fuck this gives an error but it works.
+	providers: [
+		ResendProvider({
+			apiKey: process.env.RESEND_API_KEY || "",
+			from: process.env.EMAIL_FROM || "BoostCart <noreply@example.com>",
+		}),
+		GoogleProvider,
+		CredentialsProvider({
+			credentials: {
+				email: {
+					type: "email",
+					label: "Email",
+					placeholder: "Enter your email",
+				},
+				password: {
+					type: "password",
+					label: "Password",
+					placeholder: "Enter your password",
+				},
+			},
+			authorize: async (credentials) => {
+				const validatedData = SignInSchema.safeParse(credentials);
+
+				if (!validatedData.success) return null;
+
+				const { email, password } = validatedData.data;
+
+				const user = await getUserByEmail(email);
+
+				if (!user || !user.password) {
+					return null; // User not found or no password set
+				}
+
+				const isPasswordValid = await bcrypt.compare(password, user.password);
+
+				if (!isPasswordValid) {
+					return null; // Invalid password
+				}
+
+				return user;
+			},
+		}),
+	],
+	// @ts-expect-error I don't know why the fuck this gives an error but it works.
 	adapter: PrismaAdapter(db),
 	session: {
 		strategy: "database",
