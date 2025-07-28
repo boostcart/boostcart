@@ -5,7 +5,8 @@ import { generateVerificationToken } from "./utils";
 const resend = new Resend(env.RESEND_API_KEY);
 
 export async function sendEmailVerification(email: string) {
-	const verificationToken = await generateVerificationToken("verify", email);
+	const validFor = 24; // in hours
+	const verificationToken = await generateVerificationToken("verify", email, validFor);
 
 	if (!verificationToken) return;
 
@@ -17,7 +18,7 @@ export async function sendEmailVerification(email: string) {
 			<p>Click the link below to verify your email:</p>
 			<a href="${env.BASE_URL}/api/auth/verify-email?token=${verificationToken.token}">Verify Email</a>
 			<br />
-			<p>The link expires in 1 hour, if it has expired you can request a new one by clicking <a href="${env.BASE_URL}/api/auth/resend-verification?email=${email}">here</a>.</p>
+			<p>The link expires in ${validFor} ${validFor > 1 ? "hours" : "hour"}, if it has expired you can request a new one by clicking <a href="${env.BASE_URL}/api/auth/resend-verification?email=${email}">here</a>.</p>
 			<br />
 			<p>If you did not request this email, please ignore it.</p>
 		`,
@@ -25,7 +26,8 @@ export async function sendEmailVerification(email: string) {
 }
 
 export async function sendPasswordReset(email: string) {
-	const verificationToken = await generateVerificationToken("reset", email);
+	const validFor = 1; // in hours
+	const verificationToken = await generateVerificationToken("reset", email, validFor);
 
 	if (!verificationToken) return;
 
@@ -37,7 +39,7 @@ export async function sendPasswordReset(email: string) {
 			<p>Click the link below to reset your password:</p>
 			<a href="${env.BASE_URL}/reset-password?token=${verificationToken.token}">Reset Password</a>
 			<br />
-			<p>The link expires in 1 hour, if it has expired you can request a new one by clicking <a href="${env.BASE_URL}/api/auth/resend-reset?email=${email}">here</a>.</p>
+			<p>The link expires in ${validFor} ${validFor > 1 ? "hours" : "hour"}, if it has expired you can request a new one by clicking <a href="${env.BASE_URL}/api/auth/resend-reset?email=${email}">here</a>.</p>
 			<br />
 			<p>If you did not request this email, please ignore it.</p>
 		`,
