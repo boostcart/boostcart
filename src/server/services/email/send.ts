@@ -6,7 +6,11 @@ const resend = new Resend(env.RESEND_API_KEY);
 
 export async function sendEmailVerification(email: string) {
 	const validFor = 24; // in hours
-	const verificationToken = await generateVerificationToken("verify", email, validFor);
+	const verificationToken = await generateVerificationToken(
+		"verify",
+		email,
+		validFor,
+	);
 
 	if (!verificationToken) return;
 
@@ -27,7 +31,11 @@ export async function sendEmailVerification(email: string) {
 
 export async function sendPasswordReset(email: string) {
 	const validFor = 1; // in hours
-	const verificationToken = await generateVerificationToken("reset", email, validFor);
+	const verificationToken = await generateVerificationToken(
+		"reset",
+		email,
+		validFor,
+	);
 
 	if (!verificationToken) return;
 

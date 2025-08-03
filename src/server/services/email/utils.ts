@@ -1,6 +1,6 @@
 import { v4 as uuid } from "uuid";
-import { db } from "@/server/db";
 import { getVerificationTokenByEmail } from "@/server/api/helpers";
+import { db } from "@/server/db";
 
 /**
  * Generate a verification token for email verification or password reset.
@@ -14,7 +14,7 @@ import { getVerificationTokenByEmail } from "@/server/api/helpers";
 export async function generateVerificationToken(
 	type: "verify" | "reset",
 	email: string,
-	validFor: number = 1 // Default to 1 hour
+	validFor: number = 1, // Default to 1 hour
 ) {
 	const token = uuid();
 

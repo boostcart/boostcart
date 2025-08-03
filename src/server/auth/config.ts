@@ -1,14 +1,13 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { UserRole } from "@prisma/client";
+import bcrypt from "bcrypt";
 import type { DefaultSession, NextAuthConfig } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import ResendProvider from "next-auth/providers/resend";
-import CredentialsProvider from "next-auth/providers/credentials";
-
-import { db } from "@/server/db";
 import { SignInSchema } from "@/schemas";
+import { db } from "@/server/db";
 import { getUserByEmail } from "../api/helpers";
-import bcrypt from "bcrypt";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`

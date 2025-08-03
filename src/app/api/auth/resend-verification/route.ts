@@ -1,10 +1,10 @@
+import { type NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import {
 	getUserByEmail,
 	getVerificationTokenByEmail,
 } from "@/server/api/helpers";
 import { sendEmailVerification } from "@/server/services/email/send";
-import { type NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 
 const ResendVerificationSchema = z.object({
 	email: z.email("Please enter a valid email address."),

@@ -1,23 +1,26 @@
 "use server";
 
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import bcrypt from "bcrypt";
+import { CredentialsSignin } from "next-auth";
 import {
 	ForgotPasswordSchema,
-	ResetPasswordSchema,
-	SignInSchema,
-	SignUpSchema,
 	type ForgotPasswordSchemaType,
+	ResetPasswordSchema,
 	type ResetPasswordSchemaType,
+	SignInSchema,
 	type SignInSchemaType,
+	SignUpSchema,
 	type SignUpSchemaType,
 } from "@/schemas";
-import { getCurrentUser } from "../shared";
-import bcrypt from "bcrypt";
-import { db } from "@/server/db";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { getUserByEmail, getVerificationTokenByToken } from "../helpers";
 import { signIn } from "@/server/auth";
-import { CredentialsSignin } from "next-auth";
-import { sendEmailVerification, sendPasswordReset } from "@/server/services/email/send";
+import { db } from "@/server/db";
+import {
+	sendEmailVerification,
+	sendPasswordReset,
+} from "@/server/services/email/send";
+import { getUserByEmail, getVerificationTokenByToken } from "../helpers";
+import { getCurrentUser } from "../shared";
 
 /**
  * Public API
@@ -39,7 +42,7 @@ export async function userSignUp(data: SignUpSchemaType) {
 	const validatedData = SignUpSchema.safeParse(data);
 
 	if (!validatedData.success) {
-		return { error: "invalid_data", issues: validatedData.error.issues };
+		return { error: "invalid_data" };
 	}
 
 	const { firstName, lastName, email, password } = validatedData.data;
@@ -51,6 +54,7 @@ export async function userSignUp(data: SignUpSchemaType) {
 			data: {
 				firstName,
 				lastName,
+				name: `${firstName} ${lastName}`,
 				email,
 				password: hashedPassword,
 			},
@@ -174,35 +178,27 @@ export async function userResetPassword(data: ResetPasswordSchemaType) {
 		return { error: "invalid_data" };
 	}
 
-	const { token, email, password, confirmPassword } = validatedData.data;
-
-	const user = await getUserByEmail(email);
-
-	if (!user) return { error: "user_not_found" };
-
-	if (!user.password) return { error: "password_not_set" };
+	const { token, password } = validatedData.data;
 
 	const verificationToken = await getVerificationTokenByToken("reset", token);
-
+	
 	if (!verificationToken) return { error: "invalid_token" };
 
 	if (new Date() > verificationToken.expires) {
 		return { error: "token_expired" };
 	}
 
-	if (verificationToken.email !== email) {
-		return { error: "token_email_mismatch" };
-	}
+	const user = await getUserByEmail(verificationToken?.email);
 
-	if (password !== confirmPassword) {
-		return { error: "passwords_do_not_match" };
-	}
+	if (!user || !user.email) return { error: "user_not_found" };
+
+	if (!user.password) return { error: "password_not_set" };
 
 	const hashedPassword = await bcrypt.hash(password, 12);
 
 	try {
 		await db.user.update({
-			where: { email },
+			where: { email: user.email },
 			data: { password: hashedPassword },
 		});
 

@@ -1,6 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
+import {
+	getUserByEmail,
+	getVerificationTokenByToken,
+} from "@/server/api/helpers";
 import { db } from "@/server/db";
-import { getVerificationTokenByToken, getUserByEmail } from "@/server/api/helpers";
 
 export async function GET(request: NextRequest) {
 	try {
@@ -9,16 +12,19 @@ export async function GET(request: NextRequest) {
 
 		if (!token) {
 			return NextResponse.redirect(
-				new URL("/?error=missing-token", request.url)
+				new URL("/?error=missing-token", request.url),
 			);
 		}
 
 		// Get the verification token from the database
-		const verificationToken = await getVerificationTokenByToken("verify", token);
+		const verificationToken = await getVerificationTokenByToken(
+			"verify",
+			token,
+		);
 
 		if (!verificationToken) {
 			return NextResponse.redirect(
-				new URL("/?error=invalid-token", request.url)
+				new URL("/?error=invalid-token", request.url),
 			);
 		}
 
@@ -30,7 +36,7 @@ export async function GET(request: NextRequest) {
 			});
 
 			return NextResponse.redirect(
-				new URL("/?error=token-expired", request.url)
+				new URL("/?error=token-expired", request.url),
 			);
 		}
 
@@ -39,7 +45,7 @@ export async function GET(request: NextRequest) {
 
 		if (!user) {
 			return NextResponse.redirect(
-				new URL("/?error=user-not-found", request.url)
+				new URL("/?error=user-not-found", request.url),
 			);
 		}
 
@@ -51,7 +57,7 @@ export async function GET(request: NextRequest) {
 			});
 
 			return NextResponse.redirect(
-				new URL("/?message=already-verified", request.url)
+				new URL("/?message=already-verified", request.url),
 			);
 		}
 
@@ -70,13 +76,13 @@ export async function GET(request: NextRequest) {
 
 		// Redirect to homepage with success message
 		return NextResponse.redirect(
-			new URL("/?message=email-verified", request.url)
+			new URL("/?message=email-verified", request.url),
 		);
 	} catch (error) {
 		console.error("Email verification error:", error);
-		
+
 		return NextResponse.redirect(
-			new URL("/?error=verification-failed", request.url)
+			new URL("/?error=verification-failed", request.url),
 		);
 	}
 }

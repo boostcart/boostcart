@@ -9,8 +9,10 @@ export default async function HomePage() {
 			{user ? (
 				<div className="flex flex-col space-y-2">
 					<h1>Welcome {user.name}</h1>
-					<p>Email: {user.email}</p>
-					<p>Role: {user.role}</p>
+
+					<Link href={"/account"} className="text-blue-500">
+						Account Settings
+					</Link>
 
 					<Link href={"/api/auth/signout"} className="text-blue-500">
 						Sign out
