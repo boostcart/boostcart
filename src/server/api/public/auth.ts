@@ -181,7 +181,7 @@ export async function userResetPassword(data: ResetPasswordSchemaType) {
 	const { token, password } = validatedData.data;
 
 	const verificationToken = await getVerificationTokenByToken("reset", token);
-	
+
 	if (!verificationToken) return { error: "invalid_token" };
 
 	if (new Date() > verificationToken.expires) {

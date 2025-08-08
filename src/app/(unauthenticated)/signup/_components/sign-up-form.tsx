@@ -1,129 +1,182 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ChevronLeftIcon, Loader } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
-import type { SignUpSchemaType } from "@/schemas";
-import { Loader } from "lucide-react";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useState, useTransition, type JSX } from "react";
-import { useForm } from "react-hook-form";
+import { SignUpSchema, type SignUpSchemaType } from "@/schemas";
+import { userSignUp } from "@/server/api/public/auth";
+import { SocialSignIn } from "../../_components/social-sign-in";
 
 export const SignUpForm = () => {
 	const [isLoading, startTransition] = useTransition();
 	const router = useRouter();
 
 	const form = useForm<SignUpSchemaType>({
+		resolver: zodResolver(SignUpSchema),
 		defaultValues: {
-			firstName: "",
-			lastName: "",
 			email: "",
 			password: "",
 		},
 	});
 
+	const onSubmit = async (data: SignUpSchemaType) => {
+		startTransition(() => {
+			userSignUp(data).then((result) => {
+				if (result.success) {
+					toast.success("Signed upped successfully!");
+					form.reset();
+					router.push("/");
+				}
+
+				if (result.error) {
+					toast.error(result.error);
+				}
+			});
+		});
+	};
+
 	return (
-		<main className="w-full max-w-sm mx-auto">
-			<h1 className="my-8 text-xl font-bold text-center">
-				BoostCart | Sign up
-			</h1>
-
-			<div className="flex flex-col space-y-4">
-				<Button variant="outline" onClick={() => signIn("google")}>
-					Sign up with Google
-				</Button>
-
-				<span className="text-center">or</span>
-
-				<Form {...form}>
-					<form className="flex flex-col space-y-4">
-						<div className="flex items-center space-x-4">
-							<FormField
-								control={form.control}
-								name="firstName"
-								render={({ field }) => (
-									<FormItem>
-										<Label>First Name</Label>
-										<FormControl>
-											<Input
-												placeholder="John"
-												{...field}
-												disabled={isLoading}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-
-							<FormField
-								control={form.control}
-								name="lastName"
-								render={({ field }) => (
-									<FormItem>
-										<Label>Last Name</Label>
-										<FormControl>
-											<Input
-												placeholder="Doe"
-												{...field}
-												disabled={isLoading}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-						</div>
-
-						<FormField
-							control={form.control}
-							name="email"
-							render={({ field }) => (
-								<FormItem>
-									<Label>Email</Label>
-									<FormControl>
-										<Input
-											placeholder="john.doe@example.com"
-											{...field}
-											disabled={isLoading}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
-						<FormField
-							control={form.control}
-							name="password"
-							render={({ field }) => (
-								<FormItem>
-									<Label>Password</Label>
-									<FormControl>
-										<PasswordInput
-											{...field}
-											disabled={isLoading}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
-						<Button
-							type="submit"
-							className="w-full"
-							disabled={!isLoading}
-						>
-							{isLoading && (<Loader className="animate-spin" />)}
-							{isLoading ? "Signing up..." : "Sign up with Email"}
-						</Button>
-					</form>
-				</Form>
+		<div className="flex flex-col flex-1 lg:w-1/2 w-full">
+			<div className="w-full max-w-md sm:pt-10 mx-auto mb-5">
+				<Link
+					href="/"
+					className="inline-flex items-center text-sm text-neutral-500 transition-colors hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
+				>
+					<ChevronLeftIcon />
+					Back home
+				</Link>
 			</div>
-		</main>
-	)
-}
+			<div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
+				<div>
+					<div className="mb-5 sm:mb-8">
+						<h1 className="mb-2 font-semibold text-neutral-800 text-3xl dark:text-white/90 sm:text-4xl">
+							Create an account
+						</h1>
+						<p className="text-sm text-neutral-500 dark:text-neutral-400">
+							Sign up and experience a new way of shopping online.
+						</p>
+					</div>
+					<div>
+						<SocialSignIn />
+						<div className="relative py-3 sm:py-5">
+							<div className="absolute inset-0 flex items-center">
+								<div className="w-full border-t border-neutral-200 dark:border-neutral-800"></div>
+							</div>
+							<div className="relative flex justify-center text-sm">
+								<span className="p-2 text-neutral-400 bg-white dark:bg-neutral-900 sm:px-5 sm:py-2">
+									Or
+								</span>
+							</div>
+						</div>
+						<div className="flex flex-col space-y-6">
+							<Form {...form}>
+								<form
+									onSubmit={form.handleSubmit(onSubmit)}
+									className="flex flex-col space-y-4"
+								>
+									<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+										<FormField
+											control={form.control}
+											name="firstName"
+											render={({ field }) => (
+												<div className="flex flex-col space-y-2">
+													<Label>First Name</Label>
+													<Input
+														{...field}
+														placeholder="Enter your first name"
+														disabled={isLoading}
+														required
+													/>
+												</div>
+											)}
+										/>
+
+										<FormField
+											control={form.control}
+											name="lastName"
+											render={({ field }) => (
+												<div className="flex flex-col space-y-2">
+													<Label>Last Name</Label>
+													<Input
+														{...field}
+														placeholder="Enter your last name"
+														disabled={isLoading}
+														required
+													/>
+												</div>
+											)}
+										/>
+									</div>
+
+									<FormField
+										control={form.control}
+										name="email"
+										render={({ field }) => (
+											<div className="flex flex-col space-y-2">
+												<Label>Email</Label>
+												<Input
+													{...field}
+													placeholder="Enter your email"
+													disabled={isLoading}
+													required
+												/>
+											</div>
+										)}
+									/>
+
+									<FormField
+										control={form.control}
+										name="password"
+										render={({ field }) => (
+											<div className="flex flex-col space-y-2">
+												<Label>Password</Label>
+												<PasswordInput
+													{...field}
+													placeholder="Enter your password"
+													disabled={isLoading}
+													required
+												/>
+											</div>
+										)}
+									/>
+
+									{form.formState.errors && (
+										<div className="text-sm text-red-500">
+											{Object.values(form.formState.errors).map((error) => (
+												<p key={error.message}>{error.message}</p>
+											))}
+										</div>
+									)}
+
+									<Button type="submit" disabled={isLoading}>
+										{isLoading && <Loader className="animate-spin" />}
+										{isLoading ? "Signing up..." : "Sign up"}
+									</Button>
+								</form>
+							</Form>
+
+							<span className="text-sm text-neutral-700 dark:text-neutral-400 text-center sm:text-start">
+								Already have an account?{" "}
+								<Link
+									href={"/signin"}
+									className="text-blue-500 hover:text-blue-600 transition"
+								>
+									Sign in
+								</Link>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+};

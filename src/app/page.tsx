@@ -25,7 +25,7 @@ export default async function HomePage() {
 					)}
 				</div>
 			) : (
-				<Link href={"/api/auth/signin"} className="text-blue-500">
+				<Link href={"/signin"} className="text-blue-500">
 					Sign in
 				</Link>
 			)}
