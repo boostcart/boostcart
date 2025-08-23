@@ -1,6 +1,6 @@
 "use client";
 
-import { EyeIcon, EyeOffIcon, LockIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,11 +12,7 @@ import {
 	TooltipTrigger,
 } from "./tooltip";
 
-interface PasswordInputProps extends React.ComponentProps<"input"> {
-	showIcon?: boolean;
-}
-
-function PasswordInput({ className, showIcon, ...props }: PasswordInputProps) {
+function PasswordInput({ className, ...props }: React.ComponentProps<"input">) {
 	const [showPassword, setShowPassword] = React.useState(false);
 	const disabled =
 		props.value === "" || props.value === undefined || props.disabled;
@@ -27,7 +23,6 @@ function PasswordInput({ className, showIcon, ...props }: PasswordInputProps) {
 				type={showPassword ? "text" : "password"}
 				className={cn("hide-password-toggle pr-10", className)}
 				data-slot="input"
-				startIcon={showIcon ? LockIcon : undefined}
 				{...props}
 			/>
 			<TooltipProvider>

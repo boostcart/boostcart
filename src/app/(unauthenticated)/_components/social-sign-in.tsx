@@ -102,5 +102,5 @@ export const SocialSignIn = () => {
 				<span>Sign in with Facebook</span>
 			</Button>
 		</div>
-	)
-}
+	);
+};

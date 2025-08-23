@@ -61,6 +61,12 @@ export const SetPasswordSchema = z
 		message: "Passwords do not match.",
 	});
 
+export const UpdatePersonalInfoSchema = z.object({
+	firstName: z.string().min(2, "Please enter your first name."),
+	lastName: z.string().min(2, "Please enter your last name."),
+	email: z.email("Please enter a valid email address."),
+});
+
 // Exporting schema types for use in other parts of the application
 export type SignUpSchemaType = z.infer<typeof SignUpSchema>;
 export type SignInSchemaType = z.infer<typeof SignInSchema>;
@@ -68,3 +74,6 @@ export type ForgotPasswordSchemaType = z.infer<typeof ForgotPasswordSchema>;
 export type ResetPasswordSchemaType = z.infer<typeof ResetPasswordSchema>;
 export type UpdatePasswordSchemaType = z.infer<typeof UpdatePasswordSchema>;
 export type SetPasswordSchemaType = z.infer<typeof SetPasswordSchema>;
+export type UpdatePersonalInfoSchemaType = z.infer<
+	typeof UpdatePersonalInfoSchema
+>;

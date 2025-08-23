@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
 	title: "BoostCart",
@@ -19,7 +20,7 @@ export default function RootLayout({
 	children,
 }: Readonly<{ children: React.ReactNode }>) {
 	return (
-		<html lang="en" className={`${font.variable} scheme-light`}>
+		<html lang="en" className={cn("text-base antialiased", font.variable)}>
 			<body>
 				<SessionProvider>
 					<Toaster richColors />

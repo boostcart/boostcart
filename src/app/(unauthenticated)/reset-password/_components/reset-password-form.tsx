@@ -143,14 +143,6 @@ export const ResetPasswordForm = () => {
 										)}
 									/>
 
-									{form.formState.errors && (
-										<div className="text-sm text-red-500">
-											{Object.values(form.formState.errors).map((error) => (
-												<p key={error.message}>{error.message}</p>
-											))}
-										</div>
-									)}
-
 									<Button type="submit" disabled={isLoading}>
 										{isLoading && <Loader className="animate-spin" />}
 										{isLoading ? "Resetting..." : "Reset Password"}

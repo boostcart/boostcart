@@ -6,6 +6,8 @@ import {
 	type SetPasswordSchemaType,
 	UpdatePasswordSchema,
 	type UpdatePasswordSchemaType,
+	UpdatePersonalInfoSchema,
+	type UpdatePersonalInfoSchemaType,
 } from "@/schemas";
 import { db } from "@/server/db";
 import { getCurrentUser } from "../shared";
@@ -72,6 +74,51 @@ export async function setPassword(data: SetPasswordSchemaType) {
 		await db.user.update({
 			where: { id: user.id },
 			data: { password: hashedPassword },
+		});
+
+		return { success: true };
+	} catch {
+		return { error: "something_went_wrong" };
+	}
+}
+
+export async function updatePersonalInfo(data: UpdatePersonalInfoSchemaType) {
+	if (!data) return { error: "no_data" };
+
+	const user = await getCurrentUser();
+
+	if (!user) return { error: "not_logged_in" };
+
+	const validatedData = UpdatePersonalInfoSchema.safeParse(data);
+
+	if (!validatedData.success) {
+		return { error: "invalid_data" };
+	}
+
+	const { firstName, lastName, email } = validatedData.data;
+
+	if (email !== user.email) {
+		const emailExists = await db.user.findUnique({
+			where: { email },
+		});
+
+		if (emailExists) {
+			return { error: "email_already_taken" };
+		}
+	}
+
+	if (
+		firstName === user.firstName &&
+		lastName === user.lastName &&
+		email === user.email
+	) {
+		return { success: true };
+	}
+
+	try {
+		await db.user.update({
+			where: { id: user.id },
+			data: { firstName, lastName, email },
 		});
 
 		return { success: true };
