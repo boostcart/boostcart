@@ -22,10 +22,6 @@ export default async function AccountPage() {
 					Go home
 				</Link>
 
-				<Link href={"/account/security"} className="text-blue-500">
-					Go to security settings
-				</Link>
-
 				<Link href={"/account/settings"} className="text-blue-500">
 					Go to settings
 				</Link>

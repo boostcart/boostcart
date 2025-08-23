@@ -13,7 +13,7 @@ export default async function AccountSecurityPage() {
 
 	return (
 		<main className="flex flex-col w-full p-8 space-y-4">
-			<Link href={"/account"} className="text-blue-500">
+			<Link href={"/account/settings"} className="text-blue-500">
 				Back to Account Settings
 			</Link>
 
