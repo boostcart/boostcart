@@ -9,6 +9,7 @@ import {
 	UpdatePersonalInfoSchema,
 	type UpdatePersonalInfoSchemaType,
 } from "@/schemas";
+import { auth } from "@/server/auth";
 import { db } from "@/server/db";
 import { getCurrentUser } from "../shared";
 
@@ -124,5 +125,36 @@ export async function updatePersonalInfo(data: UpdatePersonalInfoSchemaType) {
 		return { success: true };
 	} catch {
 		return { error: "something_went_wrong" };
+	}
+}
+
+export async function unlinkAccount({ provider }: { provider: string }) {
+	if (!provider) return { error: "invalid_provider" } as const;
+
+	const user = await getCurrentUser();
+	if (!user) return { error: "not_logged_in" } as const;
+
+	// Ensure the account exists
+	const account = await db.account.findFirst({
+		where: { userId: user.id, provider },
+		select: { id: true },
+	});
+
+	if (!account) return { error: "account_not_found" } as const;
+
+	// Safety: don't allow unlinking the last sign-in method if user has no password
+	const totalLinked = await db.account.count({ where: { userId: user.id } });
+	const hasPassword = !!user.password;
+	if (!hasPassword && totalLinked <= 1) {
+		return { error: "cannot_unlink_last_method" } as const;
+	}
+
+	try {
+		await db.account.delete({ where: { id: account.id } });
+		// Refresh session to reflect changes
+		await auth();
+		return { success: true } as const;
+	} catch {
+		return { error: "something_went_wrong" } as const;
 	}
 }

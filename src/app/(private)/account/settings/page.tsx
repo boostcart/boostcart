@@ -1,13 +1,31 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/server/api/shared";
+import { db } from "@/server/db";
+import { LinkedAccounts } from "./_components/linked-accounts";
+import { SetPassword } from "./_components/set-password";
+import { UpdatePassword } from "./_components/update-password";
 import { UpdatePersonalInfo } from "./_components/update-personal-info";
 
-export default async function AccountSecurityPage() {
+export default async function AccountSettingsPage() {
 	const user = await getCurrentUser();
 
 	if (!user) {
 		redirect("/signin?silent=not_logged_in");
+	}
+
+	// Fetch linked OAuth accounts for this user
+	const accounts = await db.account.findMany({
+		where: { userId: user.id },
+		orderBy: { provider: "asc" },
+		select: { id: true, provider: true, providerAccountId: true },
+	});
+
+	// Derive configured OAuth providers for display.
+	// We know Google is present; include it only if env has client ID/secret.
+	const availableProviders: { id: string; name: string }[] = [];
+	if (process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET) {
+		availableProviders.push({ id: "google", name: "Google" });
 	}
 
 	return (
@@ -21,11 +39,15 @@ export default async function AccountSecurityPage() {
 				Manage your account settings here like name and email.
 			</p>
 
-			<Link href={"/account/settings/security"} className="text-blue-500">
-				Go to security settings
-			</Link>
-
 			<UpdatePersonalInfo user={user} />
+
+			{user.password ? <UpdatePassword /> : <SetPassword />}
+
+			<LinkedAccounts
+				accounts={accounts}
+				hasPassword={!!user.password}
+				availableProviders={availableProviders}
+			/>
 		</main>
 	);
 }

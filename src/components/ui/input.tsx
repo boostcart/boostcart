@@ -1,4 +1,3 @@
-import type { Input as BaseInput } from "@base-ui-components/react/input";
 import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
 import { cn } from "@/lib/utils";
@@ -29,7 +28,7 @@ const inputVariants = cva(
 );
 
 const inputAddonVariants = cva(
-	"flex items-center shrink-0 justify-center bg-muted border border-input shadow-xs shadow-[rgba(0,0,0,0.05)] text-secondary-foreground [&_svg]:text-secondary-foreground/60",
+	"flex items-center shrink-0 justify-center bg-muted border border-input shadow-xs shadow-[rgba(0,0,0,0.05)] text-secondary-foreground",
 	{
 		variants: {
 			variant: {
@@ -100,7 +99,10 @@ const inputWrapperVariants = cva(
     [&_[data-slot=input]]:disabled:cursor-not-allowed
     [&_[data-slot=input]]:disabled:opacity-50    
 
-    [&_svg]:text-muted-foreground 
+    has-[[aria-invalid=true]]:border-destructive/60 
+    has-[[aria-invalid=true]]:ring-destructive/10 
+    dark:has-[[aria-invalid=true]]:border-destructive 
+    dark:has-[[aria-invalid=true]]:ring-destructive/20    
   `,
 	{
 		variants: {
@@ -121,8 +123,7 @@ function Input({
 	type,
 	variant,
 	...props
-}: React.ComponentProps<typeof BaseInput> &
-	VariantProps<typeof inputVariants>) {
+}: React.ComponentProps<"input"> & VariantProps<typeof inputVariants>) {
 	return (
 		<input
 			data-slot="input"

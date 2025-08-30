@@ -657,19 +657,6 @@ model Order {
     giftCardId     String?
     giftCard       GiftCard?     @relation(fields: [giftCardId], references: [id])
 
-    // Billing Information
-    billingFirstName    String
-    billingLastName     String
-    billingPhone        String
-    billingEmail        String
-    billingCompany      String?
-    billingVatNumber    String?
-    billingCountry      String
-    billingCity         String
-    billingPostcode     String
-    billingAddressLine1 String
-    billingAddressLine2 String?
-
     // Shipping Information
     shippingMethodId     String // References ShippingMethod
     shippingMethod       ShippingMethod @relation(fields: [shippingMethodId], references: [id])
@@ -678,6 +665,7 @@ model Order {
     shippingPhone        String
     shippingEmail        String
     shippingCompany      String?
+    shippingVatNumber    String?
     shippingCountry      String
     shippingCity         String
     shippingPostcode     String
@@ -760,7 +748,7 @@ model UserAddress {
     id           String  @id @default(cuid())
     userId       String
     user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-    name         String? // e.g., "Home", "Work"
+    name         String
     firstName    String
     lastName     String
     phone        String
@@ -768,6 +756,7 @@ model UserAddress {
     company      String?
     vatNumber    String?
     country      String
+    region       String?
     city         String
     postcode     String
     addressLine1 String

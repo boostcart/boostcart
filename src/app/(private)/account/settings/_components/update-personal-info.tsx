@@ -58,7 +58,7 @@ export const UpdatePersonalInfo = ({ user }: UpdatePersonalInfoProps) => {
 
 	return (
 		<div className="flex flex-col w-full max-w-sm my-4 space-y-4">
-			<h2 className="font-medium">Set Password</h2>
+			<h2 className="font-medium">Account Details</h2>
 
 			<Form {...form}>
 				<form

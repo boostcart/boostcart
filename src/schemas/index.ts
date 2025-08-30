@@ -67,6 +67,30 @@ export const UpdatePersonalInfoSchema = z.object({
 	email: z.email("Please enter a valid email address."),
 });
 
+// Addresses
+const AddressBaseSchema = z.object({
+	name: z.string().optional(),
+	firstName: z.string().min(2, "Please enter your first name."),
+	lastName: z.string().min(2, "Please enter your last name."),
+	phone: z.string().min(5, "Please enter a valid phone number."),
+	email: z.string().email().optional().or(z.literal("")),
+	company: z.string().optional(),
+	vatNumber: z.string().optional(),
+	country: z.string().min(2, "Please enter your country."),
+	city: z.string().min(1, "Please enter your city."),
+	region: z.string().optional(),
+	postcode: z.string().min(1, "Please enter your postcode."),
+	addressLine1: z.string().min(3, "Please enter your address."),
+	addressLine2: z.string().optional(),
+	isDefault: z.boolean().optional(),
+});
+
+export const CreateAddressSchema = AddressBaseSchema;
+export const UpdateAddressSchema = AddressBaseSchema.extend({
+	id: z.string().min(1, "Address id is required."),
+});
+export const DeleteAddressSchema = z.object({ id: z.string() });
+
 // Exporting schema types for use in other parts of the application
 export type SignUpSchemaType = z.infer<typeof SignUpSchema>;
 export type SignInSchemaType = z.infer<typeof SignInSchema>;
@@ -77,3 +101,6 @@ export type SetPasswordSchemaType = z.infer<typeof SetPasswordSchema>;
 export type UpdatePersonalInfoSchemaType = z.infer<
 	typeof UpdatePersonalInfoSchema
 >;
+export type CreateAddressSchemaType = z.infer<typeof CreateAddressSchema>;
+export type UpdateAddressSchemaType = z.infer<typeof UpdateAddressSchema>;
+export type DeleteAddressSchemaType = z.infer<typeof DeleteAddressSchema>;

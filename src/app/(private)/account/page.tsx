@@ -26,6 +26,10 @@ export default async function AccountPage() {
 					Go to settings
 				</Link>
 
+				<Link href={"/account/addresses"} className="text-blue-500">
+					Go to addresses
+				</Link>
+
 				<Link href={"/api/auth/signout"} className="text-blue-500">
 					Sign out
 				</Link>
