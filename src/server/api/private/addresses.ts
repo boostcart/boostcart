@@ -48,7 +48,7 @@ export async function createAddress(data: CreateAddressSchemaType) {
 			const created = await tx.userAddress.create({
 				data: {
 					userId: user.id,
-					name,
+					name: name || `Address ${Date.now()}`,
 					firstName,
 					lastName,
 					phone,
