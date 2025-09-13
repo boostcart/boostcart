@@ -19,7 +19,7 @@ export default async function HomePage() {
 					</Link>
 
 					{user.role === "ADMIN" && (
-						<Link href={"/dashboard"} className="text-blue-500">
+						<Link href={"/admin"} className="text-blue-500">
 							Admin Dashboard
 						</Link>
 					)}

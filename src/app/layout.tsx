@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
+import { ThemeProvider } from "@/providers/theme-provider";
 
 export const metadata: Metadata = {
 	title: "BoostCart",
@@ -20,12 +21,18 @@ export default function RootLayout({
 	children,
 }: Readonly<{ children: React.ReactNode }>) {
 	return (
-		<html lang="en" className={cn("text-base antialiased", font.variable)}>
+		<html
+			lang="en"
+			className={cn("text-base antialiased", font.variable)}
+			suppressHydrationWarning
+		>
 			<body>
-				<SessionProvider>
-					<Toaster richColors />
-					{children}
-				</SessionProvider>
+				<ThemeProvider>
+					<SessionProvider>
+						<Toaster richColors />
+						{children}
+					</SessionProvider>
+				</ThemeProvider>
 			</body>
 		</html>
 	);

@@ -35,7 +35,7 @@ export default async function AccountPage() {
 				</Link>
 
 				{user.role !== "USER" && (
-					<Link href={"/dashboard"} className="text-blue-500">
+					<Link href={"/admin"} className="text-blue-500">
 						Admin Dashboard
 					</Link>
 				)}

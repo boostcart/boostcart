@@ -73,7 +73,7 @@ const AddressBaseSchema = z.object({
 	firstName: z.string().min(2, "Please enter your first name."),
 	lastName: z.string().min(2, "Please enter your last name."),
 	phone: z.string().min(5, "Please enter a valid phone number."),
-	email: z.string().email().optional().or(z.literal("")),
+	email: z.email().optional().or(z.literal("")),
 	company: z.string().optional(),
 	vatNumber: z.string().optional(),
 	country: z.string().min(2, "Please enter your country."),
