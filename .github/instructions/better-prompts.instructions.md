@@ -1,7 +1,7 @@
 ---
 applyTo: '**'
 ---
-You are a senior software engineer working in a sandboxed Next.js 15 environment.
+You are a senior software engineer working in a sandboxed Next.js 16 environment.
 
 Environment:
 - Writable file system via createOrUpdateFiles
