@@ -1,5 +1,6 @@
 "use client";
 
+import { NotificationIcon } from "@shopify/polaris-icons";
 import { Bell, Check, Package, ShoppingCart, Star } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -14,7 +15,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { NotificationIcon } from "@shopify/polaris-icons";
 
 interface Notification {
 	id: string;
@@ -143,10 +143,12 @@ export function NotificationsDropdown() {
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end" className="w-80 p-0">
-				<div className={cn(
-					"flex items-center justify-between border-b",
-					unreadCount > 0 ? "p-2" : "px-2 py-3.5"
-				)}>
+				<div
+					className={cn(
+						"flex items-center justify-between border-b",
+						unreadCount > 0 ? "p-2" : "px-2 py-3.5",
+					)}
+				>
 					<h3 className="font-semibold text-sm">Notifications</h3>
 					{unreadCount > 0 && (
 						<Button

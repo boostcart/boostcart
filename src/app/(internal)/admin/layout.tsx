@@ -1,26 +1,18 @@
 "use client";
 
 import {
-	AppsFilledIcon,
-	AppsIcon,
 	ChartVerticalFilledIcon,
 	ChartVerticalIcon,
 	ContentFilledIcon,
 	ContentIcon,
-	DeliveryFilledIcon,
-	DeliveryIcon,
 	DiscountFilledIcon,
 	DiscountIcon,
 	ExitIcon,
 	HomeFilledIcon,
 	HomeIcon,
-	LanguageFilledIcon,
-	LanguageIcon,
 	MenuIcon,
 	OrderFilledIcon,
 	OrderIcon,
-	PaymentFilledIcon,
-	PaymentIcon,
 	PersonFilledIcon,
 	PersonIcon,
 	ProductFilledIcon,
@@ -32,11 +24,13 @@ import {
 	StarIcon,
 	XIcon,
 } from "@shopify/polaris-icons";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment, useState } from "react";
 import { CommandSearch } from "@/components/admin/command-search";
 import { NotificationsDropdown } from "@/components/admin/notifications-dropdown";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -49,8 +43,6 @@ import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useIsAppleDevice } from "@/hooks/use-is-apple-device";
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Image from "next/image";
 
 const navigation = [
 	{ name: `Home`, href: `/admin`, icon: HomeFilledIcon, activeIcon: HomeIcon },
@@ -59,9 +51,7 @@ const navigation = [
 		href: `/admin/orders`,
 		icon: OrderFilledIcon,
 		activeIcon: OrderIcon,
-		subItems: [
-			{ name: `Test`, href: `/admin/orders/test` },
-		]
+		subItems: [{ name: `Test`, href: `/admin/orders/test` }],
 	},
 	{
 		name: `Products`,
@@ -73,7 +63,7 @@ const navigation = [
 			{ name: `Collections`, href: `/admin/collections` },
 			{ name: `Gift cards`, href: `/admin/gift-cards` },
 			{ name: `Brands`, href: `/admin/brands` },
-		]
+		],
 	},
 	{
 		name: `Customers`,
@@ -95,7 +85,7 @@ const navigation = [
 		subItems: [
 			{ name: `Files`, href: `/admin/content/files` },
 			{ name: `Blog posts`, href: `/admin/content/blog` },
-		]
+		],
 	},
 	{
 		name: `Reviews`,
@@ -193,7 +183,11 @@ export default function AdminLayout({
 									className="gap-2 rounded-xl px-2 h-9 hover:bg-[#2c2d2e] transition"
 								>
 									<Avatar className="size-7 rounded-lg">
-										<AvatarImage src={user?.image || ""} alt={user?.name || ""} className="rounded-lg" />
+										<AvatarImage
+											src={user?.image || ""}
+											alt={user?.name || ""}
+											className="rounded-lg"
+										/>
 										<AvatarFallback className="rounded-lg bg-blue-600">
 											{user?.name?.charAt(0).toUpperCase() || (
 												<PersonIcon className="size-5 shrink-0" />
@@ -279,7 +273,9 @@ export default function AdminLayout({
 								const Icon = item.icon;
 								const ActiveIcon = item.activeIcon;
 								const isActive = pathname === item.href;
-								const shouldKeepOpen = isActive || item.subItems?.some(subItem => subItem.href === pathname);
+								const shouldKeepOpen =
+									isActive ||
+									item.subItems?.some((subItem) => subItem.href === pathname);
 								return (
 									<Fragment key={item.name}>
 										{shouldKeepOpen && item.subItems ? (
