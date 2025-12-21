@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { signIn } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 
 export const SocialSignIn = () => {
@@ -8,7 +8,7 @@ export const SocialSignIn = () => {
 		<div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
 			<Button
 				size={"lg"}
-				onClick={() => signIn("google")}
+				onClick={() => signIn.social({ provider: "google", callbackURL: "/" })}
 				className="w-full"
 				variant="outline"
 			>
@@ -44,7 +44,7 @@ export const SocialSignIn = () => {
 			</Button>
 			<Button
 				size={"lg"}
-				onClick={() => signIn("google")}
+				onClick={() => signIn.social({ provider: "google", callbackURL: "/" })}
 				className="w-full"
 				variant="outline"
 			>

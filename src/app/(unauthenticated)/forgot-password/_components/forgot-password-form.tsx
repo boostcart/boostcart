@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon, Loader } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -22,7 +21,6 @@ import { userForgotPassword } from "@/server/api/public/auth";
 
 export const ForgotPasswordForm = () => {
 	const [isLoading, startTransition] = useTransition();
-	const router = useRouter();
 
 	const form = useForm<ForgotPasswordSchemaType>({
 		resolver: zodResolver(ForgotPasswordSchema),
@@ -35,8 +33,8 @@ export const ForgotPasswordForm = () => {
 		startTransition(() => {
 			userForgotPassword(data).then((result) => {
 				if (result.success) {
-					router.push("/signin");
-					toast.success("Password updated successfully. Please sign in.");
+					toast.success("Password reset link sent! Check your email.");
+					form.reset();
 				}
 
 				if (result.error) {

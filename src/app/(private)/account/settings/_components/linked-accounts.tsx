@@ -2,16 +2,16 @@
 
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { getProviders, signIn } from "next-auth/react";
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { signIn } from "@/lib/auth-client";
+import { useMemo, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { unlinkAccount } from "@/server/api/private/auth";
 
 type AccountItem = {
 	id: string;
-	provider: string;
-	providerAccountId: string;
+	providerId: string;
+	accountId: string;
 };
 
 interface LinkedAccountsProps {
@@ -27,42 +27,27 @@ export function LinkedAccounts({
 }: LinkedAccountsProps) {
 	const router = useRouter();
 	const [isPending, startTransition] = useTransition();
-	type Provider = { id: string; name: string; type: string };
-	const [providers, setProviders] = useState<Record<string, Provider> | null>(
-		null,
-	);
-
-	useEffect(() => {
-		let isMounted = true;
-		getProviders().then((p) => {
-			if (!isMounted) return;
-			setProviders(p || {});
-		});
-		return () => {
-			isMounted = false;
-		};
-	}, []);
 
 	const oauthProviders = useMemo(() => {
 		if (availableProviders && availableProviders.length > 0) {
 			return availableProviders;
 		}
-		if (!providers) return [] as { id: string; name: string }[];
-		return Object.values(providers)
-			.filter((p) => p.type === "oauth" || p.type === "oidc")
-			.map((p) => ({ id: p.id, name: p.name || p.id }));
-	}, [availableProviders, providers]);
+		// Default to Google as configured provider
+		return [{ id: "google", name: "Google" }];
+	}, [availableProviders]);
 
 	const linkedMap = useMemo(() => {
 		const map = new Map<string, AccountItem>();
-		accounts.forEach((a) => map.set(a.provider, a));
+		accounts.forEach((a) => map.set(a.providerId, a));
 		return map;
 	}, [accounts]);
 
 	const handleLink = (providerId: string) => {
-		// Initiate OAuth flow; NextAuth will link to the current user session
-		// when already signed in.
-		signIn(providerId, { callbackUrl: "/account/settings" });
+		// Initiate OAuth flow to link account
+		signIn.social({ 
+			provider: providerId as "google", 
+			callbackURL: "/account/settings" 
+		});
 	};
 
 	const handleUnlink = (providerId: string) => {
@@ -108,7 +93,7 @@ export function LinkedAccounts({
 								{linked && acc ? (
 									<div className="mt-1 space-y-0.5 text-xs text-muted-foreground">
 										<div className="font-mono break-all">
-											Provider account ID: {acc.providerAccountId}
+											Provider account ID: {acc.accountId}
 										</div>
 										<div className="font-mono break-all">
 											Internal account ID: {acc.id}

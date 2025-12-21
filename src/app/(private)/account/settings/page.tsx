@@ -17,9 +17,20 @@ export default async function AccountSettingsPage() {
 	// Fetch linked OAuth accounts for this user
 	const accounts = await db.account.findMany({
 		where: { userId: user.id },
-		orderBy: { provider: "asc" },
-		select: { id: true, provider: true, providerAccountId: true },
+		orderBy: { providerId: "asc" },
+		select: { id: true, providerId: true, accountId: true },
 	});
+
+	// Check if user has a credential account with password (better-auth stores passwords here)
+	const credentialAccount = await db.account.findFirst({
+		where: {
+			userId: user.id,
+			providerId: "credential",
+		},
+		select: { password: true },
+	});
+
+	const hasPassword = !!credentialAccount?.password;
 
 	// Derive configured OAuth providers for display.
 	// We know Google is present; include it only if env has client ID/secret.
@@ -39,15 +50,15 @@ export default async function AccountSettingsPage() {
 				Manage your account settings here like name and email.
 			</p>
 
-			<UpdatePersonalInfo user={user} />
+		<UpdatePersonalInfo user={user} />
 
-			{user.password ? <UpdatePassword /> : <SetPassword />}
+		{hasPassword ? <UpdatePassword /> : <SetPassword />}
 
-			<LinkedAccounts
-				accounts={accounts}
-				hasPassword={!!user.password}
-				availableProviders={availableProviders}
-			/>
+		<LinkedAccounts
+			accounts={accounts}
+			hasPassword={hasPassword}
+			availableProviders={availableProviders}
+		/>
 		</main>
 	);
 }

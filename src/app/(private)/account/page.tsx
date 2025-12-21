@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/server/api/shared";
+import { SignOutButton } from "@/app/_components/sign-out-button";
 
 export default async function AccountPage() {
 	const user = await getCurrentUser();
@@ -30,9 +31,7 @@ export default async function AccountPage() {
 					Go to addresses
 				</Link>
 
-				<Link href={"/api/auth/signout"} className="text-blue-500">
-					Sign out
-				</Link>
+				<SignOutButton />
 
 				{user.role !== "USER" && (
 					<Link href={"/admin"} className="text-blue-500">

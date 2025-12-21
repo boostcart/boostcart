@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { auth } from "@/server/auth";
+import { SignOutButton } from "./_components/sign-out-button";
 
 export default async function HomePage() {
 	const user = (await auth())?.user;
@@ -14,9 +15,7 @@ export default async function HomePage() {
 						Account Settings
 					</Link>
 
-					<Link href={"/api/auth/signout"} className="text-blue-500">
-						Sign out
-					</Link>
+					<SignOutButton />
 
 					{user.role === "ADMIN" && (
 						<Link href={"/admin"} className="text-blue-500">

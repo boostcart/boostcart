@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
 		// Check if the token has expired
 		if (new Date() > verificationToken.expires) {
 			// Delete the expired token
-			await db.emailVerificationToken.delete({
+			await db.verification.delete({
 				where: { id: verificationToken.id },
 			});
 
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
 		// Check if email is already verified
 		if (user.emailVerified) {
 			// Delete the token since email is already verified
-			await db.emailVerificationToken.delete({
+			await db.verification.delete({
 				where: { id: verificationToken.id },
 			});
 
@@ -65,12 +65,13 @@ export async function GET(request: NextRequest) {
 		await db.user.update({
 			where: { id: user.id },
 			data: {
-				emailVerified: new Date(),
+				emailVerified: true,
+				emailVerifiedAt: new Date(),
 			},
 		});
 
 		// Delete the used verification token
-		await db.emailVerificationToken.delete({
+		await db.verification.delete({
 			where: { id: verificationToken.id },
 		});
 

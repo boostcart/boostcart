@@ -43,6 +43,8 @@ import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useIsAppleDevice } from "@/hooks/use-is-apple-device";
 import { cn } from "@/lib/utils";
+import { signOut } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const navigation = [
 	{ name: `Home`, href: `/admin`, icon: HomeFilledIcon, activeIcon: HomeIcon },
@@ -110,6 +112,12 @@ export default function AdminLayout({
 	const pathname = usePathname();
 	const user = useCurrentUser();
 	const isApple = useIsAppleDevice();
+	const router = useRouter();
+
+	const handleSignOut = async () => {
+		await signOut();
+		router.push("/signin");
+	};
 
 	return (
 		<div className="flex h-screen flex-col bg-[#1a1a1a]">
@@ -215,19 +223,23 @@ export default function AdminLayout({
 										<span>Profile</span>
 									</Link>
 								</DropdownMenuItem>
-								<DropdownMenuItem asChild>
-									<Link href="/account/settings" className="cursor-pointer">
-										<SettingsIcon className="size-5 shrink-0" />
-										<span>Account Settings</span>
-									</Link>
-								</DropdownMenuItem>
-								<DropdownMenuSeparator />
-								<DropdownMenuItem asChild>
-									<Link href="/api/auth/signout" className="cursor-pointer">
-										<ExitIcon className="size-5 shrink-0" />
-										<span>Sign Out</span>
-									</Link>
-								</DropdownMenuItem>
+							<DropdownMenuItem asChild>
+								<Link href="/account/settings" className="cursor-pointer">
+									<SettingsIcon className="size-5 shrink-0" />
+									<span>Account Settings</span>
+								</Link>
+							</DropdownMenuItem>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem asChild>
+								<button
+									type="button"
+									onClick={handleSignOut}
+									className="cursor-pointer w-full flex items-center gap-2"
+								>
+									<ExitIcon className="size-5 shrink-0" />
+									<span>Sign Out</span>
+								</button>
+							</DropdownMenuItem>
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>

@@ -1,11 +1,38 @@
-import NextAuth from "next-auth";
-import { cache } from "react";
+import { auth as betterAuth } from "./auth";
+import { headers } from "next/headers";
+import { db } from "../db";
 
-import { authConfig } from "./config";
+export const auth = async () => {
+	const session = await betterAuth.api.getSession({
+		headers: await headers(),
+	});
 
-// @ts-expect-error This works but TypeScript is complaining about the type.
-const { auth: uncachedAuth, handlers, signIn, signOut } = NextAuth(authConfig);
+	if (!session) return null;
 
-const auth = cache(uncachedAuth);
+	// Fetch full user data with role from database
+	const fullUser = await db.user.findUnique({
+		where: { id: session.user.id },
+		select: {
+			id: true,
+			email: true,
+			name: true,
+			firstName: true,
+			lastName: true,
+			image: true,
+			emailVerified: true,
+			emailVerifiedAt: true,
+			role: true,
+			createdAt: true,
+			updatedAt: true,
+		},
+	});
 
-export { auth, handlers, signIn, signOut };
+	if (!fullUser) return null;
+
+	return {
+		...session,
+		user: fullUser,
+	};
+};
+
+export { betterAuth };

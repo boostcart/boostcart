@@ -26,7 +26,6 @@ export const ForgotPasswordSchema = z.object({
 
 export const ResetPasswordSchema = z.object({
 	token: z.string().min(1, "Token is required."),
-	email: z.email("Please enter a valid email address."),
 	password: z
 		.string()
 		.regex(

@@ -18,43 +18,24 @@ export async function generateVerificationToken(
 ) {
 	const token = uuid();
 
-	// expires in 1 hour(s)
-	const expires = new Date(Date.now() + validFor * 60 * 60 * 1000);
+	// expires in validFor hour(s)
+	const expiresAt = new Date(Date.now() + validFor * 60 * 60 * 1000);
 
 	const existingToken = await getVerificationTokenByEmail(type, email);
 
 	if (existingToken) {
-		if (type === "verify") {
-			await db.emailVerificationToken.delete({
-				where: { id: existingToken.id },
-			});
-		}
-
-		if (type === "reset") {
-			await db.passwordResetToken.delete({
-				where: { id: existingToken.id },
-			});
-		}
+		await db.verification.delete({
+			where: { id: existingToken.id },
+		});
 	}
 
-	if (type === "verify") {
-		const verificationToken = await db.emailVerificationToken.create({
-			data: {
-				email,
-				token,
-				expires,
-			},
-		});
-		return verificationToken;
-	}
-	if (type === "reset") {
-		const verificationToken = await db.passwordResetToken.create({
-			data: {
-				email,
-				token,
-				expires,
-			},
-		});
-		return verificationToken;
-	}
+	const verificationToken = await db.verification.create({
+		data: {
+			identifier: email,
+			value: token,
+			expiresAt,
+		},
+	});
+
+	return { ...verificationToken, token, email, expires: expiresAt };
 }

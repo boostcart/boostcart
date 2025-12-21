@@ -88,19 +88,18 @@ enum PageType {
 // CORE MODELS
 // ======================================================================
 
-// --- AUTHENTICATION (NextAuth.js Integration) ---
-// These models are typically managed by NextAuth.js
-// but are included for completeness of the schema.
+// --- AUTHENTICATION (Better Auth Integration) ---
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    firstName     String?
-    lastName      String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    password      String? // For email/password sign-in
-    role          UserRole  @default(USER) // Default to regular user
+    id               String    @id @default(cuid())
+    name             String
+    firstName        String?
+    lastName         String?
+    email            String    @unique
+    emailVerified    Boolean   @default(false)
+    emailVerifiedAt  DateTime?
+    image            String?
+    password         String? // For email/password sign-in
+    role             UserRole  @default(USER) // Default to regular user
 
     accounts Account[]
     sessions Session[]
@@ -121,41 +120,53 @@ model User {
 }
 
 model Account {
-    id                String  @id @default(cuid())
-    userId            String
-    type              String
-    provider          String
-    providerAccountId String
-    refresh_token     String?
-    access_token      String?
-    expires_at        Int?
-    token_type        String?
-    scope             String?
-    id_token          String? @db.Text
-    session_state     String?
+    id                    String  @id @default(cuid())
+    accountId             String
+    providerId            String
+    userId                String
+    accessToken           String?
+    refreshToken          String?
+    idToken               String? @db.Text
+    accessTokenExpiresAt  DateTime?
+    refreshTokenExpiresAt DateTime?
+    scope                 String?
+    password              String?
 
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@unique([provider, providerAccountId])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([providerId, accountId])
 }
 
 model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique
-    userId       String
-    expires      DateTime
+    id        String   @id @default(cuid())
+    expiresAt DateTime
+    token     String   @unique
+    ipAddress String?
+    userAgent String?
+    userId    String
 
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
-model VerificationToken {
+model Verification {
+    id         String   @id @default(cuid())
     identifier String
-    token      String   @unique
-    expires    DateTime
+    value      String   @unique
+    expiresAt  DateTime
 
-    @@unique([identifier, token])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([identifier, value])
 }
 
+// Legacy tables - keeping for now, can be removed after migration
 model EmailVerificationToken {
     id      String   @id @default(cuid())
     email   String

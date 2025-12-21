@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
 import { SignUpSchema, type SignUpSchemaType } from "@/schemas";
-import { userSignUp } from "@/server/api/public/auth";
+import { signUp } from "@/lib/auth-client";
 import { SocialSignIn } from "../../_components/social-sign-in";
 
 export const SignUpForm = () => {
@@ -23,24 +23,38 @@ export const SignUpForm = () => {
 	const form = useForm<SignUpSchemaType>({
 		resolver: zodResolver(SignUpSchema),
 		defaultValues: {
+			firstName: "",
+			lastName: "",
 			email: "",
 			password: "",
 		},
 	});
 
 	const onSubmit = async (data: SignUpSchemaType) => {
-		startTransition(() => {
-			userSignUp(data).then((result) => {
-				if (result.success) {
-					toast.success("Signed upped successfully!");
-					form.reset();
-					router.push("/");
-				}
+		startTransition(async () => {
+			try {
+				const result = await signUp.email({
+					email: data.email,
+					password: data.password,
+					name: `${data.firstName} ${data.lastName}`,
+					callbackURL: "/",
+				});
 
 				if (result.error) {
-					toast.error(result.error);
+					toast.error(result.error.message || "Failed to sign up");
+				} else {
+					toast.success("Account created successfully! Please verify your email.");
+					form.reset({
+						firstName: "",
+						lastName: "",
+						email: "",
+						password: "",
+					});
+					router.push("/signin");
 				}
-			});
+			} catch (error) {
+				toast.error("An error occurred during sign up");
+			}
 		});
 	};
 

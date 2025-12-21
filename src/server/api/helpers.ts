@@ -35,21 +35,18 @@ export const getVerificationTokenByEmail = async (
 			throw new Error("Invalid token type");
 		}
 
-		if (type === "verify") {
-			const result = await db.emailVerificationToken.findFirst({
-				where: { email },
-			});
-			return result;
-		}
+		const verification = await db.verification.findFirst({
+			where: { identifier: email },
+		});
 
-		if (type === "reset") {
-			const result = await db.passwordResetToken.findFirst({
-				where: { email },
-			});
-			return result;
-		}
+		if (!verification) return null;
 
-		return null;
+		return {
+			id: verification.id,
+			email: verification.identifier,
+			token: verification.value,
+			expires: verification.expiresAt,
+		};
 	} catch {
 		return null;
 	}
@@ -66,21 +63,18 @@ export const getVerificationTokenByToken = async (
 			throw new Error("Invalid token type");
 		}
 
-		if (type === "verify") {
-			const result = await db.emailVerificationToken.findFirst({
-				where: { token },
-			});
-			return result;
-		}
+		const verification = await db.verification.findFirst({
+			where: { value: token },
+		});
 
-		if (type === "reset") {
-			const result = await db.passwordResetToken.findFirst({
-				where: { token },
-			});
-			return result;
-		}
+		if (!verification) return null;
 
-		return null;
+		return {
+			id: verification.id,
+			email: verification.identifier,
+			token: verification.value,
+			expires: verification.expiresAt,
+		};
 	} catch {
 		return null;
 	}

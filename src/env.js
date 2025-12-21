@@ -8,7 +8,7 @@ export const env = createEnv({
 	 */
 	server: {
 		BASE_URL: z.url().default("http://localhost:3000"),
-		AUTH_SECRET:
+		BETTER_AUTH_SECRET:
 			process.env.NODE_ENV === "production"
 				? z.string()
 				: z.string().optional(),
@@ -38,7 +38,7 @@ export const env = createEnv({
 	 */
 	runtimeEnv: {
 		BASE_URL: process.env.BASE_URL,
-		AUTH_SECRET: process.env.AUTH_SECRET,
+		BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
 		AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
 		AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,
 		DATABASE_URL: process.env.DATABASE_URL,

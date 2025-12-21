@@ -1,133 +1,25 @@
 "use server";
 
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import bcrypt from "bcrypt";
-import { CredentialsSignin } from "next-auth";
 import {
 	ForgotPasswordSchema,
 	type ForgotPasswordSchemaType,
 	ResetPasswordSchema,
 	type ResetPasswordSchemaType,
-	SignInSchema,
-	type SignInSchemaType,
-	SignUpSchema,
-	type SignUpSchemaType,
 } from "@/schemas";
-import { signIn } from "@/server/auth";
+import { auth as betterAuthInstance } from "@/server/auth/auth";
 import { db } from "@/server/db";
-import {
-	sendEmailVerification,
-	sendPasswordReset,
-} from "@/server/services/email/send";
-import { getUserByEmail, getVerificationTokenByToken } from "../helpers";
+import { getUserByEmail } from "../helpers";
 import { getCurrentUser } from "../shared";
 
 /**
  * Public API
- * This file contains the public API. Used for user authentication and registration.
- * The functions here are intended to be used from unauthenticated users.
+ * This file contains the public API for password reset flow using better-auth.
+ * Better-auth handles password hashing internally with scrypt - DO NOT manually hash passwords.
  */
 
 /**
- * @param data Takes first and last name, email, and password.
- * @returns success or error message.
- */
-export async function userSignUp(data: SignUpSchemaType) {
-	if (!data) return { error: "no_data" };
-
-	const isUserLoggedIn = await getCurrentUser();
-
-	if (isUserLoggedIn) return { error: "already_logged_in" };
-
-	const validatedData = SignUpSchema.safeParse(data);
-
-	if (!validatedData.success) {
-		return { error: "invalid_data" };
-	}
-
-	const { firstName, lastName, email, password } = validatedData.data;
-
-	const hashedPassword = await bcrypt.hash(password, 12);
-
-	try {
-		await db.user.create({
-			data: {
-				firstName,
-				lastName,
-				name: `${firstName} ${lastName}`,
-				email,
-				password: hashedPassword,
-			},
-		});
-
-		await sendEmailVerification(email);
-
-		return { success: true };
-	} catch (error) {
-		if (error instanceof PrismaClientKnownRequestError) {
-			// P2002 is the error code for unique constraint violation
-			if (error.code === "P2002") return { error: "email_already_exists" };
-		}
-
-		return { error: "something_went_wrong" };
-	}
-}
-
-/**
- * @param data Takes email and password.
- * @returns success or error message.
- */
-export async function userSignIn(data: SignInSchemaType) {
-	if (!data) return { error: "no_data" };
-
-	const isUserLoggedIn = await getCurrentUser();
-
-	if (isUserLoggedIn) return { error: "already_logged_in" };
-
-	const validatedData = SignInSchema.safeParse(data);
-
-	if (!validatedData.success) {
-		return { error: "invalid_data" };
-	}
-
-	const { email, password } = validatedData.data;
-
-	const user = await getUserByEmail(email);
-
-	if (!user) return { error: "user_not_found" };
-
-	if (!user.password) return { error: "password_not_set" };
-
-	const isPasswordValid = await bcrypt.compare(password, user.password);
-
-	if (!isPasswordValid) return { error: "invalid_password" };
-
-	try {
-		const result = await signIn("credentials", {
-			email,
-			password,
-			redirect: false,
-		});
-
-		if (result?.error) {
-			return { error: "sign_in_failed" };
-		}
-
-		return { success: true };
-	} catch (error) {
-		if (error instanceof CredentialsSignin) {
-			if (error.code === "credentials") {
-				return { error: "invalid_password" };
-			}
-
-			return { error: "something_went_wrong" };
-		}
-
-		return { error: "something_went_wrong" };
-	}
-}
-
-/**
+ * Request a password reset email.
+ * Uses better-auth's built-in forgetPassword which handles token generation and email sending.
  * @param data Takes email.
  * @returns success or error message.
  */
@@ -150,19 +42,39 @@ export async function userForgotPassword(data: ForgotPasswordSchemaType) {
 
 	if (!user) return { error: "user_not_found" };
 
-	if (!user.password) return { error: "password_not_set" };
+	// Check if user has a credential account with password
+	const credentialAccount = await db.account.findFirst({
+		where: {
+			userId: user.id,
+			providerId: "credential",
+		},
+		select: { password: true },
+	});
+
+	if (!credentialAccount?.password) {
+		return { error: "password_not_set" };
+	}
 
 	try {
-		await sendPasswordReset(email);
+		// Use better-auth's password reset - it handles everything including email sending
+		await betterAuthInstance.api.requestPasswordReset({
+			body: {
+				email,
+				redirectTo: "/reset-password",
+			},
+		});
 
 		return { success: true };
-	} catch {
+	} catch (error) {
+		console.error("Error requesting password reset:", error);
 		return { error: "something_went_wrong" };
 	}
 }
 
 /**
- * @param data Takes token, email, password, and confirmPassword.
+ * Reset password using better-auth's resetPassword.
+ * Better-auth handles password hashing internally with scrypt - DO NOT manually hash passwords.
+ * @param data Takes token and new password.
  * @returns success or error message.
  */
 export async function userResetPassword(data: ResetPasswordSchemaType) {
@@ -180,30 +92,61 @@ export async function userResetPassword(data: ResetPasswordSchemaType) {
 
 	const { token, password } = validatedData.data;
 
-	const verificationToken = await getVerificationTokenByToken("reset", token);
-
-	if (!verificationToken) return { error: "invalid_token" };
-
-	if (new Date() > verificationToken.expires) {
-		return { error: "token_expired" };
-	}
-
-	const user = await getUserByEmail(verificationToken?.email);
-
-	if (!user || !user.email) return { error: "user_not_found" };
-
-	if (!user.password) return { error: "password_not_set" };
-
-	const hashedPassword = await bcrypt.hash(password, 12);
-
 	try {
-		await db.user.update({
-			where: { email: user.email },
-			data: { password: hashedPassword },
+		// Use better-auth's resetPassword - it handles password hashing with scrypt internally
+		const result = await betterAuthInstance.api.resetPassword({
+			body: {
+				newPassword: password,
+				token,
+			},
 		});
 
+		if (!result) {
+			return { error: "invalid_token" };
+		}
+
 		return { success: true };
-	} catch {
+	} catch (error: unknown) {
+		console.error("Error resetting password:", error);
+		
+		// Check for specific error types
+		if (error && typeof error === "object" && "message" in error) {
+			const errorMessage = (error as { message: string }).message.toLowerCase();
+			if (errorMessage.includes("token") || errorMessage.includes("expired")) {
+				return { error: "invalid_token" };
+			}
+		}
+		
 		return { error: "something_went_wrong" };
+	}
+}
+
+/**
+ * Check if a user has a credential account with password
+ * @param email User's email address
+ * @returns Object indicating if password exists
+ */
+export async function checkUserHasPassword(email: string) {
+	try {
+		const user = await getUserByEmail(email);
+		
+		if (!user) {
+			return { hasPassword: false, error: "user_not_found" };
+		}
+
+		const credentialAccount = await db.account.findFirst({
+			where: {
+				userId: user.id,
+				providerId: "credential",
+			},
+			select: { password: true },
+		});
+
+		return { 
+			hasPassword: !!credentialAccount?.password,
+			userId: user.id,
+		};
+	} catch {
+		return { hasPassword: false, error: "something_went_wrong" };
 	}
 }

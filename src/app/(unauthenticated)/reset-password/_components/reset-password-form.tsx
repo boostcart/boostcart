@@ -4,19 +4,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon, Loader } from "lucide-react";
 import Link from "next/link";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Form, FormField } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage,
+} from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
 import { ResetPasswordSchema, type ResetPasswordSchemaType } from "@/schemas";
-import {
-	getUserByEmail,
-	getVerificationTokenByToken,
-} from "@/server/api/helpers";
 import { userResetPassword } from "@/server/api/public/auth";
 
 export const ResetPasswordForm = () => {
@@ -24,9 +25,13 @@ export const ResetPasswordForm = () => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const token = searchParams.get("token");
-	const [email, setEmail] = useState<string>("");
-	const [emailError, setEmailError] = useState<string>("");
-	const [continueReset, setContinueReset] = useState<boolean>(false);
+
+	// Check for error in URL (from better-auth redirect on invalid token)
+	const error = searchParams.get("error");
+	
+	if (error === "INVALID_TOKEN") {
+		redirect("/forgot-password?error=invalid-token");
+	}
 
 	if (!token) {
 		redirect("/signin?error=missing-token");
@@ -36,7 +41,6 @@ export const ResetPasswordForm = () => {
 		resolver: zodResolver(ResetPasswordSchema),
 		defaultValues: {
 			token: token,
-			email: email,
 			password: "",
 		},
 	});
@@ -45,54 +49,31 @@ export const ResetPasswordForm = () => {
 		startTransition(() => {
 			userResetPassword(data).then((result) => {
 				if (result.success) {
-					router.push("/signin");
-					toast.success("Password updated successfully. Please sign in.");
+					toast.success("Password reset successfully!", {
+						description: "Redirecting to sign in...",
+					});
+					setTimeout(() => {
+						router.push("/signin?message=password-reset-success");
+					}, 1500);
 				}
 
 				if (result.error) {
-					toast.error(result.error);
+					const errorMessages: Record<string, string> = {
+						no_data: "No data provided.",
+						already_logged_in: "You are already logged in.",
+						invalid_data: "Invalid data provided.",
+						invalid_token: "Invalid or expired reset token. Please request a new one.",
+						token_expired: "Reset token has expired. Please request a new one.",
+						user_not_found: "User not found.",
+						password_not_set: "Password not set for this account.",
+						something_went_wrong: "Something went wrong. Please try again.",
+					};
+					toast.error("Password reset failed", {
+						description: errorMessages[result.error] || "An error occurred.",
+					});
 				}
 			});
 		});
-	};
-
-	const handleContinueReset = async () => {
-		if (!email) {
-			setEmailError("Please enter your email.");
-			return;
-		}
-
-		if (email && !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-			setEmailError("Please enter a valid email address.");
-			return;
-		}
-
-		if (!token) {
-			redirect("/signin?error=missing-token");
-		}
-
-		const user = await getUserByEmail(email);
-
-		if (!user) {
-			setEmailError("User not found with this email.");
-			return;
-		}
-
-		if (!user.password) {
-			setEmailError("Password not set for this user.");
-			return;
-		}
-
-		const tokenEmail = await getVerificationTokenByToken("reset", token).then(
-			(tokenData) => tokenData?.email,
-		);
-
-		if (tokenEmail !== user.email) {
-			setEmailError("Email does not match the token.");
-			return;
-		}
-
-		setContinueReset(true);
 	};
 
 	return (
@@ -113,72 +94,40 @@ export const ResetPasswordForm = () => {
 							Reset Password
 						</h1>
 						<p className="text-sm text-neutral-500 dark:text-neutral-400">
-							{continueReset
-								? "Enter your new password below to reset it."
-								: "Enter your email to continue resetting your password."}
+							Enter your new password below to reset it.
 						</p>
 					</div>
-					{continueReset ? (
-						<div className="flex flex-col space-y-8">
-							<Form {...form}>
-								<form
-									onSubmit={form.handleSubmit(onSubmit)}
-									className="flex flex-col space-y-4"
-								>
-									<FormField
-										control={form.control}
-										name="password"
-										render={({ field }) => (
-											<div className="flex flex-col space-y-2">
-												<Label className="flex items-center justify-between">
-													Password
-												</Label>
+					<div className="flex flex-col space-y-8">
+						<Form {...form}>
+							<form
+								onSubmit={form.handleSubmit(onSubmit)}
+								className="flex flex-col space-y-4"
+							>
+								<FormField
+									control={form.control}
+									name="password"
+									render={({ field }) => (
+										<FormItem>
+											<Label>New Password</Label>
+											<FormControl>
 												<PasswordInput
 													{...field}
 													placeholder="Enter your new password"
 													disabled={isLoading}
-													required
 												/>
-											</div>
-										)}
-									/>
-
-									<Button type="submit" disabled={isLoading}>
-										{isLoading && <Loader className="animate-spin" />}
-										{isLoading ? "Resetting..." : "Reset Password"}
-									</Button>
-								</form>
-							</Form>
-						</div>
-					) : (
-						<div className="flex flex-col space-y-6">
-							<div className="flex flex-col space-y-2">
-								<Label>Email</Label>
-								<Input
-									type="email"
-									value={email}
-									placeholder="Enter your email"
-									onChange={(e) => setEmail(e.target.value)}
-									onKeyUp={(e) => {
-										if (e.key === "Enter") {
-											handleContinueReset();
-										}
-									}}
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
 								/>
-								{emailError && (
-									<p className="text-sm text-red-500">{emailError}</p>
-								)}
-							</div>
 
-							<Button
-								onClick={() => handleContinueReset()}
-								className="w-full"
-								disabled={!email || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)}
-							>
-								Continue
-							</Button>
-						</div>
-					)}
+								<Button type="submit" disabled={isLoading}>
+									{isLoading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
+									{isLoading ? "Resetting..." : "Reset Password"}
+								</Button>
+							</form>
+						</Form>
+					</div>
 				</div>
 			</div>
 		</div>

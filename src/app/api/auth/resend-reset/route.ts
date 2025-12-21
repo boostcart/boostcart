@@ -1,10 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import {
-	getUserByEmail,
-	getVerificationTokenByEmail,
-} from "@/server/api/helpers";
-import { sendPasswordReset } from "@/server/services/email/send";
+import { getUserByEmail } from "@/server/api/helpers";
+import { auth as betterAuthInstance } from "@/server/auth/auth";
+import { db } from "@/server/db";
 
 const ResendResetSchema = z.object({
 	email: z.email("Please enter a valid email address."),
@@ -35,31 +33,28 @@ export async function GET(request: NextRequest) {
 			);
 		}
 
-		// Check for rate limiting - if there's a password reset token created in the last 3 minutes
-		const existingToken = await getVerificationTokenByEmail(
-			"reset",
-			validatedEmail,
-		);
+		// Check if user has a credential account with password
+		const credentialAccount = await db.account.findFirst({
+			where: {
+				userId: user.id,
+				providerId: "credential",
+			},
+			select: { password: true },
+		});
 
-		if (existingToken) {
-			// Calculate when the token was created (expires time - 1 hour)
-			const tokenCreatedAt = new Date(
-				existingToken.expires.getTime() - 60 * 60 * 1000,
+		if (!credentialAccount?.password) {
+			return NextResponse.redirect(
+				new URL("/?error=no-password-account", request.url),
 			);
-			const threeMinutesAgo = new Date(Date.now() - 3 * 60 * 1000);
-
-			if (tokenCreatedAt > threeMinutesAgo) {
-				const timeRemaining = Math.ceil(
-					(3 * 60 * 1000 - (Date.now() - tokenCreatedAt.getTime())) / 1000,
-				);
-				return NextResponse.redirect(
-					new URL(`/?error=rate-limited&seconds=${timeRemaining}`, request.url),
-				);
-			}
 		}
 
-		// Send password reset email
-		await sendPasswordReset(validatedEmail);
+		// Use better-auth's password reset - it handles rate limiting and email sending
+		await betterAuthInstance.api.requestPasswordReset({
+			body: {
+				email: validatedEmail,
+				redirectTo: "/reset-password",
+			},
+		});
 
 		// Redirect to homepage with success message
 		return NextResponse.redirect(new URL("/?message=reset-sent", request.url));

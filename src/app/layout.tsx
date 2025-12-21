@@ -2,7 +2,6 @@ import "@/styles/globals.css";
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 
@@ -26,10 +25,8 @@ export default function RootLayout({
 			suppressHydrationWarning
 		>
 			<body>
-				<SessionProvider>
-					<Toaster richColors />
-					{children}
-				</SessionProvider>
+				<Toaster richColors />
+				{children}
 			</body>
 		</html>
 	);
