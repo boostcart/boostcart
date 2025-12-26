@@ -1,7 +1,7 @@
 "use client";
 
-import type { UserAddress } from "@prisma/client";
 import { Button } from "@/components/ui/button";
+import type { UserAddress } from "@/generated/prisma/client";
 
 export function AddressItem({
 	address,

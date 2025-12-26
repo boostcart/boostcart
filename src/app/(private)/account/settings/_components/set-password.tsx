@@ -37,14 +37,17 @@ export const SetPassword = () => {
 				if (result.success) {
 					form.reset();
 					router.refresh();
-					toast.success("Password set successfully. You can now sign in with your email and password.");
+					toast.success(
+						"Password set successfully. You can now sign in with your email and password.",
+					);
 				}
 
 				if (result.error) {
 					const errorMessages: Record<string, string> = {
 						no_data: "No data provided.",
 						not_logged_in: "You must be logged in to set a password.",
-						password_already_set: "You already have a password set. Use 'Update Password' instead.",
+						password_already_set:
+							"You already have a password set. Use 'Update Password' instead.",
 						invalid_data: "Invalid password format. Please check your input.",
 						passwords_do_not_match: "Passwords do not match.",
 						something_went_wrong: "Something went wrong. Please try again.",
@@ -55,14 +58,15 @@ export const SetPassword = () => {
 		});
 	};
 
-		return (
+	return (
 		<div className="flex flex-col w-full max-w-sm my-4 space-y-4">
 			<div>
 				<h2 className="font-medium">Set Password</h2>
 				<p className="text-sm text-muted-foreground mt-1">
 					Create a password to enable email/password sign-in for your account.
 				</p>
-			</div>			<Form {...form}>
+			</div>{" "}
+			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
 					className="flex flex-col space-y-4"

@@ -12,8 +12,8 @@ import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
-import { SignUpSchema, type SignUpSchemaType } from "@/schemas";
 import { signUp } from "@/lib/auth-client";
+import { SignUpSchema, type SignUpSchemaType } from "@/schemas";
 import { SocialSignIn } from "../../_components/social-sign-in";
 
 export const SignUpForm = () => {
@@ -43,7 +43,9 @@ export const SignUpForm = () => {
 				if (result.error) {
 					toast.error(result.error.message || "Failed to sign up");
 				} else {
-					toast.success("Account created successfully! Please verify your email.");
+					toast.success(
+						"Account created successfully! Please verify your email.",
+					);
 					form.reset({
 						firstName: "",
 						lastName: "",
@@ -52,7 +54,7 @@ export const SignUpForm = () => {
 					});
 					router.push("/signin");
 				}
-			} catch (error) {
+			} catch (_error) {
 				toast.error("An error occurred during sign up");
 			}
 		});

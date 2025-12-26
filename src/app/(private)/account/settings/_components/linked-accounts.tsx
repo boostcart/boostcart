@@ -2,10 +2,10 @@
 
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { signIn } from "@/lib/auth-client";
 import { useMemo, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { signIn } from "@/lib/auth-client";
 import { unlinkAccount } from "@/server/api/private/auth";
 
 type AccountItem = {
@@ -44,9 +44,9 @@ export function LinkedAccounts({
 
 	const handleLink = (providerId: string) => {
 		// Initiate OAuth flow to link account
-		signIn.social({ 
-			provider: providerId as "google", 
-			callbackURL: "/account/settings" 
+		signIn.social({
+			provider: providerId as "google",
+			callbackURL: "/account/settings",
 		});
 	};
 

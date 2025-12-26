@@ -1,11 +1,11 @@
 "use client";
 
-import type { UserAddress } from "@prisma/client";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import type { UserAddress } from "@/generated/prisma/client";
 import {
 	createAddress,
 	deleteAddress,

@@ -67,15 +67,19 @@ export async function updatePassword(data: UpdatePasswordSchemaType) {
 		return { success: true };
 	} catch (error: unknown) {
 		console.error("Error updating password:", error);
-		
+
 		// Check for specific error types from better-auth
 		if (error && typeof error === "object" && "message" in error) {
 			const errorMessage = (error as { message: string }).message.toLowerCase();
-			if (errorMessage.includes("password") || errorMessage.includes("invalid") || errorMessage.includes("incorrect")) {
+			if (
+				errorMessage.includes("password") ||
+				errorMessage.includes("invalid") ||
+				errorMessage.includes("incorrect")
+			) {
 				return { error: "invalid_old_password" };
 			}
 		}
-		
+
 		return { error: "something_went_wrong" };
 	}
 }
@@ -192,7 +196,7 @@ export async function unlinkAccount({ provider }: { provider: string }) {
 
 	// Safety: don't allow unlinking the last sign-in method if user has no password
 	const totalLinked = await db.account.count({ where: { userId: user.id } });
-	
+
 	// Check if user has a credential account with password
 	const credentialAccount = await db.account.findFirst({
 		where: {
@@ -201,7 +205,7 @@ export async function unlinkAccount({ provider }: { provider: string }) {
 		},
 		select: { password: true },
 	});
-	
+
 	const hasPassword = !!credentialAccount?.password;
 	if (!hasPassword && totalLinked <= 1) {
 		return { error: "cannot_unlink_last_method" } as const;

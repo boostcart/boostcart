@@ -1,7 +1,7 @@
 "use client";
 
-import { signIn } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
+import { signIn } from "@/lib/auth-client";
 
 export const SocialSignIn = () => {
 	return (

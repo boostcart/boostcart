@@ -108,7 +108,7 @@ export async function userResetPassword(data: ResetPasswordSchemaType) {
 		return { success: true };
 	} catch (error: unknown) {
 		console.error("Error resetting password:", error);
-		
+
 		// Check for specific error types
 		if (error && typeof error === "object" && "message" in error) {
 			const errorMessage = (error as { message: string }).message.toLowerCase();
@@ -116,7 +116,7 @@ export async function userResetPassword(data: ResetPasswordSchemaType) {
 				return { error: "invalid_token" };
 			}
 		}
-		
+
 		return { error: "something_went_wrong" };
 	}
 }
@@ -129,7 +129,7 @@ export async function userResetPassword(data: ResetPasswordSchemaType) {
 export async function checkUserHasPassword(email: string) {
 	try {
 		const user = await getUserByEmail(email);
-		
+
 		if (!user) {
 			return { hasPassword: false, error: "user_not_found" };
 		}
@@ -142,7 +142,7 @@ export async function checkUserHasPassword(email: string) {
 			select: { password: true },
 		});
 
-		return { 
+		return {
 			hasPassword: !!credentialAccount?.password,
 			userId: user.id,
 		};

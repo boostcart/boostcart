@@ -26,7 +26,7 @@ import {
 } from "@shopify/polaris-icons";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
 import { CommandSearch } from "@/components/admin/command-search";
 import { NotificationsDropdown } from "@/components/admin/notifications-dropdown";
@@ -42,9 +42,8 @@ import {
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useIsAppleDevice } from "@/hooks/use-is-apple-device";
-import { cn } from "@/lib/utils";
 import { signOut } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const navigation = [
 	{ name: `Home`, href: `/admin`, icon: HomeFilledIcon, activeIcon: HomeIcon },
@@ -156,7 +155,7 @@ export default function AdminLayout({
 					<Button
 						type="button"
 						variant="ghost"
-						className="relative w-full max-w-[600px] justify-start text-[#8a8d91] [&_svg]:fill-[#8a8d91] hover:text-white hover:[&_svg]:fill-white bg-[#2c2d2e] hover:bg-[#3a3b3c] border-0 rounded-xl px-2 transition-all h-9"
+						className="relative w-full max-w-150 justify-start text-[#8a8d91] [&_svg]:fill-[#8a8d91] hover:text-white hover:[&_svg]:fill-white bg-[#2c2d2e] hover:bg-[#3a3b3c] border-0 rounded-xl px-2 transition-all h-9"
 						onClick={() => {
 							const event = new KeyboardEvent("keydown", {
 								key: "k",
@@ -223,23 +222,23 @@ export default function AdminLayout({
 										<span>Profile</span>
 									</Link>
 								</DropdownMenuItem>
-							<DropdownMenuItem asChild>
-								<Link href="/account/settings" className="cursor-pointer">
-									<SettingsIcon className="size-5 shrink-0" />
-									<span>Account Settings</span>
-								</Link>
-							</DropdownMenuItem>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem asChild>
-								<button
-									type="button"
-									onClick={handleSignOut}
-									className="cursor-pointer w-full flex items-center gap-2"
-								>
-									<ExitIcon className="size-5 shrink-0" />
-									<span>Sign Out</span>
-								</button>
-							</DropdownMenuItem>
+								<DropdownMenuItem asChild>
+									<Link href="/account/settings" className="cursor-pointer">
+										<SettingsIcon className="size-5 shrink-0" />
+										<span>Account Settings</span>
+									</Link>
+								</DropdownMenuItem>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem asChild>
+									<button
+										type="button"
+										onClick={handleSignOut}
+										className="cursor-pointer w-full flex items-center gap-2"
+									>
+										<ExitIcon className="size-5 shrink-0" />
+										<span>Sign Out</span>
+									</button>
+								</DropdownMenuItem>
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>

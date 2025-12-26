@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "@/server/api/shared";
 import { SignOutButton } from "@/app/_components/sign-out-button";
+import { getCurrentUser } from "@/server/api/shared";
 
 export default async function AccountPage() {
 	const user = await getCurrentUser();

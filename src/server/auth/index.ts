@@ -1,6 +1,6 @@
-import { auth as betterAuth } from "./auth";
 import { headers } from "next/headers";
 import { db } from "../db";
+import { auth as betterAuth } from "./auth";
 
 export const auth = async () => {
 	const session = await betterAuth.api.getSession({

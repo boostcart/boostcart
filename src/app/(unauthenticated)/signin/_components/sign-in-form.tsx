@@ -1,10 +1,15 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle2, ChevronLeftIcon, Loader, Sparkles, XCircle } from "lucide-react";
+import {
+	CheckCircle2,
+	ChevronLeftIcon,
+	Loader,
+	Sparkles,
+	XCircle,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signIn } from "@/lib/auth-client";
 import { useCallback, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -13,10 +18,11 @@ import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
+import { signIn } from "@/lib/auth-client";
 import { SignInSchema, type SignInSchemaType } from "@/schemas";
-import { SocialSignIn } from "../../_components/social-sign-in";
-import { checkAndResendVerification } from "@/server/api/public/email-verification";
 import { userForgotPassword } from "@/server/api/public/auth";
+import { checkAndResendVerification } from "@/server/api/public/email-verification";
+import { SocialSignIn } from "../../_components/social-sign-in";
 
 export const SignInForm = () => {
 	const [isLoading, startTransition] = useTransition();
@@ -50,20 +56,33 @@ export const SignInForm = () => {
 
 				if (result.error) {
 					const errorMessage = result.error.message || "Failed to sign in";
-					
+
 					// Check for email verification error
-					if (errorMessage.toLowerCase().includes("email") && errorMessage.toLowerCase().includes("verif")) {
+					if (
+						errorMessage.toLowerCase().includes("email") &&
+						errorMessage.toLowerCase().includes("verif")
+					) {
 						// Handle email verification error
-						toast.error("Your email is not verified. Please check your inbox and verify your email.");
-						
+						toast.error(
+							"Your email is not verified. Please check your inbox and verify your email.",
+						);
+
 						// Check and resend verification email if needed
-						const verificationResult = await checkAndResendVerification(data.email);
-						
+						const verificationResult = await checkAndResendVerification(
+							data.email,
+						);
+
 						if (verificationResult.success) {
 							if (verificationResult.message === "verification_email_sent") {
-								toast.info("A new verification email has been sent to your inbox.");
-							} else if (verificationResult.message === "verification_email_already_sent") {
-								toast.info("Verification email was already sent. Please check your inbox.");
+								toast.info(
+									"A new verification email has been sent to your inbox.",
+								);
+							} else if (
+								verificationResult.message === "verification_email_already_sent"
+							) {
+								toast.info(
+									"Verification email was already sent. Please check your inbox.",
+								);
 							}
 						}
 					} else {
@@ -125,7 +144,10 @@ export const SignInForm = () => {
 	}, [form]);
 
 	// Forgot password result screen
-	if (forgotPasswordState.status === "success" || forgotPasswordState.status === "error") {
+	if (
+		forgotPasswordState.status === "success" ||
+		forgotPasswordState.status === "error"
+	) {
 		const isSuccess = forgotPasswordState.status === "success";
 		return (
 			<div className="flex flex-col flex-1 lg:w-1/2 w-full">
@@ -154,7 +176,10 @@ export const SignInForm = () => {
 						</p>
 						{isSuccess && (
 							<p className="text-sm text-neutral-400 dark:text-neutral-500">
-								We sent a password reset link to <strong className="text-neutral-600 dark:text-neutral-300">{form.getValues("email")}</strong>
+								We sent a password reset link to{" "}
+								<strong className="text-neutral-600 dark:text-neutral-300">
+									{form.getValues("email")}
+								</strong>
 							</p>
 						)}
 						<div className="flex flex-col space-y-3 w-full pt-4">
@@ -167,9 +192,7 @@ export const SignInForm = () => {
 								</Button>
 							) : (
 								<>
-									<Button onClick={handleForgotPassword}>
-										Try Again
-									</Button>
+									<Button onClick={handleForgotPassword}>Try Again</Button>
 									<Button
 										variant="outline"
 										onClick={() => setForgotPasswordState({ status: "idle" })}
@@ -347,7 +370,7 @@ export const SignInForm = () => {
 												callbackURL: "/",
 											});
 											toast.success("Magic link sent! Check your email.");
-										} catch (error) {
+										} catch (_error) {
 											toast.error("Failed to send magic link");
 										}
 									}}

@@ -1,13 +1,13 @@
 "use server";
 
-import { db } from "@/server/db";
 import { auth } from "@/server/auth/auth";
+import { db } from "@/server/db";
 
 export async function checkAndResendVerification(email: string) {
 	try {
 		// Check if user exists
 		const user = await db.user.findUnique({ where: { email } });
-		
+
 		if (!user) {
 			return { error: "user_not_found" };
 		}
@@ -25,8 +25,8 @@ export async function checkAndResendVerification(email: string) {
 
 		// If token exists and is not expired, do nothing
 		if (existingToken && existingToken.expiresAt > new Date()) {
-			return { 
-				success: true, 
+			return {
+				success: true,
 				message: "verification_email_already_sent",
 				expiresAt: existingToken.expiresAt,
 			};
@@ -37,8 +37,8 @@ export async function checkAndResendVerification(email: string) {
 			body: { email },
 		});
 
-		return { 
-			success: true, 
+		return {
+			success: true,
 			message: "verification_email_sent",
 		};
 	} catch (error) {

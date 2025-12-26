@@ -50,15 +50,15 @@ export default async function AccountSettingsPage() {
 				Manage your account settings here like name and email.
 			</p>
 
-		<UpdatePersonalInfo user={user} />
+			<UpdatePersonalInfo user={user} />
 
-		{hasPassword ? <UpdatePassword /> : <SetPassword />}
+			{hasPassword ? <UpdatePassword /> : <SetPassword />}
 
-		<LinkedAccounts
-			accounts={accounts}
-			hasPassword={hasPassword}
-			availableProviders={availableProviders}
-		/>
+			<LinkedAccounts
+				accounts={accounts}
+				hasPassword={hasPassword}
+				availableProviders={availableProviders}
+			/>
 		</main>
 	);
 }

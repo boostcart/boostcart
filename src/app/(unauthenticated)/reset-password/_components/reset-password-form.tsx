@@ -28,7 +28,7 @@ export const ResetPasswordForm = () => {
 
 	// Check for error in URL (from better-auth redirect on invalid token)
 	const error = searchParams.get("error");
-	
+
 	if (error === "INVALID_TOKEN") {
 		redirect("/forgot-password?error=invalid-token");
 	}
@@ -62,7 +62,8 @@ export const ResetPasswordForm = () => {
 						no_data: "No data provided.",
 						already_logged_in: "You are already logged in.",
 						invalid_data: "Invalid data provided.",
-						invalid_token: "Invalid or expired reset token. Please request a new one.",
+						invalid_token:
+							"Invalid or expired reset token. Please request a new one.",
 						token_expired: "Reset token has expired. Please request a new one.",
 						user_not_found: "User not found.",
 						password_not_set: "Password not set for this account.",
@@ -122,7 +123,9 @@ export const ResetPasswordForm = () => {
 								/>
 
 								<Button type="submit" disabled={isLoading}>
-									{isLoading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
+									{isLoading && (
+										<Loader className="mr-2 h-4 w-4 animate-spin" />
+									)}
 									{isLoading ? "Resetting..." : "Reset Password"}
 								</Button>
 							</form>

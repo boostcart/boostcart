@@ -66,7 +66,7 @@ export const auth = betterAuth({
 				// Send magic link via Resend
 				const { Resend } = await import("resend");
 				const resend = new Resend(process.env.RESEND_API_KEY);
-				
+
 				// Auto-verify email when they use magic link
 				const user = await db.user.findUnique({ where: { email } });
 				if (user && !user.emailVerified) {
@@ -78,7 +78,7 @@ export const auth = betterAuth({
 						},
 					});
 				}
-				
+
 				await resend.emails.send({
 					from: process.env.EMAIL_FROM || "BoostCart <noreply@boostcart.com>",
 					to: email,
@@ -117,7 +117,7 @@ export const auth = betterAuth({
 			// Send verification email
 			const { Resend } = await import("resend");
 			const resend = new Resend(process.env.RESEND_API_KEY);
-			
+
 			await resend.emails.send({
 				from: process.env.EMAIL_FROM || "BoostCart <noreply@boostcart.com>",
 				to: user.email,
