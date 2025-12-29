@@ -1,8 +1,22 @@
 "use client";
 
-import { Download, Filter, MoreVertical, Plus, Search } from "lucide-react";
-import { useState } from "react";
+import {
+	Download,
+	Loader2,
+	MoreVertical,
+	Package,
+	Plus,
+	Search,
+	Trash2,
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
+
 import { PolarisButton } from "@/components/admin/polaris-button";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -15,13 +29,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
-import {
 	Table,
 	TableBody,
 	TableCell,
@@ -29,39 +36,82 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import type { ProductStatus } from "@/generated/prisma/enums";
+import { deleteProduct, getProducts } from "@/server/api/internal/products";
 import { useDialogStore } from "@/stores/dialog-store";
 import {
 	DeleteProductDialog,
-	ProductFormDialog,
 	ViewProductDialog,
 } from "./_components/product-dialogs";
+import { ProductFilters } from "./_components/product-filters";
 
 interface Product {
 	id: string;
 	slug: string;
+	name: string;
+	description: string | null;
+	status: ProductStatus;
 	price: number;
 	sku: string | null;
 	trackStock: boolean;
 	stock: number | null;
 	categoryId: string;
-	categoryName?: string; // For display purposes
+	categoryName: string;
 	brandId: string | null;
-	brandName?: string | null; // For display purposes
-	name: string; // From translations
-	description?: string | null; // From translations
-	createdAt: string;
-	updatedAt: string;
-	deletedAt: string | null;
+	brandName: string | null;
+	imageUrl: string | null;
+	createdAt: Date;
+	updatedAt: Date;
 }
 
-export default function ProductsPage() {
-	const [searchQuery, setSearchQuery] = useState(``);
-	const [categoryFilter, setCategoryFilter] = useState(`all`);
+interface ProductsStats {
+	total: number;
+	active: number;
+	outOfStock: number;
+	lowStock: number;
+}
+
+// TODO: Replace with real data from API
+const mockCategories = [
+	{ id: "cat-1", name: "Electronics" },
+	{ id: "cat-2", name: "Clothing" },
+	{ id: "cat-3", name: "Home & Garden" },
+	{ id: "cat-4", name: "Sports & Outdoors" },
+	{ id: "cat-5", name: "Beauty & Health" },
+];
+
+const mockBrands = [
+	{ id: "brand-1", name: "Apple" },
+	{ id: "brand-2", name: "Samsung" },
+	{ id: "brand-3", name: "Nike" },
+	{ id: "brand-4", name: "Adidas" },
+	{ id: "brand-5", name: "Sony" },
+];
+
+function ProductsPageContent() {
+	const router = useRouter();
+	const searchParams = useSearchParams();
+
+	const [products, setProducts] = useState<Product[]>([]);
+	const [stats, setStats] = useState<ProductsStats>({
+		total: 0,
+		active: 0,
+		outOfStock: 0,
+		lowStock: 0,
+	});
+	const [isLoading, setIsLoading] = useState(true);
+	const [searchQuery, setSearchQuery] = useState(
+		searchParams.get("search") ?? "",
+	);
 	const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+	const [pagination, setPagination] = useState({
+		page: 1,
+		pageSize: 20,
+		total: 0,
+		totalPages: 0,
+	});
 
 	// Dialog states from zustand
-	const isAddProductOpen = useDialogStore((state) => state.isAddProductOpen);
-	const isEditProductOpen = useDialogStore((state) => state.isEditProductOpen);
 	const isViewProductOpen = useDialogStore((state) => state.isViewProductOpen);
 	const isDeleteProductOpen = useDialogStore(
 		(state) => state.isDeleteProductOpen,
@@ -69,127 +119,144 @@ export default function ProductsPage() {
 	const openDialog = useDialogStore((state) => state.openDialog);
 	const closeDialog = useDialogStore((state) => state.closeDialog);
 
-	const products: Product[] = [
-		{
-			id: `1`,
-			slug: `macbook-pro-16-m3`,
-			name: `MacBook Pro 16" M3`,
-			description: `Powerful laptop with M3 chip and stunning display`,
-			sku: `MBP-16-M3-001`,
-			categoryId: `cat-electronics`,
-			categoryName: `Electronics`,
-			brandId: `brand-apple`,
-			brandName: `Apple`,
-			price: 2499.0,
-			trackStock: true,
-			stock: 45,
-			createdAt: new Date(`2024-01-15`).toISOString(),
-			updatedAt: new Date(`2024-01-20`).toISOString(),
-			deletedAt: null,
-		},
-		{
-			id: `2`,
-			slug: `iphone-15-pro-max`,
-			name: `iPhone 15 Pro Max`,
-			description: `Latest iPhone with titanium design and advanced camera`,
-			sku: `IPH-15-PM-002`,
-			categoryId: `cat-electronics`,
-			categoryName: `Electronics`,
-			brandId: `brand-apple`,
-			brandName: `Apple`,
-			price: 1199.0,
-			trackStock: true,
-			stock: 128,
-			createdAt: new Date(`2024-01-10`).toISOString(),
-			updatedAt: new Date(`2024-01-18`).toISOString(),
-			deletedAt: null,
-		},
-		{
-			id: `3`,
-			slug: `airpods-pro-2nd-gen`,
-			name: `AirPods Pro (2nd gen)`,
-			description: `Premium wireless earbuds with active noise cancellation`,
-			sku: `APP-2ND-003`,
-			categoryId: `cat-audio`,
-			categoryName: `Audio`,
-			brandId: `brand-apple`,
-			brandName: `Apple`,
-			price: 249.0,
-			trackStock: true,
-			stock: 234,
-			createdAt: new Date(`2024-01-05`).toISOString(),
-			updatedAt: new Date(`2024-01-22`).toISOString(),
-			deletedAt: null,
-		},
-		{
-			id: `4`,
-			slug: `ipad-air-11`,
-			name: `iPad Air 11"`,
-			description: `Lightweight tablet with M2 chip and all-day battery`,
-			sku: `IPAD-AIR-11-004`,
-			categoryId: `cat-tablets`,
-			categoryName: `Tablets`,
-			brandId: `brand-apple`,
-			brandName: `Apple`,
-			price: 599.0,
-			trackStock: true,
-			stock: 87,
-			createdAt: new Date(`2024-01-12`).toISOString(),
-			updatedAt: new Date(`2024-01-25`).toISOString(),
-			deletedAt: null,
-		},
-		{
-			id: `5`,
-			slug: `apple-watch-ultra-2`,
-			name: `Apple Watch Ultra 2`,
-			description: `Rugged smartwatch designed for adventure and exploration`,
-			sku: `AW-U2-005`,
-			categoryId: `cat-wearables`,
-			categoryName: `Wearables`,
-			brandId: `brand-apple`,
-			brandName: `Apple`,
-			price: 799.0,
-			trackStock: true,
-			stock: 56,
-			createdAt: new Date(`2024-01-08`).toISOString(),
-			updatedAt: new Date(`2024-01-19`).toISOString(),
-			deletedAt: null,
-		},
-		{
-			id: `6`,
-			slug: `magic-keyboard`,
-			name: `Magic Keyboard`,
-			description: `Wireless keyboard with rechargeable battery`,
-			sku: `MK-BLK-006`,
-			categoryId: `cat-accessories`,
-			categoryName: `Accessories`,
-			brandId: `brand-apple`,
-			brandName: `Apple`,
-			price: 99.0,
-			trackStock: true,
-			stock: 0,
-			createdAt: new Date(`2024-01-03`).toISOString(),
-			updatedAt: new Date(`2024-01-21`).toISOString(),
-			deletedAt: null,
-		},
-		{
-			id: `7`,
-			slug: `samsung-galaxy-s24-ultra`,
-			name: `Samsung Galaxy S24 Ultra`,
-			description: `Flagship Android phone with S Pen and advanced AI features`,
-			sku: `SGS-24U-007`,
-			categoryId: `cat-electronics`,
-			categoryName: `Electronics`,
-			brandId: `brand-samsung`,
-			brandName: `Samsung`,
-			price: 1299.0,
-			trackStock: true,
-			stock: 67,
-			createdAt: new Date(`2024-01-14`).toISOString(),
-			updatedAt: new Date(`2024-01-23`).toISOString(),
-			deletedAt: null,
-		},
-	];
+	// Extract primitive values from searchParams to use as stable dependencies
+	const currentPage = searchParams.get("page") ?? "1";
+	const statusParam = searchParams.get("status") ?? "";
+	const categoryIdParam = searchParams.get("categoryId") ?? "";
+	const brandIdParam = searchParams.get("brandId") ?? "";
+	const stockStatusParam = searchParams.get("stockStatus") ?? "";
+	const searchParam = searchParams.get("search") ?? "";
+
+	// Fetch products with filters
+	const fetchProducts = useCallback(async () => {
+		setIsLoading(true);
+		try {
+			const page = parseInt(currentPage, 10);
+			const status = statusParam as ProductStatus | null;
+			const categoryId = categoryIdParam || null;
+			const brandId = brandIdParam || null;
+
+			// Validate stockStatus against allowed values
+			const validStockStatuses = [
+				"in_stock",
+				"out_of_stock",
+				"low_stock",
+			] as const;
+			const stockStatus =
+				stockStatusParam &&
+				validStockStatuses.includes(
+					stockStatusParam as (typeof validStockStatuses)[number],
+				)
+					? (stockStatusParam as "in_stock" | "out_of_stock" | "low_stock")
+					: undefined;
+
+			const result = await getProducts({
+				page,
+				pageSize: 20,
+				status: status ? [status] : undefined,
+				categoryIds: categoryId ? [categoryId] : undefined,
+				brandIds: brandId ? [brandId] : undefined,
+				stockStatus,
+				search: searchParam || undefined,
+			});
+
+			setProducts(
+				result.products.map((p) => ({
+					id: p.id,
+					slug: p.slug,
+					name: p.name,
+					description: p.description ?? null,
+					status: p.status,
+					price: Number(p.price),
+					sku: p.sku,
+					trackStock: p.trackStock,
+					stock: p.stock,
+					categoryId: p.categoryId,
+					categoryName: p.categoryName ?? "Uncategorized",
+					brandId: p.brandId,
+					brandName: p.brandName ?? null,
+					imageUrl: p.imageUrl ?? null,
+					createdAt: new Date(p.createdAt),
+					updatedAt: new Date(p.updatedAt),
+				})),
+			);
+
+			setPagination({
+				page: result.pagination.page,
+				pageSize: result.pagination.pageSize,
+				total: result.pagination.total,
+				totalPages: result.pagination.totalPages,
+			});
+
+			// Update stats
+			setStats({
+				total: result.pagination.total,
+				active: result.products.filter((p) => p.status === "ACTIVE").length,
+				outOfStock: result.products.filter((p) => p.trackStock && p.stock === 0)
+					.length,
+				lowStock: result.products.filter(
+					(p) =>
+						p.trackStock && p.stock !== null && p.stock > 0 && p.stock <= 10,
+				).length,
+			});
+		} catch (error) {
+			console.error("Failed to fetch products:", error);
+			toast.error("Failed to load products");
+		} finally {
+			setIsLoading(false);
+		}
+	}, [
+		currentPage,
+		statusParam,
+		categoryIdParam,
+		brandIdParam,
+		stockStatusParam,
+		searchParam,
+	]);
+
+	useEffect(() => {
+		fetchProducts();
+	}, [fetchProducts]);
+
+	// Handle search with debounce - only update URL if searchQuery differs from URL param
+	useEffect(() => {
+		// Skip if searchQuery matches URL (prevents loop)
+		if (searchQuery === searchParam) {
+			return;
+		}
+
+		const handler = setTimeout(() => {
+			const params = new URLSearchParams();
+			// Rebuild params from current values
+			if (searchQuery) {
+				params.set("search", searchQuery);
+			}
+			if (statusParam) {
+				params.set("status", statusParam);
+			}
+			if (categoryIdParam) {
+				params.set("categoryId", categoryIdParam);
+			}
+			if (brandIdParam) {
+				params.set("brandId", brandIdParam);
+			}
+			if (stockStatusParam) {
+				params.set("stockStatus", stockStatusParam);
+			}
+			// Reset page when searching
+			router.push(`/admin/products?${params.toString()}`, { scroll: false });
+		}, 300);
+
+		return () => clearTimeout(handler);
+	}, [
+		searchQuery,
+		searchParam,
+		statusParam,
+		categoryIdParam,
+		brandIdParam,
+		stockStatusParam,
+		router,
+	]);
 
 	// Event handlers
 	const handleView = (product: Product) => {
@@ -198,8 +265,7 @@ export default function ProductsPage() {
 	};
 
 	const handleEdit = (product: Product) => {
-		setSelectedProduct(product);
-		openDialog("isEditProductOpen");
+		router.push(`/admin/products/${product.id}/edit`);
 	};
 
 	const handleDelete = (product: Product) => {
@@ -207,19 +273,99 @@ export default function ProductsPage() {
 		openDialog("isDeleteProductOpen");
 	};
 
-	const handleCreate = () => {
-		setSelectedProduct(null);
-		openDialog("isAddProductOpen");
+	const handleConfirmDelete = async () => {
+		if (!selectedProduct) return;
+
+		try {
+			await deleteProduct(selectedProduct.id);
+			toast.success("Product moved to trash");
+			closeDialog("isDeleteProductOpen");
+			fetchProducts();
+		} catch (error) {
+			console.error("Failed to delete product:", error);
+			toast.error("Failed to delete product");
+		}
 	};
 
-	const getStockBadge = (stock: number) => {
+	const handleCreate = () => {
+		router.push("/admin/products/new");
+	};
+
+	const handlePageChange = (newPage: number) => {
+		const params = new URLSearchParams(searchParams.toString());
+		params.set("page", newPage.toString());
+		router.push(`/admin/products?${params.toString()}`, { scroll: false });
+	};
+
+	const getStatusBadge = (status: ProductStatus) => {
+		switch (status) {
+			case "ACTIVE":
+				return (
+					<Badge
+						variant="secondary"
+						className="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
+					>
+						Active
+					</Badge>
+				);
+			case "DRAFT":
+				return (
+					<Badge
+						variant="secondary"
+						className="bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+					>
+						Draft
+					</Badge>
+				);
+			case "UNLISTED":
+				return (
+					<Badge
+						variant="secondary"
+						className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
+					>
+						Unlisted
+					</Badge>
+				);
+		}
+	};
+
+	const getStockBadge = (product: Product) => {
+		if (!product.trackStock) {
+			return <span className="text-sm text-muted-foreground">Not tracked</span>;
+		}
+
+		const stock = product.stock ?? 0;
+
 		if (stock === 0) {
-			return `bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300`;
+			return (
+				<Badge
+					variant="destructive"
+					className="bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300"
+				>
+					Out of Stock
+				</Badge>
+			);
 		}
-		if (stock < 20) {
-			return `bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300`;
+
+		if (stock <= 10) {
+			return (
+				<Badge
+					variant="secondary"
+					className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
+				>
+					Low: {stock}
+				</Badge>
+			);
 		}
-		return `bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300`;
+
+		return (
+			<Badge
+				variant="secondary"
+				className="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
+			>
+				{stock}
+			</Badge>
+		);
 	};
 
 	return (
@@ -232,30 +378,48 @@ export default function ProductsPage() {
 						Manage your product inventory and catalog
 					</p>
 				</div>
-				<PolarisButton type="button" onClick={handleCreate}>
-					<Plus className="h-4 w-4" />
-					Add Product
-				</PolarisButton>
-			</div>{" "}
+				<div className="flex items-center gap-2">
+					<Button variant="outline" asChild>
+						<Link href="/admin/products/trash">
+							<Trash2 className="h-4 w-4 mr-2" />
+							Trash
+						</Link>
+					</Button>
+					<PolarisButton type="button" onClick={handleCreate}>
+						<Plus className="h-4 w-4" />
+						Add Product
+					</PolarisButton>
+				</div>
+			</div>
+
 			{/* Stats */}
 			<div className="grid gap-4 md:grid-cols-4">
 				<Card className="p-4">
 					<p className="text-sm text-muted-foreground">Total Products</p>
-					<p className="text-2xl font-bold mt-1">12,234</p>
+					<p className="text-2xl font-bold mt-1">
+						{stats.total.toLocaleString()}
+					</p>
 				</Card>
 				<Card className="p-4">
 					<p className="text-sm text-muted-foreground">Active Products</p>
-					<p className="text-2xl font-bold mt-1">11,567</p>
+					<p className="text-2xl font-bold mt-1">
+						{stats.active.toLocaleString()}
+					</p>
 				</Card>
 				<Card className="p-4">
 					<p className="text-sm text-muted-foreground">Out of Stock</p>
-					<p className="text-2xl font-bold mt-1">234</p>
+					<p className="text-2xl font-bold mt-1">
+						{stats.outOfStock.toLocaleString()}
+					</p>
 				</Card>
 				<Card className="p-4">
 					<p className="text-sm text-muted-foreground">Low Stock</p>
-					<p className="text-2xl font-bold mt-1">433</p>
+					<p className="text-2xl font-bold mt-1">
+						{stats.lowStock.toLocaleString()}
+					</p>
 				</Card>
 			</div>
+
 			{/* Filters */}
 			<Card className="p-4">
 				<div className="flex flex-col sm:flex-row gap-4">
@@ -269,132 +433,159 @@ export default function ProductsPage() {
 							onChange={(e) => setSearchQuery(e.target.value)}
 						/>
 					</div>
-					<Select value={categoryFilter} onValueChange={setCategoryFilter}>
-						<SelectTrigger className="w-full sm:w-[180px]">
-							<SelectValue placeholder="Filter by category" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="all">All Categories</SelectItem>
-							<SelectItem value="electronics">Electronics</SelectItem>
-							<SelectItem value="audio">Audio</SelectItem>
-							<SelectItem value="tablets">Tablets</SelectItem>
-							<SelectItem value="wearables">Wearables</SelectItem>
-							<SelectItem value="accessories">Accessories</SelectItem>
-						</SelectContent>
-					</Select>
-					<Button type="button" variant="outline">
-						<Filter className="h-4 w-4 mr-2" />
-						More Filters
-					</Button>
+					<ProductFilters categories={mockCategories} brands={mockBrands} />
 					<Button type="button" variant="outline">
 						<Download className="h-4 w-4 mr-2" />
 						Export
 					</Button>
 				</div>
 			</Card>
+
 			{/* Products Table */}
 			<Card>
-				<Table>
-					<TableHeader>
-						<TableRow>
-							<TableHead>Product</TableHead>
-							<TableHead>SKU</TableHead>
-							<TableHead>Category</TableHead>
-							<TableHead>Brand</TableHead>
-							<TableHead>Stock</TableHead>
-							<TableHead className="text-right">Price</TableHead>
-							<TableHead className="w-[70px]"></TableHead>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{products.map((product) => (
-							<TableRow key={product.id} className="cursor-pointer">
-								<TableCell>
-									<div className="flex items-center gap-3">
-										<div className="h-10 w-10 rounded-lg bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-sm">
-											📦
-										</div>
-										<div>
-											<p className="font-medium text-sm">{product.name}</p>
-											<p className="text-muted-foreground text-xs">
-												{product.deletedAt ? `Deleted` : `Active`}
-											</p>
-										</div>
-									</div>
-								</TableCell>
-								<TableCell className="font-mono text-sm">
-									{product.sku ?? `N/A`}
-								</TableCell>
-								<TableCell>
-									{product.categoryName ?? product.categoryId}
-								</TableCell>
-								<TableCell>
-									{product.brandName ?? product.brandId ?? `N/A`}
-								</TableCell>
-								<TableCell>
-									<span
-										className={`px-2 py-1 text-xs font-medium rounded-full ${getStockBadge(product.stock ?? 0)}`}
-									>
-										{product.stock === null || product.stock === 0
-											? `Out of Stock`
-											: product.stock < 20
-												? `Low: ${product.stock}`
-												: product.stock}
-									</span>
-								</TableCell>
-								<TableCell className="text-right font-medium">
-									${product.price.toFixed(2)}
-								</TableCell>
-								<TableCell>
-									<DropdownMenu>
-										<DropdownMenuTrigger asChild>
-											<Button type="button" variant="ghost" size="icon">
-												<MoreVertical className="h-4 w-4" />
-											</Button>
-										</DropdownMenuTrigger>
-										<DropdownMenuContent align="end">
-											<DropdownMenuLabel>Actions</DropdownMenuLabel>
-											<DropdownMenuItem onClick={() => handleView(product)}>
-												View details
-											</DropdownMenuItem>
-											<DropdownMenuItem onClick={() => handleEdit(product)}>
-												Edit product
-											</DropdownMenuItem>
-											<DropdownMenuItem>Duplicate</DropdownMenuItem>
-											<DropdownMenuSeparator />
-											<DropdownMenuItem>Manage inventory</DropdownMenuItem>
-											<DropdownMenuItem>View analytics</DropdownMenuItem>
-											<DropdownMenuSeparator />
-											<DropdownMenuItem
-												className="text-red-600"
-												onClick={() => handleDelete(product)}
-											>
-												Delete product
-											</DropdownMenuItem>
-										</DropdownMenuContent>
-									</DropdownMenu>
-								</TableCell>
+				{isLoading ? (
+					<div className="flex items-center justify-center py-16">
+						<Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+					</div>
+				) : products.length === 0 ? (
+					<div className="flex flex-col items-center justify-center py-16">
+						<div className="rounded-full bg-muted p-4 mb-4">
+							<Package className="h-8 w-8 text-muted-foreground" />
+						</div>
+						<h3 className="text-lg font-medium mb-1">No products found</h3>
+						<p className="text-sm text-muted-foreground mb-4">
+							{searchQuery || searchParams.toString()
+								? "Try adjusting your search or filters"
+								: "Get started by adding your first product"}
+						</p>
+						<Button onClick={handleCreate}>
+							<Plus className="h-4 w-4 mr-2" />
+							Add Product
+						</Button>
+					</div>
+				) : (
+					<Table>
+						<TableHeader>
+							<TableRow>
+								<TableHead>Product</TableHead>
+								<TableHead>Status</TableHead>
+								<TableHead>SKU</TableHead>
+								<TableHead>Category</TableHead>
+								<TableHead>Brand</TableHead>
+								<TableHead>Stock</TableHead>
+								<TableHead className="text-right">Price</TableHead>
+								<TableHead className="w-[70px]" />
 							</TableRow>
-						))}
-					</TableBody>
-				</Table>
+						</TableHeader>
+						<TableBody>
+							{products.map((product) => (
+								<TableRow key={product.id} className="cursor-pointer">
+									<TableCell>
+										<div className="flex items-center gap-3">
+											<div className="h-10 w-10 rounded-lg bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-sm overflow-hidden relative">
+												{product.imageUrl ? (
+													<Image
+														src={product.imageUrl}
+														alt={product.name}
+														fill
+														className="object-cover"
+														unoptimized
+													/>
+												) : (
+													<Package className="h-5 w-5 text-muted-foreground" />
+												)}
+											</div>
+											<div>
+												<p className="font-medium text-sm">{product.name}</p>
+												<p className="text-muted-foreground text-xs truncate max-w-[200px]">
+													{product.slug}
+												</p>
+											</div>
+										</div>
+									</TableCell>
+									<TableCell>{getStatusBadge(product.status)}</TableCell>
+									<TableCell className="font-mono text-sm">
+										{product.sku ?? "—"}
+									</TableCell>
+									<TableCell>{product.categoryName}</TableCell>
+									<TableCell>{product.brandName ?? "—"}</TableCell>
+									<TableCell>{getStockBadge(product)}</TableCell>
+									<TableCell className="text-right font-medium">
+										€{product.price.toFixed(2)}
+									</TableCell>
+									<TableCell>
+										<DropdownMenu>
+											<DropdownMenuTrigger asChild>
+												<Button type="button" variant="ghost" size="icon">
+													<MoreVertical className="h-4 w-4" />
+												</Button>
+											</DropdownMenuTrigger>
+											<DropdownMenuContent align="end">
+												<DropdownMenuLabel>Actions</DropdownMenuLabel>
+												<DropdownMenuItem onClick={() => handleView(product)}>
+													View details
+												</DropdownMenuItem>
+												<DropdownMenuItem onClick={() => handleEdit(product)}>
+													Edit product
+												</DropdownMenuItem>
+												<DropdownMenuItem>Duplicate</DropdownMenuItem>
+												<DropdownMenuSeparator />
+												<DropdownMenuItem>Manage inventory</DropdownMenuItem>
+												<DropdownMenuItem>View analytics</DropdownMenuItem>
+												<DropdownMenuSeparator />
+												<DropdownMenuItem
+													className="text-red-600"
+													onClick={() => handleDelete(product)}
+												>
+													Delete product
+												</DropdownMenuItem>
+											</DropdownMenuContent>
+										</DropdownMenu>
+									</TableCell>
+								</TableRow>
+							))}
+						</TableBody>
+					</Table>
+				)}
 			</Card>
+
 			{/* Pagination */}
-			<div className="flex items-center justify-between">
-				<p className="text-sm text-muted-foreground">
-					Showing <span className="font-medium">1-{products.length}</span> of
-					{` `}
-					<span className="font-medium">{products.length}</span> products
-				</p>
-				<div className="flex gap-2">
-					<Button type="button" variant="outline" size="sm" disabled>
-						Previous
-					</Button>
-					<Button type="button" variant="outline" size="sm" disabled>
-						Next
-					</Button>
+			{!isLoading && products.length > 0 && (
+				<div className="flex items-center justify-between">
+					<p className="text-sm text-muted-foreground">
+						Showing{" "}
+						<span className="font-medium">
+							{(pagination.page - 1) * pagination.pageSize + 1}-
+							{Math.min(
+								pagination.page * pagination.pageSize,
+								pagination.total,
+							)}
+						</span>{" "}
+						of <span className="font-medium">{pagination.total}</span> products
+					</p>
+					<div className="flex gap-2">
+						<Button
+							type="button"
+							variant="outline"
+							size="sm"
+							disabled={pagination.page <= 1}
+							onClick={() => handlePageChange(pagination.page - 1)}
+						>
+							Previous
+						</Button>
+						<Button
+							type="button"
+							variant="outline"
+							size="sm"
+							disabled={pagination.page >= pagination.totalPages}
+							onClick={() => handlePageChange(pagination.page + 1)}
+						>
+							Next
+						</Button>
+					</div>
 				</div>
-			</div>
+			)}
+
 			{/* CRUD Dialogs */}
 			<ViewProductDialog
 				open={isViewProductOpen}
@@ -403,26 +594,17 @@ export default function ProductsPage() {
 						? openDialog("isViewProductOpen")
 						: closeDialog("isViewProductOpen")
 				}
-				product={selectedProduct}
-			/>
-			<ProductFormDialog
-				open={isAddProductOpen}
-				onOpenChange={(open) =>
-					open
-						? openDialog("isAddProductOpen")
-						: closeDialog("isAddProductOpen")
+				product={
+					selectedProduct
+						? {
+								...selectedProduct,
+								price: selectedProduct.price,
+								createdAt: selectedProduct.createdAt.toISOString(),
+								updatedAt: selectedProduct.updatedAt.toISOString(),
+								deletedAt: null,
+							}
+						: null
 				}
-				mode="create"
-			/>
-			<ProductFormDialog
-				open={isEditProductOpen}
-				onOpenChange={(open) =>
-					open
-						? openDialog("isEditProductOpen")
-						: closeDialog("isEditProductOpen")
-				}
-				mode="edit"
-				product={selectedProduct}
 			/>
 			<DeleteProductDialog
 				open={isDeleteProductOpen}
@@ -431,8 +613,33 @@ export default function ProductsPage() {
 						? openDialog("isDeleteProductOpen")
 						: closeDialog("isDeleteProductOpen")
 				}
-				product={selectedProduct}
+				product={
+					selectedProduct
+						? {
+								...selectedProduct,
+								price: selectedProduct.price,
+								createdAt: selectedProduct.createdAt.toISOString(),
+								updatedAt: selectedProduct.updatedAt.toISOString(),
+								deletedAt: null,
+							}
+						: null
+				}
+				onConfirm={handleConfirmDelete}
 			/>
 		</div>
+	);
+}
+
+export default function ProductsPage() {
+	return (
+		<Suspense
+			fallback={
+				<div className="flex items-center justify-center min-h-[400px]">
+					<Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+				</div>
+			}
+		>
+			<ProductsPageContent />
+		</Suspense>
 	);
 }

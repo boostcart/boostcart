@@ -84,6 +84,58 @@ enum PageType {
     CUSTOM // For any other static pages
 }
 
+enum ProductStatus {
+    ACTIVE // Visible and available for purchase
+    UNLISTED // Available for purchase via direct link only
+    DRAFT // Not visible, not purchasable, admin only
+}
+
+enum MediaType {
+    IMAGE
+    VIDEO
+}
+
+enum PurchaseType {
+    ONE_TIME // Standard one-time purchase
+    SUBSCRIPTION // Recurring subscription only
+    ONE_TIME_AND_SUBSCRIPTION // Customer can choose either
+    PRE_ORDER // Not yet available, can pre-order
+}
+
+enum SubscriptionInterval {
+    WEEKLY
+    BI_WEEKLY
+    MONTHLY
+    BI_MONTHLY
+    QUARTERLY
+    YEARLY
+}
+
+enum PackageType {
+    BOX
+    ENVELOPE
+    SOFT_PACKAGE
+    PALLET
+}
+
+enum MeasurementUnit {
+    // Weight
+    KG
+    G
+    // Volume
+    L
+    ML
+    // Length
+    M
+    CM
+    MM
+    // Area
+    SQM
+    SQCM
+    // Per item
+    PER_ITEM
+}
+
 // ======================================================================
 // CORE MODELS
 // ======================================================================
@@ -280,14 +332,35 @@ model CategoryTranslation {
 
 // --- PRODUCTS ---
 model Product {
-    id         String  @id @default(cuid())
-    slug       String  @unique
-    price      Decimal @db.Decimal(10, 2)
-    sku        String? @unique
-    trackStock Boolean @default(false)
+    id         String        @id @default(cuid())
+    slug       String        @unique
+    price      Decimal       @db.Decimal(10, 2)
+    sku        String?       @unique
+    trackStock Boolean       @default(false)
     stock      Int?
+    status     ProductStatus @default(DRAFT)
 
-    images               ProductImage[]
+    // Pricing options
+    compareAtPrice Decimal? @db.Decimal(10, 2) // Original price for showing discounts
+    costPerItem    Decimal? @db.Decimal(10, 2) // Cost for profit calculations (not shown to customers)
+
+    // Unit pricing
+    unitPriceAmount          Decimal?        @db.Decimal(10, 2)
+    unitPriceMeasurement     MeasurementUnit?
+    unitPriceBaseAmount      Decimal?        @db.Decimal(10, 2)
+    unitPriceBaseMeasurement MeasurementUnit?
+
+    // Purchase options
+    purchaseType                PurchaseType         @default(ONE_TIME)
+    subscriptionDiscountPercent Decimal?             @db.Decimal(5, 2) // e.g., 10.00 for 10%
+    subscriptionIntervals       SubscriptionInterval[]
+    preOrderReleaseDate         DateTime?
+    preOrderDepositPercent      Decimal?             @db.Decimal(5, 2) // e.g., 20.00 for 20% deposit
+
+    // Low stock alert
+    lowStockThreshold Int?
+
+    media                ProductMedia[]
     translations         ProductTranslation[]
     specs                ProductSpecification[]
     shippingInfo         ProductShippingInfo?
@@ -324,17 +397,22 @@ model ProductTranslation {
     name        String
     description String? @db.Text // Rich text description
 
+    // SEO fields
+    metaTitle       String? // SEO title for search engines
+    metaDescription String? @db.Text // SEO description for search engines
+    customSlug      String? // Custom URL slug (if not set, use product.slug)
+
     @@unique([productId, localeId])
 }
 
-model ProductImage {
-    id        String  @id @default(cuid())
+model ProductMedia {
+    id        String    @id @default(cuid())
     productId String
-    product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+    product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
     url       String
-    altText   String? // For accessibility, translatable if desired
-    isMain    Boolean @default(false)
-    order     Int     @default(0) // For display order
+    mediaType MediaType @default(IMAGE)
+    altText   String? // For accessibility
+    order     Int       @default(0) // For display order, first (0) is cover
 
     createdAt DateTime @default(now())
 }
@@ -360,13 +438,26 @@ model ProductSpecificationTranslation {
 }
 
 model ProductShippingInfo {
-    id             String   @id @default(cuid())
-    productId      String   @unique
-    product        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-    weightKg       Decimal? @db.Decimal(10, 2)
-    widthCm        Decimal? @db.Decimal(10, 2)
-    heightCm       Decimal? @db.Decimal(10, 2)
-    depthCm        Decimal? @db.Decimal(10, 2)
+    id        String  @id @default(cuid())
+    productId String  @unique
+    product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+    // Package type
+    packageType PackageType @default(BOX)
+
+    // Packaging dimensions (used for all package types except pallet)
+    packagingWeightKg Decimal? @db.Decimal(10, 3)
+    packagingLengthCm Decimal? @db.Decimal(10, 2)
+    packagingWidthCm  Decimal? @db.Decimal(10, 2)
+    packagingHeightCm Decimal? @db.Decimal(10, 2)
+
+    // Product dimensions (used only for pallets - actual product size matters)
+    productWeightKg Decimal? @db.Decimal(10, 3)
+    productLengthCm Decimal? @db.Decimal(10, 2)
+    productWidthCm  Decimal? @db.Decimal(10, 2)
+    productHeightCm Decimal? @db.Decimal(10, 2)
+
+    // Shipping flags
     isFragile      Boolean  @default(false)
     isFreeShipping Boolean  @default(false)
     tags           String[] // Array of strings, e.g., "Oversize", "Hazmat"
@@ -442,15 +533,28 @@ model ProductVariant {
     productId       String
     product         Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
     sku             String?     @unique // Optional SKU per variant
+    price           Decimal?    @db.Decimal(10, 2) // Override price (null = use product price + adjustment)
     priceAdjustment Decimal     @default(0.00) @db.Decimal(10, 2) // Price difference from base product
     stock           Int? // Stock for this specific variant
-    image           String? // Optional image specific to this variant
+    imageUrl        String? // Image specific to this variant
     options         Json // Store key-value pairs of variant options as JSON e.g. { "Color": "Red", "Size": "Large" }
     cartItems       CartItem[]
     orderItems      OrderItem[]
+    optionMeta      VariantOptionMeta[] // For color hex values etc.
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
+
+// Stores metadata for variant options (e.g., hex color for "Color" options)
+model VariantOptionMeta {
+    id         String         @id @default(cuid())
+    variantId  String
+    variant    ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+    optionName String // e.g., "Color"
+    hexColor   String? // e.g., "#FF5733" for color options
+
+    @@unique([variantId, optionName])
 }
 
 model ProductCustomizationOption {

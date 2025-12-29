@@ -25,10 +25,13 @@ const Select = ({
 	indicatorVisibility?: boolean;
 	indicator?: ReactNode;
 } & React.ComponentProps<typeof SelectPrimitive.Root>) => {
+	const contextValue = React.useMemo(
+		() => ({ indicatorPosition, indicatorVisibility, indicator }),
+		[indicatorPosition, indicatorVisibility, indicator],
+	);
+
 	return (
-		<SelectContext.Provider
-			value={{ indicatorPosition, indicatorVisibility, indicator }}
-		>
+		<SelectContext.Provider value={contextValue}>
 			<SelectPrimitive.Root {...props} />
 		</SelectContext.Provider>
 	);

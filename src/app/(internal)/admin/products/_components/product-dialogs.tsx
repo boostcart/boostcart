@@ -567,15 +567,28 @@ interface DeleteProductDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 	product: Product | null;
+	onConfirm?: () => void | Promise<void>;
 }
 
 export function DeleteProductDialog({
 	open,
 	onOpenChange,
 	product,
+	onConfirm,
 }: DeleteProductDialogProps) {
-	const handleDelete = () => {
-		onOpenChange(false);
+	const [isDeleting, setIsDeleting] = useState(false);
+
+	const handleDelete = async () => {
+		if (onConfirm) {
+			setIsDeleting(true);
+			try {
+				await onConfirm();
+			} finally {
+				setIsDeleting(false);
+			}
+		} else {
+			onOpenChange(false);
+		}
 	};
 
 	if (!product) return null;
@@ -586,8 +599,8 @@ export function DeleteProductDialog({
 				<DialogHeader>
 					<DialogTitle>Delete Product</DialogTitle>
 					<DialogDescription>
-						Are you sure you want to delete this product? This action cannot be
-						undone.
+						Are you sure you want to delete this product? It will be moved to
+						trash and permanently deleted after 30 days.
 					</DialogDescription>
 				</DialogHeader>
 
@@ -598,24 +611,37 @@ export function DeleteProductDialog({
 					</div>
 					<div className="flex justify-between text-sm">
 						<span className="text-muted-foreground">SKU:</span>
-						<span className="font-medium font-mono">{product.sku}</span>
+						<span className="font-medium font-mono">{product.sku ?? "—"}</span>
 					</div>
 					<div className="flex justify-between text-sm">
 						<span className="text-muted-foreground">Stock:</span>
-						<span className="font-medium">{product.stock} units</span>
+						<span className="font-medium">{product.stock ?? "—"} units</span>
 					</div>
 					<div className="flex justify-between text-sm">
 						<span className="text-muted-foreground">Price:</span>
-						<span className="font-medium">{product.price}</span>
+						<span className="font-medium">
+							€
+							{typeof product.price === "number"
+								? product.price.toFixed(2)
+								: product.price}
+						</span>
 					</div>
 				</div>
 
 				<DialogFooter>
-					<Button variant="outline" onClick={() => onOpenChange(false)}>
+					<Button
+						variant="outline"
+						onClick={() => onOpenChange(false)}
+						disabled={isDeleting}
+					>
 						Cancel
 					</Button>
-					<Button variant="destructive" onClick={handleDelete}>
-						Delete Product
+					<Button
+						variant="destructive"
+						onClick={handleDelete}
+						disabled={isDeleting}
+					>
+						{isDeleting ? "Deleting..." : "Delete Product"}
 					</Button>
 				</DialogFooter>
 			</DialogContent>
