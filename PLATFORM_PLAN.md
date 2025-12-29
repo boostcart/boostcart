@@ -1,7 +1,7 @@
 # BoostCart Platform - Complete Development Plan
 
 > **Version:** 1.0
-> **Last Updated:** December 28, 2025
+> **Last Updated:** December 29, 2025
 > **Target Launch:** Q4 2026
 
 ---
@@ -37,7 +37,7 @@ BoostCart is a cloud-hosted SaaS e-commerce platform designed to compete with Sh
 - **Bulgarian-First**: Native support for Bulgarian payment gateways (ePay, EasyPay, Borica) and shipping providers (Econt, Speedy)
 - **Hybrid Theme System**: React components + JSON configuration for both developers and non-technical users
 - **Plugin Marketplace**: Shopify-style app ecosystem with OAuth-secured microservices
-- **Visual Page Builder**: Drag-and-drop editor with 50+ blocks
+- **Visual Page Builder**: Drag-and-drop editor with 35+ blocks
 - **Built-in Marketing**: Analytics, SEO tools, and abandoned cart recovery included in core platform
 
 ### Target Metrics (Year 1)
@@ -226,8 +226,8 @@ boostcart/
 | Category | Technology | Rationale |
 |----------|------------|-----------|
 | **Monorepo** | Turborepo | Fast builds, intelligent caching |
-| **Package Manager** | pnpm | Efficient, monorepo-friendly |
-| **Framework** | Next.js 15 (App Router) | SSR, API routes, edge runtime |
+| **Package Manager** | Bun | Fast installs, native TS, built-in tooling |
+| **Framework** | Next.js 16 (App Router) | SSR, API routes, edge runtime |
 | **Language** | TypeScript | Type safety, better DX |
 | **Database** | PostgreSQL | Reliable, scalable, JSON support |
 | **ORM** | Prisma | Type-safe queries, migrations |
@@ -267,6 +267,8 @@ boostcart/
 ---
 
 ## 5. Database Schema
+
+> **Note**: The `User` model is managed by Better Auth and includes fields like `id`, `email`, `name`, `emailVerified`, `image`, `createdAt`, `updatedAt`. Platform users (store owners, staff) use this model, while store customers use the separate `Customer` model.
 
 ### 5.1 Multi-Tenant Core
 
@@ -518,6 +520,37 @@ model ProductMedia {
 enum MediaType {
   IMAGE
   VIDEO
+}
+
+model ProductReview {
+  id          String   @id @default(cuid())
+  tenantId    String
+  productId   String
+  customerId  String
+  
+  rating      Int      // 1-5
+  title       String?
+  content     String?  @db.Text
+  
+  // Moderation
+  status      ReviewStatus @default(PENDING)
+  
+  // Helpful votes
+  helpfulCount Int     @default(0)
+  
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  customer    Customer @relation(fields: [customerId], references: [id])
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([productId, status])
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
 
 model Category {
@@ -1340,6 +1373,22 @@ model PluginVersion {
   @@unique([pluginId, version])
 }
 
+model PluginReview {
+  id          String   @id @default(cuid())
+  pluginId    String
+  userId      String   // Platform user who wrote review
+  
+  rating      Int      // 1-5
+  title       String?
+  content     String?  @db.Text
+  
+  plugin      Plugin   @relation(fields: [pluginId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  
+  @@unique([pluginId, userId])
+}
+
 // ============= INSTALLED PLUGINS =============
 model TenantPlugin {
   id          String  @id @default(cuid())
@@ -1584,6 +1633,22 @@ model ThemePurchase {
   purchasedAt DateTime @default(now())
   
   @@unique([tenantId, themeId])
+}
+
+model ThemeReview {
+  id          String   @id @default(cuid())
+  themeId     String
+  userId      String   // Platform user who wrote review
+  
+  rating      Int      // 1-5
+  title       String?
+  content     String?  @db.Text
+  
+  theme       Theme    @relation(fields: [themeId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  
+  @@unique([themeId, userId])
 }
 ```
 
@@ -2172,7 +2237,10 @@ enum SSLStatus {
 
 ### 11.2 Customer Schema
 
+> **Note**: The full Customer model with all fields is defined in [Section 5.3 - Orders & Customers](#53-orders--customers). Below is a simplified view for reference.
+
 ```prisma
+// Simplified view - see Section 5.3 for full schema
 model Customer {
   id          String   @id @default(cuid())
   tenantId    String
@@ -2189,46 +2257,10 @@ model Customer {
   // Marketing
   acceptsMarketing Boolean @default(false)
   
-  // Relations
-  addresses   CustomerAddress[]
-  orders      Order[]
-  wishlist    WishlistItem[]
-  reviews     Review[]
-  
-  tenant      Tenant   @relation(fields: [tenantId], references: [id])
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  // ... additional fields in Section 5.3
   
   @@unique([tenantId, email])
   @@index([tenantId])
-}
-
-model CustomerAddress {
-  id          String   @id @default(cuid())
-  customerId  String
-  
-  firstName   String
-  lastName    String
-  company     String?
-  address1    String
-  address2    String?
-  city        String
-  province    String?
-  postalCode  String
-  country     String
-  phone       String?
-  
-  isDefault   Boolean  @default(false)
-  type        AddressType @default(BOTH)
-  
-  customer    Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
-}
-
-enum AddressType {
-  SHIPPING
-  BILLING
-  BOTH
 }
 ```
 
@@ -2434,7 +2466,7 @@ const locales = {
 
 | Plan | Price | Features |
 |------|-------|----------|
-| **Free** | 0 BGN/mo | 10 products, 1% transaction fee, BoostCart branding |
+| **Free** | 0 BGN/mo | 50 products, 1% transaction fee, BoostCart branding |
 | **Starter** | 49 BGN/mo | 100 products, 0.5% transaction fee, custom domain |
 | **Professional** | 99 BGN/mo | Unlimited products, 0% transaction fee, advanced analytics |
 | **Enterprise** | 299 BGN/mo | Everything + priority support, SLA, dedicated account manager |
@@ -2733,11 +2765,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-      - run: pnpm install
-      - run: pnpm lint
-      - run: pnpm test
-      - run: pnpm build
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - run: bun lint
+      - run: bun test
+      - run: bun run build
 
   deploy-staging:
     if: github.ref == 'refs/heads/staging'
@@ -2834,13 +2866,8 @@ boostcart/
 │   ├── minimal/
 │   └── modern/
 │
-├── infrastructure/
-│   ├── docker/
-│   ├── kubernetes/
-│   └── terraform/
-│
 ├── turbo.json
-├── pnpm-workspace.yaml
+├── bunfig.toml                   # Bun workspace config
 └── package.json
 ```
 
@@ -2968,5 +2995,5 @@ export const TestimonialBlock = defineBlock({
 **End of Document**
 
 *Total estimated development time: 52 weeks (1 year)*
-*Team size recommendation: 3-5 developers*
-*Initial budget estimate: 150,000 - 250,000 BGN*
+*Solo developer + AI: 14-18 months (full-time)*
+*Initial budget estimate: 3,000 - 5,000 BGN (solo) | 150,000 - 250,000 BGN (team)*
