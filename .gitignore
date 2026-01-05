@@ -17,9 +17,12 @@ db.sqlite
 /src/generated/prisma
 
 # next.js
-/.next/
+.next/
+.turbo/
 /out/
 next-env.d.ts
+/**/.next/**
+/**/.turbo/**
 
 # production
 /build

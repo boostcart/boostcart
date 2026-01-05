@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 10, "column": 0}, "map": {"version":3,"sources":["file:///Users/bobkata/Projects/boostcart/apps/platform/src/components/ui/sonner.tsx"],"sourcesContent":["\"use client\";\n\nimport { useTheme } from \"next-themes\";\nimport { Toaster as Sonner, type ToasterProps } from \"sonner\";\n\nconst Toaster = ({ ...props }: ToasterProps) => {\n\tconst { theme = \"system\" } = useTheme();\n\n\treturn (\n\t\t<Sonner\n\t\t\ttheme={theme as ToasterProps[\"theme\"]}\n\t\t\tclassName=\"toaster group\"\n\t\t\tstyle={\n\t\t\t\t{\n\t\t\t\t\t\"--normal-bg\": \"var(--popover)\",\n\t\t\t\t\t\"--normal-text\": \"var(--popover-foreground)\",\n\t\t\t\t\t\"--normal-border\": \"var(--border)\",\n\t\t\t\t} as React.CSSProperties\n\t\t\t}\n\t\t\t{...props}\n\t\t/>\n\t);\n};\n\nexport { Toaster };\n"],"names":[],"mappings":";;;;;AAEA;AACA;AAHA;;;;AAKA,MAAM,UAAU,CAAC,EAAE,GAAG,OAAqB;IAC1C,MAAM,EAAE,QAAQ,QAAQ,EAAE,GAAG,IAAA,4JAAQ;IAErC,qBACC,8OAAC,mJAAM;QACN,OAAO;QACP,WAAU;QACV,OACC;YACC,eAAe;YACf,iBAAiB;YACjB,mBAAmB;QACpB;QAEA,GAAG,KAAK;;;;;;AAGZ"}}]
-}

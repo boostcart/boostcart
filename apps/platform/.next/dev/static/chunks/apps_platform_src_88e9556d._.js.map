@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/bobkata/Projects/boostcart/apps/platform/src/lib/utils.ts"],"sourcesContent":["import { type ClassValue, clsx } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\nexport function cn(...inputs: ClassValue[]) {\n\treturn twMerge(clsx(inputs));\n}\n"],"names":[],"mappings":";;;;AAAA;AACA;;;AAEO,SAAS,GAAG,GAAG,MAAoB;IACzC,OAAO,IAAA,yKAAO,EAAC,IAAA,gJAAI,EAAC;AACrB"}},
-    {"offset": {"line": 22, "column": 0}, "map": {"version":3,"sources":["file:///Users/bobkata/Projects/boostcart/apps/platform/src/components/loader.tsx"],"sourcesContent":["\"use client\";\n\nimport { LoaderIcon } from \"lucide-react\";\nimport { cn } from \"@/lib/utils\";\n\ninterface LoaderProps {\n\tclassName?: string;\n\tsize?: \"sm\" | \"md\" | \"lg\";\n}\n\nexport function Loader({ className, size = \"md\" }: LoaderProps) {\n\tconst sizeClasses = {\n\t\tsm: \"size-4\",\n\t\tmd: \"size-6\",\n\t\tlg: \"size-8\",\n\t};\n\n\treturn (\n\t\t<LoaderIcon\n\t\t\tclassName={cn(\n\t\t\t\t\"text-muted-foreground animate-spin\",\n\t\t\t\tsizeClasses[size],\n\t\t\t\tclassName\n\t\t\t)}\n\t\t/>\n\t);\n}\n\nexport default Loader;\n"],"names":[],"mappings":";;;;;;;AAEA;AACA;AAHA;;;;AAUO,SAAS,OAAO,EAAE,SAAS,EAAE,OAAO,IAAI,EAAe;IAC7D,MAAM,cAAc;QACnB,IAAI;QACJ,IAAI;QACJ,IAAI;IACL;IAEA,qBACC,6LAAC,2NAAU;QACV,WAAW,IAAA,gJAAE,EACZ,sCACA,WAAW,CAAC,KAAK,EACjB;;;;;;AAIJ;KAhBgB;uCAkBD"}}]
-}
