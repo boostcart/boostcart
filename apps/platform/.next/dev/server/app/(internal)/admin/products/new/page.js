@@ -1,0 +1,48 @@
+var R = require("../../../../../chunks/ssr/[turbopack]_runtime.js")(
+	"server/app/(internal)/admin/products/new/page.js",
+);
+R.c("server/chunks/ssr/node_modules_next_dist_8a020cc1._.js");
+R.c("server/chunks/ssr/[root-of-the-server]__26e4e84d._.js");
+R.c("server/chunks/ssr/node_modules_next_dist_7381059c._.js");
+R.c("server/chunks/ssr/[externals]__7f148858._.js");
+R.c(
+	"server/chunks/ssr/node_modules_next_dist_client_components_builtin_global-error_ece394eb.js",
+);
+R.c("server/chunks/ssr/node_modules_fdd145a3._.js");
+R.c("server/chunks/ssr/[root-of-the-server]__60c4878a._.js");
+R.c("server/chunks/ssr/apps_platform_src_112597de._.js");
+R.c("server/chunks/ssr/node_modules_next_dist_client_components_9774470f._.js");
+R.c(
+	"server/chunks/ssr/node_modules_next_dist_client_components_builtin_forbidden_45780354.js",
+);
+R.c(
+	"server/chunks/ssr/node_modules_next_dist_client_components_builtin_unauthorized_15817684.js",
+);
+R.c("server/chunks/ssr/[root-of-the-server]__3bbd894e._.js");
+R.c("server/chunks/ssr/[root-of-the-server]__ffebeaa7._.js");
+R.c("server/chunks/ssr/node_modules_next_9c5bce2c._.js");
+R.c("server/chunks/ssr/node_modules_zod_8ba20c62._.js");
+R.c("server/chunks/ssr/node_modules_@better-auth_core_dist_387505df._.js");
+R.c("server/chunks/ssr/node_modules_better-auth_dist_api_93266762._.js");
+R.c(
+	"server/chunks/ssr/node_modules_better-auth_dist_plugins_api-key_a7151938._.js",
+);
+R.c(
+	"server/chunks/ssr/node_modules_better-auth_dist_plugins_organization_e3bc665b._.js",
+);
+R.c("server/chunks/ssr/node_modules_better-auth_dist_plugins_599b8028._.js");
+R.c("server/chunks/ssr/node_modules_better-auth_dist_e38e4544._.js");
+R.c("server/chunks/ssr/node_modules_jose_dist_webapi_7fb2df65._.js");
+R.c("server/chunks/ssr/node_modules_kysely_dist_esm_a7bb0728._.js");
+R.c("server/chunks/ssr/[root-of-the-server]__e254e75e._.js");
+R.c(
+	"server/chunks/ssr/apps_platform_src_app_(internal)_admin_layout_tsx_356827e4._.js",
+);
+R.c("server/chunks/ssr/apps_platform_7f46ccf3._.js");
+R.c("server/chunks/ssr/node_modules_next_639f23e9._.js");
+R.m(
+	'[project]/node_modules/next/dist/esm/build/templates/app-page.js?page=/(internal)/admin/products/new/page { GLOBAL_ERROR_MODULE => "[project]/node_modules/next/dist/client/components/builtin/global-error.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_0 => "[project]/apps/platform/src/app/layout.tsx [app-rsc] (ecmascript, Next.js Server Component)", MODULE_1 => "[project]/apps/platform/src/app/loading.tsx [app-rsc] (ecmascript, Next.js Server Component)", MODULE_2 => "[project]/node_modules/next/dist/client/components/builtin/not-found.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_3 => "[project]/node_modules/next/dist/client/components/builtin/forbidden.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_4 => "[project]/node_modules/next/dist/client/components/builtin/unauthorized.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_5 => "[project]/node_modules/next/dist/client/components/builtin/global-error.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_6 => "[project]/apps/platform/src/app/(internal)/layout.tsx [app-rsc] (ecmascript, Next.js Server Component)", MODULE_7 => "[project]/node_modules/next/dist/client/components/builtin/not-found.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_8 => "[project]/node_modules/next/dist/client/components/builtin/forbidden.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_9 => "[project]/node_modules/next/dist/client/components/builtin/unauthorized.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_10 => "[project]/apps/platform/src/app/(internal)/admin/layout.tsx [app-rsc] (ecmascript, Next.js Server Component)", MODULE_11 => "[project]/apps/platform/src/app/(internal)/admin/products/new/page.tsx [app-rsc] (ecmascript, Next.js Server Component)" } [app-rsc] (ecmascript)',
+);
+module.exports = R.m(
+	'[project]/node_modules/next/dist/esm/build/templates/app-page.js?page=/(internal)/admin/products/new/page { GLOBAL_ERROR_MODULE => "[project]/node_modules/next/dist/client/components/builtin/global-error.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_0 => "[project]/apps/platform/src/app/layout.tsx [app-rsc] (ecmascript, Next.js Server Component)", MODULE_1 => "[project]/apps/platform/src/app/loading.tsx [app-rsc] (ecmascript, Next.js Server Component)", MODULE_2 => "[project]/node_modules/next/dist/client/components/builtin/not-found.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_3 => "[project]/node_modules/next/dist/client/components/builtin/forbidden.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_4 => "[project]/node_modules/next/dist/client/components/builtin/unauthorized.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_5 => "[project]/node_modules/next/dist/client/components/builtin/global-error.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_6 => "[project]/apps/platform/src/app/(internal)/layout.tsx [app-rsc] (ecmascript, Next.js Server Component)", MODULE_7 => "[project]/node_modules/next/dist/client/components/builtin/not-found.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_8 => "[project]/node_modules/next/dist/client/components/builtin/forbidden.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_9 => "[project]/node_modules/next/dist/client/components/builtin/unauthorized.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_10 => "[project]/apps/platform/src/app/(internal)/admin/layout.tsx [app-rsc] (ecmascript, Next.js Server Component)", MODULE_11 => "[project]/apps/platform/src/app/(internal)/admin/products/new/page.tsx [app-rsc] (ecmascript, Next.js Server Component)" } [app-rsc] (ecmascript)',
+).exports;

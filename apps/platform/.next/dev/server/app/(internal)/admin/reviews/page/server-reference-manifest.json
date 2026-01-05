@@ -1,0 +1,140 @@
+{
+  "node": {
+    "003bfcd7ac293af20dc22123ec44e81263e2c95347": {
+      "workers": {
+        "app/(internal)/admin/reviews/page": {
+          "moduleId": "[project]/apps/platform/.next-internal/server/app/(internal)/admin/reviews/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/platform/src/server/api/private/tenant.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/apps/platform/src/server/api/internal/reviews.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "getUserStores",
+          "filename": "apps/platform/src/server/api/private/tenant.ts"
+        }
+      },
+      "layer": {
+        "app/(internal)/admin/reviews/page": "rsc"
+      },
+      "exportedName": "getUserStores",
+      "filename": "apps/platform/src/server/api/private/tenant.ts"
+    },
+    "00b865bde8853c0b2200356e8a44aabbfda99ded8f": {
+      "workers": {
+        "app/(internal)/admin/reviews/page": {
+          "moduleId": "[project]/apps/platform/.next-internal/server/app/(internal)/admin/reviews/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/platform/src/server/api/private/tenant.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/apps/platform/src/server/api/internal/reviews.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "userHasStore",
+          "filename": "apps/platform/src/server/api/private/tenant.ts"
+        }
+      },
+      "layer": {
+        "app/(internal)/admin/reviews/page": "rsc"
+      },
+      "exportedName": "userHasStore",
+      "filename": "apps/platform/src/server/api/private/tenant.ts"
+    },
+    "00f61908051b9076d3d4981917b5b0f4b9a64a3f03": {
+      "workers": {
+        "app/(internal)/admin/reviews/page": {
+          "moduleId": "[project]/apps/platform/.next-internal/server/app/(internal)/admin/reviews/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/platform/src/server/api/private/tenant.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/apps/platform/src/server/api/internal/reviews.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "getCurrentTenant",
+          "filename": "apps/platform/src/server/api/private/tenant.ts"
+        }
+      },
+      "layer": {
+        "app/(internal)/admin/reviews/page": "action-browser"
+      },
+      "exportedName": "getCurrentTenant",
+      "filename": "apps/platform/src/server/api/private/tenant.ts"
+    },
+    "40177cd97a285945b21e6d3751ddbdc14238608821": {
+      "workers": {
+        "app/(internal)/admin/reviews/page": {
+          "moduleId": "[project]/apps/platform/.next-internal/server/app/(internal)/admin/reviews/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/platform/src/server/api/private/tenant.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/apps/platform/src/server/api/internal/reviews.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "createStore",
+          "filename": "apps/platform/src/server/api/private/tenant.ts"
+        }
+      },
+      "layer": {
+        "app/(internal)/admin/reviews/page": "rsc"
+      },
+      "exportedName": "createStore",
+      "filename": "apps/platform/src/server/api/private/tenant.ts"
+    },
+    "40ece7c8b327f75aed046925634f22b2bd96f4eb54": {
+      "workers": {
+        "app/(internal)/admin/reviews/page": {
+          "moduleId": "[project]/apps/platform/.next-internal/server/app/(internal)/admin/reviews/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/platform/src/server/api/private/tenant.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/apps/platform/src/server/api/internal/reviews.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "checkSlugAvailability",
+          "filename": "apps/platform/src/server/api/private/tenant.ts"
+        }
+      },
+      "layer": {
+        "app/(internal)/admin/reviews/page": "rsc"
+      },
+      "exportedName": "checkSlugAvailability",
+      "filename": "apps/platform/src/server/api/private/tenant.ts"
+    },
+    "40a0e8152c15ae6e0f1d3d3e46518bf62c1d2f9469": {
+      "workers": {
+        "app/(internal)/admin/reviews/page": {
+          "moduleId": "[project]/apps/platform/.next-internal/server/app/(internal)/admin/reviews/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/platform/src/server/api/private/tenant.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/apps/platform/src/server/api/internal/reviews.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "approveReview",
+          "filename": "apps/platform/src/server/api/internal/reviews.ts"
+        }
+      },
+      "layer": {
+        "app/(internal)/admin/reviews/page": "action-browser"
+      },
+      "exportedName": "approveReview",
+      "filename": "apps/platform/src/server/api/internal/reviews.ts"
+    },
+    "4034abc60ce87fb548b0905563aad19f873ebafc72": {
+      "workers": {
+        "app/(internal)/admin/reviews/page": {
+          "moduleId": "[project]/apps/platform/.next-internal/server/app/(internal)/admin/reviews/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/platform/src/server/api/private/tenant.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/apps/platform/src/server/api/internal/reviews.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "deleteReview",
+          "filename": "apps/platform/src/server/api/internal/reviews.ts"
+        }
+      },
+      "layer": {
+        "app/(internal)/admin/reviews/page": "action-browser"
+      },
+      "exportedName": "deleteReview",
+      "filename": "apps/platform/src/server/api/internal/reviews.ts"
+    },
+    "40e57d6832bf686e9e45625214b32780987aaa4e74": {
+      "workers": {
+        "app/(internal)/admin/reviews/page": {
+          "moduleId": "[project]/apps/platform/.next-internal/server/app/(internal)/admin/reviews/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/platform/src/server/api/private/tenant.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/apps/platform/src/server/api/internal/reviews.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "getReviews",
+          "filename": "apps/platform/src/server/api/internal/reviews.ts"
+        }
+      },
+      "layer": {
+        "app/(internal)/admin/reviews/page": "action-browser"
+      },
+      "exportedName": "getReviews",
+      "filename": "apps/platform/src/server/api/internal/reviews.ts"
+    },
+    "40ce306c8d68d212598728b87f1675d43b2c4b780f": {
+      "workers": {
+        "app/(internal)/admin/reviews/page": {
+          "moduleId": "[project]/apps/platform/.next-internal/server/app/(internal)/admin/reviews/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/platform/src/server/api/private/tenant.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/apps/platform/src/server/api/internal/reviews.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "unapproveReview",
+          "filename": "apps/platform/src/server/api/internal/reviews.ts"
+        }
+      },
+      "layer": {
+        "app/(internal)/admin/reviews/page": "action-browser"
+      },
+      "exportedName": "unapproveReview",
+      "filename": "apps/platform/src/server/api/internal/reviews.ts"
+    }
+  },
+  "edge": {}
+}

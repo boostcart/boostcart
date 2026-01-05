@@ -1,0 +1,80 @@
+{
+	"node": {
+		"00d8db3be13d2cae441b12d57d08b74dec882f4027": {
+			"workers": {
+				"app/(private)/account/page": {
+					"moduleId": "[project]/apps/platform/.next-internal/server/app/(private)/account/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/platform/src/server/api/shared.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/apps/platform/src/server/api/helpers.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+					"async": true,
+					"exportedName": "getCurrentUser",
+					"filename": "apps/platform/src/server/api/shared.ts"
+				}
+			},
+			"layer": {
+				"app/(private)/account/page": "rsc"
+			},
+			"exportedName": "getCurrentUser",
+			"filename": "apps/platform/src/server/api/shared.ts"
+		},
+		"403be7edd991fc3f0a8bab246a73cd3d11461580c1": {
+			"workers": {
+				"app/(private)/account/page": {
+					"moduleId": "[project]/apps/platform/.next-internal/server/app/(private)/account/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/platform/src/server/api/shared.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/apps/platform/src/server/api/helpers.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+					"async": true,
+					"exportedName": "getUserById",
+					"filename": "apps/platform/src/server/api/helpers.ts"
+				}
+			},
+			"layer": {
+				"app/(private)/account/page": "rsc"
+			},
+			"exportedName": "getUserById",
+			"filename": "apps/platform/src/server/api/helpers.ts"
+		},
+		"403f5189b884a96de2eda7cf0cf397910cdbba8829": {
+			"workers": {
+				"app/(private)/account/page": {
+					"moduleId": "[project]/apps/platform/.next-internal/server/app/(private)/account/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/platform/src/server/api/shared.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/apps/platform/src/server/api/helpers.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+					"async": true,
+					"exportedName": "getUserByEmail",
+					"filename": "apps/platform/src/server/api/helpers.ts"
+				}
+			},
+			"layer": {
+				"app/(private)/account/page": "rsc"
+			},
+			"exportedName": "getUserByEmail",
+			"filename": "apps/platform/src/server/api/helpers.ts"
+		},
+		"600ef29ac07f6fa416b736e0702e0bf7caef7b5ca5": {
+			"workers": {
+				"app/(private)/account/page": {
+					"moduleId": "[project]/apps/platform/.next-internal/server/app/(private)/account/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/platform/src/server/api/shared.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/apps/platform/src/server/api/helpers.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+					"async": true,
+					"exportedName": "getVerificationTokenByEmail",
+					"filename": "apps/platform/src/server/api/helpers.ts"
+				}
+			},
+			"layer": {
+				"app/(private)/account/page": "rsc"
+			},
+			"exportedName": "getVerificationTokenByEmail",
+			"filename": "apps/platform/src/server/api/helpers.ts"
+		},
+		"606b280f263198881f7369f134ac692520b850b3e7": {
+			"workers": {
+				"app/(private)/account/page": {
+					"moduleId": "[project]/apps/platform/.next-internal/server/app/(private)/account/page/actions.js { ACTIONS_MODULE0 => \"[project]/apps/platform/src/server/api/shared.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/apps/platform/src/server/api/helpers.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+					"async": true,
+					"exportedName": "getVerificationTokenByToken",
+					"filename": "apps/platform/src/server/api/helpers.ts"
+				}
+			},
+			"layer": {
+				"app/(private)/account/page": "rsc"
+			},
+			"exportedName": "getVerificationTokenByToken",
+			"filename": "apps/platform/src/server/api/helpers.ts"
+		}
+	},
+	"edge": {}
+}
