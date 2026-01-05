@@ -16,8 +16,14 @@ export default defineConfig({
 		path: "prisma/migrations",
 	},
 
-	// The database URL for Prisma CLI operations
+	// Database connection configuration
+	// Use DIRECT_URL for CLI operations (migrations, db push) to bypass PgBouncer
+	// This is required for Supabase and other pooled connections
 	datasource: {
-		url: env("DATABASE_URL"),
+		// For CLI operations like migrations, use direct connection (bypasses pooler)
+		url: env("DIRECT_URL") || env("DATABASE_URL"),
+		// For Prisma Client at runtime, it will use DATABASE_URL (pooled connection)
+		// The directUrl is used by CLI for schema operations
+		directUrl: env("DIRECT_URL"),
 	},
 });
