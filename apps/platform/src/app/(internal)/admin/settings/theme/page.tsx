@@ -3,12 +3,15 @@
 import {
 	ArrowLeft,
 	Check,
+	Download,
 	Eye,
 	Loader2,
 	Palette,
 	RotateCcw,
 	Save,
+	Sparkles,
 	Type,
+	Upload,
 } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
@@ -29,6 +32,12 @@ import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import {
+	type ThemePreset,
+	exportTheme,
+	importTheme,
+	themePresets,
+} from "@/lib/theme-presets";
 import { getTenantSettings, updateTheme } from "@/server/api/internal/settings";
 
 interface ThemeConfig {
@@ -44,15 +53,20 @@ interface ThemeConfig {
 	// Typography
 	fontFamily?: string;
 	headingFontFamily?: string;
+	fontSizeScale?: "compact" | "default" | "comfortable" | "large";
 	// Layout
 	headerStyle?: "default" | "centered" | "minimal";
 	footerStyle?: "default" | "simple" | "expanded";
 	productCardStyle?: "default" | "minimal" | "detailed";
+	spacingScale?: "compact" | "default" | "comfortable" | "spacious";
 	// Features
 	showBanner?: boolean;
 	bannerText?: string;
 	bannerBackgroundColor?: string;
 	bannerTextColor?: string;
+	// Border & Shadow
+	borderRadius?: "none" | "small" | "medium" | "large" | "full";
+	shadowStyle?: "none" | "subtle" | "medium" | "dramatic";
 	// Social
 	facebookUrl?: string;
 	instagramUrl?: string;
@@ -75,13 +89,17 @@ const DEFAULT_THEME = {
 	borderColor: "#e4e4e7",
 	fontFamily: "Inter, system-ui, sans-serif",
 	headingFontFamily: "Inter, system-ui, sans-serif",
+	fontSizeScale: "default" as const,
 	headerStyle: "default" as const,
 	footerStyle: "default" as const,
 	productCardStyle: "default" as const,
+	spacingScale: "default" as const,
 	showBanner: false,
 	bannerText: "",
 	bannerBackgroundColor: "#000000",
 	bannerTextColor: "#ffffff",
+	borderRadius: "medium" as const,
+	shadowStyle: "subtle" as const,
 };
 
 const FONT_OPTIONS = [
@@ -94,6 +112,9 @@ const FONT_OPTIONS = [
 	{ value: "'Lato', sans-serif", label: "Lato" },
 	{ value: "'Montserrat', sans-serif", label: "Montserrat" },
 	{ value: "'Poppins', sans-serif", label: "Poppins" },
+	{ value: "'Nunito', sans-serif", label: "Nunito" },
+	{ value: "'Space Grotesk', sans-serif", label: "Space Grotesk" },
+	{ value: "'JetBrains Mono', monospace", label: "JetBrains Mono" },
 ];
 
 export default function ThemeSettingsPage() {
@@ -150,6 +171,48 @@ export default function ThemeSettingsPage() {
 	const handleResetToDefaults = () => {
 		setConfig(DEFAULT_THEME);
 		toast.info("Reset to default theme");
+	};
+
+	const handleApplyPreset = (preset: ThemePreset) => {
+		setConfig((prev) => ({
+			...prev,
+			...preset.config,
+		}));
+		toast.success(`Applied "${preset.name}" theme`);
+	};
+
+	const handleExportTheme = () => {
+		const json = exportTheme(config);
+		const blob = new Blob([json], { type: "application/json" });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement("a");
+		a.href = url;
+		a.download = `theme-${storeSlug || "export"}.json`;
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
+		URL.revokeObjectURL(url);
+		toast.success("Theme exported successfully");
+	};
+
+	const handleImportTheme = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const file = event.target.files?.[0];
+		if (!file) return;
+
+		const reader = new FileReader();
+		reader.onload = (e) => {
+			const content = e.target?.result as string;
+			const imported = importTheme(content);
+			if (imported) {
+				setConfig((prev) => ({ ...prev, ...imported }));
+				toast.success("Theme imported successfully");
+			} else {
+				toast.error("Invalid theme file");
+			}
+		};
+		reader.readAsText(file);
+		// Reset the input
+		event.target.value = "";
 	};
 
 	const updateConfig = <K extends keyof ThemeConfig>(
@@ -211,14 +274,99 @@ export default function ThemeSettingsPage() {
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 				{/* Settings Panel */}
 				<div className="lg:col-span-2 space-y-6">
-					<Tabs defaultValue="colors" className="w-full">
-						<TabsList className="grid w-full grid-cols-5">
+					<Tabs defaultValue="presets" className="w-full">
+						<TabsList className="grid w-full grid-cols-6">
+							<TabsTrigger value="presets">Presets</TabsTrigger>
 							<TabsTrigger value="colors">Colors</TabsTrigger>
 							<TabsTrigger value="typography">Typography</TabsTrigger>
 							<TabsTrigger value="layout">Layout</TabsTrigger>
 							<TabsTrigger value="banner">Banner</TabsTrigger>
 							<TabsTrigger value="social">Social</TabsTrigger>
 						</TabsList>
+
+						{/* Presets Tab */}
+						<TabsContent value="presets" className="space-y-4">
+							<Card>
+								<CardHeader>
+									<CardTitle className="flex items-center gap-2">
+										<Sparkles className="h-5 w-5" />
+										Theme Presets
+									</CardTitle>
+								</CardHeader>
+								<CardContent className="space-y-6">
+									<p className="text-sm text-muted-foreground">
+										Choose a preset theme as a starting point, then customize it to match your brand.
+									</p>
+									<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+										{themePresets.map((preset) => (
+											<button
+												type="button"
+												key={preset.id}
+												onClick={() => handleApplyPreset(preset)}
+												className="p-4 border rounded-lg text-left transition-all hover:border-primary hover:bg-muted/50"
+											>
+												<div className="flex items-center gap-3 mb-3">
+													<div className="flex -space-x-1">
+														<div
+															className="h-6 w-6 rounded-full border-2 border-background"
+															style={{ backgroundColor: preset.preview.primaryColor }}
+														/>
+														<div
+															className="h-6 w-6 rounded-full border-2 border-background"
+															style={{ backgroundColor: preset.preview.secondaryColor }}
+														/>
+														<div
+															className="h-6 w-6 rounded-full border-2 border-background"
+															style={{ backgroundColor: preset.preview.accentColor }}
+														/>
+													</div>
+													<h4 className="font-medium">{preset.name}</h4>
+												</div>
+												<p className="text-sm text-muted-foreground">
+													{preset.description}
+												</p>
+											</button>
+										))}
+									</div>
+								</CardContent>
+							</Card>
+
+							<Card>
+								<CardHeader>
+									<CardTitle className="flex items-center gap-2">
+										<Download className="h-5 w-5" />
+										Import / Export
+									</CardTitle>
+								</CardHeader>
+								<CardContent className="space-y-4">
+									<p className="text-sm text-muted-foreground">
+										Export your current theme to share or backup, or import a previously saved theme.
+									</p>
+									<div className="flex flex-wrap gap-3">
+										<Button variant="outline" onClick={handleExportTheme}>
+											<Download className="mr-2 h-4 w-4" />
+											Export Theme
+										</Button>
+										<div>
+											<input
+												type="file"
+												accept=".json"
+												onChange={handleImportTheme}
+												className="hidden"
+												id="theme-import"
+											/>
+											<Button
+												variant="outline"
+												onClick={() => document.getElementById("theme-import")?.click()}
+											>
+												<Upload className="mr-2 h-4 w-4" />
+												Import Theme
+											</Button>
+										</div>
+									</div>
+								</CardContent>
+							</Card>
+						</TabsContent>
 
 						{/* Colors Tab */}
 						<TabsContent value="colors" className="space-y-4">
@@ -389,6 +537,55 @@ export default function ThemeSettingsPage() {
 									</div>
 								</CardContent>
 							</Card>
+
+							<Card>
+								<CardHeader>
+									<CardTitle>Text Size Scale</CardTitle>
+								</CardHeader>
+								<CardContent className="space-y-4">
+									<p className="text-sm text-muted-foreground">
+										Adjust the overall text size throughout your store
+									</p>
+									<div className="grid grid-cols-4 gap-3">
+										{(
+											["compact", "default", "comfortable", "large"] as const
+										).map((scale) => (
+											<button
+												type="button"
+												key={scale}
+												onClick={() => updateConfig("fontSizeScale", scale)}
+												className={`p-4 border rounded-lg text-center transition-all ${
+													config.fontSizeScale === scale
+														? "border-primary bg-primary/5 ring-2 ring-primary"
+														: "hover:border-muted-foreground"
+												}`}
+											>
+												<div
+													className="mb-2 font-medium"
+													style={{
+														fontSize:
+															scale === "compact"
+																? "0.875rem"
+																: scale === "default"
+																	? "1rem"
+																	: scale === "comfortable"
+																		? "1.0625rem"
+																		: "1.125rem",
+													}}
+												>
+													Aa
+												</div>
+												<span className="text-xs font-medium capitalize">
+													{scale === "default" ? "Default" : scale}
+												</span>
+												{config.fontSizeScale === scale && (
+													<Check className="h-4 w-4 mx-auto mt-1 text-primary" />
+												)}
+											</button>
+										))}
+									</div>
+								</CardContent>
+							</Card>
 						</TabsContent>
 
 						{/* Layout Tab */}
@@ -550,6 +747,143 @@ export default function ThemeSettingsPage() {
 												</button>
 											),
 										)}
+									</div>
+								</CardContent>
+							</Card>
+
+							<Card>
+								<CardHeader>
+									<CardTitle>Border Radius</CardTitle>
+								</CardHeader>
+								<CardContent className="space-y-4">
+									<div className="grid grid-cols-5 gap-3">
+										{(["none", "small", "medium", "large", "full"] as const).map(
+											(style) => (
+												<button
+													type="button"
+													key={style}
+													onClick={() => updateConfig("borderRadius", style)}
+													className={`p-3 border rounded-lg text-center transition-all ${
+														config.borderRadius === style
+															? "border-primary bg-primary/5 ring-2 ring-primary"
+															: "hover:border-muted-foreground"
+													}`}
+												>
+													<div
+														className="h-8 w-full bg-muted mb-2"
+														style={{
+															borderRadius:
+																style === "none"
+																	? "0"
+																	: style === "small"
+																		? "0.25rem"
+																		: style === "medium"
+																			? "0.5rem"
+																			: style === "large"
+																				? "0.75rem"
+																				: "9999px",
+														}}
+													/>
+													<span className="text-xs font-medium capitalize">
+														{style}
+													</span>
+												</button>
+											),
+										)}
+									</div>
+								</CardContent>
+							</Card>
+
+							<Card>
+								<CardHeader>
+									<CardTitle>Shadow Style</CardTitle>
+								</CardHeader>
+								<CardContent className="space-y-4">
+									<div className="grid grid-cols-4 gap-3">
+										{(["none", "subtle", "medium", "dramatic"] as const).map(
+											(style) => (
+												<button
+													type="button"
+													key={style}
+													onClick={() => updateConfig("shadowStyle", style)}
+													className={`p-3 border rounded-lg text-center transition-all ${
+														config.shadowStyle === style
+															? "border-primary bg-primary/5 ring-2 ring-primary"
+															: "hover:border-muted-foreground"
+													}`}
+												>
+													<div
+														className="h-10 w-full bg-background border rounded mb-2"
+														style={{
+															boxShadow:
+																style === "none"
+																	? "none"
+																	: style === "subtle"
+																		? "0 1px 2px 0 rgb(0 0 0 / 0.05)"
+																		: style === "medium"
+																			? "0 4px 6px -1px rgb(0 0 0 / 0.1)"
+																			: "0 10px 15px -3px rgb(0 0 0 / 0.1)",
+														}}
+													/>
+													<span className="text-xs font-medium capitalize">
+														{style}
+													</span>
+												</button>
+											),
+										)}
+									</div>
+								</CardContent>
+							</Card>
+
+							<Card>
+								<CardHeader>
+									<CardTitle>Spacing Scale</CardTitle>
+								</CardHeader>
+								<CardContent className="space-y-4">
+									<p className="text-sm text-muted-foreground">
+										Control the overall spacing and padding throughout your store
+									</p>
+									<div className="grid grid-cols-4 gap-3">
+										{(
+											["compact", "default", "comfortable", "spacious"] as const
+										).map((scale) => (
+											<button
+												type="button"
+												key={scale}
+												onClick={() => updateConfig("spacingScale", scale)}
+												className={`p-3 border rounded-lg text-center transition-all ${
+													config.spacingScale === scale
+														? "border-primary bg-primary/5 ring-2 ring-primary"
+														: "hover:border-muted-foreground"
+												}`}
+											>
+												<div className="flex justify-center items-center h-12 mb-2">
+													<div
+														className="flex gap-1"
+														style={{
+															gap:
+																scale === "compact"
+																	? "0.125rem"
+																	: scale === "default"
+																		? "0.25rem"
+																		: scale === "comfortable"
+																			? "0.375rem"
+																			: "0.5rem",
+														}}
+													>
+														<div className="w-3 h-6 bg-muted rounded-sm" />
+														<div className="w-3 h-6 bg-muted rounded-sm" />
+														<div className="w-3 h-6 bg-muted rounded-sm" />
+													</div>
+												</div>
+												<span className="text-xs font-medium capitalize">
+													{scale === "default" ? "Default" : scale}
+												</span>
+												{config.spacingScale === scale && (
+													<Check className="h-4 w-4 mx-auto mt-1 text-primary" />
+												)}
+											</button>
+										))}
 									</div>
 								</CardContent>
 							</Card>

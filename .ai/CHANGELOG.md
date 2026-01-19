@@ -4,6 +4,126 @@
 
 ---
 
+## January 20, 2026
+
+### Phase 6 Complete: Theme Engine Bug Fixes ✅
+
+Fixed critical bugs preventing themes from displaying on the storefront.
+
+**Issues Identified & Fixed:**
+
+| Issue | Root Cause | Fix |
+|-------|------------|-----|
+| CSS variables not reaching Tailwind | Variables set on `<div>` but `:root` had precedence | Apply variables to `document.documentElement` via useEffect |
+| HSL format incompatible with Tailwind v4 | Was returning bare HSL numbers | Changed `hexToHsl` to return `hsl(H S% L%)` format |
+| No tenant on localhost:3001 | Regex only matched `{slug}.localhost:3001` | Added development fallback using first active tenant |
+| Corrupted themeConfig in DB | JSON spread of stringified object created numeric keys | Database cleanup script to remove invalid keys |
+| Wrong ThemeProvider in root layout | Was using next-themes only | Now uses CustomThemeProvider + NextThemesProvider |
+
+**Files Modified:**
+
+| File | Change |
+|------|--------|
+| `apps/storefront/src/providers/theme-provider.tsx` | useEffect applies CSS vars to :root; hexToHsl returns hsl() format |
+| `apps/storefront/src/app/layout.tsx` | Import both CustomThemeProvider and NextThemesProvider |
+| `apps/storefront/src/server/tenant.ts` | Development fallback for localhost access |
+
+**Result:**
+- ✅ Theme saves in admin panel
+- ✅ Theme reflects on storefront immediately
+- ✅ CSS variables properly applied to `:root`
+- ✅ Colors work with Tailwind v4's `hsl()` requirement
+- ✅ Development workflow works on localhost:3001
+
+**Phase 6 Status: COMPLETE** 🎉
+
+---
+
+## January 19, 2026
+
+### Phase 6 Progress: Typography & Spacing Scales 📐
+
+Added typography scale and spacing scale controls to the Theme Engine.
+
+**New Controls:**
+
+| Control | Options | Purpose |
+|---------|---------|---------|
+| Font Size Scale | compact / default / comfortable / large | Adjust overall text size |
+| Spacing Scale | compact / default / comfortable / spacious | Control padding & gaps |
+
+**CSS Variables Added:**
+- `--font-size-base` - Base font size (0.875rem to 1.125rem)
+- `--font-size-multiplier` - Scale multiplier for font calculations
+- `--spacing-multiplier` - Multiplier for spacing/gap calculations
+- `--container-padding` - Container edge padding
+
+**Files Modified:**
+
+| File | Change |
+|------|--------|
+| `apps/platform/src/lib/theme-presets.ts` | Added fontSizeScale, spacingScale to interface & presets |
+| `apps/platform/src/app/(internal)/admin/settings/theme/page.tsx` | Added Text Size Scale card (typography tab), Spacing Scale card (layout tab) |
+| `apps/storefront/src/providers/theme-provider.tsx` | Added fontSizeScale, spacingScale CSS variable mappings |
+| `apps/storefront/src/server/tenant.ts` | Added fontSizeScale, spacingScale to ThemeConfig interface |
+
+**Theme Presets Updated:**
+- Sofia: default / default
+- Minimal: default / comfortable
+- Bold: large / spacious
+- Warm: comfortable / comfortable
+- Dark: compact / compact
+
+---
+
+## January 9, 2026
+
+### Phase 6 Progress: Theme Presets & Enhanced Controls 🎨
+
+Extended the Theme Engine with presets, import/export, and new styling controls.
+
+**New: Theme Presets System**
+
+Created 5 ready-to-use theme presets:
+
+| Preset | Description |
+|--------|-------------|
+| Sofia | Elegant purple tones with Playfair Display headings |
+| Minimal | Clean black & white with subtle grays |
+| Bold | Vibrant orange/coral with dark backgrounds |
+| Warm | Earthy amber tones with cream backgrounds |
+| Dark | Full dark mode with blue accents |
+
+**New Features:**
+
+| Feature | Description |
+|---------|-------------|
+| Presets Tab | Grid selector with color preview dots |
+| Export Theme | Download current theme as JSON file |
+| Import Theme | Upload and apply JSON theme files |
+| Border Radius | 5 options: none/small/medium/large/full |
+| Shadow Style | 4 options: none/subtle/medium/dramatic |
+
+**Enhanced ThemeProvider:**
+
+Updated storefront ThemeProvider with expanded CSS variable support:
+- `--radius` - Global border radius
+- `--shadow` - Global shadow style
+- `--primary-foreground`, `--secondary-foreground`, `--accent-foreground`
+- `--card`, `--card-foreground`, `--popover`, `--popover-foreground`
+- `--ring`, `--input`, `--muted-foreground`
+
+**Files Created/Modified:**
+
+| File | Change |
+|------|--------|
+| `apps/platform/src/lib/theme-presets.ts` | NEW: Theme presets & import/export functions |
+| `apps/platform/src/app/(internal)/admin/settings/theme/page.tsx` | Added presets tab, border radius, shadow controls |
+| `apps/storefront/src/providers/theme-provider.tsx` | Enhanced CSS variable mappings |
+| `apps/storefront/src/server/tenant.ts` | Added borderRadius & shadowStyle to ThemeConfig |
+
+---
+
 ## January 8, 2026
 
 ### Phase 6 Started: Theme Engine 🎨

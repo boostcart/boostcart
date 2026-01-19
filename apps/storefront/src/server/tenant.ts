@@ -16,10 +16,14 @@ export interface ThemeConfig {
 	// Typography
 	fontFamily?: string;
 	headingFontFamily?: string;
+	fontSizeScale?: "compact" | "default" | "comfortable" | "large";
 	// Layout
 	headerStyle?: "default" | "centered" | "minimal";
 	footerStyle?: "default" | "simple" | "expanded";
 	productCardStyle?: "default" | "minimal" | "detailed";
+	spacingScale?: "compact" | "default" | "comfortable" | "spacious";
+	borderRadius?: "none" | "small" | "medium" | "large" | "full";
+	shadowStyle?: "none" | "subtle" | "medium" | "dramatic";
 	// Features
 	showBanner?: boolean;
 	bannerText?: string;
@@ -156,6 +160,43 @@ export const getCurrentTenant = cache(
 							themeConfig: (dbTenant.themeConfig as ThemeConfig) || {},
 						}
 					: null;
+			}
+		}
+
+		// Development fallback: if no tenant found and accessing localhost directly,
+		// use the first active tenant for testing
+		if (!tenant && process.env.NODE_ENV === "development" && host.startsWith("localhost")) {
+			const fallbackTenant = await db.tenant.findFirst({
+				where: {
+					isActive: true,
+					deletedAt: null,
+				},
+				orderBy: { createdAt: "asc" },
+				select: {
+					id: true,
+					name: true,
+					slug: true,
+					description: true,
+					email: true,
+					logoUrl: true,
+					faviconUrl: true,
+					currency: true,
+					locale: true,
+					timezone: true,
+					isActive: true,
+					themeConfig: true,
+				},
+			});
+
+			if (fallbackTenant) {
+				console.log(`[Dev] Using fallback tenant: ${fallbackTenant.name} (${fallbackTenant.slug})`);
+				tenant = {
+					...fallbackTenant,
+					subdomain: fallbackTenant.slug,
+					logo: fallbackTenant.logoUrl,
+					contactEmail: fallbackTenant.email,
+					themeConfig: (fallbackTenant.themeConfig as ThemeConfig) || {},
+				};
 			}
 		}
 

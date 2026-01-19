@@ -216,6 +216,72 @@ Each section receives `form` prop and handles its own fields.
 
 ---
 
+## Tailwind v4 CSS Variables
+
+### CSS Variables Must Be Complete Color Values
+
+**Problem**: Theme CSS variables not applying when using Tailwind v4. Colors appear as defaults.
+
+**Cause**: Tailwind v4 expects complete color values, not just HSL components like Tailwind v3.
+
+**Solution**: Return `hsl()` function syntax:
+
+```typescript
+// ❌ BAD - Tailwind v3 style (broken in v4)
+function hexToHsl(hex: string): string {
+  // ... calculations ...
+  return `${h} ${s}% ${l}%`;  // "250 50% 50%"
+}
+
+// ✅ GOOD - Tailwind v4 compatible
+function hexToHsl(hex: string): string {
+  // ... calculations ...
+  return `hsl(${h} ${s}% ${l}%)`;  // "hsl(250 50% 50%)"
+}
+```
+
+---
+
+### CSS Variables Must Be On :root
+
+**Problem**: CSS variables set on wrapper div don't override Tailwind's `:root` definitions.
+
+**Solution**: Apply variables directly to `document.documentElement`:
+
+```tsx
+// ❌ BAD - variables on div don't have specificity
+function ThemeProvider({ children, theme }) {
+  return (
+    <div style={{ "--primary": "..." }}>
+      {children}
+    </div>
+  );
+}
+
+// ✅ GOOD - apply to :root via useEffect
+function ThemeProvider({ children, theme }) {
+  const cssVariables = useMemo(() => {
+    // Build variables object
+  }, [theme]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    for (const [key, value] of Object.entries(cssVariables)) {
+      root.style.setProperty(key, value);
+    }
+    return () => {
+      for (const key of Object.keys(cssVariables)) {
+        root.style.removeProperty(key);
+      }
+    };
+  }, [cssVariables]);
+
+  return children;
+}
+```
+
+---
+
 ## Adding New Entries
 
 When solving a new problem, add it here with:

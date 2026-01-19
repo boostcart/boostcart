@@ -121,7 +121,7 @@
 
 ---
 
-## 📋 Phase 6 Tasks (Theme Engine - IN PROGRESS)
+## 📋 Phase 6 Tasks (Theme Engine - NEARLY COMPLETE)
 
 ### Theme Customizer UI
 1. [x] Admin theme settings page
@@ -134,18 +134,32 @@
 8. [x] Banner configuration
 9. [x] Real-time preview panel
 
-### Theme Variations (TODO)
-10. [ ] Default theme ("Sofia")
-11. [ ] Minimal theme
-12. [ ] Bold theme
-13. [ ] Theme export/import (JSON)
+### Theme Presets (DONE)
+10. [x] Default theme ("Sofia")
+11. [x] Minimal theme
+12. [x] Bold theme
+13. [x] Warm theme
+14. [x] Dark theme
+15. [x] Theme export/import (JSON)
 
-### CSS Variable System
-14. [ ] Enhance ThemeProvider with full color palette
-15. [ ] Typography scale
-16. [ ] Spacing scale
-17. [ ] Border radius controls
-18. [ ] Shadow controls
+### CSS Variable System (DONE)
+16. [x] Enhance ThemeProvider with full color palette
+17. [x] Border radius controls (none/small/medium/large/full)
+18. [x] Shadow controls (none/subtle/medium/dramatic)
+19. [x] Card, popover, ring colors (derived)
+20. [x] Primary/secondary/accent foreground colors
+21. [x] Typography scale controls (compact/default/comfortable/large)
+22. [x] Spacing scale controls (compact/default/comfortable/spacious)
+
+### Remaining Tasks
+23. [x] Test full theme flow (admin → storefront) ✅ VERIFIED WORKING
+
+### Bug Fixes Applied (January 9, 2026)
+- Fixed ThemeProvider to apply CSS variables to `:root` (document.documentElement) instead of a div
+- Fixed `hexToHsl` function to return complete `hsl()` format for Tailwind v4 compatibility
+- Added development fallback in tenant resolution for localhost:3001 access
+- Fixed corrupted themeConfig JSON in database (numeric string keys from incorrect spread)
+- Root layout now uses both CustomThemeProvider (CSS vars) + NextThemesProvider (dark/light mode)
 
 ---
 

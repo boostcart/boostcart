@@ -1,4 +1,3 @@
-import { ThemeProvider } from "@/providers/theme-provider";
 import { getCurrentCustomer } from "@/server/auth/customer-auth";
 import { getCurrentTenant } from "@/server/tenant";
 import { StoreBanner } from "./_components/store-banner";
@@ -20,30 +19,28 @@ export default async function StoreLayout({
 	const { themeConfig } = tenant;
 
 	return (
-		<ThemeProvider themeConfig={themeConfig}>
-			<div className="flex min-h-screen flex-col">
-				{themeConfig.showBanner && themeConfig.bannerText && (
-					<StoreBanner
-						text={themeConfig.bannerText}
-						backgroundColor={themeConfig.bannerBackgroundColor}
-						textColor={themeConfig.bannerTextColor}
-					/>
-				)}
-				<StoreHeader
-					tenant={tenant}
-					customer={
-						customer
-							? {
-									firstName: customer.firstName,
-									lastName: customer.lastName,
-									email: customer.email,
-								}
-							: null
-					}
+		<div className="flex min-h-screen flex-col">
+			{themeConfig.showBanner && themeConfig.bannerText && (
+				<StoreBanner
+					text={themeConfig.bannerText}
+					backgroundColor={themeConfig.bannerBackgroundColor}
+					textColor={themeConfig.bannerTextColor}
 				/>
-				<main className="flex-1">{children}</main>
-				<StoreFooter tenant={tenant} />
-			</div>
-		</ThemeProvider>
+			)}
+			<StoreHeader
+				tenant={tenant}
+				customer={
+					customer
+						? {
+								firstName: customer.firstName,
+								lastName: customer.lastName,
+								email: customer.email,
+							}
+						: null
+				}
+			/>
+			<main className="flex-1">{children}</main>
+			<StoreFooter tenant={tenant} />
+		</div>
 	);
 }

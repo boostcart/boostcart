@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useContext, useEffect, useMemo } from "react";
 import type { ThemeConfig } from "@/server/tenant";
 
 interface ThemeContextValue {
@@ -55,9 +55,46 @@ function hexToHsl(hex: string): string {
 		}
 	}
 
-	// Return HSL values without the 'hsl()' wrapper for CSS variables
-	return `${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`;
+	// Return complete hsl() color value for Tailwind v4
+	return `hsl(${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%)`;
 }
+
+// Border radius mapping
+const borderRadiusMap: Record<string, string> = {
+	none: "0px",
+	small: "0.25rem",
+	medium: "0.5rem",
+	large: "0.75rem",
+	full: "9999px",
+};
+
+// Shadow style mapping
+const shadowStyleMap: Record<string, string> = {
+	none: "none",
+	subtle: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+	medium: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+	dramatic:
+		"0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+};
+
+// Font size scale mapping
+const fontSizeScaleMap: Record<string, { base: string; multiplier: number }> = {
+	compact: { base: "0.875rem", multiplier: 0.9 },
+	default: { base: "1rem", multiplier: 1 },
+	comfortable: { base: "1.0625rem", multiplier: 1.05 },
+	large: { base: "1.125rem", multiplier: 1.1 },
+};
+
+// Spacing scale mapping
+const spacingScaleMap: Record<
+	string,
+	{ multiplier: number; containerPadding: string }
+> = {
+	compact: { multiplier: 0.8, containerPadding: "1rem" },
+	default: { multiplier: 1, containerPadding: "1.5rem" },
+	comfortable: { multiplier: 1.2, containerPadding: "2rem" },
+	spacious: { multiplier: 1.5, containerPadding: "2.5rem" },
+};
 
 export function ThemeProvider({ children, themeConfig }: ThemeProviderProps) {
 	// Generate CSS custom properties from theme config
@@ -67,12 +104,17 @@ export function ThemeProvider({ children, themeConfig }: ThemeProviderProps) {
 		// Colors
 		if (themeConfig.primaryColor) {
 			vars["--primary"] = hexToHsl(themeConfig.primaryColor);
+			vars["--primary-foreground"] = hexToHsl("#ffffff"); // Auto-contrast
 		}
 		if (themeConfig.secondaryColor) {
 			vars["--secondary"] = hexToHsl(themeConfig.secondaryColor);
+			vars["--secondary-foreground"] = hexToHsl(
+				themeConfig.foregroundColor || "#09090b",
+			);
 		}
 		if (themeConfig.accentColor) {
 			vars["--accent"] = hexToHsl(themeConfig.accentColor);
+			vars["--accent-foreground"] = hexToHsl("#ffffff");
 		}
 		if (themeConfig.backgroundColor) {
 			vars["--background"] = hexToHsl(themeConfig.backgroundColor);
@@ -82,9 +124,30 @@ export function ThemeProvider({ children, themeConfig }: ThemeProviderProps) {
 		}
 		if (themeConfig.mutedColor) {
 			vars["--muted"] = hexToHsl(themeConfig.mutedColor);
+			vars["--muted-foreground"] = hexToHsl(
+				themeConfig.foregroundColor || "#09090b",
+			);
 		}
 		if (themeConfig.borderColor) {
 			vars["--border"] = hexToHsl(themeConfig.borderColor);
+			vars["--input"] = hexToHsl(themeConfig.borderColor);
+		}
+
+		// Card colors (derived from background)
+		if (themeConfig.backgroundColor) {
+			vars["--card"] = hexToHsl(themeConfig.backgroundColor);
+			vars["--card-foreground"] = hexToHsl(
+				themeConfig.foregroundColor || "#09090b",
+			);
+			vars["--popover"] = hexToHsl(themeConfig.backgroundColor);
+			vars["--popover-foreground"] = hexToHsl(
+				themeConfig.foregroundColor || "#09090b",
+			);
+		}
+
+		// Ring color (use primary)
+		if (themeConfig.primaryColor) {
+			vars["--ring"] = hexToHsl(themeConfig.primaryColor);
 		}
 
 		// Typography
@@ -95,21 +158,54 @@ export function ThemeProvider({ children, themeConfig }: ThemeProviderProps) {
 			vars["--font-heading"] = themeConfig.headingFontFamily;
 		}
 
+		// Border radius
+		if (themeConfig.borderRadius) {
+			const radius = borderRadiusMap[themeConfig.borderRadius] || "0.5rem";
+			vars["--radius"] = radius;
+		}
+
+		// Shadows
+		if (themeConfig.shadowStyle) {
+			vars["--shadow"] = shadowStyleMap[themeConfig.shadowStyle] || "none";
+		}
+
+		// Font size scale
+		if (themeConfig.fontSizeScale) {
+			const scale = fontSizeScaleMap[themeConfig.fontSizeScale] || fontSizeScaleMap.default;
+			vars["--font-size-base"] = scale.base;
+			vars["--font-size-multiplier"] = String(scale.multiplier);
+		}
+
+		// Spacing scale
+		if (themeConfig.spacingScale) {
+			const scale = spacingScaleMap[themeConfig.spacingScale] || spacingScaleMap.default;
+			vars["--spacing-multiplier"] = String(scale.multiplier);
+			vars["--container-padding"] = scale.containerPadding;
+		}
+
 		return vars;
 	}, [themeConfig]);
 
-	const style = useMemo(() => {
-		if (Object.keys(cssVariables).length === 0) {
-			return undefined;
+	// Apply CSS variables to :root (document.documentElement)
+	useEffect(() => {
+		const root = document.documentElement;
+		
+		// Apply all CSS variables
+		for (const [key, value] of Object.entries(cssVariables)) {
+			root.style.setProperty(key, value);
 		}
-		return cssVariables as React.CSSProperties;
+
+		// Cleanup - remove variables when component unmounts or theme changes
+		return () => {
+			for (const key of Object.keys(cssVariables)) {
+				root.style.removeProperty(key);
+			}
+		};
 	}, [cssVariables]);
 
 	return (
 		<ThemeContext.Provider value={{ theme: themeConfig }}>
-			<div style={style} className="contents">
-				{children}
-			</div>
+			{children}
 		</ThemeContext.Provider>
 	);
 }

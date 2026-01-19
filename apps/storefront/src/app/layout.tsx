@@ -1,7 +1,8 @@
 import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider as NextThemesProvider } from "@/components/theme-provider";
+import { ThemeProvider as CustomThemeProvider } from "@/providers/theme-provider";
 import { getCurrentTenant } from "@/server/tenant";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -46,15 +47,17 @@ export default async function RootLayout({
 	return (
 		<html lang={tenant.locale} suppressHydrationWarning>
 			<body className="min-h-screen bg-background font-sans antialiased">
-				<ThemeProvider
-					attribute="class"
-					defaultTheme="light"
-					enableSystem
-					disableTransitionOnChange
-				>
-					{children}
-					<Toaster position="top-center" richColors />
-				</ThemeProvider>
+				<CustomThemeProvider themeConfig={tenant.themeConfig}>
+					<NextThemesProvider
+						attribute="class"
+						defaultTheme="light"
+						enableSystem
+						disableTransitionOnChange
+					>
+						{children}
+						<Toaster position="top-center" richColors />
+					</NextThemesProvider>
+				</CustomThemeProvider>
 			</body>
 		</html>
 	);
