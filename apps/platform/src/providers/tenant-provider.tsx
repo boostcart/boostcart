@@ -3,6 +3,7 @@
 import {
 	createContext,
 	type ReactNode,
+	useCallback,
 	useContext,
 	useEffect,
 	useState,
@@ -49,7 +50,7 @@ export function TenantProvider({ children }: { children: ReactNode }) {
 	});
 	const [isLoading, setIsLoading] = useState(true);
 
-	const fetchTenant = async () => {
+	const fetchTenant = useCallback(async () => {
 		try {
 			setIsLoading(true);
 			const result = await getCurrentTenant();
@@ -61,11 +62,11 @@ export function TenantProvider({ children }: { children: ReactNode }) {
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	}, []);
 
 	useEffect(() => {
 		fetchTenant();
-	}, []);
+	}, [fetchTenant]);
 
 	return (
 		<TenantContext.Provider

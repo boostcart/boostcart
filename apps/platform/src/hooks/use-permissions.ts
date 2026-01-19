@@ -1,6 +1,6 @@
 "use client";
 
-import { useTenant } from "@/providers/tenant-provider";
+import type { StaffRole } from "@boostcart/database";
 import {
 	canDelete,
 	canManage,
@@ -14,7 +14,7 @@ import {
 	hasPermission,
 	type Permission,
 } from "@/lib/rbac";
-import type { StaffRole } from "@boostcart/database";
+import { useTenant } from "@/providers/tenant-provider";
 
 /**
  * Hook to access RBAC permissions for the current user
@@ -58,7 +58,7 @@ export function usePermissions() {
 				| "payments"
 				| "shipping"
 				| "staff"
-				| "billing"
+				| "billing",
 		) => canView(role, resource),
 		canManage: (
 			resource:
@@ -79,10 +79,10 @@ export function usePermissions() {
 				| "payments"
 				| "shipping"
 				| "staff"
-				| "billing"
+				| "billing",
 		) => canManage(role, resource),
 		canDelete: (
-			resource: "orders" | "products" | "customers" | "staff" | "store"
+			resource: "orders" | "products" | "customers" | "staff" | "store",
 		) => canDelete(role, resource),
 
 		// Role comparison

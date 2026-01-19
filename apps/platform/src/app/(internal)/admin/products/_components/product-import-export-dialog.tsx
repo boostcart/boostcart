@@ -10,8 +10,8 @@ import {
 } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 import { toast } from "sonner";
-import { Loader } from "@/components/loader";
 import { PolarisButton } from "@/components/admin/polaris-button";
+import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -37,7 +37,13 @@ interface ImportExportDialogProps {
 	onImportComplete?: () => void;
 }
 
-type Step = "choose" | "import" | "validate" | "importing" | "result" | "export";
+type Step =
+	| "choose"
+	| "import"
+	| "validate"
+	| "importing"
+	| "result"
+	| "export";
 
 interface ImportResult {
 	success: boolean;
@@ -71,7 +77,8 @@ export function ProductImportExportDialog({
 	const [validating, setValidating] = useState(false);
 	const [_importing, setImporting] = useState(false);
 	const [exporting, setExporting] = useState(false);
-	const [validationResult, setValidationResult] = useState<ValidationResult | null>(null);
+	const [validationResult, setValidationResult] =
+		useState<ValidationResult | null>(null);
 	const [importResult, setImportResult] = useState<ImportResult | null>(null);
 	const [exportFormat, setExportFormat] = useState<"csv" | "json">("csv");
 	const [includeDrafts, setIncludeDrafts] = useState(false);
@@ -115,7 +122,7 @@ export function ProductImportExportDialog({
 			// Reset input so same file can be selected again
 			event.target.value = "";
 		},
-		[]
+		[],
 	);
 
 	const handleValidate = useCallback(async () => {
@@ -139,7 +146,9 @@ export function ProductImportExportDialog({
 		setImporting(true);
 		setStep("importing");
 		try {
-			const result = await importProductsFromCSV(csvContent, { updateExisting });
+			const result = await importProductsFromCSV(csvContent, {
+				updateExisting,
+			});
 			setImportResult(result);
 			setStep("result");
 			if (result.success) {
@@ -292,7 +301,9 @@ export function ProductImportExportDialog({
 
 							<div className="flex items-center justify-between">
 								<div>
-									<Label htmlFor="update-existing">Update existing products</Label>
+									<Label htmlFor="update-existing">
+										Update existing products
+									</Label>
 									<p className="text-sm text-muted-foreground">
 										Products with matching SKU will be updated
 									</p>
@@ -329,7 +340,9 @@ export function ProductImportExportDialog({
 						<div className="space-y-4 py-4">
 							<div className="grid grid-cols-2 gap-4">
 								<Card className="p-4 text-center">
-									<p className="text-2xl font-bold">{validationResult.totalRows}</p>
+									<p className="text-2xl font-bold">
+										{validationResult.totalRows}
+									</p>
 									<p className="text-sm text-muted-foreground">Total Rows</p>
 								</Card>
 								<Card className="p-4 text-center">
@@ -401,7 +414,9 @@ export function ProductImportExportDialog({
 					<>
 						<DialogHeader>
 							<DialogTitle>
-								{importResult.success ? "Import Complete" : "Import Complete with Errors"}
+								{importResult.success
+									? "Import Complete"
+									: "Import Complete with Errors"}
 							</DialogTitle>
 							<DialogDescription>
 								{importResult.success

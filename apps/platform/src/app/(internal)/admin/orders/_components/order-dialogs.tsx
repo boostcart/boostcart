@@ -45,27 +45,76 @@ import { Textarea } from "@/components/ui/textarea";
 interface OrderItem {
 	id: string;
 	productName: string;
-	sku: string;
+	productSku?: string | null;
+	sku?: string;
 	quantity: number;
 	price: number;
+	selectedVariantName?: string | null;
 }
 
-interface Order {
+interface OrderCustomer {
 	id: string;
-	customer: string;
+	firstName?: string | null;
+	lastName?: string | null;
 	email: string;
+	phone?: string | null;
+}
+
+interface ShippingMethod {
+	id: string;
+	name: string;
+	type: string;
+	estimatedDays?: number | null;
+}
+
+interface PaymentMethod {
+	id: string;
+	name: string;
+	type: string;
+}
+
+interface OrderHistory {
+	id: string;
+	status: string;
+	notes?: string | null;
+	createdAt: Date | string;
+}
+
+interface FullOrder {
+	id: string;
+	orderNumber: string;
+	customer?: OrderCustomer | null;
+	guestEmail?: string | null;
+	guestPhone?: string | null;
 	status: string;
 	paymentStatus: string;
-	total: string;
-	items: number;
-	date: string;
-	time: string;
+	totalAmount: number;
+	shippingCost: number;
+	discountAmount: number;
+	items: OrderItem[];
+	shippingMethod: ShippingMethod;
+	paymentMethod: PaymentMethod;
+	shippingFirstName: string;
+	shippingLastName: string;
+	shippingPhone: string;
+	shippingEmail: string;
+	shippingCompany?: string | null;
+	shippingCountry: string;
+	shippingCity: string;
+	shippingPostcode: string;
+	shippingAddressLine1: string;
+	shippingAddressLine2?: string | null;
+	shippingNotes?: string | null;
+	deliveryBoxName?: string | null;
+	deliveryOfficeName?: string | null;
+	history?: OrderHistory[];
+	createdAt: Date | string;
 }
 
 interface ViewOrderDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	order: Order | null;
+	order: FullOrder | null;
 }
 
 export function ViewOrderDialog({
@@ -75,22 +124,28 @@ export function ViewOrderDialog({
 }: ViewOrderDialogProps) {
 	if (!order) return null;
 
-	const orderItems: OrderItem[] = [
-		{
-			id: `1`,
-			productName: `Wireless Headphones`,
-			sku: `WH-001`,
-			quantity: 2,
-			price: 89.99,
-		},
-		{
-			id: `2`,
-			productName: `USB-C Cable`,
-			sku: `CB-002`,
-			quantity: 3,
-			price: 12.99,
-		},
-	];
+	const customerName = order.customer
+		? `${order.customer.firstName || ""} ${order.customer.lastName || ""}`.trim() ||
+			"Guest"
+		: "Guest";
+	const customerEmail = order.customer?.email || order.guestEmail || "N/A";
+	const customerPhone = order.customer?.phone || order.guestPhone || "N/A";
+
+	const orderDate = new Date(order.createdAt).toLocaleDateString("en-US", {
+		month: "short",
+		day: "numeric",
+		year: "numeric",
+	});
+	const orderTime = new Date(order.createdAt).toLocaleTimeString("en-US", {
+		hour: "numeric",
+		minute: "2-digit",
+		hour12: true,
+	});
+
+	const subtotal = order.items.reduce(
+		(sum, item) => sum + item.price * item.quantity,
+		0,
+	);
 
 	const getStatusBadge = (status: string) => {
 		const variants: Record<
@@ -114,11 +169,11 @@ export function ViewOrderDialog({
 			<DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
 				<DialogHeader>
 					<DialogTitle className="flex items-center justify-between">
-						<span>Order Details - {order.id}</span>
+						<span>Order #{order.orderNumber}</span>
 						{getStatusBadge(order.status)}
 					</DialogTitle>
 					<DialogDescription>
-						Order placed on {order.date} at {order.time}
+						Order placed on {orderDate} at {orderTime}
 					</DialogDescription>
 				</DialogHeader>
 
@@ -137,11 +192,9 @@ export function ViewOrderDialog({
 									Customer Information
 								</div>
 								<div className="text-sm text-muted-foreground">
-									<p className="font-medium text-foreground">
-										{order.customer}
-									</p>
-									<p>{order.email}</p>
-									<p>+1 (555) 123-4567</p>
+									<p className="font-medium text-foreground">{customerName}</p>
+									<p>{customerEmail}</p>
+									{customerPhone !== "N/A" && <p>{customerPhone}</p>}
 								</div>
 							</div>
 
@@ -151,9 +204,14 @@ export function ViewOrderDialog({
 									Payment Information
 								</div>
 								<div className="text-sm text-muted-foreground">
-									<p>Status: {getStatusBadge(order.paymentStatus)}</p>
-									<p>Method: Credit Card</p>
-									<p>**** **** **** 4242</p>
+									<div className="flex items-center gap-2">
+										<span>Status:</span>
+										{getStatusBadge(order.paymentStatus)}
+									</div>
+									<p>Method: {order.paymentMethod.name}</p>
+									<p className="text-xs text-muted-foreground/70">
+										Type: {order.paymentMethod.type}
+									</p>
 								</div>
 							</div>
 						</div>
@@ -167,10 +225,20 @@ export function ViewOrderDialog({
 									Shipping Address
 								</div>
 								<div className="text-sm text-muted-foreground">
-									<p>123 Main Street</p>
-									<p>Apt 4B</p>
-									<p>New York, NY 10001</p>
-									<p>United States</p>
+									<p className="font-medium text-foreground">
+										{order.shippingFirstName} {order.shippingLastName}
+									</p>
+									<p>{order.shippingAddressLine1}</p>
+									{order.shippingAddressLine2 && (
+										<p>{order.shippingAddressLine2}</p>
+									)}
+									<p>
+										{order.shippingCity}, {order.shippingPostcode}
+									</p>
+									<p>{order.shippingCountry}</p>
+									{order.shippingCompany && (
+										<p className="text-xs">Company: {order.shippingCompany}</p>
+									)}
 								</div>
 							</div>
 
@@ -180,21 +248,33 @@ export function ViewOrderDialog({
 									Shipping Information
 								</div>
 								<div className="text-sm text-muted-foreground">
-									<p>Method: Express Delivery</p>
-									<p>Tracking: 1Z999AA10123456784</p>
-									<p>Est. Delivery: Nov 12, 2025</p>
+									<p>Method: {order.shippingMethod.name}</p>
+									<p className="text-xs text-muted-foreground/70">
+										Type: {order.shippingMethod.type}
+									</p>
+									{order.shippingMethod.estimatedDays && (
+										<p>
+											Est. Delivery: {order.shippingMethod.estimatedDays} days
+										</p>
+									)}
+									{order.deliveryBoxName && <p>Box: {order.deliveryBoxName}</p>}
+									{order.deliveryOfficeName && (
+										<p>Office: {order.deliveryOfficeName}</p>
+									)}
 								</div>
 							</div>
 						</div>
 
 						<Separator />
 
-						<div className="space-y-2">
-							<div className="text-sm font-medium">Order Notes</div>
-							<p className="text-sm text-muted-foreground">
-								Please leave package at front door. Ring bell twice.
-							</p>
-						</div>
+						{order.shippingNotes && (
+							<div className="space-y-2">
+								<div className="text-sm font-medium">Shipping Notes</div>
+								<p className="text-sm text-muted-foreground">
+									{order.shippingNotes}
+								</p>
+							</div>
+						)}
 					</TabsContent>
 
 					<TabsContent value="items" className="space-y-4">
@@ -209,13 +289,18 @@ export function ViewOrderDialog({
 								</TableRow>
 							</TableHeader>
 							<TableBody>
-								{orderItems.map((item) => (
+								{order.items.map((item) => (
 									<TableRow key={item.id}>
 										<TableCell className="font-medium">
 											{item.productName}
+											{item.selectedVariantName && (
+												<span className="block text-xs text-muted-foreground">
+													{item.selectedVariantName}
+												</span>
+											)}
 										</TableCell>
 										<TableCell className="text-muted-foreground">
-											{item.sku}
+											{item.productSku || "N/A"}
 										</TableCell>
 										<TableCell className="text-right">
 											{item.quantity}
@@ -236,91 +321,70 @@ export function ViewOrderDialog({
 						<div className="space-y-2">
 							<div className="flex justify-between text-sm">
 								<span className="text-muted-foreground">Subtotal</span>
-								<span>$218.95</span>
+								<span>${subtotal.toFixed(2)}</span>
 							</div>
 							<div className="flex justify-between text-sm">
 								<span className="text-muted-foreground">Shipping</span>
-								<span>$15.00</span>
+								<span>${order.shippingCost.toFixed(2)}</span>
 							</div>
-							<div className="flex justify-between text-sm">
-								<span className="text-muted-foreground">Tax</span>
-								<span>$20.35</span>
-							</div>
+							{order.discountAmount > 0 && (
+								<div className="flex justify-between text-sm text-green-600">
+									<span>Discount</span>
+									<span>-${order.discountAmount.toFixed(2)}</span>
+								</div>
+							)}
 							<Separator />
 							<div className="flex justify-between font-medium">
 								<span>Total</span>
-								<span className="text-lg">{order.total}</span>
+								<span className="text-lg">${order.totalAmount.toFixed(2)}</span>
 							</div>
 						</div>
 					</TabsContent>
-
 					<TabsContent value="history" className="space-y-4">
 						<div className="space-y-4">
-							{[
-								{
-									id: `1`,
-									status: `Order Delivered`,
-									date: `Nov 10, 2025`,
-									time: `2:30 PM`,
-									description: `Package delivered to front door`,
-								},
-								{
-									id: `2`,
-									status: `Out for Delivery`,
-									date: `Nov 10, 2025`,
-									time: `9:15 AM`,
-									description: `Package is out for delivery`,
-								},
-								{
-									id: `3`,
-									status: `In Transit`,
-									date: `Nov 9, 2025`,
-									time: `6:45 PM`,
-									description: `Package arrived at sorting facility`,
-								},
-								{
-									id: `4`,
-									status: `Shipped`,
-									date: `Nov 8, 2025`,
-									time: `3:20 PM`,
-									description: `Package shipped from warehouse`,
-								},
-								{
-									id: `5`,
-									status: `Processing`,
-									date: `Nov 8, 2025`,
-									time: `11:00 AM`,
-									description: `Order is being prepared`,
-								},
-								{
-									id: `6`,
-									status: `Order Confirmed`,
-									date: `Nov 8, 2025`,
-									time: `10:30 AM`,
-									description: `Payment received and order confirmed`,
-								},
-							].map((event, index) => (
-								<div key={event.id} className="flex gap-4">
-									<div className="flex flex-col items-center">
-										<div className="h-2 w-2 rounded-full bg-primary" />
-										{index < 5 && (
-											<div className="h-full w-px bg-border mt-2" />
-										)}
-									</div>
-									<div className="flex-1 pb-4">
-										<div className="flex items-center justify-between">
-											<p className="text-sm font-medium">{event.status}</p>
-											<div className="flex items-center gap-1 text-xs text-muted-foreground">
-												<Calendar className="h-3 w-3" />
-												{event.date} at {event.time}
+							{order.history && order.history.length > 0 ? (
+								order.history.map((event, index) => {
+									const eventDate = new Date(event.createdAt);
+									return (
+										<div key={event.id} className="flex gap-4">
+											<div className="flex flex-col items-center">
+												<div className="h-2 w-2 rounded-full bg-primary" />
+												{order.history && index < order.history.length - 1 && (
+													<div className="h-full w-px bg-border mt-2" />
+												)}
+											</div>
+											<div className="flex-1 pb-4">
+												<div className="flex items-center justify-between">
+													<p className="text-sm font-medium">{event.status}</p>
+													<div className="flex items-center gap-1 text-xs text-muted-foreground">
+														<Calendar className="h-3 w-3" />
+														{eventDate.toLocaleDateString("en-US", {
+															month: "short",
+															day: "numeric",
+															year: "numeric",
+														})}{" "}
+														at{" "}
+														{eventDate.toLocaleTimeString("en-US", {
+															hour: "numeric",
+															minute: "2-digit",
+															hour12: true,
+														})}
+													</div>
+												</div>
+												{event.notes && (
+													<p className="text-sm text-muted-foreground">
+														{event.notes}
+													</p>
+												)}
 											</div>
 										</div>
-										<p className="text-sm text-muted-foreground">
-											{event.description}
-										</p>
-									</div>
-								</div>
-							))}
+									);
+								})
+							) : (
+								<p className="text-sm text-muted-foreground text-center py-8">
+									No order history available
+								</p>
+							)}
 						</div>
 					</TabsContent>
 				</Tabs>
@@ -339,7 +403,7 @@ export function ViewOrderDialog({
 interface EditOrderDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	order: Order | null;
+	order: FullOrder | null;
 }
 
 export function EditOrderDialog({
@@ -386,7 +450,7 @@ export function EditOrderDialog({
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
 				<DialogHeader>
-					<DialogTitle>Edit Order - {order.id}</DialogTitle>
+					<DialogTitle>Edit Order - {order.orderNumber}</DialogTitle>
 					<DialogDescription>
 						Update order details, items, and shipping information
 					</DialogDescription>
@@ -436,26 +500,28 @@ export function EditOrderDialog({
 									</Select>
 								</div>
 							</div>
-
 							<div className="space-y-2">
 								<Label htmlFor="customer">Customer Name</Label>
 								<Input
 									id="customer"
-									defaultValue={order.customer}
+									defaultValue={
+										order.customer
+											? `${order.customer.firstName || ""} ${order.customer.lastName || ""}`.trim()
+											: "Guest"
+									}
 									placeholder="Customer name"
 								/>
 							</div>
-
 							<div className="space-y-2">
 								<Label htmlFor="email">Email</Label>
 								<Input
 									id="email"
 									type="email"
-									defaultValue={order.email}
+									defaultValue={order.customer?.email || order.guestEmail || ""}
 									placeholder="customer@example.com"
 								/>
 							</div>
-
+							defaultValue={order.customer?.email || order.guestEmail || ""}
 							<div className="space-y-2">
 								<Label htmlFor="notes">Order Notes</Label>
 								<Textarea
@@ -908,7 +974,7 @@ export function CreateOrderDialog({
 interface DeleteOrderDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	order: Order | null;
+	order: FullOrder | null;
 }
 
 export function DeleteOrderDialog({
@@ -929,27 +995,38 @@ export function DeleteOrderDialog({
 				<DialogHeader>
 					<DialogTitle>Delete Order</DialogTitle>
 					<DialogDescription>
-						Are you sure you want to delete order {order.id}? This action cannot
-						be undone.
+						Are you sure you want to delete order #{order.orderNumber}? This
+						action cannot be undone.
 					</DialogDescription>
 				</DialogHeader>
 
 				<div className="p-4 border rounded-lg bg-muted/30 space-y-2">
 					<div className="flex justify-between text-sm">
 						<span className="text-muted-foreground">Order Number:</span>
-						<span className="font-medium">{order.id}</span>
+						<span className="font-medium">{order.orderNumber}</span>
 					</div>
 					<div className="flex justify-between text-sm">
 						<span className="text-muted-foreground">Customer:</span>
-						<span className="font-medium">{order.customer}</span>
+						<span className="font-medium">
+							{order.customer
+								? `${order.customer.firstName || ""} ${order.customer.lastName || ""}`.trim() ||
+									"Guest"
+								: "Guest"}
+						</span>
 					</div>
 					<div className="flex justify-between text-sm">
 						<span className="text-muted-foreground">Total:</span>
-						<span className="font-medium">{order.total}</span>
+						<span className="font-medium">${order.totalAmount.toFixed(2)}</span>
 					</div>
 					<div className="flex justify-between text-sm">
 						<span className="text-muted-foreground">Date:</span>
-						<span className="font-medium">{order.date}</span>
+						<span className="font-medium">
+							{new Date(order.createdAt).toLocaleDateString("en-US", {
+								month: "short",
+								day: "numeric",
+								year: "numeric",
+							})}
+						</span>
 					</div>
 				</div>
 

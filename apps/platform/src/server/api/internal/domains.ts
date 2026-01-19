@@ -1,12 +1,12 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { db } from "@/server/db";
+import { z } from "zod";
 import {
 	requireManagePermission,
 	requireViewPermission,
 } from "@/server/api/permissions";
-import { z } from "zod";
+import { db } from "@/server/db";
 
 // Validation schemas
 const AddDomainSchema = z.object({
@@ -15,7 +15,7 @@ const AddDomainSchema = z.object({
 		.min(1, "Domain is required")
 		.regex(
 			/^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/,
-			"Invalid domain format"
+			"Invalid domain format",
 		)
 		.transform((d) => d.toLowerCase()),
 });
@@ -107,7 +107,7 @@ export async function removeDomain(domainId: string) {
 
 		if (otherDomains > 0) {
 			throw new Error(
-				"Cannot remove primary domain. Set another domain as primary first."
+				"Cannot remove primary domain. Set another domain as primary first.",
 			);
 		}
 	}
@@ -215,7 +215,7 @@ export async function refreshDnsToken(domainId: string) {
 // Helper function to check DNS TXT record
 async function checkDnsVerification(
 	domain: string,
-	expectedToken: string
+	expectedToken: string,
 ): Promise<boolean> {
 	try {
 		// Use DNS over HTTPS (Cloudflare) for verification
@@ -225,7 +225,7 @@ async function checkDnsVerification(
 				headers: {
 					Accept: "application/dns-json",
 				},
-			}
+			},
 		);
 
 		if (!response.ok) {

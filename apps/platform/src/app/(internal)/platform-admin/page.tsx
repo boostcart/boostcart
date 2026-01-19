@@ -311,14 +311,14 @@ function TenantStatusBadge({ isActive }: { isActive: boolean }) {
 }
 
 function formatCurrency(value: number) {
-	return new Intl.NumberFormat("bg-BG", {
+	return new Intl.NumberFormat("en-US", {
 		style: "currency",
-		currency: "BGN",
+		currency: "EUR",
 	}).format(value);
 }
 
 function formatDate(dateString: string) {
-	return new Intl.DateTimeFormat("bg-BG", {
+	return new Intl.DateTimeFormat("en-US", {
 		day: "numeric",
 		month: "short",
 		year: "numeric",

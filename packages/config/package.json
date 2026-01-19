@@ -1,11 +1,11 @@
 {
-  "name": "@boostcart/config",
-  "version": "0.1.0",
-  "private": true,
-  "type": "module",
-  "exports": {
-    "./typescript/base": "./typescript/base.json",
-    "./typescript/nextjs": "./typescript/nextjs.json",
-    "./typescript/library": "./typescript/library.json"
-  }
+	"name": "@boostcart/config",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		"./typescript/base": "./typescript/base.json",
+		"./typescript/nextjs": "./typescript/nextjs.json",
+		"./typescript/library": "./typescript/library.json"
+	}
 }

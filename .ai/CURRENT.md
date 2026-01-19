@@ -4,132 +4,275 @@
 
 ---
 
-## 🎯 Current Phase: Phase 2 - Multi-Tenant Foundation
+## 🎯 Current Phase: Phase 6 - Theme Engine
 
-**Status**: In Progress (95% complete)  
-**Target**: Weeks 5-8  
-**Goal**: Tenant management, subdomain routing, platform admin, RBAC
-
----
-
-## 📋 Immediate Tasks
-
-### Completed ✅
-
-**Phase 1:**
-1. [x] Initialize Turborepo monorepo structure
-2. [x] Set up workspace packages (`@boostcart/platform`, `@boostcart/database`, `@boostcart/ui`, `@boostcart/config`)
-3. [x] Configure shared TypeScript config
-4. [x] Migrate existing code to `apps/platform`
-5. [x] Extract database package with Prisma
-6. [x] Set up CI/CD pipeline (GitHub Actions)
-7. [x] Add multi-tenant schema (Tenant, TenantStaff, TenantDomain, Customer, CustomerAddress, CustomerSession)
-8. [x] Create tenant proxy for subdomain routing (Next.js 16 uses `proxy.ts` instead of `middleware.ts`)
-9. [x] Apply multi-tenant schema migration to database
-10. [x] Update Product API with tenant context
-11. [x] Extract auth package (`@boostcart/auth`) with factory functions
-12. [x] Create tenant onboarding flow
-13. [x] Create tenant context provider for admin dashboard
-14. [x] Update admin dashboard with real tenant data
-15. [x] Create server actions for Orders, Customers, Categories, Brands, Collections (all with tenant filtering)
-16. [x] Create server actions for Reviews, Discounts, Gift Cards, Shipping Methods, Payment Methods
-
-**Phase 2:**
-1. [x] Integrate Categories admin page with server actions
-2. [x] Integrate Brands admin page with server actions
-3. [x] Integrate Collections admin page with server actions
-4. [x] Integrate Orders admin page with server actions
-5. [x] Integrate Customers admin page with server actions
-6. [x] Update CategoryFormDialog to support create/edit operations
-7. [x] Update BrandFormDialog to support create/edit operations
-8. [x] Update CollectionFormDialog to support create/edit operations
-9. [x] Update CustomerFormDialog to support create/edit operations
-10. [x] Migrate UI components to `@boostcart/ui` (badge, card, separator, label, scroll-area, tooltip)
-11. [x] Update Product new/edit pages to use real data
-12. [x] Integrate Reviews admin page with server actions
-13. [x] Integrate Discounts admin page with server actions
-14. [x] Integrate Gift Cards admin page with server actions
-15. [x] Create Settings server actions (tenant settings, localization, payment/shipping methods)
-16. [x] Integrate Settings admin page with server actions
-17. [x] Create Analytics server actions (overview, top products, top categories, recent activity)
-18. [x] Integrate Analytics admin page with server actions
-19. [x] Create platform admin dashboard (super admin) at `/platform-admin`
-20. [x] Create tenant management page (list/activate/deactivate/delete)
-21. [x] Create user management page (list/role change/delete)
-22. [x] Create platform server actions with ADMIN role check
-
-### Up Next
-
-1. [ ] Set up Vercel project and link
-2. [ ] Add SEO fields to product form UI
-3. [ ] Create dedicated media library page
-
-### Completed Recently ✅
-
-1. [x] Add product bulk import/export
-   - Created server actions in `src/server/api/internal/product-import-export.ts`
-   - CSV parsing with validation, create/update products
-   - Export to CSV or JSON format
-   - Import preview with validation results
-   - Added Import/Export button to products page
-
-2. [x] Add DNS verification webhook
-   - Created API endpoint at `/api/webhooks/domain-verification`
-   - Handles domain.verified, domain.ssl_provisioned, domain.ssl_failed events
-   - HMAC-SHA256 signature verification
-
-3. [x] Add custom domain management UI
-   - Created server actions in `src/server/api/internal/domains.ts`
-   - Implemented DNS-over-HTTPS verification using Cloudflare API
-   - Created admin settings domains page at `/admin/settings/domains`
-   - Added domain list, add/remove, verification instructions, primary domain toggle
-   - Linked from main settings page
-
-2. [x] Add RBAC for tenant staff roles (restrict features by StaffRole)
-   - Created permission definitions in `src/lib/rbac.ts`
-   - Created `usePermissions` hook and `PermissionGuard` component
-   - Updated admin navigation to filter by role
-   - Added server-side permission checks to products and orders actions
-
-### In Progress
-
-- None
-
-### Blocked
-
-- None
+**Status**: In Progress  
+**Target**: Weeks 22-26  
+**Goal**: Visual customization for storefronts
 
 ---
 
-## 🧠 Current Thinking
+## 🏗️ Architecture Update
 
-### Multi-Tenant Architecture
+**Major Change**: Platform and Storefront are now SEPARATE apps!
 
-We've added full multi-tenant support:
+| App | Port | Purpose | Auth |
+|-----|------|---------|------|
+| `apps/platform` | 3000 | Merchant admin, marketing | Better Auth (SSO) |
+| `apps/storefront` | 3001 | Customer-facing store | JWT (store-scoped) |
 
-- `Tenant` model - stores/shops with billing, theme, settings
-- `TenantStaff` - links platform Users to Tenants with roles
-- `TenantDomain` - custom domain support with DNS/SSL verification
-- `Customer` model - separate from platform Users, per-tenant
-- All key models now have `tenantId` for data isolation
+**Why?**
+- Clean separation of concerns
+- Different auth systems (platform users ≠ store customers)
+- Store-scoped customer accounts (`@@unique([tenantId, email])`)
+- Same email can exist in different stores as different customers
+- Better GDPR compliance - merchant data isolation
 
-### Tenant Routing
+---
 
+## 🎉 Recent Completion (January 8, 2026)
+
+**Phase 6 Started** - Theme Engine Implementation:
+
+1. **Theme Settings Page** (`/admin/settings/theme`)
+   - Color pickers for all theme colors (primary, secondary, accent, background, foreground, muted, border)
+   - Typography settings (body font, heading font)
+   - Layout style options (header: default/centered/minimal, footer: default/simple/expanded, product card styles)
+   - Banner configuration (show/hide, text, colors)
+   - Social media links (Facebook, Instagram, Twitter, YouTube, TikTok)
+   - Contact information (email, phone, address)
+   - Real-time preview panel
+   - Save/discard/reset functionality
+
+2. **Settings Page Integration**
+   - Added Theme & Appearance card to main settings page
+   - Link to new theme settings page
+
+---
+
+## ✅ Completed Phases
+
+### Phase 1: Foundation (100% Complete)
+| Item | Status | Location |
+|------|--------|----------|
+| Turborepo monorepo | ✅ | Root `turbo.json`, `package.json` |
+| Shared packages | ✅ | `packages/` (database, auth, storage, ui, config, types) |
+| CI/CD pipeline | ✅ | `.github/workflows/ci.yml`, `deploy.yml` |
+| Multi-tenant schema | ✅ | `packages/database/prisma/schema.prisma` |
+| Cloudflare R2 storage | ✅ | `packages/storage/src/r2.ts` |
+| Redis caching | ✅ | `apps/platform/src/server/redis.ts` |
+| Vercel deployment | ✅ | Deployed with `turbo.json` env vars |
+
+### Phase 2: Multi-Tenant Foundation (100% Complete)
+| Item | Status | Location |
+|------|--------|----------|
+| Tenant creation & management | ✅ | `TenantStaff`, onboarding flow |
+| Subdomain routing | ✅ | `src/proxy.ts` |
+| Custom domain support | ✅ | `TenantDomain` model, `/admin/settings/domains` |
+| Platform admin dashboard | ✅ | `/platform-admin/*` (tenants, users, analytics, settings) |
+| Tenant isolation | ✅ | All server actions filter by `tenantId` |
+| User authentication | ✅ | `@boostcart/auth` (Better Auth) |
+| Role-based access control | ✅ | `src/lib/rbac.ts`, `usePermissions` hook |
+
+### Phase 3: Storefront (100% Complete)
+- ✅ Complete storefront with products, cart, checkout
+- ✅ Customer authentication & account management
+- ✅ Order history, addresses, wishlist
+- ✅ Category pages, product search, filters
+- ✅ Theme system basics (CSS variables)
+
+### Phase 4: Orders & Checkout (100% Complete)
+- ✅ Shopping cart (local storage + server sync)
+- ✅ Multi-step checkout
+- ✅ Guest checkout support
+- ✅ Order creation & management
+- ✅ Order status workflow
+- ✅ **Email notifications** (order confirmation, shipping)
+- ✅ **Invoice generation** (PDF)
+
+### Phase 5: Customer Accounts (100% Complete)
+- ✅ Customer registration & login
+- ✅ Customer dashboard
+- ✅ Address book management
+- ✅ Order history
+- ✅ Wishlist
+- ✅ **Password reset flow**
+- ✅ **Email verification**
+
+### Admin Dashboard Features (Complete)
+- ✅ Products (CRUD, variants, media, SEO, import/export)
+- ✅ Categories, Brands, Collections
+- ✅ Orders, Customers, Reviews
+- ✅ Discounts, Gift Cards, Promo Codes
+- ✅ Shipping Methods, Payment Methods
+- ✅ Settings (general, localization, domains)
+- ✅ Analytics (overview, top products, recent activity)
+- ✅ Files/Media library (`/admin/content/files`)
+
+### Email System (`@boostcart/email` package - NEW)
+- ✅ React Email templates (Bulgarian)
+- ✅ Resend integration
+- ✅ Order confirmation emails
+- ✅ Shipping update notifications
+- ✅ Email verification
+- ✅ Password reset
+- ✅ Welcome emails
+- ✅ PDF invoice generation
+
+---
+
+## 📋 Phase 6 Tasks (Theme Engine - IN PROGRESS)
+
+### Theme Customizer UI
+1. [x] Admin theme settings page
+2. [x] Color picker components
+3. [x] Font family selector
+4. [x] Logo/favicon upload (existing from settings)
+5. [x] Layout style options
+6. [x] Social media links
+7. [x] Contact information
+8. [x] Banner configuration
+9. [x] Real-time preview panel
+
+### Theme Variations (TODO)
+10. [ ] Default theme ("Sofia")
+11. [ ] Minimal theme
+12. [ ] Bold theme
+13. [ ] Theme export/import (JSON)
+
+### CSS Variable System
+14. [ ] Enhance ThemeProvider with full color palette
+15. [ ] Typography scale
+16. [ ] Spacing scale
+17. [ ] Border radius controls
+18. [ ] Shadow controls
+
+---
+
+## 📋 Removed: Phase 3/4/5 Task Lists
+
+All tasks from Phase 3, 4, and 5 have been completed and moved to "Completed Phases" section above.
+
+### Storefront Core (Platform App - E-commerce Pages)
+1. [x] Create storefront layout (header, footer, navigation) - `(public)/layout.tsx`, `_components/storefront-header.tsx`, `storefront-footer.tsx`
+2. [x] Build homepage with featured products/collections - `(public)/page.tsx`
+3. [x] Product listing page with filters & search - `(public)/products/page.tsx`, `_components/products-grid.tsx`, `products-filters.tsx`
+4. [x] Product detail page (images, variants, add to cart) - `(public)/products/[slug]/page.tsx`, `_components/*`
+5. [x] Collection pages - `(public)/collections/page.tsx`, `(public)/collections/[slug]/page.tsx`
+6. [ ] Category pages
+
+### Shopping Cart
+7. [x] Cart state management (Zustand + localStorage) - `stores/cart-store.ts`
+8. [x] Cart page UI - `(public)/cart/page.tsx`
+9. [x] Update quantity, remove items, clear cart
+10. [x] Cart summary with totals
+
+### Checkout Flow
+11. [x] Multi-step checkout (info, shipping, payment, review) - `(public)/checkout/page.tsx`
+12. [x] Guest checkout support (no auth required)
+13. [x] Address form with validation
+14. [x] Shipping method selection
+15. [x] Payment method selection (placeholder)
+16. [x] Order confirmation page - `(public)/checkout/success/page.tsx`
+
+### Storefront App (NEW - `apps/storefront`)
+17. [x] Separate storefront app structure - `apps/storefront/package.json`, configs
+18. [x] Tenant resolution from host - `apps/storefront/src/server/tenant.ts`
+19. [x] Store-scoped Customer model with JWT auth - `apps/storefront/src/server/auth/customer-auth.ts`
+20. [x] Customer login page - `apps/storefront/src/app/(store)/account/login/page.tsx`
+21. [x] Customer registration page - `apps/storefront/src/app/(store)/account/register/page.tsx`
+22. [x] Customer account dashboard - `apps/storefront/src/app/(store)/account/page.tsx`
+23. [x] Store header/footer components - `apps/storefront/src/app/(store)/_components/`
+24. [x] Product listing page with filters, search, sorting - `apps/storefront/src/app/(store)/products/page.tsx`
+25. [x] Product detail page with gallery, variants, tabs - `apps/storefront/src/app/(store)/products/[slug]/page.tsx`
+26. [x] Collections list and detail pages - `apps/storefront/src/app/(store)/collections/`
+27. [x] Cart store (Zustand + localStorage) - `apps/storefront/src/stores/cart-store.ts`
+28. [x] Cart page with quantity controls - `apps/storefront/src/app/(store)/cart/page.tsx`
+29. [x] Mini cart in header - `apps/storefront/src/app/(store)/_components/store-header.tsx`
+30. [x] Multi-step checkout flow - `apps/storefront/src/app/(store)/checkout/page.tsx`
+31. [x] Checkout success page with confetti - `apps/storefront/src/app/(store)/checkout/success/page.tsx`
+32. [x] Product detail API route - `apps/storefront/src/app/api/store/products/[slug]/route.ts`
+
+### Theme System (Basic)
+33. [x] Load theme config from tenant settings
+34. [x] Apply colors, fonts, logo
+35. [x] Responsive storefront layout
+
+### Remaining Items
+36. [x] Category pages
+37. [x] Customer order history page
+38. [x] Customer addresses page
+39. [x] Wishlist functionality - `apps/storefront/src/app/(store)/wishlist/page.tsx`, `server/actions/wishlist.ts`
+40. [x] Product search integration with backend
+
+### Media & Order Integration (NEW - Jan 11)
+41. [x] Product media upload via R2 - `platform/admin/products/_components/product-form.tsx`
+42. [x] Real order creation from checkout - `storefront/server/actions/orders.ts`
+43. [x] Checkout creates actual orders in database - `storefront/checkout/page.tsx`
+44. [x] Order confirmation shows real order number - `storefront/checkout/success/page.tsx`
+
+---
+
+## 🧠 Architecture Notes
+
+### App Separation (IMPORTANT!)
+
+| App | Subdomain | Purpose |
+|-----|-----------|---------|
+| `apps/platform` | `admin.boostcart.bg` | Merchant admin dashboard only |
+| `apps/storefront` | `{slug}.boostcart.bg` | Customer-facing store pages |
+| `apps/marketing` (future) | `boostcart.bg` | Marketing site, landing pages |
+
+**Platform App (`apps/platform`):**
+- Admin dashboard at `/admin/*`
+- Platform admin at `/platform-admin/*`
+- User onboarding at `/onboarding/*`
+- Authentication (signin/signup) at `/signin`, `/signup`
+- NO public storefront pages
+
+**Storefront App (`apps/storefront`):**
+- Homepage, products, collections, categories
+- Customer account, cart, checkout
+- Tenant-resolved via subdomain or custom domain
+- Separate JWT-based customer auth
+
+### Storefront Routes (`apps/storefront`)
 ```
-boostcart.bg/*              → Main platform (no tenant)
-store.boostcart.bg/*        → Tenant "store" storefront
-custom-domain.com/*         → Tenant with custom domain
+(store)/                     # Customer-facing storefront
+├── page.tsx                 # Homepage ✅
+├── products/
+│   ├── page.tsx            # All products ✅
+│   └── [slug]/page.tsx     # Product detail ✅
+├── collections/
+│   ├── page.tsx            # All collections ✅
+│   └── [slug]/page.tsx     # Collection detail ✅
+├── categories/
+│   └── [slug]/page.tsx     # Category page (TODO)
+├── cart/page.tsx           # Cart page ✅
+├── checkout/
+│   ├── page.tsx            # Checkout flow ✅
+│   └── success/page.tsx    # Confirmation ✅
+└── account/                # Customer auth ✅
+    ├── page.tsx            # Account dashboard ✅
+    ├── login/page.tsx      # Login ✅
+    ├── register/page.tsx   # Registration ✅
+    ├── orders/page.tsx     # Order history (TODO)
+    └── addresses/page.tsx  # Address book (TODO)
 ```
 
-**Note**: As of Next.js 16, middleware has been renamed to proxy. The file is now `src/proxy.ts` with an exported `proxy()` function instead of `middleware()`.
+### Key Storefront Components
+| Component | Location | Description |
+|-----------|----------|-------------|
+| `StoreHeader` | `_components/store-header.tsx` | Nav, search, cart, mobile menu |
+| `StoreFooter` | `_components/store-footer.tsx` | Links, newsletter, contact |
+| `ProductCard` | `_components/product-card.tsx` | Product grid card |
+| `CollectionCard` | `_components/collection-card.tsx` | Collection preview card |
 
-Proxy sets `x-tenant-slug` or `x-custom-domain` headers for downstream use.
-
----
-
-## 🐛 Known Issues
-
-None currently.
+### Customer Auth (Separate from Platform)
+- Customers use `Customer` model (not `User`)
+- JWT-based authentication
+- Per-tenant customer database
+- No access to admin dashboard
 
 ---
 
@@ -140,11 +283,14 @@ None currently.
 | Package manager | Bun | Faster, native TS, already using | Dec 29, 2025 |
 | No Docker/K8s | Serverless only | Solo dev, Vercel handles scaling | Dec 29, 2025 |
 | Multi-tenant approach | Single app, shared DB | Simpler, cost-effective | Dec 29, 2025 |
+| Customer auth | JWT (separate from platform) | Simpler, per-tenant isolation | Jan 5, 2026 |
 
 ---
 
 ## 📝 Notes
 
-- The existing codebase already has auth (Better Auth), admin pages, and basic structure
-- We need to carefully migrate without breaking existing functionality
+- Storefront will be rendered based on tenant's theme config
+- Products/Collections filtered by tenant from proxy headers
+- Cart stored in localStorage initially, synced to server on checkout
+- Start with basic theme, add visual editor in Phase 7
 - Focus on incremental progress - don't try to do everything at once

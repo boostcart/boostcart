@@ -87,7 +87,10 @@ export default function CustomersPage() {
 					email: customer.email,
 					phone: customer.phone || "N/A",
 					orders: customer._count.orders,
-					totalSpent: "$0.00", // TODO: Calculate from orders
+					totalSpent: new Intl.NumberFormat("bg-BG", {
+						style: "currency",
+						currency: "EUR",
+					}).format(customer.totalSpent),
 					status: customer.isActive ? "Active" : "Inactive",
 					joined: new Date(customer.createdAt).toLocaleDateString("en-US", {
 						month: "short",
@@ -234,7 +237,7 @@ export default function CustomersPage() {
 			{/* Customers Table */}
 			<Card>
 				{isLoading ? (
-					<div className="flex items-center justify-center min-h-[300px]">
+					<div className="flex items-center justify-center min-h-75">
 						<Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
 					</div>
 				) : filteredCustomers.length === 0 ? (
@@ -271,7 +274,7 @@ export default function CustomersPage() {
 								<TableHead>Total Spent</TableHead>
 								<TableHead>Status</TableHead>
 								<TableHead>Joined</TableHead>
-								<TableHead className="w-[70px]"></TableHead>
+								<TableHead className="w-17.5"></TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
@@ -377,6 +380,7 @@ export default function CustomersPage() {
 				open={viewDialog}
 				onOpenChange={setViewDialog}
 				customer={selectedCustomer}
+				onRefresh={fetchCustomers}
 			/>
 			<CustomerFormDialog
 				open={createDialog}

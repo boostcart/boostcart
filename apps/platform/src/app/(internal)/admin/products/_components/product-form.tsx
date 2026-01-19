@@ -6,22 +6,31 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import slugify from "slugify";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
 	type CreateProductInput,
 	CreateProductSchema,
+	type CurrencyPriceInput,
+	type ProductMediaInput,
 	type UpdateProductInput,
 } from "@/schemas/product";
 import { ProductCollectionsSection } from "./product-collections-section";
 import { ProductGeneralSection } from "./product-general-section";
 import { ProductInventorySection } from "./product-inventory-section";
 import { ProductMediaSection } from "./product-media-section";
+import { ProductMultiCurrencyPricing } from "./product-multi-currency-pricing";
 import { ProductPricingSection } from "./product-pricing-section";
 import { ProductPurchaseOptionsSection } from "./product-purchase-options-section";
 import { ProductSeoSection } from "./product-seo-section";
 import { ProductShippingSection } from "./product-shipping-section";
 import { ProductVariantsSection } from "./product-variants-section";
+
+// Extended media type that includes staged files
+interface StagedMedia extends ProductMediaInput {
+	_stagedFile?: File;
+}
 
 interface ProductFormProps {
 	mode: "create" | "edit";
@@ -42,6 +51,12 @@ export function ProductForm({
 }: ProductFormProps) {
 	const router = useRouter();
 	const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+	// Store staged files in a ref to avoid them being stripped by Zod validation
+	const stagedFilesRef = React.useRef<Map<string, File>>(new Map());
+
+	// Store currency prices for create mode
+	const currencyPricesRef = React.useRef<CurrencyPriceInput[]>([]);
 
 	const form = useForm({
 		resolver: zodResolver(CreateProductSchema),
@@ -78,6 +93,18 @@ export function ProductForm({
 		},
 	});
 
+	// Watch media changes to capture staged files before they get stripped
+	const watchedMedia = form.watch("media");
+	React.useEffect(() => {
+		if (watchedMedia) {
+			for (const m of watchedMedia as StagedMedia[]) {
+				if (m._stagedFile && m.url) {
+					stagedFilesRef.current.set(m.url, m._stagedFile);
+				}
+			}
+		}
+	}, [watchedMedia]);
+
 	// Auto-generate slug from name
 	const watchName = form.watch("name");
 	const currentSlug = form.watch("slug");
@@ -96,7 +123,89 @@ export function ProductForm({
 	const handleSubmit = async (data: CreateProductInput) => {
 		setIsSubmitting(true);
 		try {
-			await onSubmit(data);
+			// Get files from our ref (since Zod strips _stagedFile)
+			const mediaItems = data.media ?? [];
+			const filesToUpload: { blobUrl: string; file: File }[] = [];
+
+			for (const m of mediaItems) {
+				// Check if this URL has a staged file (blob URLs start with "blob:")
+				if (m.url.startsWith("blob:")) {
+					const file = stagedFilesRef.current.get(m.url);
+					if (file) {
+						filesToUpload.push({ blobUrl: m.url, file });
+					}
+				}
+			}
+
+			const uploadedMedia: Map<string, string> = new Map();
+
+			if (filesToUpload.length > 0) {
+				toast.info(`Uploading ${filesToUpload.length} file(s)...`);
+
+				// Upload files in parallel via R2 API
+				const uploadPromises = filesToUpload.map(async ({ blobUrl, file }) => {
+					const formData = new FormData();
+					formData.append("file", file);
+					formData.append("folder", "products");
+
+					const response = await fetch("/api/upload", {
+						method: "POST",
+						body: formData,
+					});
+
+					if (!response.ok) {
+						const error = await response.json();
+						throw new Error(error.error || "Upload failed");
+					}
+
+					const result = await response.json();
+					return { blobUrl, uploadedUrl: result.media.url };
+				});
+
+				try {
+					const results = await Promise.all(uploadPromises);
+					for (const { blobUrl, uploadedUrl } of results) {
+						uploadedMedia.set(blobUrl, uploadedUrl);
+					}
+				} catch (uploadError) {
+					console.error("Upload failed:", uploadError);
+					toast.error("Failed to upload media files");
+					throw uploadError;
+				}
+			}
+
+			// Replace blob URLs with uploaded URLs
+			const processedMedia: ProductMediaInput[] = mediaItems.map((m) => {
+				const uploadedUrl = uploadedMedia.get(m.url);
+				return {
+					id: m.id,
+					url: uploadedUrl ?? m.url,
+					mediaType: m.mediaType,
+					altText: m.altText,
+					order: m.order,
+				};
+			});
+
+			// Submit with real URLs and currency prices (for create mode)
+			const submitData: CreateProductInput = {
+				...data,
+				media: processedMedia,
+			};
+
+			// Add currency prices if in create mode and any are set
+			if (mode === "create" && currencyPricesRef.current.length > 0) {
+				const validPrices = currencyPricesRef.current.filter(
+					(cp) => cp.price !== null,
+				);
+				if (validPrices.length > 0) {
+					submitData.currencyPrices = validPrices;
+				}
+			}
+
+			await onSubmit(submitData);
+
+			// Clear staged files on success
+			stagedFilesRef.current.clear();
 		} catch (error) {
 			console.error("Failed to save product:", error);
 		} finally {
@@ -158,6 +267,20 @@ export function ProductForm({
 						<ProductGeneralSection categories={categories} brands={brands} />
 						<ProductMediaSection />
 						<ProductPricingSection />
+						{/* Multi-currency pricing */}
+						<ProductMultiCurrencyPricing
+							productId={mode === "edit" ? initialData?.id : undefined}
+							basePrice={form.watch("price") || 0}
+							baseCompareAtPrice={form.watch("compareAtPrice")}
+							mode={mode}
+							onChange={
+								mode === "create"
+									? (prices) => {
+											currencyPricesRef.current = prices;
+										}
+									: undefined
+							}
+						/>
 						<ProductVariantsSection />
 						<ProductShippingSection />
 						<ProductPurchaseOptionsSection />

@@ -2,8 +2,8 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { magicLink } from "better-auth/plugins";
 import { Resend } from "resend";
-import type { AuthConfig } from "./types";
 import { emailTemplates } from "./email-templates";
+import type { AuthConfig } from "./types";
 
 /**
  * Create a Better Auth instance with the given configuration.
@@ -78,7 +78,9 @@ export function createAuth(config: AuthConfig) {
 					}
 
 					// Auto-verify email when they use magic link
-					const user = await db.user.findUnique({ where: { email: userEmail } });
+					const user = await db.user.findUnique({
+						where: { email: userEmail },
+					});
 					if (user && !user.emailVerified) {
 						await db.user.update({
 							where: { email: userEmail },
@@ -135,7 +137,8 @@ export function createAuth(config: AuthConfig) {
 /**
  * Type helper to infer session type from auth instance
  */
-export type InferSession<T extends ReturnType<typeof createAuth>> = T["$Infer"]["Session"];
+export type InferSession<T extends ReturnType<typeof createAuth>> =
+	T["$Infer"]["Session"];
 
 // Re-export types
-export type { Session, User, AuthConfig } from "./types";
+export type { AuthConfig, Session, User } from "./types";

@@ -22,8 +22,5 @@ export default defineConfig({
 	datasource: {
 		// For CLI operations like migrations, use direct connection (bypasses pooler)
 		url: env("DIRECT_URL") || env("DATABASE_URL"),
-		// For Prisma Client at runtime, it will use DATABASE_URL (pooled connection)
-		// The directUrl is used by CLI for schema operations
-		directUrl: env("DIRECT_URL"),
 	},
 });

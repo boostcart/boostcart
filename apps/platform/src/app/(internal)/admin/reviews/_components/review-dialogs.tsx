@@ -307,7 +307,7 @@ export function ReviewFormDialog({
 	onOpenChange,
 	mode,
 	review,
-	onSuccess,
+	onSuccess: _onSuccess,
 }: ReviewFormDialogProps) {
 	const renderStars = (rating: number) => {
 		return (

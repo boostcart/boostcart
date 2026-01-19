@@ -55,16 +55,20 @@ export const ModelName = {
   TenantStaff: 'TenantStaff',
   TenantDomain: 'TenantDomain',
   Customer: 'Customer',
-  CustomerAddress: 'CustomerAddress',
   CustomerSession: 'CustomerSession',
+  CustomerAddress: 'CustomerAddress',
   User: 'User',
   Account: 'Account',
   Session: 'Session',
   Verification: 'Verification',
   EmailVerificationToken: 'EmailVerificationToken',
+  PasswordReset: 'PasswordReset',
+  EmailVerification: 'EmailVerification',
   PasswordResetToken: 'PasswordResetToken',
   Locale: 'Locale',
   Currency: 'Currency',
+  TenantCurrency: 'TenantCurrency',
+  ProductPrice: 'ProductPrice',
   Brand: 'Brand',
   BrandTranslation: 'BrandTranslation',
   Category: 'Category',
@@ -197,22 +201,39 @@ export const CustomerScalarFieldEnum = {
   tenantId: 'tenantId',
   email: 'email',
   password: 'password',
-  emailVerified: 'emailVerified',
   firstName: 'firstName',
   lastName: 'lastName',
   phone: 'phone',
-  isActive: 'isActive',
   acceptsMarketing: 'acceptsMarketing',
   locale: 'locale',
+  emailVerified: 'emailVerified',
+  emailVerifiedAt: 'emailVerifiedAt',
+  googleId: 'googleId',
+  facebookId: 'facebookId',
   totalSpent: 'totalSpent',
   ordersCount: 'ordersCount',
   lastOrderAt: 'lastOrderAt',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
 } as const
 
 export type CustomerScalarFieldEnum = (typeof CustomerScalarFieldEnum)[keyof typeof CustomerScalarFieldEnum]
+
+
+export const CustomerSessionScalarFieldEnum = {
+  id: 'id',
+  customerId: 'customerId',
+  token: 'token',
+  userAgent: 'userAgent',
+  ipAddress: 'ipAddress',
+  expiresAt: 'expiresAt',
+  lastActiveAt: 'lastActiveAt',
+  createdAt: 'createdAt'
+} as const
+
+export type CustomerSessionScalarFieldEnum = (typeof CustomerSessionScalarFieldEnum)[keyof typeof CustomerSessionScalarFieldEnum]
 
 
 export const CustomerAddressScalarFieldEnum = {
@@ -236,19 +257,6 @@ export const CustomerAddressScalarFieldEnum = {
 export type CustomerAddressScalarFieldEnum = (typeof CustomerAddressScalarFieldEnum)[keyof typeof CustomerAddressScalarFieldEnum]
 
 
-export const CustomerSessionScalarFieldEnum = {
-  id: 'id',
-  customerId: 'customerId',
-  token: 'token',
-  ipAddress: 'ipAddress',
-  userAgent: 'userAgent',
-  createdAt: 'createdAt',
-  expiresAt: 'expiresAt'
-} as const
-
-export type CustomerSessionScalarFieldEnum = (typeof CustomerSessionScalarFieldEnum)[keyof typeof CustomerSessionScalarFieldEnum]
-
-
 export const UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -260,6 +268,7 @@ export const UserScalarFieldEnum = {
   image: 'image',
   password: 'password',
   role: 'role',
+  phone: 'phone',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
@@ -323,6 +332,30 @@ export const EmailVerificationTokenScalarFieldEnum = {
 export type EmailVerificationTokenScalarFieldEnum = (typeof EmailVerificationTokenScalarFieldEnum)[keyof typeof EmailVerificationTokenScalarFieldEnum]
 
 
+export const PasswordResetScalarFieldEnum = {
+  id: 'id',
+  customerId: 'customerId',
+  token: 'token',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PasswordResetScalarFieldEnum = (typeof PasswordResetScalarFieldEnum)[keyof typeof PasswordResetScalarFieldEnum]
+
+
+export const EmailVerificationScalarFieldEnum = {
+  id: 'id',
+  customerId: 'customerId',
+  token: 'token',
+  expiresAt: 'expiresAt',
+  verifiedAt: 'verifiedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type EmailVerificationScalarFieldEnum = (typeof EmailVerificationScalarFieldEnum)[keyof typeof EmailVerificationScalarFieldEnum]
+
+
 export const PasswordResetTokenScalarFieldEnum = {
   id: 'id',
   email: 'email',
@@ -349,13 +382,38 @@ export const CurrencyScalarFieldEnum = {
   symbol: 'symbol',
   name: 'name',
   rate: 'rate',
-  isDefault: 'isDefault',
+  decimals: 'decimals',
+  symbolFirst: 'symbolFirst',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type CurrencyScalarFieldEnum = (typeof CurrencyScalarFieldEnum)[keyof typeof CurrencyScalarFieldEnum]
+
+
+export const TenantCurrencyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  currencyId: 'currencyId',
+  isDefault: 'isDefault',
+  createdAt: 'createdAt'
+} as const
+
+export type TenantCurrencyScalarFieldEnum = (typeof TenantCurrencyScalarFieldEnum)[keyof typeof TenantCurrencyScalarFieldEnum]
+
+
+export const ProductPriceScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  currencyId: 'currencyId',
+  price: 'price',
+  compareAtPrice: 'compareAtPrice',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductPriceScalarFieldEnum = (typeof ProductPriceScalarFieldEnum)[keyof typeof ProductPriceScalarFieldEnum]
 
 
 export const BrandScalarFieldEnum = {
@@ -746,10 +804,9 @@ export type GiftCardScalarFieldEnum = (typeof GiftCardScalarFieldEnum)[keyof typ
 
 export const CartScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
+  customerId: 'customerId',
   expiresAt: 'expiresAt',
   tenantId: 'tenantId',
-  customerId: 'customerId',
   sessionId: 'sessionId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -775,14 +832,14 @@ export type CartItemScalarFieldEnum = (typeof CartItemScalarFieldEnum)[keyof typ
 export const OrderScalarFieldEnum = {
   id: 'id',
   orderNumber: 'orderNumber',
-  userId: 'userId',
+  customerId: 'customerId',
   guestEmail: 'guestEmail',
+  guestPhone: 'guestPhone',
   status: 'status',
   paymentStatus: 'paymentStatus',
   totalAmount: 'totalAmount',
   shippingCost: 'shippingCost',
   tenantId: 'tenantId',
-  customerId: 'customerId',
   discountAmount: 'discountAmount',
   currencyId: 'currencyId',
   promoCodeId: 'promoCodeId',
@@ -900,9 +957,9 @@ export type UserAddressScalarFieldEnum = (typeof UserAddressScalarFieldEnum)[key
 
 export const WishlistItemScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
-  productId: 'productId',
   customerId: 'customerId',
+  productId: 'productId',
+  tenantId: 'tenantId',
   createdAt: 'createdAt'
 } as const
 
@@ -912,13 +969,12 @@ export type WishlistItemScalarFieldEnum = (typeof WishlistItemScalarFieldEnum)[k
 export const ReviewScalarFieldEnum = {
   id: 'id',
   productId: 'productId',
-  userId: 'userId',
+  customerId: 'customerId',
   rating: 'rating',
   title: 'title',
   comment: 'comment',
   isApproved: 'isApproved',
   tenantId: 'tenantId',
-  customerId: 'customerId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

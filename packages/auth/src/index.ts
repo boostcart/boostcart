@@ -10,4 +10,4 @@
  */
 
 // Re-export types for convenience
-export type { Session, User, AuthConfig } from "./types";
+export type { AuthConfig, Session, User } from "./types";

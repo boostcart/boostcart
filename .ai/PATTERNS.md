@@ -128,6 +128,51 @@ const tenantDb = prisma.$extends({
 
 ---
 
+### Prisma Schema Field Names
+
+**Problem**: Common assumptions about field names that are WRONG:
+
+| Assumption | Reality |
+|------------|---------|
+| `Product.categories` (many-to-many) | `Product.category` via `categoryId` (single) |
+| `Product.trackQuantity`, `Product.quantity` | `Product.trackStock`, `Product.stock` |
+| `Product.collections` | `Product.collectionProducts` (junction table) |
+| `ProductVariant.optionValues` (relation) | `ProductVariant.options` (JSON) |
+| `Collection.order` | Does NOT exist - use `createdAt` |
+| `Collection.seo` | Does NOT exist - SEO in translations |
+
+**Solution**: Always check `prisma/schema.prisma` before writing queries.
+
+---
+
+## Zod / React Hook Form
+
+### Zod v4 with @hookform/resolvers
+
+**Problem**: `@hookform/resolvers` expects Zod v3 types, but Zod v4 has incompatible internal structure. Error: `Type '4' is not assignable to type '3 | 2 | 1'`.
+
+**Solution**: Import from Zod v3 compatibility layer:
+
+```tsx
+// ❌ BAD - breaks with @hookform/resolvers
+import { z } from "zod";
+
+// ✅ GOOD - use v3 compatibility
+import { z } from "zod/v3";
+
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+});
+
+// Works with zodResolver
+const form = useForm({
+  resolver: zodResolver(schema),
+});
+```
+
+---
+
 ## File Upload
 
 ### Staged Upload Pattern

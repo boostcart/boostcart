@@ -73,7 +73,7 @@ export function ViewGiftCardDialog({
 
 					<TabsContent value="overview" className="space-y-4 mt-4">
 						<div className="space-y-4">
-							<div className="p-8 border-2 border-primary rounded-lg text-center bg-gradient-to-br from-primary/10 to-primary/5">
+							<div className="p-8 border-2 border-primary rounded-lg text-center bg-linear-to-br from-primary/10 to-primary/5">
 								<div className="flex items-center justify-center gap-2 mb-2">
 									<Gift className="h-6 w-6 text-primary" />
 									<p className="text-sm text-muted-foreground">
@@ -322,7 +322,7 @@ export function GiftCardFormDialog({
 	onOpenChange,
 	mode,
 	giftCard,
-	onSuccess,
+	onSuccess: _onSuccess,
 }: GiftCardFormDialogProps) {
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>

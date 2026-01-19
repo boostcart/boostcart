@@ -348,6 +348,7 @@ export type TenantWhereInput = {
   orders?: Prisma.OrderListRelationFilter
   carts?: Prisma.CartListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
+  wishlistItems?: Prisma.WishlistItemListRelationFilter
   pages?: Prisma.PageListRelationFilter
   filters?: Prisma.FilterListRelationFilter
   shippingMethods?: Prisma.ShippingMethodListRelationFilter
@@ -357,6 +358,7 @@ export type TenantWhereInput = {
   discounts?: Prisma.DiscountListRelationFilter
   media?: Prisma.MediaListRelationFilter
   blogPosts?: Prisma.BlogPostListRelationFilter
+  currencies?: Prisma.TenantCurrencyListRelationFilter
 }
 
 export type TenantOrderByWithRelationInput = {
@@ -395,6 +397,7 @@ export type TenantOrderByWithRelationInput = {
   orders?: Prisma.OrderOrderByRelationAggregateInput
   carts?: Prisma.CartOrderByRelationAggregateInput
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
+  wishlistItems?: Prisma.WishlistItemOrderByRelationAggregateInput
   pages?: Prisma.PageOrderByRelationAggregateInput
   filters?: Prisma.FilterOrderByRelationAggregateInput
   shippingMethods?: Prisma.ShippingMethodOrderByRelationAggregateInput
@@ -404,6 +407,7 @@ export type TenantOrderByWithRelationInput = {
   discounts?: Prisma.DiscountOrderByRelationAggregateInput
   media?: Prisma.MediaOrderByRelationAggregateInput
   blogPosts?: Prisma.BlogPostOrderByRelationAggregateInput
+  currencies?: Prisma.TenantCurrencyOrderByRelationAggregateInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -445,6 +449,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   orders?: Prisma.OrderListRelationFilter
   carts?: Prisma.CartListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
+  wishlistItems?: Prisma.WishlistItemListRelationFilter
   pages?: Prisma.PageListRelationFilter
   filters?: Prisma.FilterListRelationFilter
   shippingMethods?: Prisma.ShippingMethodListRelationFilter
@@ -454,6 +459,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   discounts?: Prisma.DiscountListRelationFilter
   media?: Prisma.MediaListRelationFilter
   blogPosts?: Prisma.BlogPostListRelationFilter
+  currencies?: Prisma.TenantCurrencyListRelationFilter
 }, "id" | "slug">
 
 export type TenantOrderByWithAggregationInput = {
@@ -554,6 +560,7 @@ export type TenantCreateInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
@@ -563,6 +570,7 @@ export type TenantCreateInput = {
   discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
@@ -601,6 +609,7 @@ export type TenantUncheckedCreateInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -610,6 +619,7 @@ export type TenantUncheckedCreateInput = {
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -648,6 +658,7 @@ export type TenantUpdateInput = {
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
@@ -657,6 +668,7 @@ export type TenantUpdateInput = {
   discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
@@ -695,6 +707,7 @@ export type TenantUncheckedUpdateInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -704,6 +717,7 @@ export type TenantUncheckedUpdateInput = {
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -947,6 +961,20 @@ export type TenantUpdateOneRequiredWithoutCustomersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutCustomersInput, Prisma.TenantUpdateWithoutCustomersInput>, Prisma.TenantUncheckedUpdateWithoutCustomersInput>
 }
 
+export type TenantCreateNestedOneWithoutCurrenciesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutCurrenciesInput, Prisma.TenantUncheckedCreateWithoutCurrenciesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCurrenciesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutCurrenciesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutCurrenciesInput, Prisma.TenantUncheckedCreateWithoutCurrenciesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCurrenciesInput
+  upsert?: Prisma.TenantUpsertWithoutCurrenciesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutCurrenciesInput, Prisma.TenantUpdateWithoutCurrenciesInput>, Prisma.TenantUncheckedUpdateWithoutCurrenciesInput>
+}
+
 export type TenantCreateNestedOneWithoutBrandsInput = {
   create?: Prisma.XOR<Prisma.TenantCreateWithoutBrandsInput, Prisma.TenantUncheckedCreateWithoutBrandsInput>
   connectOrCreate?: Prisma.TenantCreateOrConnectWithoutBrandsInput
@@ -1101,6 +1129,20 @@ export type TenantUpdateOneRequiredWithoutPaymentMethodsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutPaymentMethodsInput, Prisma.TenantUpdateWithoutPaymentMethodsInput>, Prisma.TenantUncheckedUpdateWithoutPaymentMethodsInput>
 }
 
+export type TenantCreateNestedOneWithoutWishlistItemsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutWishlistItemsInput, Prisma.TenantUncheckedCreateWithoutWishlistItemsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutWishlistItemsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutWishlistItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutWishlistItemsInput, Prisma.TenantUncheckedCreateWithoutWishlistItemsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutWishlistItemsInput
+  upsert?: Prisma.TenantUpsertWithoutWishlistItemsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutWishlistItemsInput, Prisma.TenantUpdateWithoutWishlistItemsInput>, Prisma.TenantUncheckedUpdateWithoutWishlistItemsInput>
+}
+
 export type TenantCreateNestedOneWithoutReviewsInput = {
   create?: Prisma.XOR<Prisma.TenantCreateWithoutReviewsInput, Prisma.TenantUncheckedCreateWithoutReviewsInput>
   connectOrCreate?: Prisma.TenantCreateOrConnectWithoutReviewsInput
@@ -1206,6 +1248,7 @@ export type TenantCreateWithoutStaffInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
@@ -1215,6 +1258,7 @@ export type TenantCreateWithoutStaffInput = {
   discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutStaffInput = {
@@ -1252,6 +1296,7 @@ export type TenantUncheckedCreateWithoutStaffInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -1261,6 +1306,7 @@ export type TenantUncheckedCreateWithoutStaffInput = {
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutStaffInput = {
@@ -1314,6 +1360,7 @@ export type TenantUpdateWithoutStaffInput = {
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
@@ -1323,6 +1370,7 @@ export type TenantUpdateWithoutStaffInput = {
   discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutStaffInput = {
@@ -1360,6 +1408,7 @@ export type TenantUncheckedUpdateWithoutStaffInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -1369,6 +1418,7 @@ export type TenantUncheckedUpdateWithoutStaffInput = {
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutDomainsInput = {
@@ -1406,6 +1456,7 @@ export type TenantCreateWithoutDomainsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
@@ -1415,6 +1466,7 @@ export type TenantCreateWithoutDomainsInput = {
   discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutDomainsInput = {
@@ -1452,6 +1504,7 @@ export type TenantUncheckedCreateWithoutDomainsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -1461,6 +1514,7 @@ export type TenantUncheckedCreateWithoutDomainsInput = {
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutDomainsInput = {
@@ -1514,6 +1568,7 @@ export type TenantUpdateWithoutDomainsInput = {
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
@@ -1523,6 +1578,7 @@ export type TenantUpdateWithoutDomainsInput = {
   discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutDomainsInput = {
@@ -1560,6 +1616,7 @@ export type TenantUncheckedUpdateWithoutDomainsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -1569,6 +1626,7 @@ export type TenantUncheckedUpdateWithoutDomainsInput = {
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCustomersInput = {
@@ -1606,6 +1664,7 @@ export type TenantCreateWithoutCustomersInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
@@ -1615,6 +1674,7 @@ export type TenantCreateWithoutCustomersInput = {
   discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCustomersInput = {
@@ -1652,6 +1712,7 @@ export type TenantUncheckedCreateWithoutCustomersInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -1661,6 +1722,7 @@ export type TenantUncheckedCreateWithoutCustomersInput = {
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCustomersInput = {
@@ -1714,6 +1776,7 @@ export type TenantUpdateWithoutCustomersInput = {
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
@@ -1723,6 +1786,7 @@ export type TenantUpdateWithoutCustomersInput = {
   discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCustomersInput = {
@@ -1760,6 +1824,216 @@ export type TenantUncheckedUpdateWithoutCustomersInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
+  pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
+  filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
+  shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
+  paymentMethods?: Prisma.PaymentMethodUncheckedUpdateManyWithoutTenantNestedInput
+  promoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutTenantNestedInput
+  giftCards?: Prisma.GiftCardUncheckedUpdateManyWithoutTenantNestedInput
+  discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
+  media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
+  blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutCurrenciesInput = {
+  id?: string
+  slug: string
+  name: string
+  description?: string | null
+  email: string
+  phone?: string | null
+  logoUrl?: string | null
+  faviconUrl?: string | null
+  themeId?: string | null
+  themeConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  billingStatus?: $Enums.BillingStatus
+  billingCycle?: $Enums.BillingCycle
+  planId?: string | null
+  trialEndsAt?: Date | string | null
+  currentPeriodStart?: Date | string | null
+  currentPeriodEnd?: Date | string | null
+  stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
+  currency?: string
+  locale?: string
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  staff?: Prisma.TenantStaffCreateNestedManyWithoutTenantInput
+  domains?: Prisma.TenantDomainCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  products?: Prisma.ProductCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
+  brands?: Prisma.BrandCreateNestedManyWithoutTenantInput
+  collections?: Prisma.CollectionCreateNestedManyWithoutTenantInput
+  orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
+  carts?: Prisma.CartCreateNestedManyWithoutTenantInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
+  pages?: Prisma.PageCreateNestedManyWithoutTenantInput
+  filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
+  shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
+  paymentMethods?: Prisma.PaymentMethodCreateNestedManyWithoutTenantInput
+  promoCodes?: Prisma.PromoCodeCreateNestedManyWithoutTenantInput
+  giftCards?: Prisma.GiftCardCreateNestedManyWithoutTenantInput
+  discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
+  media?: Prisma.MediaCreateNestedManyWithoutTenantInput
+  blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutCurrenciesInput = {
+  id?: string
+  slug: string
+  name: string
+  description?: string | null
+  email: string
+  phone?: string | null
+  logoUrl?: string | null
+  faviconUrl?: string | null
+  themeId?: string | null
+  themeConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  billingStatus?: $Enums.BillingStatus
+  billingCycle?: $Enums.BillingCycle
+  planId?: string | null
+  trialEndsAt?: Date | string | null
+  currentPeriodStart?: Date | string | null
+  currentPeriodEnd?: Date | string | null
+  stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
+  currency?: string
+  locale?: string
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  staff?: Prisma.TenantStaffUncheckedCreateNestedManyWithoutTenantInput
+  domains?: Prisma.TenantDomainUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
+  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutTenantInput
+  collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutTenantInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
+  carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
+  pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
+  filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
+  shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
+  paymentMethods?: Prisma.PaymentMethodUncheckedCreateNestedManyWithoutTenantInput
+  promoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutTenantInput
+  giftCards?: Prisma.GiftCardUncheckedCreateNestedManyWithoutTenantInput
+  discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
+  media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
+  blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutCurrenciesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutCurrenciesInput, Prisma.TenantUncheckedCreateWithoutCurrenciesInput>
+}
+
+export type TenantUpsertWithoutCurrenciesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutCurrenciesInput, Prisma.TenantUncheckedUpdateWithoutCurrenciesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutCurrenciesInput, Prisma.TenantUncheckedCreateWithoutCurrenciesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutCurrenciesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutCurrenciesInput, Prisma.TenantUncheckedUpdateWithoutCurrenciesInput>
+}
+
+export type TenantUpdateWithoutCurrenciesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  themeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  themeConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  billingStatus?: Prisma.EnumBillingStatusFieldUpdateOperationsInput | $Enums.BillingStatus
+  billingCycle?: Prisma.EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+  planId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trialEndsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  currentPeriodStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  currentPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  staff?: Prisma.TenantStaffUpdateManyWithoutTenantNestedInput
+  domains?: Prisma.TenantDomainUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  products?: Prisma.ProductUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
+  brands?: Prisma.BrandUpdateManyWithoutTenantNestedInput
+  collections?: Prisma.CollectionUpdateManyWithoutTenantNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
+  carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
+  pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
+  filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
+  shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
+  paymentMethods?: Prisma.PaymentMethodUpdateManyWithoutTenantNestedInput
+  promoCodes?: Prisma.PromoCodeUpdateManyWithoutTenantNestedInput
+  giftCards?: Prisma.GiftCardUpdateManyWithoutTenantNestedInput
+  discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
+  media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
+  blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutCurrenciesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  themeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  themeConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  billingStatus?: Prisma.EnumBillingStatusFieldUpdateOperationsInput | $Enums.BillingStatus
+  billingCycle?: Prisma.EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+  planId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trialEndsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  currentPeriodStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  currentPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  staff?: Prisma.TenantStaffUncheckedUpdateManyWithoutTenantNestedInput
+  domains?: Prisma.TenantDomainUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
+  brands?: Prisma.BrandUncheckedUpdateManyWithoutTenantNestedInput
+  collections?: Prisma.CollectionUncheckedUpdateManyWithoutTenantNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
+  carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -1806,6 +2080,7 @@ export type TenantCreateWithoutBrandsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
@@ -1815,6 +2090,7 @@ export type TenantCreateWithoutBrandsInput = {
   discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutBrandsInput = {
@@ -1852,6 +2128,7 @@ export type TenantUncheckedCreateWithoutBrandsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -1861,6 +2138,7 @@ export type TenantUncheckedCreateWithoutBrandsInput = {
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutBrandsInput = {
@@ -1914,6 +2192,7 @@ export type TenantUpdateWithoutBrandsInput = {
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
@@ -1923,6 +2202,7 @@ export type TenantUpdateWithoutBrandsInput = {
   discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutBrandsInput = {
@@ -1960,6 +2240,7 @@ export type TenantUncheckedUpdateWithoutBrandsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -1969,6 +2250,7 @@ export type TenantUncheckedUpdateWithoutBrandsInput = {
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCategoriesInput = {
@@ -2006,6 +2288,7 @@ export type TenantCreateWithoutCategoriesInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
@@ -2015,6 +2298,7 @@ export type TenantCreateWithoutCategoriesInput = {
   discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCategoriesInput = {
@@ -2052,6 +2336,7 @@ export type TenantUncheckedCreateWithoutCategoriesInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -2061,6 +2346,7 @@ export type TenantUncheckedCreateWithoutCategoriesInput = {
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCategoriesInput = {
@@ -2114,6 +2400,7 @@ export type TenantUpdateWithoutCategoriesInput = {
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
@@ -2123,6 +2410,7 @@ export type TenantUpdateWithoutCategoriesInput = {
   discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCategoriesInput = {
@@ -2160,6 +2448,7 @@ export type TenantUncheckedUpdateWithoutCategoriesInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -2169,6 +2458,7 @@ export type TenantUncheckedUpdateWithoutCategoriesInput = {
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutProductsInput = {
@@ -2206,6 +2496,7 @@ export type TenantCreateWithoutProductsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
@@ -2215,6 +2506,7 @@ export type TenantCreateWithoutProductsInput = {
   discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutProductsInput = {
@@ -2252,6 +2544,7 @@ export type TenantUncheckedCreateWithoutProductsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -2261,6 +2554,7 @@ export type TenantUncheckedCreateWithoutProductsInput = {
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutProductsInput = {
@@ -2314,6 +2608,7 @@ export type TenantUpdateWithoutProductsInput = {
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
@@ -2323,6 +2618,7 @@ export type TenantUpdateWithoutProductsInput = {
   discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutProductsInput = {
@@ -2360,6 +2656,7 @@ export type TenantUncheckedUpdateWithoutProductsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -2369,6 +2666,7 @@ export type TenantUncheckedUpdateWithoutProductsInput = {
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutFiltersInput = {
@@ -2407,6 +2705,7 @@ export type TenantCreateWithoutFiltersInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
   paymentMethods?: Prisma.PaymentMethodCreateNestedManyWithoutTenantInput
@@ -2415,6 +2714,7 @@ export type TenantCreateWithoutFiltersInput = {
   discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutFiltersInput = {
@@ -2453,6 +2753,7 @@ export type TenantUncheckedCreateWithoutFiltersInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
   paymentMethods?: Prisma.PaymentMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -2461,6 +2762,7 @@ export type TenantUncheckedCreateWithoutFiltersInput = {
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutFiltersInput = {
@@ -2515,6 +2817,7 @@ export type TenantUpdateWithoutFiltersInput = {
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
   paymentMethods?: Prisma.PaymentMethodUpdateManyWithoutTenantNestedInput
@@ -2523,6 +2826,7 @@ export type TenantUpdateWithoutFiltersInput = {
   discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutFiltersInput = {
@@ -2561,6 +2865,7 @@ export type TenantUncheckedUpdateWithoutFiltersInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
   paymentMethods?: Prisma.PaymentMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -2569,6 +2874,7 @@ export type TenantUncheckedUpdateWithoutFiltersInput = {
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutDiscountsInput = {
@@ -2607,6 +2913,7 @@ export type TenantCreateWithoutDiscountsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
@@ -2615,6 +2922,7 @@ export type TenantCreateWithoutDiscountsInput = {
   giftCards?: Prisma.GiftCardCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutDiscountsInput = {
@@ -2653,6 +2961,7 @@ export type TenantUncheckedCreateWithoutDiscountsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -2661,6 +2970,7 @@ export type TenantUncheckedCreateWithoutDiscountsInput = {
   giftCards?: Prisma.GiftCardUncheckedCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutDiscountsInput = {
@@ -2715,6 +3025,7 @@ export type TenantUpdateWithoutDiscountsInput = {
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
@@ -2723,6 +3034,7 @@ export type TenantUpdateWithoutDiscountsInput = {
   giftCards?: Prisma.GiftCardUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutDiscountsInput = {
@@ -2761,6 +3073,7 @@ export type TenantUncheckedUpdateWithoutDiscountsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -2769,6 +3082,7 @@ export type TenantUncheckedUpdateWithoutDiscountsInput = {
   giftCards?: Prisma.GiftCardUncheckedUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPromoCodesInput = {
@@ -2807,6 +3121,7 @@ export type TenantCreateWithoutPromoCodesInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
@@ -2815,6 +3130,7 @@ export type TenantCreateWithoutPromoCodesInput = {
   discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPromoCodesInput = {
@@ -2853,6 +3169,7 @@ export type TenantUncheckedCreateWithoutPromoCodesInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -2861,6 +3178,7 @@ export type TenantUncheckedCreateWithoutPromoCodesInput = {
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPromoCodesInput = {
@@ -2915,6 +3233,7 @@ export type TenantUpdateWithoutPromoCodesInput = {
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
@@ -2923,6 +3242,7 @@ export type TenantUpdateWithoutPromoCodesInput = {
   discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPromoCodesInput = {
@@ -2961,6 +3281,7 @@ export type TenantUncheckedUpdateWithoutPromoCodesInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -2969,6 +3290,7 @@ export type TenantUncheckedUpdateWithoutPromoCodesInput = {
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutGiftCardsInput = {
@@ -3007,6 +3329,7 @@ export type TenantCreateWithoutGiftCardsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
@@ -3015,6 +3338,7 @@ export type TenantCreateWithoutGiftCardsInput = {
   discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutGiftCardsInput = {
@@ -3053,6 +3377,7 @@ export type TenantUncheckedCreateWithoutGiftCardsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -3061,6 +3386,7 @@ export type TenantUncheckedCreateWithoutGiftCardsInput = {
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutGiftCardsInput = {
@@ -3115,6 +3441,7 @@ export type TenantUpdateWithoutGiftCardsInput = {
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
@@ -3123,6 +3450,7 @@ export type TenantUpdateWithoutGiftCardsInput = {
   discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutGiftCardsInput = {
@@ -3161,6 +3489,7 @@ export type TenantUncheckedUpdateWithoutGiftCardsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -3169,6 +3498,7 @@ export type TenantUncheckedUpdateWithoutGiftCardsInput = {
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCartsInput = {
@@ -3206,6 +3536,7 @@ export type TenantCreateWithoutCartsInput = {
   collections?: Prisma.CollectionCreateNestedManyWithoutTenantInput
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
@@ -3215,6 +3546,7 @@ export type TenantCreateWithoutCartsInput = {
   discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCartsInput = {
@@ -3252,6 +3584,7 @@ export type TenantUncheckedCreateWithoutCartsInput = {
   collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutTenantInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -3261,6 +3594,7 @@ export type TenantUncheckedCreateWithoutCartsInput = {
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCartsInput = {
@@ -3314,6 +3648,7 @@ export type TenantUpdateWithoutCartsInput = {
   collections?: Prisma.CollectionUpdateManyWithoutTenantNestedInput
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
@@ -3323,6 +3658,7 @@ export type TenantUpdateWithoutCartsInput = {
   discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCartsInput = {
@@ -3360,6 +3696,7 @@ export type TenantUncheckedUpdateWithoutCartsInput = {
   collections?: Prisma.CollectionUncheckedUpdateManyWithoutTenantNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -3369,6 +3706,7 @@ export type TenantUncheckedUpdateWithoutCartsInput = {
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutOrdersInput = {
@@ -3406,6 +3744,7 @@ export type TenantCreateWithoutOrdersInput = {
   collections?: Prisma.CollectionCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
@@ -3415,6 +3754,7 @@ export type TenantCreateWithoutOrdersInput = {
   discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutOrdersInput = {
@@ -3452,6 +3792,7 @@ export type TenantUncheckedCreateWithoutOrdersInput = {
   collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -3461,6 +3802,7 @@ export type TenantUncheckedCreateWithoutOrdersInput = {
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutOrdersInput = {
@@ -3514,6 +3856,7 @@ export type TenantUpdateWithoutOrdersInput = {
   collections?: Prisma.CollectionUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
@@ -3523,6 +3866,7 @@ export type TenantUpdateWithoutOrdersInput = {
   discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutOrdersInput = {
@@ -3560,6 +3904,7 @@ export type TenantUncheckedUpdateWithoutOrdersInput = {
   collections?: Prisma.CollectionUncheckedUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -3569,6 +3914,7 @@ export type TenantUncheckedUpdateWithoutOrdersInput = {
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutShippingMethodsInput = {
@@ -3607,6 +3953,7 @@ export type TenantCreateWithoutShippingMethodsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
   paymentMethods?: Prisma.PaymentMethodCreateNestedManyWithoutTenantInput
@@ -3615,6 +3962,7 @@ export type TenantCreateWithoutShippingMethodsInput = {
   discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutShippingMethodsInput = {
@@ -3653,6 +4001,7 @@ export type TenantUncheckedCreateWithoutShippingMethodsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
   paymentMethods?: Prisma.PaymentMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -3661,6 +4010,7 @@ export type TenantUncheckedCreateWithoutShippingMethodsInput = {
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutShippingMethodsInput = {
@@ -3715,6 +4065,7 @@ export type TenantUpdateWithoutShippingMethodsInput = {
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
   paymentMethods?: Prisma.PaymentMethodUpdateManyWithoutTenantNestedInput
@@ -3723,6 +4074,7 @@ export type TenantUpdateWithoutShippingMethodsInput = {
   discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutShippingMethodsInput = {
@@ -3761,6 +4113,7 @@ export type TenantUncheckedUpdateWithoutShippingMethodsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
   paymentMethods?: Prisma.PaymentMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -3769,6 +4122,7 @@ export type TenantUncheckedUpdateWithoutShippingMethodsInput = {
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPaymentMethodsInput = {
@@ -3807,6 +4161,7 @@ export type TenantCreateWithoutPaymentMethodsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
@@ -3815,6 +4170,7 @@ export type TenantCreateWithoutPaymentMethodsInput = {
   discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPaymentMethodsInput = {
@@ -3853,6 +4209,7 @@ export type TenantUncheckedCreateWithoutPaymentMethodsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -3861,6 +4218,7 @@ export type TenantUncheckedCreateWithoutPaymentMethodsInput = {
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPaymentMethodsInput = {
@@ -3915,6 +4273,7 @@ export type TenantUpdateWithoutPaymentMethodsInput = {
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
@@ -3923,6 +4282,7 @@ export type TenantUpdateWithoutPaymentMethodsInput = {
   discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPaymentMethodsInput = {
@@ -3961,6 +4321,7 @@ export type TenantUncheckedUpdateWithoutPaymentMethodsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -3969,6 +4330,215 @@ export type TenantUncheckedUpdateWithoutPaymentMethodsInput = {
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutWishlistItemsInput = {
+  id?: string
+  slug: string
+  name: string
+  description?: string | null
+  email: string
+  phone?: string | null
+  logoUrl?: string | null
+  faviconUrl?: string | null
+  themeId?: string | null
+  themeConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  billingStatus?: $Enums.BillingStatus
+  billingCycle?: $Enums.BillingCycle
+  planId?: string | null
+  trialEndsAt?: Date | string | null
+  currentPeriodStart?: Date | string | null
+  currentPeriodEnd?: Date | string | null
+  stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
+  currency?: string
+  locale?: string
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  staff?: Prisma.TenantStaffCreateNestedManyWithoutTenantInput
+  domains?: Prisma.TenantDomainCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  products?: Prisma.ProductCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
+  brands?: Prisma.BrandCreateNestedManyWithoutTenantInput
+  collections?: Prisma.CollectionCreateNestedManyWithoutTenantInput
+  orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
+  carts?: Prisma.CartCreateNestedManyWithoutTenantInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  pages?: Prisma.PageCreateNestedManyWithoutTenantInput
+  filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
+  shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
+  paymentMethods?: Prisma.PaymentMethodCreateNestedManyWithoutTenantInput
+  promoCodes?: Prisma.PromoCodeCreateNestedManyWithoutTenantInput
+  giftCards?: Prisma.GiftCardCreateNestedManyWithoutTenantInput
+  discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
+  media?: Prisma.MediaCreateNestedManyWithoutTenantInput
+  blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutWishlistItemsInput = {
+  id?: string
+  slug: string
+  name: string
+  description?: string | null
+  email: string
+  phone?: string | null
+  logoUrl?: string | null
+  faviconUrl?: string | null
+  themeId?: string | null
+  themeConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  billingStatus?: $Enums.BillingStatus
+  billingCycle?: $Enums.BillingCycle
+  planId?: string | null
+  trialEndsAt?: Date | string | null
+  currentPeriodStart?: Date | string | null
+  currentPeriodEnd?: Date | string | null
+  stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
+  currency?: string
+  locale?: string
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  staff?: Prisma.TenantStaffUncheckedCreateNestedManyWithoutTenantInput
+  domains?: Prisma.TenantDomainUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
+  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutTenantInput
+  collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutTenantInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
+  carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
+  filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
+  shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
+  paymentMethods?: Prisma.PaymentMethodUncheckedCreateNestedManyWithoutTenantInput
+  promoCodes?: Prisma.PromoCodeUncheckedCreateNestedManyWithoutTenantInput
+  giftCards?: Prisma.GiftCardUncheckedCreateNestedManyWithoutTenantInput
+  discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
+  media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
+  blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutWishlistItemsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutWishlistItemsInput, Prisma.TenantUncheckedCreateWithoutWishlistItemsInput>
+}
+
+export type TenantUpsertWithoutWishlistItemsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutWishlistItemsInput, Prisma.TenantUncheckedUpdateWithoutWishlistItemsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutWishlistItemsInput, Prisma.TenantUncheckedCreateWithoutWishlistItemsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutWishlistItemsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutWishlistItemsInput, Prisma.TenantUncheckedUpdateWithoutWishlistItemsInput>
+}
+
+export type TenantUpdateWithoutWishlistItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  themeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  themeConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  billingStatus?: Prisma.EnumBillingStatusFieldUpdateOperationsInput | $Enums.BillingStatus
+  billingCycle?: Prisma.EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+  planId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trialEndsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  currentPeriodStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  currentPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  staff?: Prisma.TenantStaffUpdateManyWithoutTenantNestedInput
+  domains?: Prisma.TenantDomainUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  products?: Prisma.ProductUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
+  brands?: Prisma.BrandUpdateManyWithoutTenantNestedInput
+  collections?: Prisma.CollectionUpdateManyWithoutTenantNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
+  carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
+  filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
+  shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
+  paymentMethods?: Prisma.PaymentMethodUpdateManyWithoutTenantNestedInput
+  promoCodes?: Prisma.PromoCodeUpdateManyWithoutTenantNestedInput
+  giftCards?: Prisma.GiftCardUpdateManyWithoutTenantNestedInput
+  discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
+  media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
+  blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutWishlistItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  themeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  themeConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  billingStatus?: Prisma.EnumBillingStatusFieldUpdateOperationsInput | $Enums.BillingStatus
+  billingCycle?: Prisma.EnumBillingCycleFieldUpdateOperationsInput | $Enums.BillingCycle
+  planId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trialEndsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  currentPeriodStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  currentPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  staff?: Prisma.TenantStaffUncheckedUpdateManyWithoutTenantNestedInput
+  domains?: Prisma.TenantDomainUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
+  brands?: Prisma.BrandUncheckedUpdateManyWithoutTenantNestedInput
+  collections?: Prisma.CollectionUncheckedUpdateManyWithoutTenantNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
+  carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
+  filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
+  shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
+  paymentMethods?: Prisma.PaymentMethodUncheckedUpdateManyWithoutTenantNestedInput
+  promoCodes?: Prisma.PromoCodeUncheckedUpdateManyWithoutTenantNestedInput
+  giftCards?: Prisma.GiftCardUncheckedUpdateManyWithoutTenantNestedInput
+  discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
+  media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
+  blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutReviewsInput = {
@@ -4006,6 +4576,7 @@ export type TenantCreateWithoutReviewsInput = {
   collections?: Prisma.CollectionCreateNestedManyWithoutTenantInput
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
@@ -4015,6 +4586,7 @@ export type TenantCreateWithoutReviewsInput = {
   discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutReviewsInput = {
@@ -4052,6 +4624,7 @@ export type TenantUncheckedCreateWithoutReviewsInput = {
   collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutTenantInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -4061,6 +4634,7 @@ export type TenantUncheckedCreateWithoutReviewsInput = {
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutReviewsInput = {
@@ -4114,6 +4688,7 @@ export type TenantUpdateWithoutReviewsInput = {
   collections?: Prisma.CollectionUpdateManyWithoutTenantNestedInput
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
@@ -4123,6 +4698,7 @@ export type TenantUpdateWithoutReviewsInput = {
   discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutReviewsInput = {
@@ -4160,6 +4736,7 @@ export type TenantUncheckedUpdateWithoutReviewsInput = {
   collections?: Prisma.CollectionUncheckedUpdateManyWithoutTenantNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -4169,6 +4746,7 @@ export type TenantUncheckedUpdateWithoutReviewsInput = {
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutMediaInput = {
@@ -4207,6 +4785,7 @@ export type TenantCreateWithoutMediaInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
@@ -4215,6 +4794,7 @@ export type TenantCreateWithoutMediaInput = {
   giftCards?: Prisma.GiftCardCreateNestedManyWithoutTenantInput
   discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutMediaInput = {
@@ -4253,6 +4833,7 @@ export type TenantUncheckedCreateWithoutMediaInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -4261,6 +4842,7 @@ export type TenantUncheckedCreateWithoutMediaInput = {
   giftCards?: Prisma.GiftCardUncheckedCreateNestedManyWithoutTenantInput
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutMediaInput = {
@@ -4315,6 +4897,7 @@ export type TenantUpdateWithoutMediaInput = {
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
@@ -4323,6 +4906,7 @@ export type TenantUpdateWithoutMediaInput = {
   giftCards?: Prisma.GiftCardUpdateManyWithoutTenantNestedInput
   discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutMediaInput = {
@@ -4361,6 +4945,7 @@ export type TenantUncheckedUpdateWithoutMediaInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -4369,6 +4954,7 @@ export type TenantUncheckedUpdateWithoutMediaInput = {
   giftCards?: Prisma.GiftCardUncheckedUpdateManyWithoutTenantNestedInput
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutBlogPostsInput = {
@@ -4407,6 +4993,7 @@ export type TenantCreateWithoutBlogPostsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
@@ -4415,6 +5002,7 @@ export type TenantCreateWithoutBlogPostsInput = {
   giftCards?: Prisma.GiftCardCreateNestedManyWithoutTenantInput
   discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutBlogPostsInput = {
@@ -4453,6 +5041,7 @@ export type TenantUncheckedCreateWithoutBlogPostsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -4461,6 +5050,7 @@ export type TenantUncheckedCreateWithoutBlogPostsInput = {
   giftCards?: Prisma.GiftCardUncheckedCreateNestedManyWithoutTenantInput
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutBlogPostsInput = {
@@ -4515,6 +5105,7 @@ export type TenantUpdateWithoutBlogPostsInput = {
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
@@ -4523,6 +5114,7 @@ export type TenantUpdateWithoutBlogPostsInput = {
   giftCards?: Prisma.GiftCardUpdateManyWithoutTenantNestedInput
   discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutBlogPostsInput = {
@@ -4561,6 +5153,7 @@ export type TenantUncheckedUpdateWithoutBlogPostsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -4569,6 +5162,7 @@ export type TenantUncheckedUpdateWithoutBlogPostsInput = {
   giftCards?: Prisma.GiftCardUncheckedUpdateManyWithoutTenantNestedInput
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPagesInput = {
@@ -4607,6 +5201,7 @@ export type TenantCreateWithoutPagesInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
   paymentMethods?: Prisma.PaymentMethodCreateNestedManyWithoutTenantInput
@@ -4615,6 +5210,7 @@ export type TenantCreateWithoutPagesInput = {
   discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPagesInput = {
@@ -4653,6 +5249,7 @@ export type TenantUncheckedCreateWithoutPagesInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
   paymentMethods?: Prisma.PaymentMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -4661,6 +5258,7 @@ export type TenantUncheckedCreateWithoutPagesInput = {
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPagesInput = {
@@ -4715,6 +5313,7 @@ export type TenantUpdateWithoutPagesInput = {
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
   paymentMethods?: Prisma.PaymentMethodUpdateManyWithoutTenantNestedInput
@@ -4723,6 +5322,7 @@ export type TenantUpdateWithoutPagesInput = {
   discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPagesInput = {
@@ -4761,6 +5361,7 @@ export type TenantUncheckedUpdateWithoutPagesInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
   paymentMethods?: Prisma.PaymentMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -4769,6 +5370,7 @@ export type TenantUncheckedUpdateWithoutPagesInput = {
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCollectionsInput = {
@@ -4806,6 +5408,7 @@ export type TenantCreateWithoutCollectionsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodCreateNestedManyWithoutTenantInput
@@ -4815,6 +5418,7 @@ export type TenantCreateWithoutCollectionsInput = {
   discounts?: Prisma.DiscountCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCollectionsInput = {
@@ -4852,6 +5456,7 @@ export type TenantUncheckedCreateWithoutCollectionsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTenantInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutTenantInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTenantInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutTenantInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutTenantInput
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutTenantInput
   shippingMethods?: Prisma.ShippingMethodUncheckedCreateNestedManyWithoutTenantInput
@@ -4861,6 +5466,7 @@ export type TenantUncheckedCreateWithoutCollectionsInput = {
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutTenantInput
   media?: Prisma.MediaUncheckedCreateNestedManyWithoutTenantInput
   blogPosts?: Prisma.BlogPostUncheckedCreateNestedManyWithoutTenantInput
+  currencies?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCollectionsInput = {
@@ -4914,6 +5520,7 @@ export type TenantUpdateWithoutCollectionsInput = {
   orders?: Prisma.OrderUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUpdateManyWithoutTenantNestedInput
@@ -4923,6 +5530,7 @@ export type TenantUpdateWithoutCollectionsInput = {
   discounts?: Prisma.DiscountUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCollectionsInput = {
@@ -4960,6 +5568,7 @@ export type TenantUncheckedUpdateWithoutCollectionsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTenantNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutTenantNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTenantNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutTenantNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutTenantNestedInput
   filters?: Prisma.FilterUncheckedUpdateManyWithoutTenantNestedInput
   shippingMethods?: Prisma.ShippingMethodUncheckedUpdateManyWithoutTenantNestedInput
@@ -4969,6 +5578,7 @@ export type TenantUncheckedUpdateWithoutCollectionsInput = {
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutTenantNestedInput
   media?: Prisma.MediaUncheckedUpdateManyWithoutTenantNestedInput
   blogPosts?: Prisma.BlogPostUncheckedUpdateManyWithoutTenantNestedInput
+  currencies?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 
@@ -4987,6 +5597,7 @@ export type TenantCountOutputType = {
   orders: number
   carts: number
   reviews: number
+  wishlistItems: number
   pages: number
   filters: number
   shippingMethods: number
@@ -4996,6 +5607,7 @@ export type TenantCountOutputType = {
   discounts: number
   media: number
   blogPosts: number
+  currencies: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5009,6 +5621,7 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   orders?: boolean | TenantCountOutputTypeCountOrdersArgs
   carts?: boolean | TenantCountOutputTypeCountCartsArgs
   reviews?: boolean | TenantCountOutputTypeCountReviewsArgs
+  wishlistItems?: boolean | TenantCountOutputTypeCountWishlistItemsArgs
   pages?: boolean | TenantCountOutputTypeCountPagesArgs
   filters?: boolean | TenantCountOutputTypeCountFiltersArgs
   shippingMethods?: boolean | TenantCountOutputTypeCountShippingMethodsArgs
@@ -5018,6 +5631,7 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   discounts?: boolean | TenantCountOutputTypeCountDiscountsArgs
   media?: boolean | TenantCountOutputTypeCountMediaArgs
   blogPosts?: boolean | TenantCountOutputTypeCountBlogPostsArgs
+  currencies?: boolean | TenantCountOutputTypeCountCurrenciesArgs
 }
 
 /**
@@ -5103,6 +5717,13 @@ export type TenantCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Types.
 /**
  * TenantCountOutputType without action
  */
+export type TenantCountOutputTypeCountWishlistItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WishlistItemWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
 export type TenantCountOutputTypeCountPagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.PageWhereInput
 }
@@ -5163,6 +5784,13 @@ export type TenantCountOutputTypeCountBlogPostsArgs<ExtArgs extends runtime.Type
   where?: Prisma.BlogPostWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountCurrenciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TenantCurrencyWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -5200,6 +5828,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   orders?: boolean | Prisma.Tenant$ordersArgs<ExtArgs>
   carts?: boolean | Prisma.Tenant$cartsArgs<ExtArgs>
   reviews?: boolean | Prisma.Tenant$reviewsArgs<ExtArgs>
+  wishlistItems?: boolean | Prisma.Tenant$wishlistItemsArgs<ExtArgs>
   pages?: boolean | Prisma.Tenant$pagesArgs<ExtArgs>
   filters?: boolean | Prisma.Tenant$filtersArgs<ExtArgs>
   shippingMethods?: boolean | Prisma.Tenant$shippingMethodsArgs<ExtArgs>
@@ -5209,6 +5838,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   discounts?: boolean | Prisma.Tenant$discountsArgs<ExtArgs>
   media?: boolean | Prisma.Tenant$mediaArgs<ExtArgs>
   blogPosts?: boolean | Prisma.Tenant$blogPostsArgs<ExtArgs>
+  currencies?: boolean | Prisma.Tenant$currenciesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
@@ -5308,6 +5938,7 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   orders?: boolean | Prisma.Tenant$ordersArgs<ExtArgs>
   carts?: boolean | Prisma.Tenant$cartsArgs<ExtArgs>
   reviews?: boolean | Prisma.Tenant$reviewsArgs<ExtArgs>
+  wishlistItems?: boolean | Prisma.Tenant$wishlistItemsArgs<ExtArgs>
   pages?: boolean | Prisma.Tenant$pagesArgs<ExtArgs>
   filters?: boolean | Prisma.Tenant$filtersArgs<ExtArgs>
   shippingMethods?: boolean | Prisma.Tenant$shippingMethodsArgs<ExtArgs>
@@ -5317,6 +5948,7 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   discounts?: boolean | Prisma.Tenant$discountsArgs<ExtArgs>
   media?: boolean | Prisma.Tenant$mediaArgs<ExtArgs>
   blogPosts?: boolean | Prisma.Tenant$blogPostsArgs<ExtArgs>
+  currencies?: boolean | Prisma.Tenant$currenciesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -5335,6 +5967,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     orders: Prisma.$OrderPayload<ExtArgs>[]
     carts: Prisma.$CartPayload<ExtArgs>[]
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
+    wishlistItems: Prisma.$WishlistItemPayload<ExtArgs>[]
     pages: Prisma.$PagePayload<ExtArgs>[]
     filters: Prisma.$FilterPayload<ExtArgs>[]
     shippingMethods: Prisma.$ShippingMethodPayload<ExtArgs>[]
@@ -5344,6 +5977,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     discounts: Prisma.$DiscountPayload<ExtArgs>[]
     media: Prisma.$MediaPayload<ExtArgs>[]
     blogPosts: Prisma.$BlogPostPayload<ExtArgs>[]
+    currencies: Prisma.$TenantCurrencyPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -5775,6 +6409,7 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   orders<T extends Prisma.Tenant$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   carts<T extends Prisma.Tenant$cartsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$cartsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CartPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviews<T extends Prisma.Tenant$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  wishlistItems<T extends Prisma.Tenant$wishlistItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$wishlistItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pages<T extends Prisma.Tenant$pagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$pagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   filters<T extends Prisma.Tenant$filtersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$filtersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FilterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   shippingMethods<T extends Prisma.Tenant$shippingMethodsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$shippingMethodsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShippingMethodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -5784,6 +6419,7 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   discounts<T extends Prisma.Tenant$discountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$discountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DiscountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   media<T extends Prisma.Tenant$mediaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$mediaArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   blogPosts<T extends Prisma.Tenant$blogPostsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$blogPostsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  currencies<T extends Prisma.Tenant$currenciesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$currenciesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantCurrencyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6466,6 +7102,30 @@ export type Tenant$reviewsArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
+ * Tenant.wishlistItems
+ */
+export type Tenant$wishlistItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WishlistItem
+   */
+  select?: Prisma.WishlistItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WishlistItem
+   */
+  omit?: Prisma.WishlistItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WishlistItemInclude<ExtArgs> | null
+  where?: Prisma.WishlistItemWhereInput
+  orderBy?: Prisma.WishlistItemOrderByWithRelationInput | Prisma.WishlistItemOrderByWithRelationInput[]
+  cursor?: Prisma.WishlistItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WishlistItemScalarFieldEnum | Prisma.WishlistItemScalarFieldEnum[]
+}
+
+/**
  * Tenant.pages
  */
 export type Tenant$pagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -6679,6 +7339,30 @@ export type Tenant$blogPostsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.BlogPostScalarFieldEnum | Prisma.BlogPostScalarFieldEnum[]
+}
+
+/**
+ * Tenant.currencies
+ */
+export type Tenant$currenciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TenantCurrency
+   */
+  select?: Prisma.TenantCurrencySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TenantCurrency
+   */
+  omit?: Prisma.TenantCurrencyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TenantCurrencyInclude<ExtArgs> | null
+  where?: Prisma.TenantCurrencyWhereInput
+  orderBy?: Prisma.TenantCurrencyOrderByWithRelationInput | Prisma.TenantCurrencyOrderByWithRelationInput[]
+  cursor?: Prisma.TenantCurrencyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TenantCurrencyScalarFieldEnum | Prisma.TenantCurrencyScalarFieldEnum[]
 }
 
 /**

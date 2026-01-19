@@ -10,10 +10,10 @@ import {
 	Trash2,
 	TrendingUp,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Loader } from "@/components/loader";
 import { PolarisButton } from "@/components/admin/polaris-button";
+import { Loader } from "@/components/loader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -86,11 +86,7 @@ export default function AbandonedCheckoutsPage() {
 	const [selectedCart, setSelectedCart] = useState<AbandonedCart | null>(null);
 	const [deleting, setDeleting] = useState(false);
 
-	useEffect(() => {
-		loadData();
-	}, []);
-
-	async function loadData() {
+	const loadData = useCallback(async () => {
 		try {
 			setLoading(true);
 			const [cartsData, statsData] = await Promise.all([
@@ -99,12 +95,16 @@ export default function AbandonedCheckoutsPage() {
 			]);
 			setCarts(cartsData);
 			setStats(statsData);
-		} catch (error) {
+		} catch (_error) {
 			toast.error("Failed to load abandoned carts");
 		} finally {
 			setLoading(false);
 		}
-	}
+	}, []);
+
+	useEffect(() => {
+		loadData();
+	}, [loadData]);
 
 	const handleView = (cart: AbandonedCart) => {
 		setSelectedCart(cart);
@@ -126,7 +126,7 @@ export default function AbandonedCheckoutsPage() {
 			setDeleteDialogOpen(false);
 			toast.success("Abandoned cart deleted");
 			loadData(); // Refresh stats
-		} catch (error) {
+		} catch (_error) {
 			toast.error("Failed to delete cart");
 		} finally {
 			setDeleting(false);
@@ -144,7 +144,7 @@ export default function AbandonedCheckoutsPage() {
 	const formatCurrency = (amount: number) => {
 		return new Intl.NumberFormat("bg-BG", {
 			style: "currency",
-			currency: "BGN",
+			currency: "EUR",
 		}).format(amount);
 	};
 

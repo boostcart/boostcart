@@ -21,8 +21,8 @@ import { useDialogStore } from "@/stores/dialog-store";
 import { DiscountFormDialog } from "./discounts/_components/discount-dialogs";
 import { ProductFormDialog } from "./products/_components/product-dialogs";
 
-function formatCurrency(amount: number, currency = "BGN") {
-	return new Intl.NumberFormat("bg-BG", {
+function formatCurrency(amount: number, currency = "EUR") {
+	return new Intl.NumberFormat("en-US", {
 		style: "currency",
 		currency,
 	}).format(amount);
@@ -47,7 +47,7 @@ export default function AdminDashboard() {
 	const dashboardStats = [
 		{
 			title: `Total Revenue`,
-			value: formatCurrency(stats.totalRevenue, tenant?.currency ?? "BGN"),
+			value: formatCurrency(stats.totalRevenue, tenant?.currency ?? "EUR"),
 			change: `From paid orders`,
 			trend: `up`,
 			icon: DollarSign,

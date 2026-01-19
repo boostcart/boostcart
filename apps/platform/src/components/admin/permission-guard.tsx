@@ -105,7 +105,7 @@ export function HideIfHasPermission({
 export function withPermission<P extends object>(
 	WrappedComponent: React.ComponentType<P>,
 	permission: Permission,
-	Fallback?: React.ComponentType
+	Fallback?: React.ComponentType,
 ) {
 	return function PermissionProtectedComponent(props: P) {
 		return (

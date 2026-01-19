@@ -34,7 +34,7 @@ export interface AuthConfig {
 	/**
 	 * Prisma database client (any Prisma client instance)
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// biome-ignore lint/suspicious/noExplicitAny: i mean what type should this be? if you have an idea go for it
 	db: any;
 
 	/**
@@ -92,7 +92,10 @@ export interface AuthConfig {
  * Email templates configuration
  */
 export interface EmailTemplates {
-	resetPassword: (params: { user: { name?: string; email: string }; url: string }) => {
+	resetPassword: (params: {
+		user: { name?: string; email: string };
+		url: string;
+	}) => {
 		subject: string;
 		html: string;
 	};
@@ -100,7 +103,10 @@ export interface EmailTemplates {
 		subject: string;
 		html: string;
 	};
-	verifyEmail: (params: { user: { name?: string; email: string }; url: string }) => {
+	verifyEmail: (params: {
+		user: { name?: string; email: string };
+		url: string;
+	}) => {
 		subject: string;
 		html: string;
 	};

@@ -17,8 +17,8 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Loader } from "@/components/loader";
 import { PolarisButton } from "@/components/admin/polaris-button";
+import { Loader } from "@/components/loader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -49,8 +49,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
 	addDomain,
-	getDomainVerificationInstructions,
 	getDomains,
+	getDomainVerificationInstructions,
 	refreshDnsToken,
 	removeDomain,
 	setPrimaryDomain,
@@ -126,7 +126,7 @@ export default function DomainsPage() {
 			fetchDomains();
 		} catch (error) {
 			toast.error(
-				error instanceof Error ? error.message : "Failed to add domain"
+				error instanceof Error ? error.message : "Failed to add domain",
 			);
 		} finally {
 			setAddingDomain(false);
@@ -156,7 +156,7 @@ export default function DomainsPage() {
 				fetchDomains();
 			} else {
 				toast.error(
-					"DNS record not found. Please check your DNS settings and try again."
+					"DNS record not found. Please check your DNS settings and try again.",
 				);
 			}
 		} catch (_error) {
@@ -181,7 +181,7 @@ export default function DomainsPage() {
 								value: `boostcart-verify=${updated.dnsToken}`,
 							},
 						}
-					: null
+					: null,
 			);
 			toast.success("Verification token refreshed");
 		} catch (_error) {
@@ -196,7 +196,7 @@ export default function DomainsPage() {
 			fetchDomains();
 		} catch (error) {
 			toast.error(
-				error instanceof Error ? error.message : "Failed to set primary domain"
+				error instanceof Error ? error.message : "Failed to set primary domain",
 			);
 		}
 	};
@@ -217,7 +217,7 @@ export default function DomainsPage() {
 			fetchDomains();
 		} catch (error) {
 			toast.error(
-				error instanceof Error ? error.message : "Failed to remove domain"
+				error instanceof Error ? error.message : "Failed to remove domain",
 			);
 		} finally {
 			setDeleting(false);
@@ -355,9 +355,7 @@ export default function DomainsPage() {
 												<span className="text-xs text-muted-foreground flex items-center gap-1">
 													<Shield className="h-3 w-3" />
 													SSL{" "}
-													{domain.sslStatus === "active"
-														? "Active"
-														: "Pending"}
+													{domain.sslStatus === "active" ? "Active" : "Pending"}
 												</span>
 											)}
 										</div>
@@ -519,7 +517,7 @@ export default function DomainsPage() {
 											onClick={() =>
 												copyToClipboard(
 													verificationInstructions.instructions.value,
-													"Value"
+													"Value",
 												)
 											}
 										>
@@ -557,7 +555,7 @@ export default function DomainsPage() {
 										<code className="text-sm bg-muted px-2 py-1 rounded">
 											@ or{" "}
 											{verificationInstructions.instructions.cname.host.split(
-												"."
+												".",
 											)[0] || "@"}
 										</code>
 										<Button
@@ -567,9 +565,9 @@ export default function DomainsPage() {
 											onClick={() =>
 												copyToClipboard(
 													verificationInstructions.instructions.cname.host.split(
-														"."
+														".",
 													)[0] || "@",
-													"Host"
+													"Host",
 												)
 											}
 										>
@@ -588,7 +586,7 @@ export default function DomainsPage() {
 											onClick={() =>
 												copyToClipboard(
 													verificationInstructions.instructions.cname.value,
-													"CNAME Value"
+													"CNAME Value",
 												)
 											}
 										>

@@ -4,6 +4,442 @@
 
 ---
 
+## January 8, 2026
+
+### Phase 6 Started: Theme Engine 🎨
+
+Started implementing the Theme Engine for visual customization of storefronts.
+
+**New: Theme Settings Page** (`/admin/settings/theme`)
+
+Created comprehensive theme customization page with:
+
+| Feature | Description |
+|---------|-------------|
+| Color Pickers | Primary, secondary, accent, background, foreground, muted, border colors |
+| Typography | Body font and heading font selection from Google Fonts |
+| Layout Styles | Header (default/centered/minimal), Footer (default/simple/expanded), Product Card (default/minimal/detailed) |
+| Banner Config | Show/hide, text, background & text colors with live preview |
+| Social Links | Facebook, Instagram, Twitter/X, YouTube, TikTok URLs |
+| Contact Info | Email, phone, address for footer display |
+| Preview Panel | Real-time preview of color swatches and mini storefront mockup |
+| Save System | Unsaved changes detection, discard, reset to defaults |
+
+**Files Created/Modified:**
+
+| File | Change |
+|------|--------|
+| `apps/platform/src/app/(internal)/admin/settings/theme/page.tsx` | New theme settings page |
+| `apps/platform/src/app/(internal)/admin/settings/page.tsx` | Added Theme & Appearance card |
+
+**Integration:**
+- Uses existing `updateTheme` server action from `settings.ts`
+- Theme config stored as JSON in tenant's `themeConfig` field
+- Compatible with existing `ThemeProvider` in storefront that applies CSS variables
+
+---
+
+## January 7, 2026
+
+### Phase 4 & 5 Completion: Email System & Customer Features ✅
+
+Completed remaining features from Phase 4 (Orders & Checkout) and Phase 5 (Customer Accounts): email notifications, invoice generation, password reset, and email verification.
+
+**New Package: `@boostcart/email`**
+
+Created shared email package with React Email templates and Resend integration:
+
+| Component | Location | Description |
+|-----------|----------|-------------|
+| Email Client | `packages/email/src/client.ts` | Resend wrapper with configurable defaults |
+| Email Service | `packages/email/src/service.ts` | High-level API for sending emails |
+| Order Confirmation | `templates/order-confirmation.tsx` | Bulgarian order confirmation email |
+| Shipping Update | `templates/shipping-update.tsx` | Tracking and delivery notifications |
+| Email Verification | `templates/verification.tsx` | Verify customer email addresses |
+| Password Reset | `templates/password-reset.tsx` | Secure password reset links |
+| Welcome Email | `templates/welcome.tsx` | New customer welcome message |
+| Invoice PDF | `templates/invoice-pdf.tsx` | PDF invoice generation with @react-pdf/renderer |
+
+**Password Reset Flow**
+
+| File | Description |
+|------|-------------|
+| `password-reset.ts` (actions) | Request & reset password server actions |
+| `forgot-password/page.tsx` | Form to request reset link |
+| `reset-password/page.tsx` | Set new password with token validation |
+
+**Email Verification Flow**
+
+| File | Description |
+|------|-------------|
+| `email-verification.ts` (actions) | Send & verify email server actions |
+| `verify-email/page.tsx` | Email verification page with token |
+| Database migration | Added `EmailVerification` and `PasswordReset` tables |
+
+**Key Features Implemented:**
+
+1. **Email Notifications**:
+   - Order confirmation emails sent automatically after checkout
+   - Shipping update notifications (ready for integration)
+   - Welcome emails for new customers
+   - All templates in Bulgarian with bilingual headers
+
+2. **Invoice Generation**:
+   - PDF invoices with `@react-pdf/renderer`
+   - Bulgarian invoice format with VAT details
+   - Attachable to order confirmation emails
+   - Export functions: `generateInvoicePDF()`, `getInvoiceFilename()`
+
+3. **Password Reset**:
+   - Secure token-based reset flow (expires in 1 hour)
+   - Tokens stored in `PasswordReset` table linked to customers
+   - One-time use tokens marked with `usedAt` timestamp
+   - Email enumeration protection (always returns success)
+
+4. **Email Verification**:
+   - Verification emails sent on customer registration
+   - Tokens expire in 24 hours
+   - Updates `Customer.emailVerified` and `emailVerifiedAt`
+   - Stored in `EmailVerification` table
+
+**Database Changes:**
+
+Added two new tables for customer authentication:
+
+```prisma
+model PasswordReset {
+  id         String   @id @default(cuid())
+  customerId String   @unique
+  customer   Customer @relation(...)
+  token      String   @unique
+  expiresAt  DateTime
+  usedAt     DateTime?
+  createdAt  DateTime @default(now())
+}
+
+model EmailVerification {
+  id         String   @id @default(cuid())
+  customerId String   @unique
+  customer   Customer @relation(...)
+  token      String   @unique
+  expiresAt  DateTime
+  verifiedAt DateTime?
+  createdAt  DateTime @default(now())
+}
+```
+
+**Configuration:**
+
+- Added `RESEND_API_KEY` to storefront env validation
+- Email service gracefully handles missing API key (logs warning)
+- Both apps now depend on `@boostcart/email` workspace package
+
+**Phase 4 & 5 Status:**
+
+✅ **Phase 4: Orders & Checkout** - COMPLETE
+- ✅ Shopping cart
+- ✅ Multi-step checkout
+- ✅ Guest checkout
+- ✅ Order creation & management
+- ✅ Order status workflow
+- ✅ Email notifications
+- ✅ Invoice generation (PDF)
+
+✅ **Phase 5: Customer Accounts** - COMPLETE
+- ✅ Customer registration & login
+- ✅ Customer dashboard
+- ✅ Address book management
+- ✅ Order history
+- ✅ Wishlist
+- ✅ Password reset flow
+- ✅ Email verification
+
+---
+
+## January 12, 2026
+
+### Phase 3 Storefront Completion ✅
+
+Completed remaining Phase 3 storefront features: category pages, customer account management, global search, and theme system basics.
+
+**New Pages & Components:**
+
+| Feature | Location | Description |
+|---------|----------|-------------|
+| Categories List | `(store)/categories/page.tsx` | Top-level categories with subcategory previews |
+| Category Detail | `(store)/categories/[slug]/page.tsx` | Category products with sorting & pagination |
+| Subcategory Page | `(store)/categories/[slug]/[subSlug]/page.tsx` | Nested category products |
+| Order History | `(store)/account/orders/page.tsx` | Customer orders with status filters |
+| Order Detail | `(store)/account/orders/[orderNumber]/page.tsx` | Full order details with timeline |
+| Addresses List | `(store)/account/addresses/page.tsx` | Manage shipping addresses |
+| Address Form | `addresses/_components/address-form.tsx` | Create/edit address form |
+| New Address Page | `addresses/new/page.tsx` | Add new address |
+| Edit Address Page | `addresses/[id]/edit/page.tsx` | Edit existing address |
+| Address Actions | `account/_actions/addresses.ts` | CRUD server actions for addresses |
+| Global Search | `(store)/_components/global-search.tsx` | Site-wide product search modal |
+| Search API | `(store)/_actions/search.ts` | Server action for product search |
+| Store Banner | `(store)/_components/store-banner.tsx` | Dismissible banner component |
+| Theme Provider | `providers/theme-provider.tsx` | CSS variable theme injection |
+
+**Modified Files:**
+
+| File | Changes |
+| ---- | ------- |
+| `(store)/layout.tsx` | Added ThemeProvider and StoreBanner components |
+| `(store)/_components/store-header.tsx` | Integrated GlobalSearch with ⌘K shortcut |
+| `(store)/_components/store-footer.tsx` | Added social links and contact info from theme |
+| `server/tenant.ts` | Extended StorefrontTenant with ThemeConfig interface |
+
+**Key Features:**
+
+1. **Category Navigation**: Full hierarchy support with parent/child categories, breadcrumbs, product counts
+
+2. **Order History**:
+   - Status filters (pending, confirmed, shipped, delivered, etc.)
+   - Status badges with color coding
+   - Order timeline with history events
+   - Payment and shipping details
+
+3. **Address Management**:
+   - CRUD operations with server actions
+   - Default address selection
+   - Country selection for Bulgarian market
+
+4. **Global Search**:
+   - Debounced search with 300ms delay
+   - Keyboard shortcut (⌘K / Ctrl+K)
+   - Product results with images, prices, categories
+   - "View all results" link to products page
+
+5. **Theme System**:
+   - ThemeConfig interface with colors, fonts, layout options
+   - CSS variable injection via ThemeProvider
+   - Hex to HSL conversion for Tailwind compatibility
+   - Social links in footer from theme config
+   - Promotional banner support
+
+---
+
+## January 11, 2026
+
+### Wishlist, Media Upload & Order Creation Features ✅
+
+Completed three major features: full wishlist functionality, product media upload integration with Cloudflare R2, and real order creation from storefront checkout.
+
+**New Files Created:**
+
+| Feature | Location | Description |
+| ------- | -------- | ----------- |
+| Wishlist Actions | `storefront/server/actions/wishlist.ts` | Full CRUD for wishlist items |
+| Order Actions | `storefront/server/actions/orders.ts` | Order creation and retrieval |
+| Wishlist Page | `storefront/app/(store)/wishlist/page.tsx` | Customer wishlist grid |
+| Remove Button | `wishlist/_components/wishlist-remove-button.tsx` | Remove item from wishlist |
+| Add to Cart | `wishlist/_components/wishlist-add-to-cart.tsx` | Add wishlist item to cart |
+| Wishlist Button | `storefront/components/wishlist-button.tsx` | Reusable toggle button |
+
+**Modified Files:**
+
+| File | Changes |
+| ---- | ------- |
+| `platform/admin/products/_components/product-form.tsx` | Integrated R2 upload - uploads staged files before saving product |
+| `storefront/(store)/products/[slug]/_components/product-info.tsx` | Added WishlistButton component |
+| `storefront/(store)/_components/store-header.tsx` | Added wishlist link in dropdown menu |
+| `storefront/(store)/checkout/page.tsx` | Calls real `createOrder()` API instead of simulating |
+| `storefront/(store)/checkout/success/page.tsx` | Shows real order number from URL params |
+
+**Key Technical Details:**
+
+1. **Media Upload Flow**:
+   - Product form stages files locally with blob URLs
+   - On submit, uploads all staged files via `uploadFiles("productMedia", { files })`
+   - Replaces blob URLs with real uploaded URLs before saving
+
+2. **Order Creation**:
+   - Auto-creates default Currency (BGN), ShippingMethod, PaymentMethod if none exist
+   - Creates OrderHistory entry with PENDING status
+   - Decrements stock for products with `trackStock` enabled
+   - Uses Prisma transaction for data integrity
+
+3. **Prisma Schema Field Names** (corrected from intuitive names):
+   - Order uses `shippingAddressLine1`/`shippingAddressLine2` (not `shippingAddress1`)
+   - Order uses `shippingPostcode` (not `shippingZip`)
+   - ShippingMethod uses `cost` (not `price`)
+   - OrderHistory uses `timestamp` (not `createdAt`)
+
+4. **Wishlist Implementation**:
+   - Server actions for add/remove/toggle/get operations
+   - Button shows filled heart when item is wishlisted
+   - Redirects to login if not authenticated
+
+---
+
+## January 10, 2026
+
+### Storefront Core Features Complete ✅
+
+Completed the main storefront shopping experience with products, collections, cart, and checkout functionality.
+
+**New Pages & Components:**
+
+| Feature | Location | Description |
+|---------|----------|-------------|
+| Products List | `(store)/products/page.tsx` | Product grid with filters, search, sorting |
+| Product Detail | `(store)/products/[slug]/page.tsx` | Gallery, variants, tabs, related products |
+| Product API | `api/store/products/[slug]/route.ts` | API endpoint for product data |
+| Collections List | `(store)/collections/page.tsx` | All collections grid |
+| Collection Detail | `(store)/collections/[slug]/page.tsx` | Collection with products |
+| Cart Page | `(store)/cart/page.tsx` | Full cart with quantity controls |
+| Checkout | `(store)/checkout/page.tsx` | Multi-step (info, shipping, payment, review) |
+| Success Page | `(store)/checkout/success/page.tsx` | Order confirmation with confetti |
+
+**Cart Store (`stores/cart-store.ts`):**
+- Zustand v5 with localStorage persistence
+- `addItem`, `removeItem`, `updateQuantity`, `clearCart`
+- `getSubtotal`, `getSavings` computed values
+- Cart items include product, variant, quantity, price
+
+**Store Header Updates:**
+- Mini cart sheet with items preview
+- Cart badge with item count
+- Quick remove from mini cart
+
+**Key Technical Decisions:**
+1. Product detail as client component with API route (not server component) - allows dynamic variant selection
+2. Zod v4 compatibility - use `import { z } from "zod/v3"` for React Hook Form integration
+3. Prisma schema corrections:
+   - Product has single `category` via `categoryId` (not many-to-many)
+   - Product uses `trackStock`/`stock` (not `trackQuantity`/`quantity`)
+   - Collections linked via `collectionProducts` junction table
+   - ProductVariant uses JSON `options` field (not `optionValues` relation)
+
+**Dependencies Added:**
+- `canvas-confetti` v1.9.4 for checkout success animation
+
+---
+
+## January 9, 2026
+
+### Platform/Storefront Architecture Cleanup ✅
+
+Removed the `(public)` folder from platform app since all storefront functionality now belongs in the separate storefront app.
+
+**Architecture Finalized:**
+| App | Subdomain | Purpose |
+|-----|-----------|---------|
+| `apps/platform` | `admin.boostcart.bg` | Merchant admin dashboard only |
+| `apps/storefront` | `{slug}.boostcart.bg` | Customer-facing store pages |
+| `apps/marketing` (future) | `boostcart.bg` | Marketing site, landing pages |
+
+**Changes:**
+- Removed `apps/platform/src/app/(public)/*` - these routes conflicted with `(private)/account`
+- Created `.env` symlink in storefront to use root `.env` file
+- Platform app now contains ONLY:
+  - `/admin/*` - Store management dashboard
+  - `/platform-admin/*` - Super admin (tenant/user management)
+  - `/signin`, `/signup` - Authentication
+  - `/onboarding/*` - New store setup
+  - `/(private)/account/*` - Platform user account settings
+
+---
+
+### Storefront App Separation ✅
+
+Created a completely separate `apps/storefront` app for customer-facing store functionality. This follows the Shopify-like architecture pattern where the platform (merchant dashboard) and storefront (customer-facing store) are separate applications.
+
+**Architecture Decision:**
+- **Platform App** (`apps/platform`, port 3000): Merchant admin dashboard, Better Auth for platform users
+- **Storefront App** (`apps/storefront`, port 3001): Customer-facing store, store-scoped JWT auth
+
+**New Storefront Structure:**
+```
+apps/storefront/
+├── package.json                    # Separate dependencies (no better-auth)
+├── src/
+│   ├── env.js                      # Environment configuration
+│   ├── server/
+│   │   ├── db.ts                   # Prisma client
+│   │   ├── tenant.ts               # Tenant resolution from host
+│   │   └── auth/
+│   │       └── customer-auth.ts    # JWT-based customer auth
+│   ├── components/
+│   │   ├── ui/                     # Shadcn components (button, card, etc.)
+│   │   └── theme-provider.tsx
+│   ├── stores/
+│   │   └── customer-auth-store.ts  # Zustand auth state
+│   └── app/
+│       ├── layout.tsx              # Root layout with tenant check
+│       └── (store)/
+│           ├── layout.tsx          # Store layout with header/footer
+│           ├── page.tsx            # Homepage with products/collections
+│           ├── _components/
+│           │   ├── store-header.tsx
+│           │   ├── store-footer.tsx
+│           │   ├── product-card.tsx
+│           │   └── collection-card.tsx
+│           └── account/
+│               ├── layout.tsx
+│               ├── page.tsx        # Account dashboard
+│               ├── login/          # Login page + server action
+│               ├── register/       # Register page + server action
+│               └── logout/         # Logout route handler
+```
+
+**Tenant Resolution:**
+- Subdomain pattern: `{slug}.boostcart.bg` or `{slug}.localhost:3001`
+- Custom domain lookup from `TenantDomain` table
+- Cached per request via React cache()
+
+**Customer Authentication:**
+- JWT-based auth using `jose` library
+- Access tokens (15 min) + Refresh tokens (30 days)
+- HTTP-only cookies for security
+- `CustomerSession` table stores refresh tokens
+- Store-scoped: `@@unique([tenantId, email])` constraint
+
+**Key Files:**
+- `apps/storefront/src/server/tenant.ts` - Tenant resolution with `StorefrontTenant` interface
+- `apps/storefront/src/server/auth/customer-auth.ts` - Full JWT auth system with register/login/logout
+- `apps/storefront/src/app/(store)/page.tsx` - Homepage with featured products and collections
+- `apps/storefront/src/app/(store)/account/page.tsx` - Customer account dashboard
+
+**Auth API:**
+- `registerCustomer({ tenantId, email, password, firstName?, lastName? })` → tokens + customer
+- `loginCustomer({ tenantId, email, password })` → tokens + customer
+- `logoutCustomer()` → clears session
+- `getCurrentCustomer()` → session data or null
+- `refreshAccessToken()` → new access token
+
+---
+
+## January 8, 2026
+
+### Storefront Schema Fixes ✅
+
+Fixed major Prisma schema mismatches in storefront server actions that were causing ~50+ TypeScript errors.
+
+**Issue:**
+The storefront.ts file was written with assumed field names that didn't exist in the actual schema:
+- Used `isVisible` instead of `isActive` on Collection
+- Used `sortOrder` on Collection (doesn't exist)
+- Used `specifications` instead of `specs` on Product
+- Used `isActive` on Category (doesn't exist)
+- Used `imageUrl` on Category instead of `coverImageUrl`/`iconUrl`
+
+**Fixed Files:**
+- `apps/platform/src/server/api/public/storefront.ts` - Completely rewritten with correct schema
+- `apps/platform/src/app/(public)/products/page.tsx` - Fixed sortBy type and props passing
+- `apps/platform/src/stores/cart-store.ts` - Fixed undefined check with non-null assertion
+
+**Schema Corrections Applied:**
+- Collection: Uses `isActive` for filtering, `products` relation for count
+- Category: Uses `coverImageUrl` or `iconUrl` for images, no isActive filter
+- Product: Uses `specs` relation with translations for specifications
+- All models: Properly include translations with locale filtering
+
+**Result:** TypeScript compilation now passes with zero errors.
+
+---
+
 ## January 7, 2026
 
 ### Platform Admin (Super Admin) Pages ✅

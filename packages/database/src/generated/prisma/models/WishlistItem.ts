@@ -26,25 +26,25 @@ export type AggregateWishlistItem = {
 
 export type WishlistItemMinAggregateOutputType = {
   id: string | null
-  userId: string | null
-  productId: string | null
   customerId: string | null
+  productId: string | null
+  tenantId: string | null
   createdAt: Date | null
 }
 
 export type WishlistItemMaxAggregateOutputType = {
   id: string | null
-  userId: string | null
-  productId: string | null
   customerId: string | null
+  productId: string | null
+  tenantId: string | null
   createdAt: Date | null
 }
 
 export type WishlistItemCountAggregateOutputType = {
   id: number
-  userId: number
-  productId: number
   customerId: number
+  productId: number
+  tenantId: number
   createdAt: number
   _all: number
 }
@@ -52,25 +52,25 @@ export type WishlistItemCountAggregateOutputType = {
 
 export type WishlistItemMinAggregateInputType = {
   id?: true
-  userId?: true
-  productId?: true
   customerId?: true
+  productId?: true
+  tenantId?: true
   createdAt?: true
 }
 
 export type WishlistItemMaxAggregateInputType = {
   id?: true
-  userId?: true
-  productId?: true
   customerId?: true
+  productId?: true
+  tenantId?: true
   createdAt?: true
 }
 
 export type WishlistItemCountAggregateInputType = {
   id?: true
-  userId?: true
-  productId?: true
   customerId?: true
+  productId?: true
+  tenantId?: true
   createdAt?: true
   _all?: true
 }
@@ -149,9 +149,9 @@ export type WishlistItemGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 
 export type WishlistItemGroupByOutputType = {
   id: string
-  userId: string | null
+  customerId: string
   productId: string
-  customerId: string | null
+  tenantId: string
   createdAt: Date
   _count: WishlistItemCountAggregateOutputType | null
   _min: WishlistItemMinAggregateOutputType | null
@@ -178,24 +178,24 @@ export type WishlistItemWhereInput = {
   OR?: Prisma.WishlistItemWhereInput[]
   NOT?: Prisma.WishlistItemWhereInput | Prisma.WishlistItemWhereInput[]
   id?: Prisma.StringFilter<"WishlistItem"> | string
-  userId?: Prisma.StringNullableFilter<"WishlistItem"> | string | null
+  customerId?: Prisma.StringFilter<"WishlistItem"> | string
   productId?: Prisma.StringFilter<"WishlistItem"> | string
-  customerId?: Prisma.StringNullableFilter<"WishlistItem"> | string | null
+  tenantId?: Prisma.StringFilter<"WishlistItem"> | string
   createdAt?: Prisma.DateTimeFilter<"WishlistItem"> | Date | string
-  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  customer?: Prisma.XOR<Prisma.CustomerScalarRelationFilter, Prisma.CustomerWhereInput>
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
-  customer?: Prisma.XOR<Prisma.CustomerNullableScalarRelationFilter, Prisma.CustomerWhereInput> | null
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }
 
 export type WishlistItemOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  customerId?: Prisma.SortOrder
   productId?: Prisma.SortOrder
-  customerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
-  product?: Prisma.ProductOrderByWithRelationInput
   customer?: Prisma.CustomerOrderByWithRelationInput
+  product?: Prisma.ProductOrderByWithRelationInput
+  tenant?: Prisma.TenantOrderByWithRelationInput
 }
 
 export type WishlistItemWhereUniqueInput = Prisma.AtLeast<{
@@ -204,20 +204,20 @@ export type WishlistItemWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.WishlistItemWhereInput | Prisma.WishlistItemWhereInput[]
   OR?: Prisma.WishlistItemWhereInput[]
   NOT?: Prisma.WishlistItemWhereInput | Prisma.WishlistItemWhereInput[]
-  userId?: Prisma.StringNullableFilter<"WishlistItem"> | string | null
+  customerId?: Prisma.StringFilter<"WishlistItem"> | string
   productId?: Prisma.StringFilter<"WishlistItem"> | string
-  customerId?: Prisma.StringNullableFilter<"WishlistItem"> | string | null
+  tenantId?: Prisma.StringFilter<"WishlistItem"> | string
   createdAt?: Prisma.DateTimeFilter<"WishlistItem"> | Date | string
-  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  customer?: Prisma.XOR<Prisma.CustomerScalarRelationFilter, Prisma.CustomerWhereInput>
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
-  customer?: Prisma.XOR<Prisma.CustomerNullableScalarRelationFilter, Prisma.CustomerWhereInput> | null
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }, "id" | "customerId_productId">
 
 export type WishlistItemOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  customerId?: Prisma.SortOrder
   productId?: Prisma.SortOrder
-  customerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.WishlistItemCountOrderByAggregateInput
   _max?: Prisma.WishlistItemMaxOrderByAggregateInput
@@ -229,49 +229,49 @@ export type WishlistItemScalarWhereWithAggregatesInput = {
   OR?: Prisma.WishlistItemScalarWhereWithAggregatesInput[]
   NOT?: Prisma.WishlistItemScalarWhereWithAggregatesInput | Prisma.WishlistItemScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"WishlistItem"> | string
-  userId?: Prisma.StringNullableWithAggregatesFilter<"WishlistItem"> | string | null
+  customerId?: Prisma.StringWithAggregatesFilter<"WishlistItem"> | string
   productId?: Prisma.StringWithAggregatesFilter<"WishlistItem"> | string
-  customerId?: Prisma.StringNullableWithAggregatesFilter<"WishlistItem"> | string | null
+  tenantId?: Prisma.StringWithAggregatesFilter<"WishlistItem"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"WishlistItem"> | Date | string
 }
 
 export type WishlistItemCreateInput = {
   id?: string
   createdAt?: Date | string
-  user?: Prisma.UserCreateNestedOneWithoutWishlistItemsInput
+  customer: Prisma.CustomerCreateNestedOneWithoutWishlistItemsInput
   product: Prisma.ProductCreateNestedOneWithoutWishlistItemsInput
-  customer?: Prisma.CustomerCreateNestedOneWithoutWishlistItemsInput
+  tenant: Prisma.TenantCreateNestedOneWithoutWishlistItemsInput
 }
 
 export type WishlistItemUncheckedCreateInput = {
   id?: string
-  userId?: string | null
+  customerId: string
   productId: string
-  customerId?: string | null
+  tenantId: string
   createdAt?: Date | string
 }
 
 export type WishlistItemUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneWithoutWishlistItemsNestedInput
+  customer?: Prisma.CustomerUpdateOneRequiredWithoutWishlistItemsNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutWishlistItemsNestedInput
-  customer?: Prisma.CustomerUpdateOneWithoutWishlistItemsNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutWishlistItemsNestedInput
 }
 
 export type WishlistItemUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerId?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type WishlistItemCreateManyInput = {
   id?: string
-  userId?: string | null
+  customerId: string
   productId: string
-  customerId?: string | null
+  tenantId: string
   createdAt?: Date | string
 }
 
@@ -282,9 +282,9 @@ export type WishlistItemUpdateManyMutationInput = {
 
 export type WishlistItemUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerId?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -305,26 +305,68 @@ export type WishlistItemCustomerIdProductIdCompoundUniqueInput = {
 
 export type WishlistItemCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  productId?: Prisma.SortOrder
   customerId?: Prisma.SortOrder
+  productId?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type WishlistItemMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  productId?: Prisma.SortOrder
   customerId?: Prisma.SortOrder
+  productId?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type WishlistItemMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  productId?: Prisma.SortOrder
   customerId?: Prisma.SortOrder
+  productId?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type WishlistItemCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.WishlistItemCreateWithoutTenantInput, Prisma.WishlistItemUncheckedCreateWithoutTenantInput> | Prisma.WishlistItemCreateWithoutTenantInput[] | Prisma.WishlistItemUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.WishlistItemCreateOrConnectWithoutTenantInput | Prisma.WishlistItemCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.WishlistItemCreateManyTenantInputEnvelope
+  connect?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
+}
+
+export type WishlistItemUncheckedCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.WishlistItemCreateWithoutTenantInput, Prisma.WishlistItemUncheckedCreateWithoutTenantInput> | Prisma.WishlistItemCreateWithoutTenantInput[] | Prisma.WishlistItemUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.WishlistItemCreateOrConnectWithoutTenantInput | Prisma.WishlistItemCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.WishlistItemCreateManyTenantInputEnvelope
+  connect?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
+}
+
+export type WishlistItemUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.WishlistItemCreateWithoutTenantInput, Prisma.WishlistItemUncheckedCreateWithoutTenantInput> | Prisma.WishlistItemCreateWithoutTenantInput[] | Prisma.WishlistItemUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.WishlistItemCreateOrConnectWithoutTenantInput | Prisma.WishlistItemCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.WishlistItemUpsertWithWhereUniqueWithoutTenantInput | Prisma.WishlistItemUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.WishlistItemCreateManyTenantInputEnvelope
+  set?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
+  disconnect?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
+  delete?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
+  connect?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
+  update?: Prisma.WishlistItemUpdateWithWhereUniqueWithoutTenantInput | Prisma.WishlistItemUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.WishlistItemUpdateManyWithWhereWithoutTenantInput | Prisma.WishlistItemUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.WishlistItemScalarWhereInput | Prisma.WishlistItemScalarWhereInput[]
+}
+
+export type WishlistItemUncheckedUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.WishlistItemCreateWithoutTenantInput, Prisma.WishlistItemUncheckedCreateWithoutTenantInput> | Prisma.WishlistItemCreateWithoutTenantInput[] | Prisma.WishlistItemUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.WishlistItemCreateOrConnectWithoutTenantInput | Prisma.WishlistItemCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.WishlistItemUpsertWithWhereUniqueWithoutTenantInput | Prisma.WishlistItemUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.WishlistItemCreateManyTenantInputEnvelope
+  set?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
+  disconnect?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
+  delete?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
+  connect?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
+  update?: Prisma.WishlistItemUpdateWithWhereUniqueWithoutTenantInput | Prisma.WishlistItemUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.WishlistItemUpdateManyWithWhereWithoutTenantInput | Prisma.WishlistItemUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.WishlistItemScalarWhereInput | Prisma.WishlistItemScalarWhereInput[]
 }
 
 export type WishlistItemCreateNestedManyWithoutCustomerInput = {
@@ -366,48 +408,6 @@ export type WishlistItemUncheckedUpdateManyWithoutCustomerNestedInput = {
   connect?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
   update?: Prisma.WishlistItemUpdateWithWhereUniqueWithoutCustomerInput | Prisma.WishlistItemUpdateWithWhereUniqueWithoutCustomerInput[]
   updateMany?: Prisma.WishlistItemUpdateManyWithWhereWithoutCustomerInput | Prisma.WishlistItemUpdateManyWithWhereWithoutCustomerInput[]
-  deleteMany?: Prisma.WishlistItemScalarWhereInput | Prisma.WishlistItemScalarWhereInput[]
-}
-
-export type WishlistItemCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.WishlistItemCreateWithoutUserInput, Prisma.WishlistItemUncheckedCreateWithoutUserInput> | Prisma.WishlistItemCreateWithoutUserInput[] | Prisma.WishlistItemUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.WishlistItemCreateOrConnectWithoutUserInput | Prisma.WishlistItemCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.WishlistItemCreateManyUserInputEnvelope
-  connect?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
-}
-
-export type WishlistItemUncheckedCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.WishlistItemCreateWithoutUserInput, Prisma.WishlistItemUncheckedCreateWithoutUserInput> | Prisma.WishlistItemCreateWithoutUserInput[] | Prisma.WishlistItemUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.WishlistItemCreateOrConnectWithoutUserInput | Prisma.WishlistItemCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.WishlistItemCreateManyUserInputEnvelope
-  connect?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
-}
-
-export type WishlistItemUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.WishlistItemCreateWithoutUserInput, Prisma.WishlistItemUncheckedCreateWithoutUserInput> | Prisma.WishlistItemCreateWithoutUserInput[] | Prisma.WishlistItemUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.WishlistItemCreateOrConnectWithoutUserInput | Prisma.WishlistItemCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.WishlistItemUpsertWithWhereUniqueWithoutUserInput | Prisma.WishlistItemUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.WishlistItemCreateManyUserInputEnvelope
-  set?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
-  disconnect?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
-  delete?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
-  connect?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
-  update?: Prisma.WishlistItemUpdateWithWhereUniqueWithoutUserInput | Prisma.WishlistItemUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.WishlistItemUpdateManyWithWhereWithoutUserInput | Prisma.WishlistItemUpdateManyWithWhereWithoutUserInput[]
-  deleteMany?: Prisma.WishlistItemScalarWhereInput | Prisma.WishlistItemScalarWhereInput[]
-}
-
-export type WishlistItemUncheckedUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.WishlistItemCreateWithoutUserInput, Prisma.WishlistItemUncheckedCreateWithoutUserInput> | Prisma.WishlistItemCreateWithoutUserInput[] | Prisma.WishlistItemUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.WishlistItemCreateOrConnectWithoutUserInput | Prisma.WishlistItemCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.WishlistItemUpsertWithWhereUniqueWithoutUserInput | Prisma.WishlistItemUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.WishlistItemCreateManyUserInputEnvelope
-  set?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
-  disconnect?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
-  delete?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
-  connect?: Prisma.WishlistItemWhereUniqueInput | Prisma.WishlistItemWhereUniqueInput[]
-  update?: Prisma.WishlistItemUpdateWithWhereUniqueWithoutUserInput | Prisma.WishlistItemUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.WishlistItemUpdateManyWithWhereWithoutUserInput | Prisma.WishlistItemUpdateManyWithWhereWithoutUserInput[]
   deleteMany?: Prisma.WishlistItemScalarWhereInput | Prisma.WishlistItemScalarWhereInput[]
 }
 
@@ -453,17 +453,68 @@ export type WishlistItemUncheckedUpdateManyWithoutProductNestedInput = {
   deleteMany?: Prisma.WishlistItemScalarWhereInput | Prisma.WishlistItemScalarWhereInput[]
 }
 
+export type WishlistItemCreateWithoutTenantInput = {
+  id?: string
+  createdAt?: Date | string
+  customer: Prisma.CustomerCreateNestedOneWithoutWishlistItemsInput
+  product: Prisma.ProductCreateNestedOneWithoutWishlistItemsInput
+}
+
+export type WishlistItemUncheckedCreateWithoutTenantInput = {
+  id?: string
+  customerId: string
+  productId: string
+  createdAt?: Date | string
+}
+
+export type WishlistItemCreateOrConnectWithoutTenantInput = {
+  where: Prisma.WishlistItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.WishlistItemCreateWithoutTenantInput, Prisma.WishlistItemUncheckedCreateWithoutTenantInput>
+}
+
+export type WishlistItemCreateManyTenantInputEnvelope = {
+  data: Prisma.WishlistItemCreateManyTenantInput | Prisma.WishlistItemCreateManyTenantInput[]
+  skipDuplicates?: boolean
+}
+
+export type WishlistItemUpsertWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.WishlistItemWhereUniqueInput
+  update: Prisma.XOR<Prisma.WishlistItemUpdateWithoutTenantInput, Prisma.WishlistItemUncheckedUpdateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.WishlistItemCreateWithoutTenantInput, Prisma.WishlistItemUncheckedCreateWithoutTenantInput>
+}
+
+export type WishlistItemUpdateWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.WishlistItemWhereUniqueInput
+  data: Prisma.XOR<Prisma.WishlistItemUpdateWithoutTenantInput, Prisma.WishlistItemUncheckedUpdateWithoutTenantInput>
+}
+
+export type WishlistItemUpdateManyWithWhereWithoutTenantInput = {
+  where: Prisma.WishlistItemScalarWhereInput
+  data: Prisma.XOR<Prisma.WishlistItemUpdateManyMutationInput, Prisma.WishlistItemUncheckedUpdateManyWithoutTenantInput>
+}
+
+export type WishlistItemScalarWhereInput = {
+  AND?: Prisma.WishlistItemScalarWhereInput | Prisma.WishlistItemScalarWhereInput[]
+  OR?: Prisma.WishlistItemScalarWhereInput[]
+  NOT?: Prisma.WishlistItemScalarWhereInput | Prisma.WishlistItemScalarWhereInput[]
+  id?: Prisma.StringFilter<"WishlistItem"> | string
+  customerId?: Prisma.StringFilter<"WishlistItem"> | string
+  productId?: Prisma.StringFilter<"WishlistItem"> | string
+  tenantId?: Prisma.StringFilter<"WishlistItem"> | string
+  createdAt?: Prisma.DateTimeFilter<"WishlistItem"> | Date | string
+}
+
 export type WishlistItemCreateWithoutCustomerInput = {
   id?: string
   createdAt?: Date | string
-  user?: Prisma.UserCreateNestedOneWithoutWishlistItemsInput
   product: Prisma.ProductCreateNestedOneWithoutWishlistItemsInput
+  tenant: Prisma.TenantCreateNestedOneWithoutWishlistItemsInput
 }
 
 export type WishlistItemUncheckedCreateWithoutCustomerInput = {
   id?: string
-  userId?: string | null
   productId: string
+  tenantId: string
   createdAt?: Date | string
 }
 
@@ -493,68 +544,17 @@ export type WishlistItemUpdateManyWithWhereWithoutCustomerInput = {
   data: Prisma.XOR<Prisma.WishlistItemUpdateManyMutationInput, Prisma.WishlistItemUncheckedUpdateManyWithoutCustomerInput>
 }
 
-export type WishlistItemScalarWhereInput = {
-  AND?: Prisma.WishlistItemScalarWhereInput | Prisma.WishlistItemScalarWhereInput[]
-  OR?: Prisma.WishlistItemScalarWhereInput[]
-  NOT?: Prisma.WishlistItemScalarWhereInput | Prisma.WishlistItemScalarWhereInput[]
-  id?: Prisma.StringFilter<"WishlistItem"> | string
-  userId?: Prisma.StringNullableFilter<"WishlistItem"> | string | null
-  productId?: Prisma.StringFilter<"WishlistItem"> | string
-  customerId?: Prisma.StringNullableFilter<"WishlistItem"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"WishlistItem"> | Date | string
-}
-
-export type WishlistItemCreateWithoutUserInput = {
-  id?: string
-  createdAt?: Date | string
-  product: Prisma.ProductCreateNestedOneWithoutWishlistItemsInput
-  customer?: Prisma.CustomerCreateNestedOneWithoutWishlistItemsInput
-}
-
-export type WishlistItemUncheckedCreateWithoutUserInput = {
-  id?: string
-  productId: string
-  customerId?: string | null
-  createdAt?: Date | string
-}
-
-export type WishlistItemCreateOrConnectWithoutUserInput = {
-  where: Prisma.WishlistItemWhereUniqueInput
-  create: Prisma.XOR<Prisma.WishlistItemCreateWithoutUserInput, Prisma.WishlistItemUncheckedCreateWithoutUserInput>
-}
-
-export type WishlistItemCreateManyUserInputEnvelope = {
-  data: Prisma.WishlistItemCreateManyUserInput | Prisma.WishlistItemCreateManyUserInput[]
-  skipDuplicates?: boolean
-}
-
-export type WishlistItemUpsertWithWhereUniqueWithoutUserInput = {
-  where: Prisma.WishlistItemWhereUniqueInput
-  update: Prisma.XOR<Prisma.WishlistItemUpdateWithoutUserInput, Prisma.WishlistItemUncheckedUpdateWithoutUserInput>
-  create: Prisma.XOR<Prisma.WishlistItemCreateWithoutUserInput, Prisma.WishlistItemUncheckedCreateWithoutUserInput>
-}
-
-export type WishlistItemUpdateWithWhereUniqueWithoutUserInput = {
-  where: Prisma.WishlistItemWhereUniqueInput
-  data: Prisma.XOR<Prisma.WishlistItemUpdateWithoutUserInput, Prisma.WishlistItemUncheckedUpdateWithoutUserInput>
-}
-
-export type WishlistItemUpdateManyWithWhereWithoutUserInput = {
-  where: Prisma.WishlistItemScalarWhereInput
-  data: Prisma.XOR<Prisma.WishlistItemUpdateManyMutationInput, Prisma.WishlistItemUncheckedUpdateManyWithoutUserInput>
-}
-
 export type WishlistItemCreateWithoutProductInput = {
   id?: string
   createdAt?: Date | string
-  user?: Prisma.UserCreateNestedOneWithoutWishlistItemsInput
-  customer?: Prisma.CustomerCreateNestedOneWithoutWishlistItemsInput
+  customer: Prisma.CustomerCreateNestedOneWithoutWishlistItemsInput
+  tenant: Prisma.TenantCreateNestedOneWithoutWishlistItemsInput
 }
 
 export type WishlistItemUncheckedCreateWithoutProductInput = {
   id?: string
-  userId?: string | null
-  customerId?: string | null
+  customerId: string
+  tenantId: string
   createdAt?: Date | string
 }
 
@@ -584,87 +584,87 @@ export type WishlistItemUpdateManyWithWhereWithoutProductInput = {
   data: Prisma.XOR<Prisma.WishlistItemUpdateManyMutationInput, Prisma.WishlistItemUncheckedUpdateManyWithoutProductInput>
 }
 
+export type WishlistItemCreateManyTenantInput = {
+  id?: string
+  customerId: string
+  productId: string
+  createdAt?: Date | string
+}
+
+export type WishlistItemUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customer?: Prisma.CustomerUpdateOneRequiredWithoutWishlistItemsNestedInput
+  product?: Prisma.ProductUpdateOneRequiredWithoutWishlistItemsNestedInput
+}
+
+export type WishlistItemUncheckedUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.StringFieldUpdateOperationsInput | string
+  productId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type WishlistItemUncheckedUpdateManyWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.StringFieldUpdateOperationsInput | string
+  productId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type WishlistItemCreateManyCustomerInput = {
   id?: string
-  userId?: string | null
   productId: string
+  tenantId: string
   createdAt?: Date | string
 }
 
 export type WishlistItemUpdateWithoutCustomerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneWithoutWishlistItemsNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutWishlistItemsNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutWishlistItemsNestedInput
 }
 
 export type WishlistItemUncheckedUpdateWithoutCustomerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   productId?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type WishlistItemUncheckedUpdateManyWithoutCustomerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   productId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type WishlistItemCreateManyUserInput = {
-  id?: string
-  productId: string
-  customerId?: string | null
-  createdAt?: Date | string
-}
-
-export type WishlistItemUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  product?: Prisma.ProductUpdateOneRequiredWithoutWishlistItemsNestedInput
-  customer?: Prisma.CustomerUpdateOneWithoutWishlistItemsNestedInput
-}
-
-export type WishlistItemUncheckedUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  productId?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type WishlistItemUncheckedUpdateManyWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  productId?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type WishlistItemCreateManyProductInput = {
   id?: string
-  userId?: string | null
-  customerId?: string | null
+  customerId: string
+  tenantId: string
   createdAt?: Date | string
 }
 
 export type WishlistItemUpdateWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneWithoutWishlistItemsNestedInput
-  customer?: Prisma.CustomerUpdateOneWithoutWishlistItemsNestedInput
+  customer?: Prisma.CustomerUpdateOneRequiredWithoutWishlistItemsNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutWishlistItemsNestedInput
 }
 
 export type WishlistItemUncheckedUpdateWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerId?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type WishlistItemUncheckedUpdateManyWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerId?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -672,74 +672,74 @@ export type WishlistItemUncheckedUpdateManyWithoutProductInput = {
 
 export type WishlistItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
-  productId?: boolean
   customerId?: boolean
+  productId?: boolean
+  tenantId?: boolean
   createdAt?: boolean
-  user?: boolean | Prisma.WishlistItem$userArgs<ExtArgs>
+  customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
-  customer?: boolean | Prisma.WishlistItem$customerArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["wishlistItem"]>
 
 export type WishlistItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
-  productId?: boolean
   customerId?: boolean
+  productId?: boolean
+  tenantId?: boolean
   createdAt?: boolean
-  user?: boolean | Prisma.WishlistItem$userArgs<ExtArgs>
+  customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
-  customer?: boolean | Prisma.WishlistItem$customerArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["wishlistItem"]>
 
 export type WishlistItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
-  productId?: boolean
   customerId?: boolean
+  productId?: boolean
+  tenantId?: boolean
   createdAt?: boolean
-  user?: boolean | Prisma.WishlistItem$userArgs<ExtArgs>
+  customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
-  customer?: boolean | Prisma.WishlistItem$customerArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["wishlistItem"]>
 
 export type WishlistItemSelectScalar = {
   id?: boolean
-  userId?: boolean
-  productId?: boolean
   customerId?: boolean
+  productId?: boolean
+  tenantId?: boolean
   createdAt?: boolean
 }
 
-export type WishlistItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "productId" | "customerId" | "createdAt", ExtArgs["result"]["wishlistItem"]>
+export type WishlistItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "customerId" | "productId" | "tenantId" | "createdAt", ExtArgs["result"]["wishlistItem"]>
 export type WishlistItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.WishlistItem$userArgs<ExtArgs>
+  customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
-  customer?: boolean | Prisma.WishlistItem$customerArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type WishlistItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.WishlistItem$userArgs<ExtArgs>
+  customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
-  customer?: boolean | Prisma.WishlistItem$customerArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type WishlistItemIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.WishlistItem$userArgs<ExtArgs>
+  customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
-  customer?: boolean | Prisma.WishlistItem$customerArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 
 export type $WishlistItemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "WishlistItem"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs> | null
+    customer: Prisma.$CustomerPayload<ExtArgs>
     product: Prisma.$ProductPayload<ExtArgs>
-    customer: Prisma.$CustomerPayload<ExtArgs> | null
+    tenant: Prisma.$TenantPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    userId: string | null
+    customerId: string
     productId: string
-    customerId: string | null
+    tenantId: string
     createdAt: Date
   }, ExtArgs["result"]["wishlistItem"]>
   composites: {}
@@ -1135,9 +1135,9 @@ readonly fields: WishlistItemFieldRefs;
  */
 export interface Prisma__WishlistItemClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.WishlistItem$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WishlistItem$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  customer<T extends Prisma.CustomerDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CustomerDefaultArgs<ExtArgs>>): Prisma.Prisma__CustomerClient<runtime.Types.Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   product<T extends Prisma.ProductDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductDefaultArgs<ExtArgs>>): Prisma.Prisma__ProductClient<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  customer<T extends Prisma.WishlistItem$customerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WishlistItem$customerArgs<ExtArgs>>): Prisma.Prisma__CustomerClient<runtime.Types.Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1168,9 +1168,9 @@ export interface Prisma__WishlistItemClient<T, Null = never, ExtArgs extends run
  */
 export interface WishlistItemFieldRefs {
   readonly id: Prisma.FieldRef<"WishlistItem", 'String'>
-  readonly userId: Prisma.FieldRef<"WishlistItem", 'String'>
-  readonly productId: Prisma.FieldRef<"WishlistItem", 'String'>
   readonly customerId: Prisma.FieldRef<"WishlistItem", 'String'>
+  readonly productId: Prisma.FieldRef<"WishlistItem", 'String'>
+  readonly tenantId: Prisma.FieldRef<"WishlistItem", 'String'>
   readonly createdAt: Prisma.FieldRef<"WishlistItem", 'DateTime'>
 }
     
@@ -1565,44 +1565,6 @@ export type WishlistItemDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Limit how many WishlistItems to delete.
    */
   limit?: number
-}
-
-/**
- * WishlistItem.user
- */
-export type WishlistItem$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the User
-   */
-  select?: Prisma.UserSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the User
-   */
-  omit?: Prisma.UserOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
-}
-
-/**
- * WishlistItem.customer
- */
-export type WishlistItem$customerArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Customer
-   */
-  select?: Prisma.CustomerSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Customer
-   */
-  omit?: Prisma.CustomerOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CustomerInclude<ExtArgs> | null
-  where?: Prisma.CustomerWhereInput
 }
 
 /**

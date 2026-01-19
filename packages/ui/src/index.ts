@@ -1,17 +1,17 @@
 // Core utilities
-export { cn } from "./lib/utils";
 
 // Components
-export { Badge, badgeVariants, type BadgeProps } from "./badge";
+export { Badge, type BadgeProps, badgeVariants } from "./badge";
 export {
 	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
 	CardHeader,
 	CardTitle,
-	CardDescription,
-	CardContent,
-	CardFooter,
 } from "./card";
 export { Label } from "./label";
+export { cn } from "./lib/utils";
 export { ScrollArea, ScrollBar } from "./scroll-area";
 export { Separator } from "./separator";
 export {

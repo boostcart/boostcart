@@ -1,30 +1,30 @@
 {
-  "name": "boostcart",
-  "version": "0.1.0",
-  "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "dev:platform": "turbo run dev --filter=@boostcart/platform",
-    "check": "turbo run check",
-    "typecheck": "turbo run typecheck",
-    "test": "turbo run test",
-    "db:generate": "turbo run db:generate --filter=@boostcart/database",
-    "db:migrate": "turbo run db:migrate --filter=@boostcart/database",
-    "db:push": "turbo run db:push --filter=@boostcart/database",
-    "db:studio": "turbo run db:studio --filter=@boostcart/database"
-  },
-  "devDependencies": {
-    "@tailwindcss/typography": "^0.5.19",
-    "turbo": "^2.7.2"
-  },
-  "packageManager": "bun@1.3.5",
-  "dependencies": {
-    "@tiptap/extension-image": "^3.14.0",
-    "ioredis": "^5.8.2"
-  }
+	"name": "boostcart",
+	"version": "0.1.0",
+	"private": true,
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	],
+	"scripts": {
+		"build": "turbo run build",
+		"dev": "turbo run dev",
+		"dev:platform": "turbo run dev --filter=@boostcart/platform",
+		"check": "turbo run check",
+		"typecheck": "turbo run typecheck",
+		"test": "turbo run test",
+		"db:generate": "turbo run db:generate --filter=@boostcart/database",
+		"db:migrate": "turbo run db:migrate --filter=@boostcart/database",
+		"db:push": "turbo run db:push --filter=@boostcart/database",
+		"db:studio": "turbo run db:studio --filter=@boostcart/database"
+	},
+	"devDependencies": {
+		"@tailwindcss/typography": "^0.5.19",
+		"turbo": "^2.7.4"
+	},
+	"packageManager": "bun@1.3.5",
+	"dependencies": {
+		"@tiptap/extension-image": "^3.15.3",
+		"ioredis": "^5.9.1"
+	}
 }

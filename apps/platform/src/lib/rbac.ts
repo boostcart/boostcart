@@ -237,7 +237,7 @@ const ROLE_PERMISSIONS: Record<StaffRole, Permission[]> = {
  */
 export function hasPermission(
 	role: StaffRole | string | null,
-	permission: Permission
+	permission: Permission,
 ): boolean {
 	if (!role) return false;
 	const permissions = ROLE_PERMISSIONS[role as StaffRole];
@@ -250,7 +250,7 @@ export function hasPermission(
  */
 export function hasAnyPermission(
 	role: StaffRole | string | null,
-	permissions: Permission[]
+	permissions: Permission[],
 ): boolean {
 	return permissions.some((permission) => hasPermission(role, permission));
 }
@@ -260,7 +260,7 @@ export function hasAnyPermission(
  */
 export function hasAllPermissions(
 	role: StaffRole | string | null,
-	permissions: Permission[]
+	permissions: Permission[],
 ): boolean {
 	return permissions.every((permission) => hasPermission(role, permission));
 }
@@ -296,7 +296,7 @@ export function canManage(
 		| "payments"
 		| "shipping"
 		| "staff"
-		| "billing"
+		| "billing",
 ): boolean {
 	return hasPermission(role, `${resource}:manage` as Permission);
 }
@@ -326,7 +326,7 @@ export function canView(
 		| "payments"
 		| "shipping"
 		| "staff"
-		| "billing"
+		| "billing",
 ): boolean {
 	return hasPermission(role, `${resource}:view` as Permission);
 }
@@ -336,7 +336,7 @@ export function canView(
  */
 export function canDelete(
 	role: StaffRole | string | null,
-	resource: "orders" | "products" | "customers" | "staff" | "store"
+	resource: "orders" | "products" | "customers" | "staff" | "store",
 ): boolean {
 	return hasPermission(role, `${resource}:delete` as Permission);
 }
@@ -358,7 +358,7 @@ const ROLE_HIERARCHY: Record<StaffRole, number> = {
  */
 export function hasHigherOrEqualAuthority(
 	roleA: StaffRole | string | null,
-	roleB: StaffRole | string | null
+	roleB: StaffRole | string | null,
 ): boolean {
 	if (!roleA || !roleB) return false;
 	const levelA = ROLE_HIERARCHY[roleA as StaffRole] || 0;

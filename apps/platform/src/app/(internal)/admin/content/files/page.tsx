@@ -489,7 +489,7 @@ export default function FilesPage() {
 					/>
 				</div>
 				<Select value={selectedFolder} onValueChange={setSelectedFolder}>
-					<SelectTrigger className="w-[180px]">
+					<SelectTrigger className="w-45">
 						<SelectValue placeholder="All folders" />
 					</SelectTrigger>
 					<SelectContent>
@@ -568,13 +568,21 @@ export default function FilesPage() {
 							const isSelected = selectedFiles.has(file.id);
 
 							return (
-								// biome-ignore lint/a11y/useKeyWithClickEvents: Selection handled via checkbox
+								// biome-ignore lint/a11y/useSemanticElements: Using div with role=button for clickable file item because we cannot have nested buttons
 								<div
 									key={file.id}
 									className={`group relative border rounded-lg overflow-hidden cursor-pointer transition-all ${
 										isSelected ? "ring-2 ring-primary" : "hover:border-primary"
 									}`}
 									onClick={() => handleSelectFile(file.id)}
+									onKeyDown={(e) => {
+										if (e.key === "Enter" || e.key === " ") {
+											e.preventDefault();
+											handleSelectFile(file.id);
+										}
+									}}
+									role="button"
+									tabIndex={0}
 								>
 									<div className="absolute top-2 left-2 z-10">
 										<Checkbox
@@ -636,7 +644,7 @@ export default function FilesPage() {
 					<Table>
 						<TableHeader>
 							<TableRow>
-								<TableHead className="w-[40px]">
+								<TableHead className="w-10">
 									<Checkbox
 										checked={selectedFiles.size === filteredFiles.length}
 										onCheckedChange={handleSelectAll}
@@ -674,7 +682,7 @@ export default function FilesPage() {
 														<FileIcon className="h-5 w-5 text-muted-foreground" />
 													)}
 												</div>
-												<span className="font-medium truncate max-w-[200px]">
+												<span className="font-medium truncate max-w-50">
 													{file.originalName}
 												</span>
 											</div>

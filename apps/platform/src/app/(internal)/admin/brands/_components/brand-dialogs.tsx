@@ -68,7 +68,7 @@ export function ViewBrandDialog({
 							<div className="flex items-start gap-4">
 								<div className="w-24 h-24 border-2 rounded-lg flex items-center justify-center bg-muted">
 									{brand.logo ? (
-										<div className="w-full h-full rounded-lg bg-gradient-to-br from-primary/20 to-primary/5" />
+										<div className="w-full h-full rounded-lg bg-linear-to-br from-primary/20 to-primary/5" />
 									) : (
 										<Building2 className="h-12 w-12 text-muted-foreground" />
 									)}

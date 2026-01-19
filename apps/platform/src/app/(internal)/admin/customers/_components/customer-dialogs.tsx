@@ -1,7 +1,16 @@
 "use client";
 
-import { Calendar, Loader2, MapPin, User } from "lucide-react";
-import { useEffect, useState } from "react";
+import {
+	Calendar,
+	Key,
+	Loader2,
+	Mail,
+	MapPin,
+	Package,
+	RefreshCw,
+	User,
+} from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { PolarisButton } from "@/components/admin/polaris-button";
 import { Badge } from "@/components/ui/badge";
@@ -16,21 +25,18 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import {
 	createCustomer,
+	getCustomer,
+	resetCustomerPassword,
+	sendCustomerEmail,
 	updateCustomer,
 } from "@/server/api/internal/customers";
 
+// UI Customer type for list display
 interface Customer {
 	id: string;
 	name: string;
@@ -42,178 +48,585 @@ interface Customer {
 	joined: string;
 }
 
+// Full customer data from API
+interface CustomerDetail {
+	id: string;
+	email: string;
+	firstName: string | null;
+	lastName: string | null;
+	phone: string | null;
+	acceptsMarketing: boolean;
+	locale: string;
+	emailVerified: boolean;
+	totalSpent: number;
+	ordersCount: number;
+	lastOrderAt: Date | null;
+	isActive: boolean;
+	createdAt: Date;
+	addresses: CustomerAddress[];
+	orders: CustomerOrder[];
+	_count: {
+		addresses: number;
+		orders: number;
+	};
+}
+
+interface CustomerAddress {
+	id: string;
+	firstName: string;
+	lastName: string;
+	company: string | null;
+	address1: string;
+	address2: string | null;
+	city: string;
+	province: string | null;
+	country: string;
+	postalCode: string;
+	phone: string | null;
+	isDefault: boolean;
+}
+
+interface CustomerOrder {
+	id: string;
+	orderNumber: string;
+	status: string;
+	paymentStatus: string;
+	totalAmount: number;
+	createdAt: Date;
+}
+
 interface ViewCustomerDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 	customer: Customer | null;
+	onRefresh?: () => void;
 }
 
 export function ViewCustomerDialog({
 	open,
 	onOpenChange,
 	customer,
+	onRefresh,
 }: ViewCustomerDialogProps) {
+	const [isLoading, setIsLoading] = useState(false);
+	const [customerDetail, setCustomerDetail] = useState<CustomerDetail | null>(
+		null,
+	);
+	const [isSendingEmail, setIsSendingEmail] = useState(false);
+	const [isResettingPassword, setIsResettingPassword] = useState(false);
+	const [showEmailDialog, setShowEmailDialog] = useState(false);
+	const [emailSubject, setEmailSubject] = useState("");
+	const [emailBody, setEmailBody] = useState("");
+
+	// Fetch full customer data when dialog opens
+	const fetchCustomerDetail = useCallback(async () => {
+		if (!customer?.id) return;
+
+		setIsLoading(true);
+		try {
+			const data = await getCustomer(customer.id);
+			setCustomerDetail(data as CustomerDetail);
+		} catch (error) {
+			console.error("Failed to fetch customer details:", error);
+			toast.error("Failed to load customer details");
+		} finally {
+			setIsLoading(false);
+		}
+	}, [customer?.id]);
+
+	useEffect(() => {
+		if (open && customer?.id) {
+			fetchCustomerDetail();
+		} else {
+			setCustomerDetail(null);
+		}
+	}, [open, customer?.id, fetchCustomerDetail]);
+
+	const handleSendEmail = async () => {
+		if (!customerDetail || !emailSubject.trim() || !emailBody.trim()) {
+			toast.error("Please fill in subject and message");
+			return;
+		}
+
+		setIsSendingEmail(true);
+		try {
+			await sendCustomerEmail(customerDetail.id, {
+				subject: emailSubject,
+				body: emailBody,
+			});
+			toast.success("Email sent successfully");
+			setShowEmailDialog(false);
+			setEmailSubject("");
+			setEmailBody("");
+		} catch (error) {
+			console.error("Failed to send email:", error);
+			toast.error("Failed to send email");
+		} finally {
+			setIsSendingEmail(false);
+		}
+	};
+
+	const handleResetPassword = async () => {
+		if (!customerDetail) return;
+
+		const confirmed = window.confirm(
+			`Send password reset email to ${customerDetail.email}?`,
+		);
+		if (!confirmed) return;
+
+		setIsResettingPassword(true);
+		try {
+			await resetCustomerPassword(customerDetail.id);
+			toast.success("Password reset email sent");
+		} catch (error) {
+			console.error("Failed to reset password:", error);
+			toast.error("Failed to send password reset email");
+		} finally {
+			setIsResettingPassword(false);
+		}
+	};
+
+	const formatCurrency = (amount: number) => {
+		return new Intl.NumberFormat("bg-BG", {
+			style: "currency",
+			currency: "EUR",
+		}).format(amount);
+	};
+
+	const formatDate = (date: Date | string) => {
+		return new Date(date).toLocaleDateString("en-US", {
+			month: "short",
+			day: "numeric",
+			year: "numeric",
+		});
+	};
+
+	const getStatusBadgeVariant = (status: string) => {
+		switch (status) {
+			case "DELIVERED":
+			case "COMPLETED":
+				return "default";
+			case "PENDING":
+			case "PROCESSING":
+				return "secondary";
+			case "CANCELLED":
+			case "REFUNDED":
+				return "destructive";
+			default:
+				return "outline";
+		}
+	};
+
 	if (!customer) return null;
 
-	const recentOrders = [
-		{ id: `#3210`, date: `Nov 8, 2025`, total: `$329.00`, status: `DELIVERED` },
-		{
-			id: `#3156`,
-			date: `Oct 25, 2025`,
-			total: `$149.00`,
-			status: `DELIVERED`,
-		},
-		{ id: `#3102`, date: `Oct 10, 2025`, total: `$89.00`, status: `DELIVERED` },
-	];
+	const customerName = customerDetail
+		? `${customerDetail.firstName || ""} ${customerDetail.lastName || ""}`.trim() ||
+			"Unknown"
+		: customer.name;
+
+	const avgOrderValue =
+		customerDetail && customerDetail.ordersCount > 0
+			? customerDetail.totalSpent / customerDetail.ordersCount
+			: 0;
 
 	return (
-		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-				<DialogHeader>
-					<DialogTitle className="flex items-center gap-2">
-						<User className="h-5 w-5" />
-						{customer.name}
-					</DialogTitle>
-					<DialogDescription>Complete customer information</DialogDescription>
-				</DialogHeader>
+		<>
+			<Dialog open={open} onOpenChange={onOpenChange}>
+				<DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+					<DialogHeader>
+						<DialogTitle className="flex items-center gap-2">
+							<User className="h-5 w-5" />
+							{customerName}
+						</DialogTitle>
+						<DialogDescription>Complete customer information</DialogDescription>
+					</DialogHeader>
 
-				<Tabs defaultValue="overview" className="w-full">
-					<TabsList className="grid w-full grid-cols-3">
-						<TabsTrigger value="overview">Overview</TabsTrigger>
-						<TabsTrigger value="orders">Orders</TabsTrigger>
-						<TabsTrigger value="addresses">Addresses</TabsTrigger>
-					</TabsList>
-
-					<TabsContent value="overview" className="space-y-4">
-						<div className="grid grid-cols-2 gap-6">
-							<div className="space-y-4">
-								<div>
-									<p className="text-sm font-medium text-muted-foreground mb-1">
-										Contact Information
-									</p>
-									<div className="space-y-2 text-sm">
-										<p className="flex items-center gap-2">
-											<span className="font-medium">Email:</span>
-											<span>{customer.email}</span>
-										</p>
-										<p className="flex items-center gap-2">
-											<span className="font-medium">Phone:</span>
-											<span>{customer.phone}</span>
-										</p>
-										<p className="flex items-center gap-2">
-											<span className="font-medium">Status:</span>
-											<Badge>{customer.status}</Badge>
-										</p>
-									</div>
-								</div>
-
-								<Separator />
-
-								<div>
-									<p className="text-sm font-medium text-muted-foreground mb-1">
-										Account Details
-									</p>
-									<div className="space-y-2 text-sm">
-										<p className="flex items-center gap-2">
-											<Calendar className="h-4 w-4" />
-											<span>Joined {customer.joined}</span>
-										</p>
-										<p className="flex items-center gap-2">
-											<span className="font-medium">Customer ID:</span>
-											<span className="font-mono">{customer.id}</span>
-										</p>
-									</div>
-								</div>
-							</div>
-
-							<div className="space-y-4">
-								<div className="p-4 border rounded-lg bg-muted/30">
-									<p className="text-sm text-muted-foreground mb-3">
-										Lifetime Value
-									</p>
-									<p className="text-3xl font-bold">{customer.totalSpent}</p>
-								</div>
-
-								<div className="p-4 border rounded-lg bg-muted/30">
-									<p className="text-sm text-muted-foreground mb-3">
-										Total Orders
-									</p>
-									<p className="text-3xl font-bold">{customer.orders}</p>
-								</div>
-
-								<div className="p-4 border rounded-lg bg-muted/30">
-									<p className="text-sm text-muted-foreground mb-3">
-										Average Order Value
-									</p>
-									<p className="text-3xl font-bold">$189.00</p>
-								</div>
-							</div>
+					{isLoading ? (
+						<div className="flex items-center justify-center py-12">
+							<Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
 						</div>
-					</TabsContent>
+					) : (
+						<Tabs defaultValue="overview" className="w-full">
+							<TabsList className="grid w-full grid-cols-4">
+								<TabsTrigger value="overview">Overview</TabsTrigger>
+								<TabsTrigger value="orders">
+									Orders ({customerDetail?._count.orders ?? 0})
+								</TabsTrigger>
+								<TabsTrigger value="addresses">
+									Addresses ({customerDetail?._count.addresses ?? 0})
+								</TabsTrigger>
+								<TabsTrigger value="actions">Actions</TabsTrigger>
+							</TabsList>
 
-					<TabsContent value="orders" className="space-y-4">
-						<div className="space-y-3">
-							{recentOrders.map((order) => (
-								<div
-									key={order.id}
-									className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/30 transition-colors"
-								>
-									<div>
-										<p className="font-medium">{order.id}</p>
-										<p className="text-sm text-muted-foreground">
-											{order.date}
-										</p>
+							<TabsContent value="overview" className="space-y-4">
+								<div className="grid grid-cols-2 gap-6">
+									<div className="space-y-4">
+										<div>
+											<p className="text-sm font-medium text-muted-foreground mb-2">
+												Contact Information
+											</p>
+											<div className="space-y-2 text-sm">
+												<div className="flex items-center gap-2">
+													<span className="font-medium">Email:</span>
+													<span>{customerDetail?.email ?? customer.email}</span>
+													{customerDetail?.emailVerified && (
+														<Badge variant="outline" className="text-xs">
+															Verified
+														</Badge>
+													)}
+												</div>
+												<div className="flex items-center gap-2">
+													<span className="font-medium">Phone:</span>
+													<span>
+														{customerDetail?.phone ?? customer.phone ?? "N/A"}
+													</span>
+												</div>
+												<div className="flex items-center gap-2">
+													<span className="font-medium">Status:</span>
+													<Badge
+														variant={
+															customerDetail?.isActive ? "default" : "secondary"
+														}
+													>
+														{customerDetail?.isActive ? "Active" : "Inactive"}
+													</Badge>
+												</div>
+												<div className="flex items-center gap-2">
+													<span className="font-medium">Marketing:</span>
+													<Badge
+														variant={
+															customerDetail?.acceptsMarketing
+																? "default"
+																: "outline"
+														}
+													>
+														{customerDetail?.acceptsMarketing
+															? "Subscribed"
+															: "Not subscribed"}
+													</Badge>
+												</div>
+											</div>
+										</div>
+
+										<Separator />
+
+										<div>
+											<p className="text-sm font-medium text-muted-foreground mb-2">
+												Account Details
+											</p>
+											<div className="space-y-2 text-sm">
+												<div className="flex items-center gap-2">
+													<Calendar className="h-4 w-4" />
+													<span>
+														Joined{" "}
+														{customerDetail
+															? formatDate(customerDetail.createdAt)
+															: customer.joined}
+													</span>
+												</div>
+												{customerDetail?.lastOrderAt && (
+													<div className="flex items-center gap-2">
+														<Package className="h-4 w-4" />
+														<span>
+															Last order{" "}
+															{formatDate(customerDetail.lastOrderAt)}
+														</span>
+													</div>
+												)}
+												<div className="flex items-center gap-2">
+													<span className="font-medium">Customer ID:</span>
+													<span className="font-mono text-xs">
+														{customer.id}
+													</span>
+												</div>
+												<div className="flex items-center gap-2">
+													<span className="font-medium">Locale:</span>
+													<span>{customerDetail?.locale ?? "bg"}</span>
+												</div>
+											</div>
+										</div>
 									</div>
-									<div className="text-right">
-										<p className="font-medium">{order.total}</p>
-										<Badge variant="outline" className="mt-1">
-											{order.status}
-										</Badge>
+
+									<div className="space-y-4">
+										<div className="p-4 border rounded-lg bg-muted/30">
+											<p className="text-sm text-muted-foreground mb-2">
+												Lifetime Value
+											</p>
+											<p className="text-3xl font-bold">
+												{formatCurrency(customerDetail?.totalSpent ?? 0)}
+											</p>
+										</div>
+
+										<div className="p-4 border rounded-lg bg-muted/30">
+											<p className="text-sm text-muted-foreground mb-2">
+												Total Orders
+											</p>
+											<p className="text-3xl font-bold">
+												{customerDetail?.ordersCount ?? customer.orders}
+											</p>
+										</div>
+
+										<div className="p-4 border rounded-lg bg-muted/30">
+											<p className="text-sm text-muted-foreground mb-2">
+												Average Order Value
+											</p>
+											<p className="text-3xl font-bold">
+												{formatCurrency(avgOrderValue)}
+											</p>
+										</div>
 									</div>
 								</div>
-							))}
+							</TabsContent>
+
+							<TabsContent value="orders" className="space-y-4">
+								{customerDetail?.orders && customerDetail.orders.length > 0 ? (
+									<div className="space-y-3">
+										{customerDetail.orders.map((order) => (
+											<button
+												type="button"
+												key={order.id}
+												className="w-full flex items-center justify-between p-4 border rounded-lg hover:bg-muted/30 transition-colors cursor-pointer text-left"
+												onClick={() => {
+													window.location.href = `/admin/orders?id=${order.id}`;
+												}}
+											>
+												<div>
+													<p className="font-medium">{order.orderNumber}</p>
+													<p className="text-sm text-muted-foreground">
+														{formatDate(order.createdAt)}
+													</p>
+												</div>
+												<div className="text-right">
+													<p className="font-medium">
+														{formatCurrency(order.totalAmount)}
+													</p>
+													<div className="flex gap-2 mt-1">
+														<Badge
+															variant={getStatusBadgeVariant(order.status)}
+														>
+															{order.status}
+														</Badge>
+														<Badge
+															variant={getStatusBadgeVariant(
+																order.paymentStatus,
+															)}
+														>
+															{order.paymentStatus}
+														</Badge>
+													</div>
+												</div>
+											</button>
+										))}
+									</div>
+								) : (
+									<div className="text-center py-8 text-muted-foreground">
+										<Package className="h-12 w-12 mx-auto mb-3 opacity-50" />
+										<p>No orders yet</p>
+									</div>
+								)}
+							</TabsContent>
+
+							<TabsContent value="addresses" className="space-y-4">
+								{customerDetail?.addresses &&
+								customerDetail.addresses.length > 0 ? (
+									<div className="space-y-4">
+										{customerDetail.addresses.map((address) => (
+											<div key={address.id} className="p-4 border rounded-lg">
+												<div className="flex items-start justify-between mb-2">
+													<div className="flex items-start gap-2">
+														<MapPin className="h-4 w-4 mt-0.5" />
+														<div>
+															<p className="font-medium">
+																{address.firstName} {address.lastName}
+															</p>
+															{address.isDefault && (
+																<Badge
+																	variant="outline"
+																	className="text-xs mt-1"
+																>
+																	Default
+																</Badge>
+															)}
+														</div>
+													</div>
+												</div>
+												<div className="text-sm text-muted-foreground ml-6">
+													{address.company && <p>{address.company}</p>}
+													<p>{address.address1}</p>
+													{address.address2 && <p>{address.address2}</p>}
+													<p>
+														{address.city}
+														{address.province && `, ${address.province}`}{" "}
+														{address.postalCode}
+													</p>
+													<p>{address.country}</p>
+													{address.phone && (
+														<p className="mt-1">📞 {address.phone}</p>
+													)}
+												</div>
+											</div>
+										))}
+									</div>
+								) : (
+									<div className="text-center py-8 text-muted-foreground">
+										<MapPin className="h-12 w-12 mx-auto mb-3 opacity-50" />
+										<p>No addresses saved</p>
+									</div>
+								)}
+							</TabsContent>
+
+							<TabsContent value="actions" className="space-y-4">
+								<div className="grid gap-4">
+									<div className="p-4 border rounded-lg">
+										<div className="flex items-center justify-between">
+											<div>
+												<p className="font-medium flex items-center gap-2">
+													<Mail className="h-4 w-4" />
+													Send Email
+												</p>
+												<p className="text-sm text-muted-foreground">
+													Send a custom email to this customer
+												</p>
+											</div>
+											<Button onClick={() => setShowEmailDialog(true)}>
+												Compose Email
+											</Button>
+										</div>
+									</div>
+
+									<div className="p-4 border rounded-lg">
+										<div className="flex items-center justify-between">
+											<div>
+												<p className="font-medium flex items-center gap-2">
+													<Key className="h-4 w-4" />
+													Password Reset
+												</p>
+												<p className="text-sm text-muted-foreground">
+													Send a password reset link to the customer
+												</p>
+											</div>
+											<Button
+												variant="outline"
+												onClick={handleResetPassword}
+												disabled={isResettingPassword}
+											>
+												{isResettingPassword ? (
+													<>
+														<Loader2 className="h-4 w-4 animate-spin mr-2" />
+														Sending...
+													</>
+												) : (
+													<>
+														<RefreshCw className="h-4 w-4 mr-2" />
+														Reset Password
+													</>
+												)}
+											</Button>
+										</div>
+									</div>
+
+									<div className="p-4 border rounded-lg">
+										<div className="flex items-center justify-between">
+											<div>
+												<p className="font-medium flex items-center gap-2">
+													<User className="h-4 w-4" />
+													Account Status
+												</p>
+												<p className="text-sm text-muted-foreground">
+													{customerDetail?.isActive
+														? "Customer account is active"
+														: "Customer account is disabled"}
+												</p>
+											</div>
+											<Button
+												variant={
+													customerDetail?.isActive ? "destructive" : "default"
+												}
+												onClick={async () => {
+													if (!customerDetail) return;
+													try {
+														await updateCustomer(customerDetail.id, {
+															isActive: !customerDetail.isActive,
+														});
+														toast.success(
+															customerDetail.isActive
+																? "Account disabled"
+																: "Account enabled",
+														);
+														fetchCustomerDetail();
+														onRefresh?.();
+													} catch {
+														toast.error("Failed to update account status");
+													}
+												}}
+											>
+												{customerDetail?.isActive
+													? "Disable Account"
+													: "Enable Account"}
+											</Button>
+										</div>
+									</div>
+								</div>
+							</TabsContent>
+						</Tabs>
+					)}
+
+					<DialogFooter>
+						<Button variant="outline" onClick={() => onOpenChange(false)}>
+							Close
+						</Button>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
+
+			{/* Email Dialog */}
+			<Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>Send Email</DialogTitle>
+						<DialogDescription>
+							Send an email to {customerDetail?.email}
+						</DialogDescription>
+					</DialogHeader>
+					<div className="space-y-4">
+						<div className="space-y-2">
+							<Label htmlFor="email-subject">Subject</Label>
+							<Input
+								id="email-subject"
+								value={emailSubject}
+								onChange={(e) => setEmailSubject(e.target.value)}
+								placeholder="Email subject..."
+							/>
 						</div>
-					</TabsContent>
-
-					<TabsContent value="addresses" className="space-y-4">
-						<div className="space-y-4">
-							<div className="p-4 border rounded-lg">
-								<div className="flex items-start gap-2 mb-2">
-									<MapPin className="h-4 w-4 mt-0.5" />
-									<p className="font-medium">Shipping Address</p>
-								</div>
-								<div className="text-sm text-muted-foreground ml-6">
-									<p>123 Main Street</p>
-									<p>Apt 4B</p>
-									<p>New York, NY 10001</p>
-									<p>United States</p>
-								</div>
-							</div>
-
-							<div className="p-4 border rounded-lg">
-								<div className="flex items-start gap-2 mb-2">
-									<MapPin className="h-4 w-4 mt-0.5" />
-									<p className="font-medium">Billing Address</p>
-								</div>
-								<div className="text-sm text-muted-foreground ml-6">
-									<p>123 Main Street</p>
-									<p>Apt 4B</p>
-									<p>New York, NY 10001</p>
-									<p>United States</p>
-								</div>
-							</div>
+						<div className="space-y-2">
+							<Label htmlFor="email-body">Message</Label>
+							<Textarea
+								id="email-body"
+								value={emailBody}
+								onChange={(e) => setEmailBody(e.target.value)}
+								placeholder="Write your message..."
+								rows={6}
+							/>
 						</div>
-					</TabsContent>
-				</Tabs>
-
-				<DialogFooter>
-					<Button variant="outline" onClick={() => onOpenChange(false)}>
-						Close
-					</Button>
-					<Button type="button">Send Email</Button>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
+					</div>
+					<DialogFooter>
+						<Button variant="outline" onClick={() => setShowEmailDialog(false)}>
+							Cancel
+						</Button>
+						<Button onClick={handleSendEmail} disabled={isSendingEmail}>
+							{isSendingEmail ? (
+								<>
+									<Loader2 className="h-4 w-4 animate-spin mr-2" />
+									Sending...
+								</>
+							) : (
+								"Send Email"
+							)}
+						</Button>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
+		</>
 	);
 }
 

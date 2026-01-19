@@ -107,7 +107,7 @@ export default function UsersPage() {
 			setPage(1);
 		}, 300);
 		return () => clearTimeout(timer);
-	}, [search]);
+	}, []);
 
 	const handleRoleChange = async () => {
 		if (!selectedUser) return;

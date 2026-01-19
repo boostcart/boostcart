@@ -18,7 +18,6 @@ export const env = createEnv({
 		DIRECT_URL: z.url().optional(),
 		RESEND_API_KEY: z.string(),
 		EMAIL_FROM: z.string(),
-		UPLOADTHING_TOKEN: z.string().optional(),
 		// Cloudflare R2 Storage
 		R2_ACCOUNT_ID: z.string(),
 		R2_ACCESS_KEY_ID: z.string(),
@@ -57,7 +56,6 @@ export const env = createEnv({
 		DIRECT_URL: process.env.DIRECT_URL,
 		RESEND_API_KEY: process.env.RESEND_API_KEY,
 		EMAIL_FROM: process.env.EMAIL_FROM,
-		UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
 		// Cloudflare R2 Storage
 		R2_ACCOUNT_ID: process.env.R2_ACCOUNT_ID,
 		R2_ACCESS_KEY_ID: process.env.R2_ACCESS_KEY_ID,

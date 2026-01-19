@@ -30,12 +30,29 @@ async function requireStoreAccess() {
 	};
 }
 
+async function getDefaultLocale() {
+	let locale = await db.locale.findFirst({
+		where: { isDefault: true },
+	});
+
+	if (!locale) {
+		locale = await db.locale.upsert({
+			where: { code: "bg-BG" },
+			create: { code: "bg-BG", name: "Български", isDefault: true },
+			update: {},
+		});
+	}
+
+	return locale;
+}
+
 export async function getBrands() {
 	const { tenantId } = await requireStoreAccess();
 
 	const brands = await db.brand.findMany({
 		where: { tenantId },
 		include: {
+			translations: true,
 			_count: {
 				select: {
 					products: true,
@@ -54,6 +71,7 @@ export async function getBrand(id: string) {
 	const brand = await db.brand.findFirst({
 		where: { id, tenantId },
 		include: {
+			translations: true,
 			products: {
 				take: 10,
 				orderBy: { createdAt: "desc" },
@@ -79,13 +97,11 @@ interface BrandInput {
 	description?: string;
 	logoUrl?: string;
 	websiteUrl?: string;
-	isActive?: boolean;
-	seoTitle?: string;
-	seoDescription?: string;
 }
 
 export async function createBrand(input: BrandInput) {
 	const { tenantId } = await requireStoreAccess();
+	const locale = await getDefaultLocale();
 
 	// Check if slug already exists for this tenant
 	const existing = await db.brand.findFirst({
@@ -101,8 +117,21 @@ export async function createBrand(input: BrandInput) {
 
 	const brand = await db.brand.create({
 		data: {
-			...input,
+			slug: input.slug,
+			name: input.name,
+			logoUrl: input.logoUrl,
+			description: input.description,
 			tenantId,
+			translations: {
+				create: {
+					localeId: locale.id,
+					name: input.name,
+					description: input.description,
+				},
+			},
+		},
+		include: {
+			translations: true,
 		},
 	});
 
@@ -111,6 +140,7 @@ export async function createBrand(input: BrandInput) {
 
 export async function updateBrand(id: string, input: Partial<BrandInput>) {
 	const { tenantId } = await requireStoreAccess();
+	const locale = await getDefaultLocale();
 
 	// Verify brand belongs to tenant
 	const brand = await db.brand.findFirst({
@@ -138,7 +168,34 @@ export async function updateBrand(id: string, input: Partial<BrandInput>) {
 
 	const updated = await db.brand.update({
 		where: { id },
-		data: input,
+		data: {
+			slug: input.slug,
+			name: input.name,
+			logoUrl: input.logoUrl,
+			description: input.description,
+			translations: {
+				upsert: {
+					where: {
+						brandId_localeId: {
+							brandId: id,
+							localeId: locale.id,
+						},
+					},
+					create: {
+						localeId: locale.id,
+						name: input.name ?? "",
+						description: input.description,
+					},
+					update: {
+						name: input.name,
+						description: input.description,
+					},
+				},
+			},
+		},
+		include: {
+			translations: true,
+		},
 	});
 
 	return updated;

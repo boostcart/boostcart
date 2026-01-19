@@ -3,8 +3,8 @@
 import { FolderTree, MoreVertical, Plus, Search } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Loader } from "@/components/loader";
 import { PolarisButton } from "@/components/admin/polaris-button";
+import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -35,6 +35,14 @@ import {
 } from "./_components/category-dialogs";
 
 // Backend API type
+interface CategoryTranslation {
+	id: string;
+	categoryId: string;
+	localeId: string;
+	name: string;
+	description: string | null;
+}
+
 interface ApiCategory {
 	id: string;
 	slug: string;
@@ -44,9 +52,11 @@ interface ApiCategory {
 	tenantId: string;
 	createdAt: Date;
 	updatedAt: Date;
+	translations: CategoryTranslation[];
 	parent?: {
 		id: string;
 		slug: string;
+		translations?: CategoryTranslation[];
 	} | null;
 	_count: {
 		products: number;
@@ -59,9 +69,11 @@ interface Category {
 	id: string;
 	name: string;
 	slug: string;
+	description?: string | null;
 	parentId?: string | null;
 	parent?: {
 		slug: string;
+		name?: string;
 	} | null;
 	products: number;
 	subcategories: number;
@@ -95,13 +107,19 @@ export default function CategoriesPage() {
 			const transformed = data.map(
 				(cat: ApiCategory): Category => ({
 					id: cat.id,
-					name: cat.slug, // TODO: Add name field to Category model
+					name: cat.translations[0]?.name ?? cat.slug,
 					slug: cat.slug,
+					description: cat.translations[0]?.description,
 					parentId: cat.parentId,
-					parent: cat.parent,
+					parent: cat.parent
+						? {
+								slug: cat.parent.slug,
+								name: cat.parent.translations?.[0]?.name ?? cat.parent.slug,
+							}
+						: null,
 					products: cat._count.products,
 					subcategories: cat._count.subCategories,
-					status: "Active", // TODO: Add status field to Category model
+					status: "Active",
 					_count: cat._count,
 				}),
 			);
@@ -128,8 +146,9 @@ export default function CategoriesPage() {
 		const query = searchQuery.toLowerCase();
 		const filtered = categories.filter(
 			(cat) =>
+				cat.name.toLowerCase().includes(query) ||
 				cat.slug.toLowerCase().includes(query) ||
-				cat.parent?.slug.toLowerCase().includes(query),
+				cat.parent?.name?.toLowerCase().includes(query),
 		);
 		setFilteredCategories(filtered);
 	}, [searchQuery, categories]);
@@ -240,7 +259,7 @@ export default function CategoriesPage() {
 								<TableHead>Parent</TableHead>
 								<TableHead>Products</TableHead>
 								<TableHead>Subcategories</TableHead>
-								<TableHead className="w-[70px]"></TableHead>
+								<TableHead className="w-17.5"></TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
@@ -248,7 +267,7 @@ export default function CategoriesPage() {
 								<TableRow key={category.id} className="cursor-pointer">
 									<TableCell>
 										<div className="flex items-center gap-3">
-											<div className="h-10 w-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+											<div className="h-10 w-10 rounded-lg bg-linear-to-br from-blue-500 to-purple-600 flex items-center justify-center">
 												<FolderTree className="h-5 w-5 text-white" />
 											</div>
 											<span className="font-medium">{category.slug}</span>

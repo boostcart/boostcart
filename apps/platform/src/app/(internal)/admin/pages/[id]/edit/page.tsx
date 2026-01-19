@@ -6,8 +6,8 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Loader } from "@/components/loader";
 import { PolarisButton } from "@/components/admin/polaris-button";
+import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {

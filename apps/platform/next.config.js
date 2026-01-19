@@ -10,6 +10,19 @@ const config = {
 	experimental: {
 		authInterrupts: true,
 	},
+	// Images from Cloudflare R2 storage
+	images: {
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "*.r2.cloudflarestorage.com",
+			},
+			{
+				protocol: "https",
+				hostname: "*.r2.dev",
+			},
+		],
+	},
 };
 
 export default config;

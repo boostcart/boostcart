@@ -3,9 +3,7 @@
 import { FileImage, FileVideo, Loader2, Upload, X } from "lucide-react";
 import Image from "next/image";
 import * as React from "react";
-import type { OurFileRouter } from "@/app/api/uploadthing/core";
 import { Button } from "@/components/ui/button";
-import { useUploadThing } from "@/lib/uploadthing";
 import { cn } from "@/lib/utils";
 
 export interface UploadedMedia {
@@ -14,10 +12,8 @@ export interface UploadedMedia {
 	name: string;
 }
 
-type EndpointKey = keyof OurFileRouter;
-
 interface MediaUploadProps {
-	endpoint: EndpointKey;
+	folder?: string;
 	value?: UploadedMedia[];
 	onChange?: (media: UploadedMedia[]) => void;
 	maxFiles?: number;
@@ -27,8 +23,36 @@ interface MediaUploadProps {
 	acceptVideos?: boolean;
 }
 
+async function uploadFile(
+	file: File,
+	folder?: string,
+): Promise<{ url: string; type: "image" | "video"; name: string }> {
+	const formData = new FormData();
+	formData.append("file", file);
+	if (folder) {
+		formData.append("folder", folder);
+	}
+
+	const response = await fetch("/api/upload", {
+		method: "POST",
+		body: formData,
+	});
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.error || "Upload failed");
+	}
+
+	const result = await response.json();
+	return {
+		url: result.media.url,
+		type: file.type.startsWith("video/") ? "video" : "image",
+		name: result.media.originalName || file.name,
+	};
+}
+
 export function MediaUpload({
-	endpoint,
+	folder = "media",
 	value = [],
 	onChange,
 	maxFiles = 20,
@@ -38,23 +62,23 @@ export function MediaUpload({
 	acceptVideos = true,
 }: MediaUploadProps) {
 	const [isDragging, setIsDragging] = React.useState(false);
+	const [isUploading, setIsUploading] = React.useState(false);
 	const inputRef = React.useRef<HTMLInputElement>(null);
 
-	const { startUpload, isUploading } = useUploadThing(endpoint, {
-		onClientUploadComplete: (res) => {
-			if (res) {
-				const newMedia: UploadedMedia[] = res.map((file) => ({
-					url: file.ufsUrl,
-					type: file.type.startsWith("video/") ? "video" : "image",
-					name: file.name,
-				}));
-				onChange?.([...value, ...newMedia]);
-			}
-		},
-		onUploadError: (error) => {
+	const handleUpload = async (files: File[]) => {
+		if (files.length === 0) return;
+
+		setIsUploading(true);
+		try {
+			const uploadPromises = files.map((file) => uploadFile(file, folder));
+			const results = await Promise.all(uploadPromises);
+			onChange?.([...value, ...results]);
+		} catch (error) {
 			console.error("Upload error:", error);
-		},
-	});
+		} finally {
+			setIsUploading(false);
+		}
+	};
 
 	const handleDragOver = (e: React.DragEvent) => {
 		e.preventDefault();
@@ -78,9 +102,7 @@ export function MediaUpload({
 		const remainingSlots = maxFiles - value.length;
 		const filesToUpload = files.slice(0, remainingSlots);
 
-		if (filesToUpload.length > 0) {
-			await startUpload(filesToUpload);
-		}
+		await handleUpload(filesToUpload);
 	};
 
 	const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,9 +112,7 @@ export function MediaUpload({
 		const remainingSlots = maxFiles - value.length;
 		const filesToUpload = files.slice(0, remainingSlots);
 
-		if (filesToUpload.length > 0) {
-			await startUpload(filesToUpload);
-		}
+		await handleUpload(filesToUpload);
 
 		// Reset input
 		if (inputRef.current) {
@@ -220,7 +240,7 @@ export function MediaUpload({
 
 // Simple single image upload
 interface SingleImageUploadProps {
-	endpoint: EndpointKey;
+	folder?: string;
 	value?: string;
 	onChange?: (url: string | undefined) => void;
 	disabled?: boolean;
@@ -229,7 +249,7 @@ interface SingleImageUploadProps {
 }
 
 export function SingleImageUpload({
-	endpoint,
+	folder = "media",
 	value,
 	onChange,
 	disabled = false,
@@ -237,23 +257,22 @@ export function SingleImageUpload({
 	aspectRatio = "square",
 }: SingleImageUploadProps) {
 	const inputRef = React.useRef<HTMLInputElement>(null);
-
-	const { startUpload, isUploading } = useUploadThing(endpoint, {
-		onClientUploadComplete: (res) => {
-			if (res?.[0]) {
-				onChange?.(res[0].ufsUrl);
-			}
-		},
-		onUploadError: (error) => {
-			console.error("Upload error:", error);
-		},
-	});
+	const [isUploading, setIsUploading] = React.useState(false);
 
 	const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (disabled || isUploading || !e.target.files?.[0]) return;
-		await startUpload([e.target.files[0]]);
-		if (inputRef.current) {
-			inputRef.current.value = "";
+
+		setIsUploading(true);
+		try {
+			const result = await uploadFile(e.target.files[0], folder);
+			onChange?.(result.url);
+		} catch (error) {
+			console.error("Upload error:", error);
+		} finally {
+			setIsUploading(false);
+			if (inputRef.current) {
+				inputRef.current.value = "";
+			}
 		}
 	};
 

@@ -8,6 +8,11 @@
 	"files": { "ignoreUnknown": false },
 	"formatter": { "enabled": true },
 	"linter": {
-		"enabled": true
+		"enabled": true,
+		"rules": {
+			"suspicious": {
+				"noArrayIndexKey": "warn"
+			}
+		}
 	}
 }

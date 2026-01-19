@@ -1,20 +1,22 @@
 "use client";
 
-import Link from "next/link";
 import {
 	ArrowRight,
 	Bell,
+	Coins,
 	CreditCard,
 	Globe,
 	Link2,
 	Loader2,
+	Palette,
 	Store,
 	Truck,
 } from "lucide-react";
+import Link from "next/link";
 import * as React from "react";
 import { toast } from "sonner";
-import { Loader } from "@/components/loader";
 import { PolarisButton } from "@/components/admin/polaris-button";
+import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -60,7 +62,6 @@ export default function SettingsPage() {
 	const [storeEmail, setStoreEmail] = React.useState("");
 	const [storePhone, setStorePhone] = React.useState("");
 	const [storeDescription, setStoreDescription] = React.useState("");
-	const [currency, setCurrency] = React.useState("BGN");
 	const [locale, setLocale] = React.useState("bg");
 	const [timezone, setTimezone] = React.useState("Europe/Sofia");
 
@@ -81,7 +82,6 @@ export default function SettingsPage() {
 			setStoreEmail(settingsData.email);
 			setStorePhone(settingsData.phone ?? "");
 			setStoreDescription(settingsData.description ?? "");
-			setCurrency(settingsData.currency);
 			setLocale(settingsData.locale);
 			setTimezone(settingsData.timezone);
 		} catch (error) {
@@ -118,7 +118,7 @@ export default function SettingsPage() {
 		setIsSaving(true);
 		try {
 			await updateLocalization({
-				currency,
+				currency: "EUR", // Currency is now managed via currencies page
 				locale,
 				timezone,
 			});
@@ -155,7 +155,7 @@ export default function SettingsPage() {
 
 	if (isLoading) {
 		return (
-			<div className="flex items-center justify-center min-h-[400px]">
+			<div className="flex items-center justify-center min-h-100">
 				<Loader size="lg" />
 			</div>
 		);
@@ -271,6 +271,55 @@ export default function SettingsPage() {
 					</div>
 				</Card>
 
+				{/* Theme Settings */}
+				<Card className="p-6">
+					<div className="flex items-center justify-between">
+						<div className="flex items-center gap-3">
+							<div className="h-10 w-10 rounded-lg bg-pink-100 dark:bg-pink-900 flex items-center justify-center">
+								<Palette className="h-5 w-5 text-pink-600 dark:text-pink-300" />
+							</div>
+							<div>
+								<h2 className="text-xl font-bold">Theme & Appearance</h2>
+								<p className="text-sm text-muted-foreground">
+									Customize colors, fonts, layout, and branding for your storefront
+								</p>
+							</div>
+						</div>
+						<Link
+							href="/admin/settings/theme"
+							className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+						>
+							Customize Theme
+							<ArrowRight className="h-4 w-4" />
+						</Link>
+					</div>
+				</Card>
+
+				{/* Currencies */}
+				<Card className="p-6">
+					<div className="flex items-center justify-between">
+						<div className="flex items-center gap-3">
+							<div className="h-10 w-10 rounded-lg bg-amber-100 dark:bg-amber-900 flex items-center justify-center">
+								<Coins className="h-5 w-5 text-amber-600 dark:text-amber-300" />
+							</div>
+							<div>
+								<h2 className="text-xl font-bold">Currencies</h2>
+								<p className="text-sm text-muted-foreground">
+									Enable multiple currencies with automatic exchange rate
+									updates
+								</p>
+							</div>
+						</div>
+						<Link
+							href="/admin/settings/currencies"
+							className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+						>
+							Manage Currencies
+							<ArrowRight className="h-4 w-4" />
+						</Link>
+					</div>
+				</Card>
+
 				{/* Localization */}
 				<Card className="p-6">
 					<div className="flex items-center gap-3 mb-6">
@@ -280,7 +329,7 @@ export default function SettingsPage() {
 						<div>
 							<h2 className="text-xl font-bold">Localization</h2>
 							<p className="text-sm text-muted-foreground">
-								Configure languages and currencies
+								Configure language and regional settings
 							</p>
 						</div>
 					</div>
@@ -296,20 +345,6 @@ export default function SettingsPage() {
 									<SelectItem value="en">English</SelectItem>
 									<SelectItem value="de">Deutsch</SelectItem>
 									<SelectItem value="fr">Français</SelectItem>
-								</SelectContent>
-							</Select>
-						</div>
-						<div className="space-y-2">
-							<Label htmlFor="default-currency">Default Currency</Label>
-							<Select value={currency} onValueChange={setCurrency}>
-								<SelectTrigger id="default-currency">
-									<SelectValue placeholder="Select currency" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem value="BGN">BGN - Bulgarian Lev</SelectItem>
-									<SelectItem value="EUR">EUR - Euro</SelectItem>
-									<SelectItem value="USD">USD - US Dollar</SelectItem>
-									<SelectItem value="GBP">GBP - British Pound</SelectItem>
 								</SelectContent>
 							</Select>
 						</div>

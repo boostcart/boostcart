@@ -188,7 +188,12 @@ export async function getEnabledShippingMethods() {
 		orderBy: { createdAt: "asc" },
 	});
 
-	return shippingMethods;
+	// Serialize Decimal types to numbers for client components
+	return shippingMethods.map((method) => ({
+		...method,
+		cost: method.cost.toNumber(),
+		freeAboveAmount: method.freeAboveAmount?.toNumber() ?? null,
+	}));
 }
 
 // Toggle payment method
@@ -228,7 +233,12 @@ export async function toggleShippingMethod(shippingMethodId: string) {
 		data: { isActive: !shippingMethod.isActive },
 	});
 
-	return updated;
+	// Serialize Decimal types to numbers for client components
+	return {
+		...updated,
+		cost: updated.cost.toNumber(),
+		freeAboveAmount: updated.freeAboveAmount?.toNumber() ?? null,
+	};
 }
 
 // Add custom domain

@@ -46,7 +46,12 @@ export async function getShippingMethods() {
 		orderBy: { createdAt: "desc" },
 	});
 
-	return methods;
+	// Serialize Decimal types to numbers for client components
+	return methods.map((method) => ({
+		...method,
+		cost: method.cost.toNumber(),
+		freeAboveAmount: method.freeAboveAmount?.toNumber() ?? null,
+	}));
 }
 
 export async function getShippingMethod(id: string) {
@@ -67,7 +72,12 @@ export async function getShippingMethod(id: string) {
 		throw new Error("Shipping method not found");
 	}
 
-	return method;
+	// Serialize Decimal types to numbers for client components
+	return {
+		...method,
+		cost: method.cost.toNumber(),
+		freeAboveAmount: method.freeAboveAmount?.toNumber() ?? null,
+	};
 }
 
 interface ShippingMethodInput {
@@ -90,7 +100,12 @@ export async function createShippingMethod(input: ShippingMethodInput) {
 		},
 	});
 
-	return method;
+	// Serialize Decimal types to numbers for client components
+	return {
+		...method,
+		cost: method.cost.toNumber(),
+		freeAboveAmount: method.freeAboveAmount?.toNumber() ?? null,
+	};
 }
 
 export async function updateShippingMethod(
@@ -113,7 +128,12 @@ export async function updateShippingMethod(
 		data: input,
 	});
 
-	return updated;
+	// Serialize Decimal types to numbers for client components
+	return {
+		...updated,
+		cost: updated.cost.toNumber(),
+		freeAboveAmount: updated.freeAboveAmount?.toNumber() ?? null,
+	};
 }
 
 export async function deleteShippingMethod(id: string) {
@@ -163,5 +183,10 @@ export async function toggleShippingMethodStatus(id: string) {
 		data: { isActive: !method.isActive },
 	});
 
-	return updated;
+	// Serialize Decimal types to numbers for client components
+	return {
+		...updated,
+		cost: updated.cost.toNumber(),
+		freeAboveAmount: updated.freeAboveAmount?.toNumber() ?? null,
+	};
 }

@@ -50,17 +50,36 @@ export async function getAbandonedCarts() {
 			},
 		},
 		include: {
-			customer: true,
+			customer: {
+				select: {
+					id: true,
+					email: true,
+					firstName: true,
+					lastName: true,
+				},
+			},
 			items: {
 				include: {
 					product: {
-						include: {
+						select: {
+							id: true,
+							slug: true,
+							price: true,
 							translations: {
 								take: 1,
+								select: {
+									name: true,
+								},
 							},
 						},
 					},
-					selectedVariant: true,
+					selectedVariant: {
+						select: {
+							id: true,
+							sku: true,
+							price: true,
+						},
+					},
 				},
 			},
 		},
@@ -103,21 +122,45 @@ export async function getAbandonedCart(id: string) {
 	const cart = await db.cart.findFirst({
 		where: { id, tenantId },
 		include: {
-			customer: true,
+			customer: {
+				select: {
+					id: true,
+					email: true,
+					firstName: true,
+					lastName: true,
+					phone: true,
+				},
+			},
 			items: {
 				include: {
 					product: {
-						include: {
+						select: {
+							id: true,
+							slug: true,
+							price: true,
 							translations: {
 								take: 1,
+								select: {
+									name: true,
+								},
 							},
 							media: {
 								orderBy: { order: "asc" },
 								take: 1,
+								select: {
+									url: true,
+								},
 							},
 						},
 					},
-					selectedVariant: true,
+					selectedVariant: {
+						select: {
+							id: true,
+							sku: true,
+							price: true,
+							options: true,
+						},
+					},
 				},
 			},
 		},
@@ -203,8 +246,16 @@ export async function getAbandonedCartStats() {
 		include: {
 			items: {
 				include: {
-					product: true,
-					selectedVariant: true,
+					product: {
+						select: {
+							price: true,
+						},
+					},
+					selectedVariant: {
+						select: {
+							price: true,
+						},
+					},
 				},
 			},
 		},

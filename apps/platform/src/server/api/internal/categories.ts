@@ -36,7 +36,12 @@ export async function getCategories() {
 	const categories = await db.category.findMany({
 		where: { tenantId },
 		include: {
-			parent: true,
+			parent: {
+				include: {
+					translations: true,
+				},
+			},
+			translations: true,
 			_count: {
 				select: {
 					products: true,
@@ -56,8 +61,17 @@ export async function getCategory(id: string) {
 	const category = await db.category.findFirst({
 		where: { id, tenantId },
 		include: {
-			parent: true,
-			subCategories: true,
+			parent: {
+				include: {
+					translations: true,
+				},
+			},
+			subCategories: {
+				include: {
+					translations: true,
+				},
+			},
+			translations: true,
 			products: {
 				take: 10,
 				orderBy: { createdAt: "desc" },
@@ -83,13 +97,30 @@ interface CategoryInput {
 	slug: string;
 	description?: string;
 	parentId?: string;
-	isActive?: boolean;
-	seoTitle?: string;
-	seoDescription?: string;
+	iconUrl?: string;
+	coverImageUrl?: string;
+}
+
+async function getDefaultLocale() {
+	let locale = await db.locale.findFirst({
+		where: { isDefault: true },
+	});
+
+	if (!locale) {
+		// Create default locale if not exists
+		locale = await db.locale.upsert({
+			where: { code: "bg-BG" },
+			create: { code: "bg-BG", name: "Български", isDefault: true },
+			update: {},
+		});
+	}
+
+	return locale;
 }
 
 export async function createCategory(input: CategoryInput) {
 	const { tenantId } = await requireStoreAccess();
+	const locale = await getDefaultLocale();
 
 	// Check if slug already exists for this tenant
 	const existing = await db.category.findFirst({
@@ -116,8 +147,21 @@ export async function createCategory(input: CategoryInput) {
 
 	const category = await db.category.create({
 		data: {
-			...input,
+			slug: input.slug,
+			iconUrl: input.iconUrl,
+			coverImageUrl: input.coverImageUrl,
+			parentId: input.parentId,
 			tenantId,
+			translations: {
+				create: {
+					localeId: locale.id,
+					name: input.name,
+					description: input.description,
+				},
+			},
+		},
+		include: {
+			translations: true,
 		},
 	});
 
@@ -129,10 +173,12 @@ export async function updateCategory(
 	input: Partial<CategoryInput>,
 ) {
 	const { tenantId } = await requireStoreAccess();
+	const locale = await getDefaultLocale();
 
 	// Verify category belongs to tenant
 	const category = await db.category.findFirst({
 		where: { id, tenantId },
+		include: { translations: true },
 	});
 
 	if (!category) {
@@ -170,9 +216,37 @@ export async function updateCategory(
 		}
 	}
 
+	// Update category and translations
 	const updated = await db.category.update({
 		where: { id },
-		data: input,
+		data: {
+			slug: input.slug,
+			iconUrl: input.iconUrl,
+			coverImageUrl: input.coverImageUrl,
+			parentId: input.parentId,
+			translations: {
+				upsert: {
+					where: {
+						categoryId_localeId: {
+							categoryId: id,
+							localeId: locale.id,
+						},
+					},
+					create: {
+						localeId: locale.id,
+						name: input.name ?? "",
+						description: input.description,
+					},
+					update: {
+						name: input.name,
+						description: input.description,
+					},
+				},
+			},
+		},
+		include: {
+			translations: true,
+		},
 	});
 
 	return updated;

@@ -480,7 +480,7 @@ function ProductsPageContent() {
 								<TableHead>Brand</TableHead>
 								<TableHead>Stock</TableHead>
 								<TableHead className="text-right">Price</TableHead>
-								<TableHead className="w-[70px]" />
+								<TableHead className="w-17.5" />
 							</TableRow>
 						</TableHeader>
 						<TableBody>
@@ -503,7 +503,7 @@ function ProductsPageContent() {
 											</div>
 											<div>
 												<p className="font-medium text-sm">{product.name}</p>
-												<p className="text-muted-foreground text-xs truncate max-w-[200px]">
+												<p className="text-muted-foreground text-xs truncate max-w-50">
 													{product.slug}
 												</p>
 											</div>
@@ -645,7 +645,7 @@ export default function ProductsPage() {
 	return (
 		<Suspense
 			fallback={
-				<div className="flex items-center justify-center min-h-[400px]">
+				<div className="flex items-center justify-center min-h-100">
 					<Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
 				</div>
 			}

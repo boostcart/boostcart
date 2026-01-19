@@ -28,10 +28,12 @@ export type AggregateCurrency = {
 
 export type CurrencyAvgAggregateOutputType = {
   rate: runtime.Decimal | null
+  decimals: number | null
 }
 
 export type CurrencySumAggregateOutputType = {
   rate: runtime.Decimal | null
+  decimals: number | null
 }
 
 export type CurrencyMinAggregateOutputType = {
@@ -40,7 +42,8 @@ export type CurrencyMinAggregateOutputType = {
   symbol: string | null
   name: string | null
   rate: runtime.Decimal | null
-  isDefault: boolean | null
+  decimals: number | null
+  symbolFirst: boolean | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -52,7 +55,8 @@ export type CurrencyMaxAggregateOutputType = {
   symbol: string | null
   name: string | null
   rate: runtime.Decimal | null
-  isDefault: boolean | null
+  decimals: number | null
+  symbolFirst: boolean | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -64,7 +68,8 @@ export type CurrencyCountAggregateOutputType = {
   symbol: number
   name: number
   rate: number
-  isDefault: number
+  decimals: number
+  symbolFirst: number
   isActive: number
   createdAt: number
   updatedAt: number
@@ -74,10 +79,12 @@ export type CurrencyCountAggregateOutputType = {
 
 export type CurrencyAvgAggregateInputType = {
   rate?: true
+  decimals?: true
 }
 
 export type CurrencySumAggregateInputType = {
   rate?: true
+  decimals?: true
 }
 
 export type CurrencyMinAggregateInputType = {
@@ -86,7 +93,8 @@ export type CurrencyMinAggregateInputType = {
   symbol?: true
   name?: true
   rate?: true
-  isDefault?: true
+  decimals?: true
+  symbolFirst?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -98,7 +106,8 @@ export type CurrencyMaxAggregateInputType = {
   symbol?: true
   name?: true
   rate?: true
-  isDefault?: true
+  decimals?: true
+  symbolFirst?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -110,7 +119,8 @@ export type CurrencyCountAggregateInputType = {
   symbol?: true
   name?: true
   rate?: true
-  isDefault?: true
+  decimals?: true
+  symbolFirst?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -209,7 +219,8 @@ export type CurrencyGroupByOutputType = {
   symbol: string
   name: string
   rate: runtime.Decimal
-  isDefault: boolean
+  decimals: number
+  symbolFirst: boolean
   isActive: boolean
   createdAt: Date
   updatedAt: Date
@@ -244,12 +255,15 @@ export type CurrencyWhereInput = {
   symbol?: Prisma.StringFilter<"Currency"> | string
   name?: Prisma.StringFilter<"Currency"> | string
   rate?: Prisma.DecimalFilter<"Currency"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  isDefault?: Prisma.BoolFilter<"Currency"> | boolean
+  decimals?: Prisma.IntFilter<"Currency"> | number
+  symbolFirst?: Prisma.BoolFilter<"Currency"> | boolean
   isActive?: Prisma.BoolFilter<"Currency"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Currency"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Currency"> | Date | string
   orders?: Prisma.OrderListRelationFilter
   giftCards?: Prisma.GiftCardListRelationFilter
+  productPrices?: Prisma.ProductPriceListRelationFilter
+  tenants?: Prisma.TenantCurrencyListRelationFilter
 }
 
 export type CurrencyOrderByWithRelationInput = {
@@ -258,12 +272,15 @@ export type CurrencyOrderByWithRelationInput = {
   symbol?: Prisma.SortOrder
   name?: Prisma.SortOrder
   rate?: Prisma.SortOrder
-  isDefault?: Prisma.SortOrder
+  decimals?: Prisma.SortOrder
+  symbolFirst?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   orders?: Prisma.OrderOrderByRelationAggregateInput
   giftCards?: Prisma.GiftCardOrderByRelationAggregateInput
+  productPrices?: Prisma.ProductPriceOrderByRelationAggregateInput
+  tenants?: Prisma.TenantCurrencyOrderByRelationAggregateInput
 }
 
 export type CurrencyWhereUniqueInput = Prisma.AtLeast<{
@@ -275,12 +292,15 @@ export type CurrencyWhereUniqueInput = Prisma.AtLeast<{
   symbol?: Prisma.StringFilter<"Currency"> | string
   name?: Prisma.StringFilter<"Currency"> | string
   rate?: Prisma.DecimalFilter<"Currency"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  isDefault?: Prisma.BoolFilter<"Currency"> | boolean
+  decimals?: Prisma.IntFilter<"Currency"> | number
+  symbolFirst?: Prisma.BoolFilter<"Currency"> | boolean
   isActive?: Prisma.BoolFilter<"Currency"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Currency"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Currency"> | Date | string
   orders?: Prisma.OrderListRelationFilter
   giftCards?: Prisma.GiftCardListRelationFilter
+  productPrices?: Prisma.ProductPriceListRelationFilter
+  tenants?: Prisma.TenantCurrencyListRelationFilter
 }, "id" | "code">
 
 export type CurrencyOrderByWithAggregationInput = {
@@ -289,7 +309,8 @@ export type CurrencyOrderByWithAggregationInput = {
   symbol?: Prisma.SortOrder
   name?: Prisma.SortOrder
   rate?: Prisma.SortOrder
-  isDefault?: Prisma.SortOrder
+  decimals?: Prisma.SortOrder
+  symbolFirst?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -309,7 +330,8 @@ export type CurrencyScalarWhereWithAggregatesInput = {
   symbol?: Prisma.StringWithAggregatesFilter<"Currency"> | string
   name?: Prisma.StringWithAggregatesFilter<"Currency"> | string
   rate?: Prisma.DecimalWithAggregatesFilter<"Currency"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  isDefault?: Prisma.BoolWithAggregatesFilter<"Currency"> | boolean
+  decimals?: Prisma.IntWithAggregatesFilter<"Currency"> | number
+  symbolFirst?: Prisma.BoolWithAggregatesFilter<"Currency"> | boolean
   isActive?: Prisma.BoolWithAggregatesFilter<"Currency"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Currency"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Currency"> | Date | string
@@ -321,12 +343,15 @@ export type CurrencyCreateInput = {
   symbol: string
   name: string
   rate: runtime.Decimal | runtime.DecimalJsLike | number | string
-  isDefault?: boolean
+  decimals?: number
+  symbolFirst?: boolean
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderCreateNestedManyWithoutCurrencyInput
   giftCards?: Prisma.GiftCardCreateNestedManyWithoutCurrencyInput
+  productPrices?: Prisma.ProductPriceCreateNestedManyWithoutCurrencyInput
+  tenants?: Prisma.TenantCurrencyCreateNestedManyWithoutCurrencyInput
 }
 
 export type CurrencyUncheckedCreateInput = {
@@ -335,12 +360,15 @@ export type CurrencyUncheckedCreateInput = {
   symbol: string
   name: string
   rate: runtime.Decimal | runtime.DecimalJsLike | number | string
-  isDefault?: boolean
+  decimals?: number
+  symbolFirst?: boolean
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutCurrencyInput
   giftCards?: Prisma.GiftCardUncheckedCreateNestedManyWithoutCurrencyInput
+  productPrices?: Prisma.ProductPriceUncheckedCreateNestedManyWithoutCurrencyInput
+  tenants?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutCurrencyInput
 }
 
 export type CurrencyUpdateInput = {
@@ -349,12 +377,15 @@ export type CurrencyUpdateInput = {
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  decimals?: Prisma.IntFieldUpdateOperationsInput | number
+  symbolFirst?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUpdateManyWithoutCurrencyNestedInput
   giftCards?: Prisma.GiftCardUpdateManyWithoutCurrencyNestedInput
+  productPrices?: Prisma.ProductPriceUpdateManyWithoutCurrencyNestedInput
+  tenants?: Prisma.TenantCurrencyUpdateManyWithoutCurrencyNestedInput
 }
 
 export type CurrencyUncheckedUpdateInput = {
@@ -363,12 +394,15 @@ export type CurrencyUncheckedUpdateInput = {
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  decimals?: Prisma.IntFieldUpdateOperationsInput | number
+  symbolFirst?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutCurrencyNestedInput
   giftCards?: Prisma.GiftCardUncheckedUpdateManyWithoutCurrencyNestedInput
+  productPrices?: Prisma.ProductPriceUncheckedUpdateManyWithoutCurrencyNestedInput
+  tenants?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutCurrencyNestedInput
 }
 
 export type CurrencyCreateManyInput = {
@@ -377,7 +411,8 @@ export type CurrencyCreateManyInput = {
   symbol: string
   name: string
   rate: runtime.Decimal | runtime.DecimalJsLike | number | string
-  isDefault?: boolean
+  decimals?: number
+  symbolFirst?: boolean
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -389,7 +424,8 @@ export type CurrencyUpdateManyMutationInput = {
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  decimals?: Prisma.IntFieldUpdateOperationsInput | number
+  symbolFirst?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -401,7 +437,8 @@ export type CurrencyUncheckedUpdateManyInput = {
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  decimals?: Prisma.IntFieldUpdateOperationsInput | number
+  symbolFirst?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -413,7 +450,8 @@ export type CurrencyCountOrderByAggregateInput = {
   symbol?: Prisma.SortOrder
   name?: Prisma.SortOrder
   rate?: Prisma.SortOrder
-  isDefault?: Prisma.SortOrder
+  decimals?: Prisma.SortOrder
+  symbolFirst?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -421,6 +459,7 @@ export type CurrencyCountOrderByAggregateInput = {
 
 export type CurrencyAvgOrderByAggregateInput = {
   rate?: Prisma.SortOrder
+  decimals?: Prisma.SortOrder
 }
 
 export type CurrencyMaxOrderByAggregateInput = {
@@ -429,7 +468,8 @@ export type CurrencyMaxOrderByAggregateInput = {
   symbol?: Prisma.SortOrder
   name?: Prisma.SortOrder
   rate?: Prisma.SortOrder
-  isDefault?: Prisma.SortOrder
+  decimals?: Prisma.SortOrder
+  symbolFirst?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -441,7 +481,8 @@ export type CurrencyMinOrderByAggregateInput = {
   symbol?: Prisma.SortOrder
   name?: Prisma.SortOrder
   rate?: Prisma.SortOrder
-  isDefault?: Prisma.SortOrder
+  decimals?: Prisma.SortOrder
+  symbolFirst?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -449,11 +490,40 @@ export type CurrencyMinOrderByAggregateInput = {
 
 export type CurrencySumOrderByAggregateInput = {
   rate?: Prisma.SortOrder
+  decimals?: Prisma.SortOrder
 }
 
 export type CurrencyScalarRelationFilter = {
   is?: Prisma.CurrencyWhereInput
   isNot?: Prisma.CurrencyWhereInput
+}
+
+export type CurrencyCreateNestedOneWithoutTenantsInput = {
+  create?: Prisma.XOR<Prisma.CurrencyCreateWithoutTenantsInput, Prisma.CurrencyUncheckedCreateWithoutTenantsInput>
+  connectOrCreate?: Prisma.CurrencyCreateOrConnectWithoutTenantsInput
+  connect?: Prisma.CurrencyWhereUniqueInput
+}
+
+export type CurrencyUpdateOneRequiredWithoutTenantsNestedInput = {
+  create?: Prisma.XOR<Prisma.CurrencyCreateWithoutTenantsInput, Prisma.CurrencyUncheckedCreateWithoutTenantsInput>
+  connectOrCreate?: Prisma.CurrencyCreateOrConnectWithoutTenantsInput
+  upsert?: Prisma.CurrencyUpsertWithoutTenantsInput
+  connect?: Prisma.CurrencyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CurrencyUpdateToOneWithWhereWithoutTenantsInput, Prisma.CurrencyUpdateWithoutTenantsInput>, Prisma.CurrencyUncheckedUpdateWithoutTenantsInput>
+}
+
+export type CurrencyCreateNestedOneWithoutProductPricesInput = {
+  create?: Prisma.XOR<Prisma.CurrencyCreateWithoutProductPricesInput, Prisma.CurrencyUncheckedCreateWithoutProductPricesInput>
+  connectOrCreate?: Prisma.CurrencyCreateOrConnectWithoutProductPricesInput
+  connect?: Prisma.CurrencyWhereUniqueInput
+}
+
+export type CurrencyUpdateOneRequiredWithoutProductPricesNestedInput = {
+  create?: Prisma.XOR<Prisma.CurrencyCreateWithoutProductPricesInput, Prisma.CurrencyUncheckedCreateWithoutProductPricesInput>
+  connectOrCreate?: Prisma.CurrencyCreateOrConnectWithoutProductPricesInput
+  upsert?: Prisma.CurrencyUpsertWithoutProductPricesInput
+  connect?: Prisma.CurrencyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CurrencyUpdateToOneWithWhereWithoutProductPricesInput, Prisma.CurrencyUpdateWithoutProductPricesInput>, Prisma.CurrencyUncheckedUpdateWithoutProductPricesInput>
 }
 
 export type CurrencyCreateNestedOneWithoutGiftCardsInput = {
@@ -484,17 +554,180 @@ export type CurrencyUpdateOneRequiredWithoutOrdersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CurrencyUpdateToOneWithWhereWithoutOrdersInput, Prisma.CurrencyUpdateWithoutOrdersInput>, Prisma.CurrencyUncheckedUpdateWithoutOrdersInput>
 }
 
+export type CurrencyCreateWithoutTenantsInput = {
+  id?: string
+  code: string
+  symbol: string
+  name: string
+  rate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decimals?: number
+  symbolFirst?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  orders?: Prisma.OrderCreateNestedManyWithoutCurrencyInput
+  giftCards?: Prisma.GiftCardCreateNestedManyWithoutCurrencyInput
+  productPrices?: Prisma.ProductPriceCreateNestedManyWithoutCurrencyInput
+}
+
+export type CurrencyUncheckedCreateWithoutTenantsInput = {
+  id?: string
+  code: string
+  symbol: string
+  name: string
+  rate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decimals?: number
+  symbolFirst?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutCurrencyInput
+  giftCards?: Prisma.GiftCardUncheckedCreateNestedManyWithoutCurrencyInput
+  productPrices?: Prisma.ProductPriceUncheckedCreateNestedManyWithoutCurrencyInput
+}
+
+export type CurrencyCreateOrConnectWithoutTenantsInput = {
+  where: Prisma.CurrencyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CurrencyCreateWithoutTenantsInput, Prisma.CurrencyUncheckedCreateWithoutTenantsInput>
+}
+
+export type CurrencyUpsertWithoutTenantsInput = {
+  update: Prisma.XOR<Prisma.CurrencyUpdateWithoutTenantsInput, Prisma.CurrencyUncheckedUpdateWithoutTenantsInput>
+  create: Prisma.XOR<Prisma.CurrencyCreateWithoutTenantsInput, Prisma.CurrencyUncheckedCreateWithoutTenantsInput>
+  where?: Prisma.CurrencyWhereInput
+}
+
+export type CurrencyUpdateToOneWithWhereWithoutTenantsInput = {
+  where?: Prisma.CurrencyWhereInput
+  data: Prisma.XOR<Prisma.CurrencyUpdateWithoutTenantsInput, Prisma.CurrencyUncheckedUpdateWithoutTenantsInput>
+}
+
+export type CurrencyUpdateWithoutTenantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  symbol?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  decimals?: Prisma.IntFieldUpdateOperationsInput | number
+  symbolFirst?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  orders?: Prisma.OrderUpdateManyWithoutCurrencyNestedInput
+  giftCards?: Prisma.GiftCardUpdateManyWithoutCurrencyNestedInput
+  productPrices?: Prisma.ProductPriceUpdateManyWithoutCurrencyNestedInput
+}
+
+export type CurrencyUncheckedUpdateWithoutTenantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  symbol?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  decimals?: Prisma.IntFieldUpdateOperationsInput | number
+  symbolFirst?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutCurrencyNestedInput
+  giftCards?: Prisma.GiftCardUncheckedUpdateManyWithoutCurrencyNestedInput
+  productPrices?: Prisma.ProductPriceUncheckedUpdateManyWithoutCurrencyNestedInput
+}
+
+export type CurrencyCreateWithoutProductPricesInput = {
+  id?: string
+  code: string
+  symbol: string
+  name: string
+  rate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decimals?: number
+  symbolFirst?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  orders?: Prisma.OrderCreateNestedManyWithoutCurrencyInput
+  giftCards?: Prisma.GiftCardCreateNestedManyWithoutCurrencyInput
+  tenants?: Prisma.TenantCurrencyCreateNestedManyWithoutCurrencyInput
+}
+
+export type CurrencyUncheckedCreateWithoutProductPricesInput = {
+  id?: string
+  code: string
+  symbol: string
+  name: string
+  rate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decimals?: number
+  symbolFirst?: boolean
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutCurrencyInput
+  giftCards?: Prisma.GiftCardUncheckedCreateNestedManyWithoutCurrencyInput
+  tenants?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutCurrencyInput
+}
+
+export type CurrencyCreateOrConnectWithoutProductPricesInput = {
+  where: Prisma.CurrencyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CurrencyCreateWithoutProductPricesInput, Prisma.CurrencyUncheckedCreateWithoutProductPricesInput>
+}
+
+export type CurrencyUpsertWithoutProductPricesInput = {
+  update: Prisma.XOR<Prisma.CurrencyUpdateWithoutProductPricesInput, Prisma.CurrencyUncheckedUpdateWithoutProductPricesInput>
+  create: Prisma.XOR<Prisma.CurrencyCreateWithoutProductPricesInput, Prisma.CurrencyUncheckedCreateWithoutProductPricesInput>
+  where?: Prisma.CurrencyWhereInput
+}
+
+export type CurrencyUpdateToOneWithWhereWithoutProductPricesInput = {
+  where?: Prisma.CurrencyWhereInput
+  data: Prisma.XOR<Prisma.CurrencyUpdateWithoutProductPricesInput, Prisma.CurrencyUncheckedUpdateWithoutProductPricesInput>
+}
+
+export type CurrencyUpdateWithoutProductPricesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  symbol?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  decimals?: Prisma.IntFieldUpdateOperationsInput | number
+  symbolFirst?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  orders?: Prisma.OrderUpdateManyWithoutCurrencyNestedInput
+  giftCards?: Prisma.GiftCardUpdateManyWithoutCurrencyNestedInput
+  tenants?: Prisma.TenantCurrencyUpdateManyWithoutCurrencyNestedInput
+}
+
+export type CurrencyUncheckedUpdateWithoutProductPricesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  symbol?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  decimals?: Prisma.IntFieldUpdateOperationsInput | number
+  symbolFirst?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutCurrencyNestedInput
+  giftCards?: Prisma.GiftCardUncheckedUpdateManyWithoutCurrencyNestedInput
+  tenants?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutCurrencyNestedInput
+}
+
 export type CurrencyCreateWithoutGiftCardsInput = {
   id?: string
   code: string
   symbol: string
   name: string
   rate: runtime.Decimal | runtime.DecimalJsLike | number | string
-  isDefault?: boolean
+  decimals?: number
+  symbolFirst?: boolean
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderCreateNestedManyWithoutCurrencyInput
+  productPrices?: Prisma.ProductPriceCreateNestedManyWithoutCurrencyInput
+  tenants?: Prisma.TenantCurrencyCreateNestedManyWithoutCurrencyInput
 }
 
 export type CurrencyUncheckedCreateWithoutGiftCardsInput = {
@@ -503,11 +736,14 @@ export type CurrencyUncheckedCreateWithoutGiftCardsInput = {
   symbol: string
   name: string
   rate: runtime.Decimal | runtime.DecimalJsLike | number | string
-  isDefault?: boolean
+  decimals?: number
+  symbolFirst?: boolean
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutCurrencyInput
+  productPrices?: Prisma.ProductPriceUncheckedCreateNestedManyWithoutCurrencyInput
+  tenants?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutCurrencyInput
 }
 
 export type CurrencyCreateOrConnectWithoutGiftCardsInput = {
@@ -532,11 +768,14 @@ export type CurrencyUpdateWithoutGiftCardsInput = {
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  decimals?: Prisma.IntFieldUpdateOperationsInput | number
+  symbolFirst?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUpdateManyWithoutCurrencyNestedInput
+  productPrices?: Prisma.ProductPriceUpdateManyWithoutCurrencyNestedInput
+  tenants?: Prisma.TenantCurrencyUpdateManyWithoutCurrencyNestedInput
 }
 
 export type CurrencyUncheckedUpdateWithoutGiftCardsInput = {
@@ -545,11 +784,14 @@ export type CurrencyUncheckedUpdateWithoutGiftCardsInput = {
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  decimals?: Prisma.IntFieldUpdateOperationsInput | number
+  symbolFirst?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutCurrencyNestedInput
+  productPrices?: Prisma.ProductPriceUncheckedUpdateManyWithoutCurrencyNestedInput
+  tenants?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutCurrencyNestedInput
 }
 
 export type CurrencyCreateWithoutOrdersInput = {
@@ -558,11 +800,14 @@ export type CurrencyCreateWithoutOrdersInput = {
   symbol: string
   name: string
   rate: runtime.Decimal | runtime.DecimalJsLike | number | string
-  isDefault?: boolean
+  decimals?: number
+  symbolFirst?: boolean
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   giftCards?: Prisma.GiftCardCreateNestedManyWithoutCurrencyInput
+  productPrices?: Prisma.ProductPriceCreateNestedManyWithoutCurrencyInput
+  tenants?: Prisma.TenantCurrencyCreateNestedManyWithoutCurrencyInput
 }
 
 export type CurrencyUncheckedCreateWithoutOrdersInput = {
@@ -571,11 +816,14 @@ export type CurrencyUncheckedCreateWithoutOrdersInput = {
   symbol: string
   name: string
   rate: runtime.Decimal | runtime.DecimalJsLike | number | string
-  isDefault?: boolean
+  decimals?: number
+  symbolFirst?: boolean
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   giftCards?: Prisma.GiftCardUncheckedCreateNestedManyWithoutCurrencyInput
+  productPrices?: Prisma.ProductPriceUncheckedCreateNestedManyWithoutCurrencyInput
+  tenants?: Prisma.TenantCurrencyUncheckedCreateNestedManyWithoutCurrencyInput
 }
 
 export type CurrencyCreateOrConnectWithoutOrdersInput = {
@@ -600,11 +848,14 @@ export type CurrencyUpdateWithoutOrdersInput = {
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  decimals?: Prisma.IntFieldUpdateOperationsInput | number
+  symbolFirst?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   giftCards?: Prisma.GiftCardUpdateManyWithoutCurrencyNestedInput
+  productPrices?: Prisma.ProductPriceUpdateManyWithoutCurrencyNestedInput
+  tenants?: Prisma.TenantCurrencyUpdateManyWithoutCurrencyNestedInput
 }
 
 export type CurrencyUncheckedUpdateWithoutOrdersInput = {
@@ -613,11 +864,14 @@ export type CurrencyUncheckedUpdateWithoutOrdersInput = {
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   rate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  decimals?: Prisma.IntFieldUpdateOperationsInput | number
+  symbolFirst?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   giftCards?: Prisma.GiftCardUncheckedUpdateManyWithoutCurrencyNestedInput
+  productPrices?: Prisma.ProductPriceUncheckedUpdateManyWithoutCurrencyNestedInput
+  tenants?: Prisma.TenantCurrencyUncheckedUpdateManyWithoutCurrencyNestedInput
 }
 
 
@@ -628,11 +882,15 @@ export type CurrencyUncheckedUpdateWithoutOrdersInput = {
 export type CurrencyCountOutputType = {
   orders: number
   giftCards: number
+  productPrices: number
+  tenants: number
 }
 
 export type CurrencyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orders?: boolean | CurrencyCountOutputTypeCountOrdersArgs
   giftCards?: boolean | CurrencyCountOutputTypeCountGiftCardsArgs
+  productPrices?: boolean | CurrencyCountOutputTypeCountProductPricesArgs
+  tenants?: boolean | CurrencyCountOutputTypeCountTenantsArgs
 }
 
 /**
@@ -659,6 +917,20 @@ export type CurrencyCountOutputTypeCountGiftCardsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.GiftCardWhereInput
 }
 
+/**
+ * CurrencyCountOutputType without action
+ */
+export type CurrencyCountOutputTypeCountProductPricesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProductPriceWhereInput
+}
+
+/**
+ * CurrencyCountOutputType without action
+ */
+export type CurrencyCountOutputTypeCountTenantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TenantCurrencyWhereInput
+}
+
 
 export type CurrencySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -666,12 +938,15 @@ export type CurrencySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   symbol?: boolean
   name?: boolean
   rate?: boolean
-  isDefault?: boolean
+  decimals?: boolean
+  symbolFirst?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   orders?: boolean | Prisma.Currency$ordersArgs<ExtArgs>
   giftCards?: boolean | Prisma.Currency$giftCardsArgs<ExtArgs>
+  productPrices?: boolean | Prisma.Currency$productPricesArgs<ExtArgs>
+  tenants?: boolean | Prisma.Currency$tenantsArgs<ExtArgs>
   _count?: boolean | Prisma.CurrencyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["currency"]>
 
@@ -681,7 +956,8 @@ export type CurrencySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   symbol?: boolean
   name?: boolean
   rate?: boolean
-  isDefault?: boolean
+  decimals?: boolean
+  symbolFirst?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -693,7 +969,8 @@ export type CurrencySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   symbol?: boolean
   name?: boolean
   rate?: boolean
-  isDefault?: boolean
+  decimals?: boolean
+  symbolFirst?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -705,16 +982,19 @@ export type CurrencySelectScalar = {
   symbol?: boolean
   name?: boolean
   rate?: boolean
-  isDefault?: boolean
+  decimals?: boolean
+  symbolFirst?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CurrencyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "symbol" | "name" | "rate" | "isDefault" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["currency"]>
+export type CurrencyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "symbol" | "name" | "rate" | "decimals" | "symbolFirst" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["currency"]>
 export type CurrencyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orders?: boolean | Prisma.Currency$ordersArgs<ExtArgs>
   giftCards?: boolean | Prisma.Currency$giftCardsArgs<ExtArgs>
+  productPrices?: boolean | Prisma.Currency$productPricesArgs<ExtArgs>
+  tenants?: boolean | Prisma.Currency$tenantsArgs<ExtArgs>
   _count?: boolean | Prisma.CurrencyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CurrencyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -725,6 +1005,8 @@ export type $CurrencyPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     orders: Prisma.$OrderPayload<ExtArgs>[]
     giftCards: Prisma.$GiftCardPayload<ExtArgs>[]
+    productPrices: Prisma.$ProductPricePayload<ExtArgs>[]
+    tenants: Prisma.$TenantCurrencyPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -732,7 +1014,8 @@ export type $CurrencyPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     symbol: string
     name: string
     rate: runtime.Decimal
-    isDefault: boolean
+    decimals: number
+    symbolFirst: boolean
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -1132,6 +1415,8 @@ export interface Prisma__CurrencyClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   orders<T extends Prisma.Currency$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Currency$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   giftCards<T extends Prisma.Currency$giftCardsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Currency$giftCardsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GiftCardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  productPrices<T extends Prisma.Currency$productPricesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Currency$productPricesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductPricePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tenants<T extends Prisma.Currency$tenantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Currency$tenantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantCurrencyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1166,7 +1451,8 @@ export interface CurrencyFieldRefs {
   readonly symbol: Prisma.FieldRef<"Currency", 'String'>
   readonly name: Prisma.FieldRef<"Currency", 'String'>
   readonly rate: Prisma.FieldRef<"Currency", 'Decimal'>
-  readonly isDefault: Prisma.FieldRef<"Currency", 'Boolean'>
+  readonly decimals: Prisma.FieldRef<"Currency", 'Int'>
+  readonly symbolFirst: Prisma.FieldRef<"Currency", 'Boolean'>
   readonly isActive: Prisma.FieldRef<"Currency", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Currency", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Currency", 'DateTime'>
@@ -1603,6 +1889,54 @@ export type Currency$giftCardsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.GiftCardScalarFieldEnum | Prisma.GiftCardScalarFieldEnum[]
+}
+
+/**
+ * Currency.productPrices
+ */
+export type Currency$productPricesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProductPrice
+   */
+  select?: Prisma.ProductPriceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProductPrice
+   */
+  omit?: Prisma.ProductPriceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProductPriceInclude<ExtArgs> | null
+  where?: Prisma.ProductPriceWhereInput
+  orderBy?: Prisma.ProductPriceOrderByWithRelationInput | Prisma.ProductPriceOrderByWithRelationInput[]
+  cursor?: Prisma.ProductPriceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProductPriceScalarFieldEnum | Prisma.ProductPriceScalarFieldEnum[]
+}
+
+/**
+ * Currency.tenants
+ */
+export type Currency$tenantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TenantCurrency
+   */
+  select?: Prisma.TenantCurrencySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TenantCurrency
+   */
+  omit?: Prisma.TenantCurrencyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TenantCurrencyInclude<ExtArgs> | null
+  where?: Prisma.TenantCurrencyWhereInput
+  orderBy?: Prisma.TenantCurrencyOrderByWithRelationInput | Prisma.TenantCurrencyOrderByWithRelationInput[]
+  cursor?: Prisma.TenantCurrencyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TenantCurrencyScalarFieldEnum | Prisma.TenantCurrencyScalarFieldEnum[]
 }
 
 /**

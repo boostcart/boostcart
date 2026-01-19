@@ -30,12 +30,29 @@ async function requireStoreAccess() {
 	};
 }
 
+async function getDefaultLocale() {
+	let locale = await db.locale.findFirst({
+		where: { isDefault: true },
+	});
+
+	if (!locale) {
+		locale = await db.locale.upsert({
+			where: { code: "bg-BG" },
+			create: { code: "bg-BG", name: "Български", isDefault: true },
+			update: {},
+		});
+	}
+
+	return locale;
+}
+
 export async function getCollections() {
 	const { tenantId } = await requireStoreAccess();
 
 	const collections = await db.collection.findMany({
 		where: { tenantId },
 		include: {
+			translations: true,
 			_count: {
 				select: {
 					products: true,
@@ -54,10 +71,15 @@ export async function getCollection(id: string) {
 	const collection = await db.collection.findFirst({
 		where: { id, tenantId },
 		include: {
+			translations: true,
 			products: {
 				take: 20,
 				include: {
-					product: true,
+					product: {
+						include: {
+							translations: true,
+						},
+					},
 				},
 			},
 			_count: {
@@ -81,14 +103,11 @@ interface CollectionInput {
 	description?: string;
 	imageUrl?: string;
 	isActive?: boolean;
-	isFeatured?: boolean;
-	sortOrder?: number;
-	seoTitle?: string;
-	seoDescription?: string;
 }
 
 export async function createCollection(input: CollectionInput) {
 	const { tenantId } = await requireStoreAccess();
+	const locale = await getDefaultLocale();
 
 	// Check if slug already exists for this tenant
 	const existing = await db.collection.findFirst({
@@ -104,8 +123,20 @@ export async function createCollection(input: CollectionInput) {
 
 	const collection = await db.collection.create({
 		data: {
-			...input,
+			slug: input.slug,
+			imageUrl: input.imageUrl,
+			isActive: input.isActive ?? true,
 			tenantId,
+			translations: {
+				create: {
+					localeId: locale.id,
+					name: input.name,
+					description: input.description,
+				},
+			},
+		},
+		include: {
+			translations: true,
 		},
 	});
 
@@ -117,6 +148,7 @@ export async function updateCollection(
 	input: Partial<CollectionInput>,
 ) {
 	const { tenantId } = await requireStoreAccess();
+	const locale = await getDefaultLocale();
 
 	// Verify collection belongs to tenant
 	const collection = await db.collection.findFirst({
@@ -144,7 +176,33 @@ export async function updateCollection(
 
 	const updated = await db.collection.update({
 		where: { id },
-		data: input,
+		data: {
+			slug: input.slug,
+			imageUrl: input.imageUrl,
+			isActive: input.isActive,
+			translations: {
+				upsert: {
+					where: {
+						collectionId_localeId: {
+							collectionId: id,
+							localeId: locale.id,
+						},
+					},
+					create: {
+						localeId: locale.id,
+						name: input.name ?? "",
+						description: input.description,
+					},
+					update: {
+						name: input.name,
+						description: input.description,
+					},
+				},
+			},
+		},
+		include: {
+			translations: true,
+		},
 	});
 
 	return updated;

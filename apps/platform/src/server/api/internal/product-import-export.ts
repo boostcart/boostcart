@@ -2,11 +2,11 @@
 
 import type { ProductStatus } from "@boostcart/database";
 import { z } from "zod";
-import { db } from "@/server/db";
 import {
-	requireViewPermission,
 	requireManagePermission,
+	requireViewPermission,
 } from "@/server/api/permissions";
+import { db } from "@/server/db";
 
 // CSV Row Schema for Product Import
 const ProductImportRowSchema = z.object({
@@ -56,7 +56,9 @@ function parseCSV(content: string): Record<string, string>[] {
 	// Parse header
 	const headerLine = lines[0];
 	if (!headerLine) return [];
-	const headers = headerLine.split(",").map((h) => h.trim().replace(/^"|"$/g, ""));
+	const headers = headerLine
+		.split(",")
+		.map((h) => h.trim().replace(/^"|"$/g, ""));
 
 	// Parse data rows
 	const rows: Record<string, string>[] = [];
@@ -123,7 +125,7 @@ function generateSlug(name: string): string {
  */
 export async function importProductsFromCSV(
 	csvContent: string,
-	options?: { updateExisting?: boolean }
+	options?: { updateExisting?: boolean },
 ): Promise<ImportResult> {
 	const { tenantId } = await requireManagePermission("products");
 	const updateExisting = options?.updateExisting ?? true;
@@ -150,7 +152,13 @@ export async function importProductsFromCSV(
 			return {
 				...result,
 				success: false,
-				errors: [{ row: 0, sku: "", error: "No default locale found. Please configure locales first." }],
+				errors: [
+					{
+						row: 0,
+						sku: "",
+						error: "No default locale found. Please configure locales first.",
+					},
+				],
 			};
 		}
 
@@ -175,7 +183,13 @@ export async function importProductsFromCSV(
 			return {
 				...result,
 				success: false,
-				errors: [{ row: 0, sku: "", error: "No categories found. Please create a category first." }],
+				errors: [
+					{
+						row: 0,
+						sku: "",
+						error: "No categories found. Please create a category first.",
+					},
+				],
 			};
 		}
 
@@ -192,7 +206,9 @@ export async function importProductsFromCSV(
 					result.errors.push({
 						row: rowNum,
 						sku: rawRow.sku ?? "",
-						error: parseResult.error.issues.map((e) => `${e.path.join(".")}: ${e.message}`).join(", "),
+						error: parseResult.error.issues
+							.map((e) => `${e.path.join(".")}: ${e.message}`)
+							.join(", "),
 					});
 					continue;
 				}
@@ -201,12 +217,10 @@ export async function importProductsFromCSV(
 
 				// Look up category and brand IDs
 				const categoryId = row.categorySlug
-					? categoryMap.get(row.categorySlug) ?? defaultCategory.id
+					? (categoryMap.get(row.categorySlug) ?? defaultCategory.id)
 					: defaultCategory.id;
 
-				const brandId = row.brandSlug
-					? brandMap.get(row.brandSlug)
-					: undefined;
+				const brandId = row.brandSlug ? brandMap.get(row.brandSlug) : undefined;
 
 				// Check if product exists by SKU
 				const existingProduct = await db.product.findFirst({
@@ -240,7 +254,7 @@ export async function importProductsFromCSV(
 
 							// Find existing translation for default locale
 							const existingTranslation = existingProduct.translations.find(
-								(t) => t.localeId === defaultLocale.id
+								(t) => t.localeId === defaultLocale.id,
 							);
 
 							if (existingTranslation) {
@@ -275,7 +289,7 @@ export async function importProductsFromCSV(
 				} else {
 					// Create new product
 					const slug = generateSlug(row.name);
-					
+
 					// Ensure unique slug
 					let finalSlug = slug;
 					let counter = 1;
@@ -401,7 +415,7 @@ export async function exportProducts(options?: ExportOptions): Promise<string> {
 				updatedAt: p.updatedAt.toISOString(),
 			})),
 			null,
-			2
+			2,
 		);
 	}
 
@@ -438,7 +452,9 @@ export async function exportProducts(options?: ExportOptions): Promise<string> {
 		escapeCSVValue(p.translations[0]?.metaDescription ?? ""),
 	]);
 
-	const csv = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
+	const csv = [headers.join(","), ...rows.map((row) => row.join(","))].join(
+		"\n",
+	);
 
 	return csv;
 }
@@ -495,9 +511,7 @@ export async function getProductImportTemplate(): Promise<string> {
 /**
  * Validate CSV content before import (dry run)
  */
-export async function validateProductCSV(
-	csvContent: string
-): Promise<{
+export async function validateProductCSV(csvContent: string): Promise<{
 	valid: boolean;
 	totalRows: number;
 	validRows: number;
@@ -517,7 +531,7 @@ export async function validateProductCSV(
 		const rowNum = i + 2;
 		const row = rows[i];
 		if (!row) continue;
-		
+
 		const validation = ProductImportRowSchema.safeParse(row);
 
 		if (validation.success) {
@@ -527,7 +541,7 @@ export async function validateProductCSV(
 			result.errors.push({
 				row: rowNum,
 				errors: validation.error.issues.map(
-					(e) => `${e.path.join(".")}: ${e.message}`
+					(e) => `${e.path.join(".")}: ${e.message}`,
 				),
 			});
 		}

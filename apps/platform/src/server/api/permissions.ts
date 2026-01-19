@@ -1,18 +1,18 @@
 "use server";
 
-import { db } from "@/server/db";
-import { auth } from "@/server/auth";
-import { requireAdminTenant } from "@/server/tenant";
 import type { StaffRole } from "@boostcart/database";
 import {
-	hasPermission,
-	hasAnyPermission,
-	hasAllPermissions,
+	canDelete,
 	canManage,
 	canView,
-	canDelete,
+	hasAllPermissions,
+	hasAnyPermission,
+	hasPermission,
 	type Permission,
 } from "@/lib/rbac";
+import { auth } from "@/server/auth";
+import { db } from "@/server/db";
+import { requireAdminTenant } from "@/server/tenant";
 
 interface StaffContext {
 	userId: string;
@@ -60,7 +60,9 @@ export async function getStaffContext(): Promise<StaffContext> {
  * Require a specific permission to continue
  * Throws an error if the user doesn't have the required permission
  */
-export async function requirePermission(permission: Permission): Promise<StaffContext> {
+export async function requirePermission(
+	permission: Permission,
+): Promise<StaffContext> {
 	const context = await getStaffContext();
 
 	if (!hasPermission(context.role, permission)) {
@@ -73,7 +75,9 @@ export async function requirePermission(permission: Permission): Promise<StaffCo
 /**
  * Require any of the specified permissions
  */
-export async function requireAnyPermission(permissions: Permission[]): Promise<StaffContext> {
+export async function requireAnyPermission(
+	permissions: Permission[],
+): Promise<StaffContext> {
 	const context = await getStaffContext();
 
 	if (!hasAnyPermission(context.role, permissions)) {
@@ -86,7 +90,9 @@ export async function requireAnyPermission(permissions: Permission[]): Promise<S
 /**
  * Require all of the specified permissions
  */
-export async function requireAllPermissions(permissions: Permission[]): Promise<StaffContext> {
+export async function requireAllPermissions(
+	permissions: Permission[],
+): Promise<StaffContext> {
 	const context = await getStaffContext();
 
 	if (!hasAllPermissions(context.role, permissions)) {
@@ -118,7 +124,7 @@ export async function requireManagePermission(
 		| "payments"
 		| "shipping"
 		| "staff"
-		| "billing"
+		| "billing",
 ): Promise<StaffContext> {
 	const context = await getStaffContext();
 
@@ -153,7 +159,7 @@ export async function requireViewPermission(
 		| "payments"
 		| "shipping"
 		| "staff"
-		| "billing"
+		| "billing",
 ): Promise<StaffContext> {
 	const context = await getStaffContext();
 
@@ -168,7 +174,7 @@ export async function requireViewPermission(
  * Require ability to delete a resource
  */
 export async function requireDeletePermission(
-	resource: "orders" | "products" | "customers" | "staff" | "store"
+	resource: "orders" | "products" | "customers" | "staff" | "store",
 ): Promise<StaffContext> {
 	const context = await getStaffContext();
 
@@ -182,7 +188,9 @@ export async function requireDeletePermission(
 /**
  * Check if current user has a permission (doesn't throw)
  */
-export async function checkPermission(permission: Permission): Promise<boolean> {
+export async function checkPermission(
+	permission: Permission,
+): Promise<boolean> {
 	try {
 		const context = await getStaffContext();
 		return hasPermission(context.role, permission);

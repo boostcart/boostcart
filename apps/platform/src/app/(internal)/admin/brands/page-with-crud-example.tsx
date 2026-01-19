@@ -207,7 +207,7 @@ export default function BrandsWithCRUDPage() {
 							<TableHead>Slug</TableHead>
 							<TableHead>Products</TableHead>
 							<TableHead>Status</TableHead>
-							<TableHead className="w-[70px]"></TableHead>
+							<TableHead className="w-17.5"></TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>

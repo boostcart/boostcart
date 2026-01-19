@@ -164,7 +164,7 @@ export function DiscountFormDialog({
 	onOpenChange,
 	discount,
 	mode,
-	onSuccess,
+	onSuccess: _onSuccess,
 }: DiscountFormDialogProps) {
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();

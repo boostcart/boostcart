@@ -10,8 +10,8 @@ import {
 } from "lucide-react";
 import * as React from "react";
 import { toast } from "sonner";
-import { Loader } from "@/components/loader";
 import { PolarisButton } from "@/components/admin/polaris-button";
+import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -231,7 +231,7 @@ export default function DiscountsPage() {
 
 	if (isLoading) {
 		return (
-			<div className="flex items-center justify-center min-h-[400px]">
+			<div className="flex items-center justify-center min-h-100">
 				<Loader size="lg" />
 			</div>
 		);
@@ -289,7 +289,7 @@ export default function DiscountsPage() {
 						/>
 					</div>
 					<Select value={typeFilter} onValueChange={setTypeFilter}>
-						<SelectTrigger className="w-full sm:w-[180px]">
+						<SelectTrigger className="w-full sm:w-45">
 							<SelectValue placeholder="Filter by type" />
 						</SelectTrigger>
 						<SelectContent>
@@ -339,7 +339,7 @@ export default function DiscountsPage() {
 								<TableHead>Active Period</TableHead>
 								<TableHead>Uses</TableHead>
 								<TableHead>Status</TableHead>
-								<TableHead className="w-[70px]"></TableHead>
+								<TableHead className="w-17.5"></TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>

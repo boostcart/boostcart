@@ -3,8 +3,8 @@
 import { Eye, FolderOpen, Pencil, Plus, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Loader } from "@/components/loader";
 import { PolarisButton } from "@/components/admin/polaris-button";
+import { Loader } from "@/components/loader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -35,6 +35,14 @@ import {
 } from "./_components/collection-dialogs";
 
 // Backend API type
+interface CollectionTranslation {
+	id: string;
+	collectionId: string;
+	localeId: string;
+	name: string;
+	description: string | null;
+}
+
 interface ApiCollection {
 	id: string;
 	slug: string;
@@ -43,6 +51,7 @@ interface ApiCollection {
 	tenantId: string;
 	createdAt: Date;
 	updatedAt: Date;
+	translations: CollectionTranslation[];
 	_count: {
 		products: number;
 	};
@@ -54,44 +63,12 @@ interface Collection {
 	name: string;
 	slug: string;
 	description: string;
+	imageUrl?: string | null;
 	type: string;
 	products: number;
 	featured: boolean;
 	status: string;
 }
-
-const mockCollections: Collection[] = [
-	{
-		id: "1",
-		name: "Summer Collection",
-		slug: "summer-collection",
-		description: "Hot summer products and essentials",
-		type: "MANUAL",
-		products: 45,
-		featured: true,
-		status: "Active",
-	},
-	{
-		id: "2",
-		name: "Best Sellers",
-		slug: "best-sellers",
-		description: "Our most popular products",
-		type: "AUTOMATED",
-		products: 32,
-		featured: true,
-		status: "Active",
-	},
-	{
-		id: "3",
-		name: "New Arrivals",
-		slug: "new-arrivals",
-		description: "Latest additions to our catalog",
-		type: "AUTOMATED",
-		products: 28,
-		featured: false,
-		status: "Active",
-	},
-];
 
 export default function CollectionsPage() {
 	const [collections, setCollections] = useState<Collection[]>([]);
@@ -109,14 +86,15 @@ export default function CollectionsPage() {
 			const data = await getCollections();
 			// Transform API data to match dialog types
 			const transformed = data.map(
-				(col): Collection => ({
+				(col: ApiCollection): Collection => ({
 					id: col.id,
-					name: col.slug, // TODO: Add name field to Collection model
+					name: col.translations[0]?.name ?? col.slug,
 					slug: col.slug,
-					description: "", // TODO: Add description field to Collection model
-					type: "MANUAL", // TODO: Add type field to Collection model
+					description: col.translations[0]?.description ?? "",
+					imageUrl: col.imageUrl,
+					type: "MANUAL",
 					products: col._count.products,
-					featured: false, // TODO: Add featured field to Collection model
+					featured: false,
 					status: col.isActive ? "Active" : "Inactive",
 				}),
 			);
@@ -217,7 +195,7 @@ export default function CollectionsPage() {
 			</div>
 			<Card>
 				{isLoading ? (
-					<div className="flex items-center justify-center min-h-[300px]">
+					<div className="flex items-center justify-center min-h-75">
 						<Loader size="lg" />
 					</div>
 				) : collections.length === 0 ? (

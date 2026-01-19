@@ -41,16 +41,19 @@ export type CustomerMinAggregateOutputType = {
   tenantId: string | null
   email: string | null
   password: string | null
-  emailVerified: boolean | null
   firstName: string | null
   lastName: string | null
   phone: string | null
-  isActive: boolean | null
   acceptsMarketing: boolean | null
   locale: string | null
+  emailVerified: boolean | null
+  emailVerifiedAt: Date | null
+  googleId: string | null
+  facebookId: string | null
   totalSpent: runtime.Decimal | null
   ordersCount: number | null
   lastOrderAt: Date | null
+  isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
@@ -61,16 +64,19 @@ export type CustomerMaxAggregateOutputType = {
   tenantId: string | null
   email: string | null
   password: string | null
-  emailVerified: boolean | null
   firstName: string | null
   lastName: string | null
   phone: string | null
-  isActive: boolean | null
   acceptsMarketing: boolean | null
   locale: string | null
+  emailVerified: boolean | null
+  emailVerifiedAt: Date | null
+  googleId: string | null
+  facebookId: string | null
   totalSpent: runtime.Decimal | null
   ordersCount: number | null
   lastOrderAt: Date | null
+  isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
@@ -81,16 +87,19 @@ export type CustomerCountAggregateOutputType = {
   tenantId: number
   email: number
   password: number
-  emailVerified: number
   firstName: number
   lastName: number
   phone: number
-  isActive: number
   acceptsMarketing: number
   locale: number
+  emailVerified: number
+  emailVerifiedAt: number
+  googleId: number
+  facebookId: number
   totalSpent: number
   ordersCount: number
   lastOrderAt: number
+  isActive: number
   createdAt: number
   updatedAt: number
   deletedAt: number
@@ -113,16 +122,19 @@ export type CustomerMinAggregateInputType = {
   tenantId?: true
   email?: true
   password?: true
-  emailVerified?: true
   firstName?: true
   lastName?: true
   phone?: true
-  isActive?: true
   acceptsMarketing?: true
   locale?: true
+  emailVerified?: true
+  emailVerifiedAt?: true
+  googleId?: true
+  facebookId?: true
   totalSpent?: true
   ordersCount?: true
   lastOrderAt?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -133,16 +145,19 @@ export type CustomerMaxAggregateInputType = {
   tenantId?: true
   email?: true
   password?: true
-  emailVerified?: true
   firstName?: true
   lastName?: true
   phone?: true
-  isActive?: true
   acceptsMarketing?: true
   locale?: true
+  emailVerified?: true
+  emailVerifiedAt?: true
+  googleId?: true
+  facebookId?: true
   totalSpent?: true
   ordersCount?: true
   lastOrderAt?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -153,16 +168,19 @@ export type CustomerCountAggregateInputType = {
   tenantId?: true
   email?: true
   password?: true
-  emailVerified?: true
   firstName?: true
   lastName?: true
   phone?: true
-  isActive?: true
   acceptsMarketing?: true
   locale?: true
+  emailVerified?: true
+  emailVerifiedAt?: true
+  googleId?: true
+  facebookId?: true
   totalSpent?: true
   ordersCount?: true
   lastOrderAt?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -259,17 +277,20 @@ export type CustomerGroupByOutputType = {
   id: string
   tenantId: string
   email: string
-  password: string | null
-  emailVerified: boolean
+  password: string
   firstName: string | null
   lastName: string | null
   phone: string | null
-  isActive: boolean
   acceptsMarketing: boolean
   locale: string
+  emailVerified: boolean
+  emailVerifiedAt: Date | null
+  googleId: string | null
+  facebookId: string | null
   totalSpent: runtime.Decimal
   ordersCount: number
   lastOrderAt: Date | null
+  isActive: boolean
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
@@ -302,54 +323,64 @@ export type CustomerWhereInput = {
   id?: Prisma.StringFilter<"Customer"> | string
   tenantId?: Prisma.StringFilter<"Customer"> | string
   email?: Prisma.StringFilter<"Customer"> | string
-  password?: Prisma.StringNullableFilter<"Customer"> | string | null
-  emailVerified?: Prisma.BoolFilter<"Customer"> | boolean
+  password?: Prisma.StringFilter<"Customer"> | string
   firstName?: Prisma.StringNullableFilter<"Customer"> | string | null
   lastName?: Prisma.StringNullableFilter<"Customer"> | string | null
   phone?: Prisma.StringNullableFilter<"Customer"> | string | null
-  isActive?: Prisma.BoolFilter<"Customer"> | boolean
   acceptsMarketing?: Prisma.BoolFilter<"Customer"> | boolean
   locale?: Prisma.StringFilter<"Customer"> | string
+  emailVerified?: Prisma.BoolFilter<"Customer"> | boolean
+  emailVerifiedAt?: Prisma.DateTimeNullableFilter<"Customer"> | Date | string | null
+  googleId?: Prisma.StringNullableFilter<"Customer"> | string | null
+  facebookId?: Prisma.StringNullableFilter<"Customer"> | string | null
   totalSpent?: Prisma.DecimalFilter<"Customer"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFilter<"Customer"> | number
   lastOrderAt?: Prisma.DateTimeNullableFilter<"Customer"> | Date | string | null
+  isActive?: Prisma.BoolFilter<"Customer"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Customer"> | Date | string | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   addresses?: Prisma.CustomerAddressListRelationFilter
-  sessions?: Prisma.CustomerSessionListRelationFilter
   orders?: Prisma.OrderListRelationFilter
-  carts?: Prisma.CartListRelationFilter
+  cart?: Prisma.XOR<Prisma.CartNullableScalarRelationFilter, Prisma.CartWhereInput> | null
   reviews?: Prisma.ReviewListRelationFilter
   wishlistItems?: Prisma.WishlistItemListRelationFilter
+  sessions?: Prisma.CustomerSessionListRelationFilter
+  passwordReset?: Prisma.XOR<Prisma.PasswordResetNullableScalarRelationFilter, Prisma.PasswordResetWhereInput> | null
+  emailVerification?: Prisma.XOR<Prisma.EmailVerificationNullableScalarRelationFilter, Prisma.EmailVerificationWhereInput> | null
 }
 
 export type CustomerOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  password?: Prisma.SortOrderInput | Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
+  password?: Prisma.SortOrder
   firstName?: Prisma.SortOrderInput | Prisma.SortOrder
   lastName?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
-  isActive?: Prisma.SortOrder
   acceptsMarketing?: Prisma.SortOrder
   locale?: Prisma.SortOrder
+  emailVerified?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  googleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  facebookId?: Prisma.SortOrderInput | Prisma.SortOrder
   totalSpent?: Prisma.SortOrder
   ordersCount?: Prisma.SortOrder
   lastOrderAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
   addresses?: Prisma.CustomerAddressOrderByRelationAggregateInput
-  sessions?: Prisma.CustomerSessionOrderByRelationAggregateInput
   orders?: Prisma.OrderOrderByRelationAggregateInput
-  carts?: Prisma.CartOrderByRelationAggregateInput
+  cart?: Prisma.CartOrderByWithRelationInput
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
   wishlistItems?: Prisma.WishlistItemOrderByRelationAggregateInput
+  sessions?: Prisma.CustomerSessionOrderByRelationAggregateInput
+  passwordReset?: Prisma.PasswordResetOrderByWithRelationInput
+  emailVerification?: Prisma.EmailVerificationOrderByWithRelationInput
 }
 
 export type CustomerWhereUniqueInput = Prisma.AtLeast<{
@@ -360,44 +391,52 @@ export type CustomerWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.CustomerWhereInput | Prisma.CustomerWhereInput[]
   tenantId?: Prisma.StringFilter<"Customer"> | string
   email?: Prisma.StringFilter<"Customer"> | string
-  password?: Prisma.StringNullableFilter<"Customer"> | string | null
-  emailVerified?: Prisma.BoolFilter<"Customer"> | boolean
+  password?: Prisma.StringFilter<"Customer"> | string
   firstName?: Prisma.StringNullableFilter<"Customer"> | string | null
   lastName?: Prisma.StringNullableFilter<"Customer"> | string | null
   phone?: Prisma.StringNullableFilter<"Customer"> | string | null
-  isActive?: Prisma.BoolFilter<"Customer"> | boolean
   acceptsMarketing?: Prisma.BoolFilter<"Customer"> | boolean
   locale?: Prisma.StringFilter<"Customer"> | string
+  emailVerified?: Prisma.BoolFilter<"Customer"> | boolean
+  emailVerifiedAt?: Prisma.DateTimeNullableFilter<"Customer"> | Date | string | null
+  googleId?: Prisma.StringNullableFilter<"Customer"> | string | null
+  facebookId?: Prisma.StringNullableFilter<"Customer"> | string | null
   totalSpent?: Prisma.DecimalFilter<"Customer"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFilter<"Customer"> | number
   lastOrderAt?: Prisma.DateTimeNullableFilter<"Customer"> | Date | string | null
+  isActive?: Prisma.BoolFilter<"Customer"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Customer"> | Date | string | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   addresses?: Prisma.CustomerAddressListRelationFilter
-  sessions?: Prisma.CustomerSessionListRelationFilter
   orders?: Prisma.OrderListRelationFilter
-  carts?: Prisma.CartListRelationFilter
+  cart?: Prisma.XOR<Prisma.CartNullableScalarRelationFilter, Prisma.CartWhereInput> | null
   reviews?: Prisma.ReviewListRelationFilter
   wishlistItems?: Prisma.WishlistItemListRelationFilter
+  sessions?: Prisma.CustomerSessionListRelationFilter
+  passwordReset?: Prisma.XOR<Prisma.PasswordResetNullableScalarRelationFilter, Prisma.PasswordResetWhereInput> | null
+  emailVerification?: Prisma.XOR<Prisma.EmailVerificationNullableScalarRelationFilter, Prisma.EmailVerificationWhereInput> | null
 }, "id" | "tenantId_email">
 
 export type CustomerOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  password?: Prisma.SortOrderInput | Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
+  password?: Prisma.SortOrder
   firstName?: Prisma.SortOrderInput | Prisma.SortOrder
   lastName?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
-  isActive?: Prisma.SortOrder
   acceptsMarketing?: Prisma.SortOrder
   locale?: Prisma.SortOrder
+  emailVerified?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  googleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  facebookId?: Prisma.SortOrderInput | Prisma.SortOrder
   totalSpent?: Prisma.SortOrder
   ordersCount?: Prisma.SortOrder
   lastOrderAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -415,17 +454,20 @@ export type CustomerScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Customer"> | string
   tenantId?: Prisma.StringWithAggregatesFilter<"Customer"> | string
   email?: Prisma.StringWithAggregatesFilter<"Customer"> | string
-  password?: Prisma.StringNullableWithAggregatesFilter<"Customer"> | string | null
-  emailVerified?: Prisma.BoolWithAggregatesFilter<"Customer"> | boolean
+  password?: Prisma.StringWithAggregatesFilter<"Customer"> | string
   firstName?: Prisma.StringNullableWithAggregatesFilter<"Customer"> | string | null
   lastName?: Prisma.StringNullableWithAggregatesFilter<"Customer"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"Customer"> | string | null
-  isActive?: Prisma.BoolWithAggregatesFilter<"Customer"> | boolean
   acceptsMarketing?: Prisma.BoolWithAggregatesFilter<"Customer"> | boolean
   locale?: Prisma.StringWithAggregatesFilter<"Customer"> | string
+  emailVerified?: Prisma.BoolWithAggregatesFilter<"Customer"> | boolean
+  emailVerifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Customer"> | Date | string | null
+  googleId?: Prisma.StringNullableWithAggregatesFilter<"Customer"> | string | null
+  facebookId?: Prisma.StringNullableWithAggregatesFilter<"Customer"> | string | null
   totalSpent?: Prisma.DecimalWithAggregatesFilter<"Customer"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntWithAggregatesFilter<"Customer"> | number
   lastOrderAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Customer"> | Date | string | null
+  isActive?: Prisma.BoolWithAggregatesFilter<"Customer"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Customer"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Customer"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Customer"> | Date | string | null
@@ -434,122 +476,145 @@ export type CustomerScalarWhereWithAggregatesInput = {
 export type CustomerCreateInput = {
   id?: string
   email: string
-  password?: string | null
-  emailVerified?: boolean
+  password: string
   firstName?: string | null
   lastName?: string | null
   phone?: string | null
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
   totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: number
   lastOrderAt?: Date | string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
   addresses?: Prisma.CustomerAddressCreateNestedManyWithoutCustomerInput
-  sessions?: Prisma.CustomerSessionCreateNestedManyWithoutCustomerInput
   orders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
-  carts?: Prisma.CartCreateNestedManyWithoutCustomerInput
+  cart?: Prisma.CartCreateNestedOneWithoutCustomerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutCustomerInput
   wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutCustomerInput
+  sessions?: Prisma.CustomerSessionCreateNestedManyWithoutCustomerInput
+  passwordReset?: Prisma.PasswordResetCreateNestedOneWithoutCustomerInput
+  emailVerification?: Prisma.EmailVerificationCreateNestedOneWithoutCustomerInput
 }
 
 export type CustomerUncheckedCreateInput = {
   id?: string
   tenantId: string
   email: string
-  password?: string | null
-  emailVerified?: boolean
+  password: string
   firstName?: string | null
   lastName?: string | null
   phone?: string | null
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
   totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: number
   lastOrderAt?: Date | string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   addresses?: Prisma.CustomerAddressUncheckedCreateNestedManyWithoutCustomerInput
-  sessions?: Prisma.CustomerSessionUncheckedCreateNestedManyWithoutCustomerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
-  carts?: Prisma.CartUncheckedCreateNestedManyWithoutCustomerInput
+  cart?: Prisma.CartUncheckedCreateNestedOneWithoutCustomerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutCustomerInput
   wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutCustomerInput
+  sessions?: Prisma.CustomerSessionUncheckedCreateNestedManyWithoutCustomerInput
+  passwordReset?: Prisma.PasswordResetUncheckedCreateNestedOneWithoutCustomerInput
+  emailVerification?: Prisma.EmailVerificationUncheckedCreateNestedOneWithoutCustomerInput
 }
 
 export type CustomerUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
   addresses?: Prisma.CustomerAddressUpdateManyWithoutCustomerNestedInput
-  sessions?: Prisma.CustomerSessionUpdateManyWithoutCustomerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
-  carts?: Prisma.CartUpdateManyWithoutCustomerNestedInput
+  cart?: Prisma.CartUpdateOneWithoutCustomerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutCustomerNestedInput
   wishlistItems?: Prisma.WishlistItemUpdateManyWithoutCustomerNestedInput
+  sessions?: Prisma.CustomerSessionUpdateManyWithoutCustomerNestedInput
+  passwordReset?: Prisma.PasswordResetUpdateOneWithoutCustomerNestedInput
+  emailVerification?: Prisma.EmailVerificationUpdateOneWithoutCustomerNestedInput
 }
 
 export type CustomerUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   addresses?: Prisma.CustomerAddressUncheckedUpdateManyWithoutCustomerNestedInput
-  sessions?: Prisma.CustomerSessionUncheckedUpdateManyWithoutCustomerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
-  carts?: Prisma.CartUncheckedUpdateManyWithoutCustomerNestedInput
+  cart?: Prisma.CartUncheckedUpdateOneWithoutCustomerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutCustomerNestedInput
   wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutCustomerNestedInput
+  sessions?: Prisma.CustomerSessionUncheckedUpdateManyWithoutCustomerNestedInput
+  passwordReset?: Prisma.PasswordResetUncheckedUpdateOneWithoutCustomerNestedInput
+  emailVerification?: Prisma.EmailVerificationUncheckedUpdateOneWithoutCustomerNestedInput
 }
 
 export type CustomerCreateManyInput = {
   id?: string
   tenantId: string
   email: string
-  password?: string | null
-  emailVerified?: boolean
+  password: string
   firstName?: string | null
   lastName?: string | null
   phone?: string | null
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
   totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: number
   lastOrderAt?: Date | string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -558,17 +623,20 @@ export type CustomerCreateManyInput = {
 export type CustomerUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -578,17 +646,20 @@ export type CustomerUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -614,16 +685,19 @@ export type CustomerCountOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
   acceptsMarketing?: Prisma.SortOrder
   locale?: Prisma.SortOrder
+  emailVerified?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrder
+  googleId?: Prisma.SortOrder
+  facebookId?: Prisma.SortOrder
   totalSpent?: Prisma.SortOrder
   ordersCount?: Prisma.SortOrder
   lastOrderAt?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -639,16 +713,19 @@ export type CustomerMaxOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
   acceptsMarketing?: Prisma.SortOrder
   locale?: Prisma.SortOrder
+  emailVerified?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrder
+  googleId?: Prisma.SortOrder
+  facebookId?: Prisma.SortOrder
   totalSpent?: Prisma.SortOrder
   ordersCount?: Prisma.SortOrder
   lastOrderAt?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -659,16 +736,19 @@ export type CustomerMinOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
   acceptsMarketing?: Prisma.SortOrder
   locale?: Prisma.SortOrder
+  emailVerified?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrder
+  googleId?: Prisma.SortOrder
+  facebookId?: Prisma.SortOrder
   totalSpent?: Prisma.SortOrder
   ordersCount?: Prisma.SortOrder
   lastOrderAt?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -747,20 +827,6 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type CustomerCreateNestedOneWithoutAddressesInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutAddressesInput, Prisma.CustomerUncheckedCreateWithoutAddressesInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutAddressesInput
-  connect?: Prisma.CustomerWhereUniqueInput
-}
-
-export type CustomerUpdateOneRequiredWithoutAddressesNestedInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutAddressesInput, Prisma.CustomerUncheckedCreateWithoutAddressesInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutAddressesInput
-  upsert?: Prisma.CustomerUpsertWithoutAddressesInput
-  connect?: Prisma.CustomerWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutAddressesInput, Prisma.CustomerUpdateWithoutAddressesInput>, Prisma.CustomerUncheckedUpdateWithoutAddressesInput>
-}
-
 export type CustomerCreateNestedOneWithoutSessionsInput = {
   create?: Prisma.XOR<Prisma.CustomerCreateWithoutSessionsInput, Prisma.CustomerUncheckedCreateWithoutSessionsInput>
   connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutSessionsInput
@@ -775,20 +841,62 @@ export type CustomerUpdateOneRequiredWithoutSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutSessionsInput, Prisma.CustomerUpdateWithoutSessionsInput>, Prisma.CustomerUncheckedUpdateWithoutSessionsInput>
 }
 
-export type CustomerCreateNestedOneWithoutCartsInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutCartsInput, Prisma.CustomerUncheckedCreateWithoutCartsInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutCartsInput
+export type CustomerCreateNestedOneWithoutAddressesInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutAddressesInput, Prisma.CustomerUncheckedCreateWithoutAddressesInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutAddressesInput
   connect?: Prisma.CustomerWhereUniqueInput
 }
 
-export type CustomerUpdateOneWithoutCartsNestedInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutCartsInput, Prisma.CustomerUncheckedCreateWithoutCartsInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutCartsInput
-  upsert?: Prisma.CustomerUpsertWithoutCartsInput
+export type CustomerUpdateOneRequiredWithoutAddressesNestedInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutAddressesInput, Prisma.CustomerUncheckedCreateWithoutAddressesInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutAddressesInput
+  upsert?: Prisma.CustomerUpsertWithoutAddressesInput
+  connect?: Prisma.CustomerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutAddressesInput, Prisma.CustomerUpdateWithoutAddressesInput>, Prisma.CustomerUncheckedUpdateWithoutAddressesInput>
+}
+
+export type CustomerCreateNestedOneWithoutPasswordResetInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutPasswordResetInput, Prisma.CustomerUncheckedCreateWithoutPasswordResetInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutPasswordResetInput
+  connect?: Prisma.CustomerWhereUniqueInput
+}
+
+export type CustomerUpdateOneRequiredWithoutPasswordResetNestedInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutPasswordResetInput, Prisma.CustomerUncheckedCreateWithoutPasswordResetInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutPasswordResetInput
+  upsert?: Prisma.CustomerUpsertWithoutPasswordResetInput
+  connect?: Prisma.CustomerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutPasswordResetInput, Prisma.CustomerUpdateWithoutPasswordResetInput>, Prisma.CustomerUncheckedUpdateWithoutPasswordResetInput>
+}
+
+export type CustomerCreateNestedOneWithoutEmailVerificationInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutEmailVerificationInput, Prisma.CustomerUncheckedCreateWithoutEmailVerificationInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutEmailVerificationInput
+  connect?: Prisma.CustomerWhereUniqueInput
+}
+
+export type CustomerUpdateOneRequiredWithoutEmailVerificationNestedInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutEmailVerificationInput, Prisma.CustomerUncheckedCreateWithoutEmailVerificationInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutEmailVerificationInput
+  upsert?: Prisma.CustomerUpsertWithoutEmailVerificationInput
+  connect?: Prisma.CustomerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutEmailVerificationInput, Prisma.CustomerUpdateWithoutEmailVerificationInput>, Prisma.CustomerUncheckedUpdateWithoutEmailVerificationInput>
+}
+
+export type CustomerCreateNestedOneWithoutCartInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutCartInput, Prisma.CustomerUncheckedCreateWithoutCartInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutCartInput
+  connect?: Prisma.CustomerWhereUniqueInput
+}
+
+export type CustomerUpdateOneWithoutCartNestedInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutCartInput, Prisma.CustomerUncheckedCreateWithoutCartInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutCartInput
+  upsert?: Prisma.CustomerUpsertWithoutCartInput
   disconnect?: Prisma.CustomerWhereInput | boolean
   delete?: Prisma.CustomerWhereInput | boolean
   connect?: Prisma.CustomerWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutCartsInput, Prisma.CustomerUpdateWithoutCartsInput>, Prisma.CustomerUncheckedUpdateWithoutCartsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutCartInput, Prisma.CustomerUpdateWithoutCartInput>, Prisma.CustomerUncheckedUpdateWithoutCartInput>
 }
 
 export type CustomerCreateNestedOneWithoutOrdersInput = {
@@ -813,12 +921,10 @@ export type CustomerCreateNestedOneWithoutWishlistItemsInput = {
   connect?: Prisma.CustomerWhereUniqueInput
 }
 
-export type CustomerUpdateOneWithoutWishlistItemsNestedInput = {
+export type CustomerUpdateOneRequiredWithoutWishlistItemsNestedInput = {
   create?: Prisma.XOR<Prisma.CustomerCreateWithoutWishlistItemsInput, Prisma.CustomerUncheckedCreateWithoutWishlistItemsInput>
   connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutWishlistItemsInput
   upsert?: Prisma.CustomerUpsertWithoutWishlistItemsInput
-  disconnect?: Prisma.CustomerWhereInput | boolean
-  delete?: Prisma.CustomerWhereInput | boolean
   connect?: Prisma.CustomerWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutWishlistItemsInput, Prisma.CustomerUpdateWithoutWishlistItemsInput>, Prisma.CustomerUncheckedUpdateWithoutWishlistItemsInput>
 }
@@ -829,12 +935,10 @@ export type CustomerCreateNestedOneWithoutReviewsInput = {
   connect?: Prisma.CustomerWhereUniqueInput
 }
 
-export type CustomerUpdateOneWithoutReviewsNestedInput = {
+export type CustomerUpdateOneRequiredWithoutReviewsNestedInput = {
   create?: Prisma.XOR<Prisma.CustomerCreateWithoutReviewsInput, Prisma.CustomerUncheckedCreateWithoutReviewsInput>
   connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutReviewsInput
   upsert?: Prisma.CustomerUpsertWithoutReviewsInput
-  disconnect?: Prisma.CustomerWhereInput | boolean
-  delete?: Prisma.CustomerWhereInput | boolean
   connect?: Prisma.CustomerWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutReviewsInput, Prisma.CustomerUpdateWithoutReviewsInput>, Prisma.CustomerUncheckedUpdateWithoutReviewsInput>
 }
@@ -842,51 +946,61 @@ export type CustomerUpdateOneWithoutReviewsNestedInput = {
 export type CustomerCreateWithoutTenantInput = {
   id?: string
   email: string
-  password?: string | null
-  emailVerified?: boolean
+  password: string
   firstName?: string | null
   lastName?: string | null
   phone?: string | null
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
   totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: number
   lastOrderAt?: Date | string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   addresses?: Prisma.CustomerAddressCreateNestedManyWithoutCustomerInput
-  sessions?: Prisma.CustomerSessionCreateNestedManyWithoutCustomerInput
   orders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
-  carts?: Prisma.CartCreateNestedManyWithoutCustomerInput
+  cart?: Prisma.CartCreateNestedOneWithoutCustomerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutCustomerInput
   wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutCustomerInput
+  sessions?: Prisma.CustomerSessionCreateNestedManyWithoutCustomerInput
+  passwordReset?: Prisma.PasswordResetCreateNestedOneWithoutCustomerInput
+  emailVerification?: Prisma.EmailVerificationCreateNestedOneWithoutCustomerInput
 }
 
 export type CustomerUncheckedCreateWithoutTenantInput = {
   id?: string
   email: string
-  password?: string | null
-  emailVerified?: boolean
+  password: string
   firstName?: string | null
   lastName?: string | null
   phone?: string | null
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
   totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: number
   lastOrderAt?: Date | string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   addresses?: Prisma.CustomerAddressUncheckedCreateNestedManyWithoutCustomerInput
-  sessions?: Prisma.CustomerSessionUncheckedCreateNestedManyWithoutCustomerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
-  carts?: Prisma.CartUncheckedCreateNestedManyWithoutCustomerInput
+  cart?: Prisma.CartUncheckedCreateNestedOneWithoutCustomerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutCustomerInput
   wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutCustomerInput
+  sessions?: Prisma.CustomerSessionUncheckedCreateNestedManyWithoutCustomerInput
+  passwordReset?: Prisma.PasswordResetUncheckedCreateNestedOneWithoutCustomerInput
+  emailVerification?: Prisma.EmailVerificationUncheckedCreateNestedOneWithoutCustomerInput
 }
 
 export type CustomerCreateOrConnectWithoutTenantInput = {
@@ -922,186 +1036,83 @@ export type CustomerScalarWhereInput = {
   id?: Prisma.StringFilter<"Customer"> | string
   tenantId?: Prisma.StringFilter<"Customer"> | string
   email?: Prisma.StringFilter<"Customer"> | string
-  password?: Prisma.StringNullableFilter<"Customer"> | string | null
-  emailVerified?: Prisma.BoolFilter<"Customer"> | boolean
+  password?: Prisma.StringFilter<"Customer"> | string
   firstName?: Prisma.StringNullableFilter<"Customer"> | string | null
   lastName?: Prisma.StringNullableFilter<"Customer"> | string | null
   phone?: Prisma.StringNullableFilter<"Customer"> | string | null
-  isActive?: Prisma.BoolFilter<"Customer"> | boolean
   acceptsMarketing?: Prisma.BoolFilter<"Customer"> | boolean
   locale?: Prisma.StringFilter<"Customer"> | string
+  emailVerified?: Prisma.BoolFilter<"Customer"> | boolean
+  emailVerifiedAt?: Prisma.DateTimeNullableFilter<"Customer"> | Date | string | null
+  googleId?: Prisma.StringNullableFilter<"Customer"> | string | null
+  facebookId?: Prisma.StringNullableFilter<"Customer"> | string | null
   totalSpent?: Prisma.DecimalFilter<"Customer"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFilter<"Customer"> | number
   lastOrderAt?: Prisma.DateTimeNullableFilter<"Customer"> | Date | string | null
+  isActive?: Prisma.BoolFilter<"Customer"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Customer"> | Date | string | null
 }
 
-export type CustomerCreateWithoutAddressesInput = {
-  id?: string
-  email: string
-  password?: string | null
-  emailVerified?: boolean
-  firstName?: string | null
-  lastName?: string | null
-  phone?: string | null
-  isActive?: boolean
-  acceptsMarketing?: boolean
-  locale?: string
-  totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  ordersCount?: number
-  lastOrderAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  deletedAt?: Date | string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
-  sessions?: Prisma.CustomerSessionCreateNestedManyWithoutCustomerInput
-  orders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
-  carts?: Prisma.CartCreateNestedManyWithoutCustomerInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutCustomerInput
-  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutCustomerInput
-}
-
-export type CustomerUncheckedCreateWithoutAddressesInput = {
-  id?: string
-  tenantId: string
-  email: string
-  password?: string | null
-  emailVerified?: boolean
-  firstName?: string | null
-  lastName?: string | null
-  phone?: string | null
-  isActive?: boolean
-  acceptsMarketing?: boolean
-  locale?: string
-  totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  ordersCount?: number
-  lastOrderAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  deletedAt?: Date | string | null
-  sessions?: Prisma.CustomerSessionUncheckedCreateNestedManyWithoutCustomerInput
-  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
-  carts?: Prisma.CartUncheckedCreateNestedManyWithoutCustomerInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutCustomerInput
-  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutCustomerInput
-}
-
-export type CustomerCreateOrConnectWithoutAddressesInput = {
-  where: Prisma.CustomerWhereUniqueInput
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutAddressesInput, Prisma.CustomerUncheckedCreateWithoutAddressesInput>
-}
-
-export type CustomerUpsertWithoutAddressesInput = {
-  update: Prisma.XOR<Prisma.CustomerUpdateWithoutAddressesInput, Prisma.CustomerUncheckedUpdateWithoutAddressesInput>
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutAddressesInput, Prisma.CustomerUncheckedCreateWithoutAddressesInput>
-  where?: Prisma.CustomerWhereInput
-}
-
-export type CustomerUpdateToOneWithWhereWithoutAddressesInput = {
-  where?: Prisma.CustomerWhereInput
-  data: Prisma.XOR<Prisma.CustomerUpdateWithoutAddressesInput, Prisma.CustomerUncheckedUpdateWithoutAddressesInput>
-}
-
-export type CustomerUpdateWithoutAddressesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  locale?: Prisma.StringFieldUpdateOperationsInput | string
-  totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
-  sessions?: Prisma.CustomerSessionUpdateManyWithoutCustomerNestedInput
-  orders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
-  carts?: Prisma.CartUpdateManyWithoutCustomerNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutCustomerNestedInput
-  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutCustomerNestedInput
-}
-
-export type CustomerUncheckedUpdateWithoutAddressesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  locale?: Prisma.StringFieldUpdateOperationsInput | string
-  totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  sessions?: Prisma.CustomerSessionUncheckedUpdateManyWithoutCustomerNestedInput
-  orders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
-  carts?: Prisma.CartUncheckedUpdateManyWithoutCustomerNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutCustomerNestedInput
-  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutCustomerNestedInput
-}
-
 export type CustomerCreateWithoutSessionsInput = {
   id?: string
   email: string
-  password?: string | null
-  emailVerified?: boolean
+  password: string
   firstName?: string | null
   lastName?: string | null
   phone?: string | null
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
   totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: number
   lastOrderAt?: Date | string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
   addresses?: Prisma.CustomerAddressCreateNestedManyWithoutCustomerInput
   orders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
-  carts?: Prisma.CartCreateNestedManyWithoutCustomerInput
+  cart?: Prisma.CartCreateNestedOneWithoutCustomerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutCustomerInput
   wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutCustomerInput
+  passwordReset?: Prisma.PasswordResetCreateNestedOneWithoutCustomerInput
+  emailVerification?: Prisma.EmailVerificationCreateNestedOneWithoutCustomerInput
 }
 
 export type CustomerUncheckedCreateWithoutSessionsInput = {
   id?: string
   tenantId: string
   email: string
-  password?: string | null
-  emailVerified?: boolean
+  password: string
   firstName?: string | null
   lastName?: string | null
   phone?: string | null
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
   totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: number
   lastOrderAt?: Date | string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   addresses?: Prisma.CustomerAddressUncheckedCreateNestedManyWithoutCustomerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
-  carts?: Prisma.CartUncheckedCreateNestedManyWithoutCustomerInput
+  cart?: Prisma.CartUncheckedCreateNestedOneWithoutCustomerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutCustomerInput
   wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutCustomerInput
+  passwordReset?: Prisma.PasswordResetUncheckedCreateNestedOneWithoutCustomerInput
+  emailVerification?: Prisma.EmailVerificationUncheckedCreateNestedOneWithoutCustomerInput
 }
 
 export type CustomerCreateOrConnectWithoutSessionsInput = {
@@ -1123,217 +1134,665 @@ export type CustomerUpdateToOneWithWhereWithoutSessionsInput = {
 export type CustomerUpdateWithoutSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
   addresses?: Prisma.CustomerAddressUpdateManyWithoutCustomerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
-  carts?: Prisma.CartUpdateManyWithoutCustomerNestedInput
+  cart?: Prisma.CartUpdateOneWithoutCustomerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutCustomerNestedInput
   wishlistItems?: Prisma.WishlistItemUpdateManyWithoutCustomerNestedInput
+  passwordReset?: Prisma.PasswordResetUpdateOneWithoutCustomerNestedInput
+  emailVerification?: Prisma.EmailVerificationUpdateOneWithoutCustomerNestedInput
 }
 
 export type CustomerUncheckedUpdateWithoutSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   addresses?: Prisma.CustomerAddressUncheckedUpdateManyWithoutCustomerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
-  carts?: Prisma.CartUncheckedUpdateManyWithoutCustomerNestedInput
+  cart?: Prisma.CartUncheckedUpdateOneWithoutCustomerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutCustomerNestedInput
   wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutCustomerNestedInput
+  passwordReset?: Prisma.PasswordResetUncheckedUpdateOneWithoutCustomerNestedInput
+  emailVerification?: Prisma.EmailVerificationUncheckedUpdateOneWithoutCustomerNestedInput
 }
 
-export type CustomerCreateWithoutCartsInput = {
+export type CustomerCreateWithoutAddressesInput = {
   id?: string
   email: string
-  password?: string | null
-  emailVerified?: boolean
+  password: string
   firstName?: string | null
   lastName?: string | null
   phone?: string | null
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
   totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: number
   lastOrderAt?: Date | string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
+  orders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
+  cart?: Prisma.CartCreateNestedOneWithoutCustomerInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutCustomerInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutCustomerInput
+  sessions?: Prisma.CustomerSessionCreateNestedManyWithoutCustomerInput
+  passwordReset?: Prisma.PasswordResetCreateNestedOneWithoutCustomerInput
+  emailVerification?: Prisma.EmailVerificationCreateNestedOneWithoutCustomerInput
+}
+
+export type CustomerUncheckedCreateWithoutAddressesInput = {
+  id?: string
+  tenantId: string
+  email: string
+  password: string
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  acceptsMarketing?: boolean
+  locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
+  totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  ordersCount?: number
+  lastOrderAt?: Date | string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
+  cart?: Prisma.CartUncheckedCreateNestedOneWithoutCustomerInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutCustomerInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutCustomerInput
+  sessions?: Prisma.CustomerSessionUncheckedCreateNestedManyWithoutCustomerInput
+  passwordReset?: Prisma.PasswordResetUncheckedCreateNestedOneWithoutCustomerInput
+  emailVerification?: Prisma.EmailVerificationUncheckedCreateNestedOneWithoutCustomerInput
+}
+
+export type CustomerCreateOrConnectWithoutAddressesInput = {
+  where: Prisma.CustomerWhereUniqueInput
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutAddressesInput, Prisma.CustomerUncheckedCreateWithoutAddressesInput>
+}
+
+export type CustomerUpsertWithoutAddressesInput = {
+  update: Prisma.XOR<Prisma.CustomerUpdateWithoutAddressesInput, Prisma.CustomerUncheckedUpdateWithoutAddressesInput>
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutAddressesInput, Prisma.CustomerUncheckedCreateWithoutAddressesInput>
+  where?: Prisma.CustomerWhereInput
+}
+
+export type CustomerUpdateToOneWithWhereWithoutAddressesInput = {
+  where?: Prisma.CustomerWhereInput
+  data: Prisma.XOR<Prisma.CustomerUpdateWithoutAddressesInput, Prisma.CustomerUncheckedUpdateWithoutAddressesInput>
+}
+
+export type CustomerUpdateWithoutAddressesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
+  cart?: Prisma.CartUpdateOneWithoutCustomerNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutCustomerNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutCustomerNestedInput
+  sessions?: Prisma.CustomerSessionUpdateManyWithoutCustomerNestedInput
+  passwordReset?: Prisma.PasswordResetUpdateOneWithoutCustomerNestedInput
+  emailVerification?: Prisma.EmailVerificationUpdateOneWithoutCustomerNestedInput
+}
+
+export type CustomerUncheckedUpdateWithoutAddressesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
+  cart?: Prisma.CartUncheckedUpdateOneWithoutCustomerNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutCustomerNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutCustomerNestedInput
+  sessions?: Prisma.CustomerSessionUncheckedUpdateManyWithoutCustomerNestedInput
+  passwordReset?: Prisma.PasswordResetUncheckedUpdateOneWithoutCustomerNestedInput
+  emailVerification?: Prisma.EmailVerificationUncheckedUpdateOneWithoutCustomerNestedInput
+}
+
+export type CustomerCreateWithoutPasswordResetInput = {
+  id?: string
+  email: string
+  password: string
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  acceptsMarketing?: boolean
+  locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
+  totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  ordersCount?: number
+  lastOrderAt?: Date | string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
   addresses?: Prisma.CustomerAddressCreateNestedManyWithoutCustomerInput
-  sessions?: Prisma.CustomerSessionCreateNestedManyWithoutCustomerInput
   orders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
+  cart?: Prisma.CartCreateNestedOneWithoutCustomerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutCustomerInput
   wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutCustomerInput
+  sessions?: Prisma.CustomerSessionCreateNestedManyWithoutCustomerInput
+  emailVerification?: Prisma.EmailVerificationCreateNestedOneWithoutCustomerInput
 }
 
-export type CustomerUncheckedCreateWithoutCartsInput = {
+export type CustomerUncheckedCreateWithoutPasswordResetInput = {
   id?: string
   tenantId: string
   email: string
-  password?: string | null
-  emailVerified?: boolean
+  password: string
   firstName?: string | null
   lastName?: string | null
   phone?: string | null
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
   totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: number
   lastOrderAt?: Date | string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   addresses?: Prisma.CustomerAddressUncheckedCreateNestedManyWithoutCustomerInput
-  sessions?: Prisma.CustomerSessionUncheckedCreateNestedManyWithoutCustomerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
+  cart?: Prisma.CartUncheckedCreateNestedOneWithoutCustomerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutCustomerInput
   wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutCustomerInput
+  sessions?: Prisma.CustomerSessionUncheckedCreateNestedManyWithoutCustomerInput
+  emailVerification?: Prisma.EmailVerificationUncheckedCreateNestedOneWithoutCustomerInput
 }
 
-export type CustomerCreateOrConnectWithoutCartsInput = {
+export type CustomerCreateOrConnectWithoutPasswordResetInput = {
   where: Prisma.CustomerWhereUniqueInput
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutCartsInput, Prisma.CustomerUncheckedCreateWithoutCartsInput>
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutPasswordResetInput, Prisma.CustomerUncheckedCreateWithoutPasswordResetInput>
 }
 
-export type CustomerUpsertWithoutCartsInput = {
-  update: Prisma.XOR<Prisma.CustomerUpdateWithoutCartsInput, Prisma.CustomerUncheckedUpdateWithoutCartsInput>
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutCartsInput, Prisma.CustomerUncheckedCreateWithoutCartsInput>
+export type CustomerUpsertWithoutPasswordResetInput = {
+  update: Prisma.XOR<Prisma.CustomerUpdateWithoutPasswordResetInput, Prisma.CustomerUncheckedUpdateWithoutPasswordResetInput>
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutPasswordResetInput, Prisma.CustomerUncheckedCreateWithoutPasswordResetInput>
   where?: Prisma.CustomerWhereInput
 }
 
-export type CustomerUpdateToOneWithWhereWithoutCartsInput = {
+export type CustomerUpdateToOneWithWhereWithoutPasswordResetInput = {
   where?: Prisma.CustomerWhereInput
-  data: Prisma.XOR<Prisma.CustomerUpdateWithoutCartsInput, Prisma.CustomerUncheckedUpdateWithoutCartsInput>
+  data: Prisma.XOR<Prisma.CustomerUpdateWithoutPasswordResetInput, Prisma.CustomerUncheckedUpdateWithoutPasswordResetInput>
 }
 
-export type CustomerUpdateWithoutCartsInput = {
+export type CustomerUpdateWithoutPasswordResetInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
   addresses?: Prisma.CustomerAddressUpdateManyWithoutCustomerNestedInput
-  sessions?: Prisma.CustomerSessionUpdateManyWithoutCustomerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
+  cart?: Prisma.CartUpdateOneWithoutCustomerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutCustomerNestedInput
   wishlistItems?: Prisma.WishlistItemUpdateManyWithoutCustomerNestedInput
+  sessions?: Prisma.CustomerSessionUpdateManyWithoutCustomerNestedInput
+  emailVerification?: Prisma.EmailVerificationUpdateOneWithoutCustomerNestedInput
 }
 
-export type CustomerUncheckedUpdateWithoutCartsInput = {
+export type CustomerUncheckedUpdateWithoutPasswordResetInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   addresses?: Prisma.CustomerAddressUncheckedUpdateManyWithoutCustomerNestedInput
-  sessions?: Prisma.CustomerSessionUncheckedUpdateManyWithoutCustomerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
+  cart?: Prisma.CartUncheckedUpdateOneWithoutCustomerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutCustomerNestedInput
   wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutCustomerNestedInput
+  sessions?: Prisma.CustomerSessionUncheckedUpdateManyWithoutCustomerNestedInput
+  emailVerification?: Prisma.EmailVerificationUncheckedUpdateOneWithoutCustomerNestedInput
 }
 
-export type CustomerCreateWithoutOrdersInput = {
+export type CustomerCreateWithoutEmailVerificationInput = {
   id?: string
   email: string
-  password?: string | null
-  emailVerified?: boolean
+  password: string
   firstName?: string | null
   lastName?: string | null
   phone?: string | null
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
   totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: number
   lastOrderAt?: Date | string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
   addresses?: Prisma.CustomerAddressCreateNestedManyWithoutCustomerInput
-  sessions?: Prisma.CustomerSessionCreateNestedManyWithoutCustomerInput
-  carts?: Prisma.CartCreateNestedManyWithoutCustomerInput
+  orders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
+  cart?: Prisma.CartCreateNestedOneWithoutCustomerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutCustomerInput
   wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutCustomerInput
+  sessions?: Prisma.CustomerSessionCreateNestedManyWithoutCustomerInput
+  passwordReset?: Prisma.PasswordResetCreateNestedOneWithoutCustomerInput
+}
+
+export type CustomerUncheckedCreateWithoutEmailVerificationInput = {
+  id?: string
+  tenantId: string
+  email: string
+  password: string
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  acceptsMarketing?: boolean
+  locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
+  totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  ordersCount?: number
+  lastOrderAt?: Date | string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  addresses?: Prisma.CustomerAddressUncheckedCreateNestedManyWithoutCustomerInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
+  cart?: Prisma.CartUncheckedCreateNestedOneWithoutCustomerInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutCustomerInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutCustomerInput
+  sessions?: Prisma.CustomerSessionUncheckedCreateNestedManyWithoutCustomerInput
+  passwordReset?: Prisma.PasswordResetUncheckedCreateNestedOneWithoutCustomerInput
+}
+
+export type CustomerCreateOrConnectWithoutEmailVerificationInput = {
+  where: Prisma.CustomerWhereUniqueInput
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutEmailVerificationInput, Prisma.CustomerUncheckedCreateWithoutEmailVerificationInput>
+}
+
+export type CustomerUpsertWithoutEmailVerificationInput = {
+  update: Prisma.XOR<Prisma.CustomerUpdateWithoutEmailVerificationInput, Prisma.CustomerUncheckedUpdateWithoutEmailVerificationInput>
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutEmailVerificationInput, Prisma.CustomerUncheckedCreateWithoutEmailVerificationInput>
+  where?: Prisma.CustomerWhereInput
+}
+
+export type CustomerUpdateToOneWithWhereWithoutEmailVerificationInput = {
+  where?: Prisma.CustomerWhereInput
+  data: Prisma.XOR<Prisma.CustomerUpdateWithoutEmailVerificationInput, Prisma.CustomerUncheckedUpdateWithoutEmailVerificationInput>
+}
+
+export type CustomerUpdateWithoutEmailVerificationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
+  addresses?: Prisma.CustomerAddressUpdateManyWithoutCustomerNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
+  cart?: Prisma.CartUpdateOneWithoutCustomerNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutCustomerNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutCustomerNestedInput
+  sessions?: Prisma.CustomerSessionUpdateManyWithoutCustomerNestedInput
+  passwordReset?: Prisma.PasswordResetUpdateOneWithoutCustomerNestedInput
+}
+
+export type CustomerUncheckedUpdateWithoutEmailVerificationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  addresses?: Prisma.CustomerAddressUncheckedUpdateManyWithoutCustomerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
+  cart?: Prisma.CartUncheckedUpdateOneWithoutCustomerNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutCustomerNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutCustomerNestedInput
+  sessions?: Prisma.CustomerSessionUncheckedUpdateManyWithoutCustomerNestedInput
+  passwordReset?: Prisma.PasswordResetUncheckedUpdateOneWithoutCustomerNestedInput
+}
+
+export type CustomerCreateWithoutCartInput = {
+  id?: string
+  email: string
+  password: string
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  acceptsMarketing?: boolean
+  locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
+  totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  ordersCount?: number
+  lastOrderAt?: Date | string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
+  addresses?: Prisma.CustomerAddressCreateNestedManyWithoutCustomerInput
+  orders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutCustomerInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutCustomerInput
+  sessions?: Prisma.CustomerSessionCreateNestedManyWithoutCustomerInput
+  passwordReset?: Prisma.PasswordResetCreateNestedOneWithoutCustomerInput
+  emailVerification?: Prisma.EmailVerificationCreateNestedOneWithoutCustomerInput
+}
+
+export type CustomerUncheckedCreateWithoutCartInput = {
+  id?: string
+  tenantId: string
+  email: string
+  password: string
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  acceptsMarketing?: boolean
+  locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
+  totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  ordersCount?: number
+  lastOrderAt?: Date | string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  addresses?: Prisma.CustomerAddressUncheckedCreateNestedManyWithoutCustomerInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutCustomerInput
+  wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutCustomerInput
+  sessions?: Prisma.CustomerSessionUncheckedCreateNestedManyWithoutCustomerInput
+  passwordReset?: Prisma.PasswordResetUncheckedCreateNestedOneWithoutCustomerInput
+  emailVerification?: Prisma.EmailVerificationUncheckedCreateNestedOneWithoutCustomerInput
+}
+
+export type CustomerCreateOrConnectWithoutCartInput = {
+  where: Prisma.CustomerWhereUniqueInput
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutCartInput, Prisma.CustomerUncheckedCreateWithoutCartInput>
+}
+
+export type CustomerUpsertWithoutCartInput = {
+  update: Prisma.XOR<Prisma.CustomerUpdateWithoutCartInput, Prisma.CustomerUncheckedUpdateWithoutCartInput>
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutCartInput, Prisma.CustomerUncheckedCreateWithoutCartInput>
+  where?: Prisma.CustomerWhereInput
+}
+
+export type CustomerUpdateToOneWithWhereWithoutCartInput = {
+  where?: Prisma.CustomerWhereInput
+  data: Prisma.XOR<Prisma.CustomerUpdateWithoutCartInput, Prisma.CustomerUncheckedUpdateWithoutCartInput>
+}
+
+export type CustomerUpdateWithoutCartInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
+  addresses?: Prisma.CustomerAddressUpdateManyWithoutCustomerNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutCustomerNestedInput
+  wishlistItems?: Prisma.WishlistItemUpdateManyWithoutCustomerNestedInput
+  sessions?: Prisma.CustomerSessionUpdateManyWithoutCustomerNestedInput
+  passwordReset?: Prisma.PasswordResetUpdateOneWithoutCustomerNestedInput
+  emailVerification?: Prisma.EmailVerificationUpdateOneWithoutCustomerNestedInput
+}
+
+export type CustomerUncheckedUpdateWithoutCartInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  addresses?: Prisma.CustomerAddressUncheckedUpdateManyWithoutCustomerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutCustomerNestedInput
+  wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutCustomerNestedInput
+  sessions?: Prisma.CustomerSessionUncheckedUpdateManyWithoutCustomerNestedInput
+  passwordReset?: Prisma.PasswordResetUncheckedUpdateOneWithoutCustomerNestedInput
+  emailVerification?: Prisma.EmailVerificationUncheckedUpdateOneWithoutCustomerNestedInput
+}
+
+export type CustomerCreateWithoutOrdersInput = {
+  id?: string
+  email: string
+  password: string
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  acceptsMarketing?: boolean
+  locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
+  totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  ordersCount?: number
+  lastOrderAt?: Date | string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
+  addresses?: Prisma.CustomerAddressCreateNestedManyWithoutCustomerInput
+  cart?: Prisma.CartCreateNestedOneWithoutCustomerInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutCustomerInput
+  wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutCustomerInput
+  sessions?: Prisma.CustomerSessionCreateNestedManyWithoutCustomerInput
+  passwordReset?: Prisma.PasswordResetCreateNestedOneWithoutCustomerInput
+  emailVerification?: Prisma.EmailVerificationCreateNestedOneWithoutCustomerInput
 }
 
 export type CustomerUncheckedCreateWithoutOrdersInput = {
   id?: string
   tenantId: string
   email: string
-  password?: string | null
-  emailVerified?: boolean
+  password: string
   firstName?: string | null
   lastName?: string | null
   phone?: string | null
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
   totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: number
   lastOrderAt?: Date | string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   addresses?: Prisma.CustomerAddressUncheckedCreateNestedManyWithoutCustomerInput
-  sessions?: Prisma.CustomerSessionUncheckedCreateNestedManyWithoutCustomerInput
-  carts?: Prisma.CartUncheckedCreateNestedManyWithoutCustomerInput
+  cart?: Prisma.CartUncheckedCreateNestedOneWithoutCustomerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutCustomerInput
   wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutCustomerInput
+  sessions?: Prisma.CustomerSessionUncheckedCreateNestedManyWithoutCustomerInput
+  passwordReset?: Prisma.PasswordResetUncheckedCreateNestedOneWithoutCustomerInput
+  emailVerification?: Prisma.EmailVerificationUncheckedCreateNestedOneWithoutCustomerInput
 }
 
 export type CustomerCreateOrConnectWithoutOrdersInput = {
@@ -1355,101 +1814,121 @@ export type CustomerUpdateToOneWithWhereWithoutOrdersInput = {
 export type CustomerUpdateWithoutOrdersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
   addresses?: Prisma.CustomerAddressUpdateManyWithoutCustomerNestedInput
-  sessions?: Prisma.CustomerSessionUpdateManyWithoutCustomerNestedInput
-  carts?: Prisma.CartUpdateManyWithoutCustomerNestedInput
+  cart?: Prisma.CartUpdateOneWithoutCustomerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutCustomerNestedInput
   wishlistItems?: Prisma.WishlistItemUpdateManyWithoutCustomerNestedInput
+  sessions?: Prisma.CustomerSessionUpdateManyWithoutCustomerNestedInput
+  passwordReset?: Prisma.PasswordResetUpdateOneWithoutCustomerNestedInput
+  emailVerification?: Prisma.EmailVerificationUpdateOneWithoutCustomerNestedInput
 }
 
 export type CustomerUncheckedUpdateWithoutOrdersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   addresses?: Prisma.CustomerAddressUncheckedUpdateManyWithoutCustomerNestedInput
-  sessions?: Prisma.CustomerSessionUncheckedUpdateManyWithoutCustomerNestedInput
-  carts?: Prisma.CartUncheckedUpdateManyWithoutCustomerNestedInput
+  cart?: Prisma.CartUncheckedUpdateOneWithoutCustomerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutCustomerNestedInput
   wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutCustomerNestedInput
+  sessions?: Prisma.CustomerSessionUncheckedUpdateManyWithoutCustomerNestedInput
+  passwordReset?: Prisma.PasswordResetUncheckedUpdateOneWithoutCustomerNestedInput
+  emailVerification?: Prisma.EmailVerificationUncheckedUpdateOneWithoutCustomerNestedInput
 }
 
 export type CustomerCreateWithoutWishlistItemsInput = {
   id?: string
   email: string
-  password?: string | null
-  emailVerified?: boolean
+  password: string
   firstName?: string | null
   lastName?: string | null
   phone?: string | null
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
   totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: number
   lastOrderAt?: Date | string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
   addresses?: Prisma.CustomerAddressCreateNestedManyWithoutCustomerInput
-  sessions?: Prisma.CustomerSessionCreateNestedManyWithoutCustomerInput
   orders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
-  carts?: Prisma.CartCreateNestedManyWithoutCustomerInput
+  cart?: Prisma.CartCreateNestedOneWithoutCustomerInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutCustomerInput
+  sessions?: Prisma.CustomerSessionCreateNestedManyWithoutCustomerInput
+  passwordReset?: Prisma.PasswordResetCreateNestedOneWithoutCustomerInput
+  emailVerification?: Prisma.EmailVerificationCreateNestedOneWithoutCustomerInput
 }
 
 export type CustomerUncheckedCreateWithoutWishlistItemsInput = {
   id?: string
   tenantId: string
   email: string
-  password?: string | null
-  emailVerified?: boolean
+  password: string
   firstName?: string | null
   lastName?: string | null
   phone?: string | null
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
   totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: number
   lastOrderAt?: Date | string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   addresses?: Prisma.CustomerAddressUncheckedCreateNestedManyWithoutCustomerInput
-  sessions?: Prisma.CustomerSessionUncheckedCreateNestedManyWithoutCustomerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
-  carts?: Prisma.CartUncheckedCreateNestedManyWithoutCustomerInput
+  cart?: Prisma.CartUncheckedCreateNestedOneWithoutCustomerInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutCustomerInput
+  sessions?: Prisma.CustomerSessionUncheckedCreateNestedManyWithoutCustomerInput
+  passwordReset?: Prisma.PasswordResetUncheckedCreateNestedOneWithoutCustomerInput
+  emailVerification?: Prisma.EmailVerificationUncheckedCreateNestedOneWithoutCustomerInput
 }
 
 export type CustomerCreateOrConnectWithoutWishlistItemsInput = {
@@ -1471,101 +1950,121 @@ export type CustomerUpdateToOneWithWhereWithoutWishlistItemsInput = {
 export type CustomerUpdateWithoutWishlistItemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
   addresses?: Prisma.CustomerAddressUpdateManyWithoutCustomerNestedInput
-  sessions?: Prisma.CustomerSessionUpdateManyWithoutCustomerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
-  carts?: Prisma.CartUpdateManyWithoutCustomerNestedInput
+  cart?: Prisma.CartUpdateOneWithoutCustomerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutCustomerNestedInput
+  sessions?: Prisma.CustomerSessionUpdateManyWithoutCustomerNestedInput
+  passwordReset?: Prisma.PasswordResetUpdateOneWithoutCustomerNestedInput
+  emailVerification?: Prisma.EmailVerificationUpdateOneWithoutCustomerNestedInput
 }
 
 export type CustomerUncheckedUpdateWithoutWishlistItemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   addresses?: Prisma.CustomerAddressUncheckedUpdateManyWithoutCustomerNestedInput
-  sessions?: Prisma.CustomerSessionUncheckedUpdateManyWithoutCustomerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
-  carts?: Prisma.CartUncheckedUpdateManyWithoutCustomerNestedInput
+  cart?: Prisma.CartUncheckedUpdateOneWithoutCustomerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutCustomerNestedInput
+  sessions?: Prisma.CustomerSessionUncheckedUpdateManyWithoutCustomerNestedInput
+  passwordReset?: Prisma.PasswordResetUncheckedUpdateOneWithoutCustomerNestedInput
+  emailVerification?: Prisma.EmailVerificationUncheckedUpdateOneWithoutCustomerNestedInput
 }
 
 export type CustomerCreateWithoutReviewsInput = {
   id?: string
   email: string
-  password?: string | null
-  emailVerified?: boolean
+  password: string
   firstName?: string | null
   lastName?: string | null
   phone?: string | null
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
   totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: number
   lastOrderAt?: Date | string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
   addresses?: Prisma.CustomerAddressCreateNestedManyWithoutCustomerInput
-  sessions?: Prisma.CustomerSessionCreateNestedManyWithoutCustomerInput
   orders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
-  carts?: Prisma.CartCreateNestedManyWithoutCustomerInput
+  cart?: Prisma.CartCreateNestedOneWithoutCustomerInput
   wishlistItems?: Prisma.WishlistItemCreateNestedManyWithoutCustomerInput
+  sessions?: Prisma.CustomerSessionCreateNestedManyWithoutCustomerInput
+  passwordReset?: Prisma.PasswordResetCreateNestedOneWithoutCustomerInput
+  emailVerification?: Prisma.EmailVerificationCreateNestedOneWithoutCustomerInput
 }
 
 export type CustomerUncheckedCreateWithoutReviewsInput = {
   id?: string
   tenantId: string
   email: string
-  password?: string | null
-  emailVerified?: boolean
+  password: string
   firstName?: string | null
   lastName?: string | null
   phone?: string | null
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
   totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: number
   lastOrderAt?: Date | string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   addresses?: Prisma.CustomerAddressUncheckedCreateNestedManyWithoutCustomerInput
-  sessions?: Prisma.CustomerSessionUncheckedCreateNestedManyWithoutCustomerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
-  carts?: Prisma.CartUncheckedCreateNestedManyWithoutCustomerInput
+  cart?: Prisma.CartUncheckedCreateNestedOneWithoutCustomerInput
   wishlistItems?: Prisma.WishlistItemUncheckedCreateNestedManyWithoutCustomerInput
+  sessions?: Prisma.CustomerSessionUncheckedCreateNestedManyWithoutCustomerInput
+  passwordReset?: Prisma.PasswordResetUncheckedCreateNestedOneWithoutCustomerInput
+  emailVerification?: Prisma.EmailVerificationUncheckedCreateNestedOneWithoutCustomerInput
 }
 
 export type CustomerCreateOrConnectWithoutReviewsInput = {
@@ -1587,67 +2086,80 @@ export type CustomerUpdateToOneWithWhereWithoutReviewsInput = {
 export type CustomerUpdateWithoutReviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
   addresses?: Prisma.CustomerAddressUpdateManyWithoutCustomerNestedInput
-  sessions?: Prisma.CustomerSessionUpdateManyWithoutCustomerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
-  carts?: Prisma.CartUpdateManyWithoutCustomerNestedInput
+  cart?: Prisma.CartUpdateOneWithoutCustomerNestedInput
   wishlistItems?: Prisma.WishlistItemUpdateManyWithoutCustomerNestedInput
+  sessions?: Prisma.CustomerSessionUpdateManyWithoutCustomerNestedInput
+  passwordReset?: Prisma.PasswordResetUpdateOneWithoutCustomerNestedInput
+  emailVerification?: Prisma.EmailVerificationUpdateOneWithoutCustomerNestedInput
 }
 
 export type CustomerUncheckedUpdateWithoutReviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   addresses?: Prisma.CustomerAddressUncheckedUpdateManyWithoutCustomerNestedInput
-  sessions?: Prisma.CustomerSessionUncheckedUpdateManyWithoutCustomerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
-  carts?: Prisma.CartUncheckedUpdateManyWithoutCustomerNestedInput
+  cart?: Prisma.CartUncheckedUpdateOneWithoutCustomerNestedInput
   wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutCustomerNestedInput
+  sessions?: Prisma.CustomerSessionUncheckedUpdateManyWithoutCustomerNestedInput
+  passwordReset?: Prisma.PasswordResetUncheckedUpdateOneWithoutCustomerNestedInput
+  emailVerification?: Prisma.EmailVerificationUncheckedUpdateOneWithoutCustomerNestedInput
 }
 
 export type CustomerCreateManyTenantInput = {
   id?: string
   email: string
-  password?: string | null
-  emailVerified?: boolean
+  password: string
   firstName?: string | null
   lastName?: string | null
   phone?: string | null
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: string
+  emailVerified?: boolean
+  emailVerifiedAt?: Date | string | null
+  googleId?: string | null
+  facebookId?: string | null
   totalSpent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: number
   lastOrderAt?: Date | string | null
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -1656,67 +2168,80 @@ export type CustomerCreateManyTenantInput = {
 export type CustomerUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   addresses?: Prisma.CustomerAddressUpdateManyWithoutCustomerNestedInput
-  sessions?: Prisma.CustomerSessionUpdateManyWithoutCustomerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
-  carts?: Prisma.CartUpdateManyWithoutCustomerNestedInput
+  cart?: Prisma.CartUpdateOneWithoutCustomerNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutCustomerNestedInput
   wishlistItems?: Prisma.WishlistItemUpdateManyWithoutCustomerNestedInput
+  sessions?: Prisma.CustomerSessionUpdateManyWithoutCustomerNestedInput
+  passwordReset?: Prisma.PasswordResetUpdateOneWithoutCustomerNestedInput
+  emailVerification?: Prisma.EmailVerificationUpdateOneWithoutCustomerNestedInput
 }
 
 export type CustomerUncheckedUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   addresses?: Prisma.CustomerAddressUncheckedUpdateManyWithoutCustomerNestedInput
-  sessions?: Prisma.CustomerSessionUncheckedUpdateManyWithoutCustomerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
-  carts?: Prisma.CartUncheckedUpdateManyWithoutCustomerNestedInput
+  cart?: Prisma.CartUncheckedUpdateOneWithoutCustomerNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutCustomerNestedInput
   wishlistItems?: Prisma.WishlistItemUncheckedUpdateManyWithoutCustomerNestedInput
+  sessions?: Prisma.CustomerSessionUncheckedUpdateManyWithoutCustomerNestedInput
+  passwordReset?: Prisma.PasswordResetUncheckedUpdateOneWithoutCustomerNestedInput
+  emailVerification?: Prisma.EmailVerificationUncheckedUpdateOneWithoutCustomerNestedInput
 }
 
 export type CustomerUncheckedUpdateManyWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   acceptsMarketing?: Prisma.BoolFieldUpdateOperationsInput | boolean
   locale?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalSpent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ordersCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastOrderAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1729,20 +2254,18 @@ export type CustomerUncheckedUpdateManyWithoutTenantInput = {
 
 export type CustomerCountOutputType = {
   addresses: number
-  sessions: number
   orders: number
-  carts: number
   reviews: number
   wishlistItems: number
+  sessions: number
 }
 
 export type CustomerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   addresses?: boolean | CustomerCountOutputTypeCountAddressesArgs
-  sessions?: boolean | CustomerCountOutputTypeCountSessionsArgs
   orders?: boolean | CustomerCountOutputTypeCountOrdersArgs
-  carts?: boolean | CustomerCountOutputTypeCountCartsArgs
   reviews?: boolean | CustomerCountOutputTypeCountReviewsArgs
   wishlistItems?: boolean | CustomerCountOutputTypeCountWishlistItemsArgs
+  sessions?: boolean | CustomerCountOutputTypeCountSessionsArgs
 }
 
 /**
@@ -1765,22 +2288,8 @@ export type CustomerCountOutputTypeCountAddressesArgs<ExtArgs extends runtime.Ty
 /**
  * CustomerCountOutputType without action
  */
-export type CustomerCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.CustomerSessionWhereInput
-}
-
-/**
- * CustomerCountOutputType without action
- */
 export type CustomerCountOutputTypeCountOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.OrderWhereInput
-}
-
-/**
- * CustomerCountOutputType without action
- */
-export type CustomerCountOutputTypeCountCartsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.CartWhereInput
 }
 
 /**
@@ -1797,32 +2306,44 @@ export type CustomerCountOutputTypeCountWishlistItemsArgs<ExtArgs extends runtim
   where?: Prisma.WishlistItemWhereInput
 }
 
+/**
+ * CustomerCountOutputType without action
+ */
+export type CustomerCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CustomerSessionWhereInput
+}
+
 
 export type CustomerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   tenantId?: boolean
   email?: boolean
   password?: boolean
-  emailVerified?: boolean
   firstName?: boolean
   lastName?: boolean
   phone?: boolean
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: boolean
+  emailVerified?: boolean
+  emailVerifiedAt?: boolean
+  googleId?: boolean
+  facebookId?: boolean
   totalSpent?: boolean
   ordersCount?: boolean
   lastOrderAt?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   addresses?: boolean | Prisma.Customer$addressesArgs<ExtArgs>
-  sessions?: boolean | Prisma.Customer$sessionsArgs<ExtArgs>
   orders?: boolean | Prisma.Customer$ordersArgs<ExtArgs>
-  carts?: boolean | Prisma.Customer$cartsArgs<ExtArgs>
+  cart?: boolean | Prisma.Customer$cartArgs<ExtArgs>
   reviews?: boolean | Prisma.Customer$reviewsArgs<ExtArgs>
   wishlistItems?: boolean | Prisma.Customer$wishlistItemsArgs<ExtArgs>
+  sessions?: boolean | Prisma.Customer$sessionsArgs<ExtArgs>
+  passwordReset?: boolean | Prisma.Customer$passwordResetArgs<ExtArgs>
+  emailVerification?: boolean | Prisma.Customer$emailVerificationArgs<ExtArgs>
   _count?: boolean | Prisma.CustomerCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["customer"]>
 
@@ -1831,16 +2352,19 @@ export type CustomerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   tenantId?: boolean
   email?: boolean
   password?: boolean
-  emailVerified?: boolean
   firstName?: boolean
   lastName?: boolean
   phone?: boolean
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: boolean
+  emailVerified?: boolean
+  emailVerifiedAt?: boolean
+  googleId?: boolean
+  facebookId?: boolean
   totalSpent?: boolean
   ordersCount?: boolean
   lastOrderAt?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
@@ -1852,16 +2376,19 @@ export type CustomerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   tenantId?: boolean
   email?: boolean
   password?: boolean
-  emailVerified?: boolean
   firstName?: boolean
   lastName?: boolean
   phone?: boolean
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: boolean
+  emailVerified?: boolean
+  emailVerifiedAt?: boolean
+  googleId?: boolean
+  facebookId?: boolean
   totalSpent?: boolean
   ordersCount?: boolean
   lastOrderAt?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
@@ -1873,30 +2400,35 @@ export type CustomerSelectScalar = {
   tenantId?: boolean
   email?: boolean
   password?: boolean
-  emailVerified?: boolean
   firstName?: boolean
   lastName?: boolean
   phone?: boolean
-  isActive?: boolean
   acceptsMarketing?: boolean
   locale?: boolean
+  emailVerified?: boolean
+  emailVerifiedAt?: boolean
+  googleId?: boolean
+  facebookId?: boolean
   totalSpent?: boolean
   ordersCount?: boolean
   lastOrderAt?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
 }
 
-export type CustomerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "email" | "password" | "emailVerified" | "firstName" | "lastName" | "phone" | "isActive" | "acceptsMarketing" | "locale" | "totalSpent" | "ordersCount" | "lastOrderAt" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["customer"]>
+export type CustomerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "email" | "password" | "firstName" | "lastName" | "phone" | "acceptsMarketing" | "locale" | "emailVerified" | "emailVerifiedAt" | "googleId" | "facebookId" | "totalSpent" | "ordersCount" | "lastOrderAt" | "isActive" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["customer"]>
 export type CustomerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   addresses?: boolean | Prisma.Customer$addressesArgs<ExtArgs>
-  sessions?: boolean | Prisma.Customer$sessionsArgs<ExtArgs>
   orders?: boolean | Prisma.Customer$ordersArgs<ExtArgs>
-  carts?: boolean | Prisma.Customer$cartsArgs<ExtArgs>
+  cart?: boolean | Prisma.Customer$cartArgs<ExtArgs>
   reviews?: boolean | Prisma.Customer$reviewsArgs<ExtArgs>
   wishlistItems?: boolean | Prisma.Customer$wishlistItemsArgs<ExtArgs>
+  sessions?: boolean | Prisma.Customer$sessionsArgs<ExtArgs>
+  passwordReset?: boolean | Prisma.Customer$passwordResetArgs<ExtArgs>
+  emailVerification?: boolean | Prisma.Customer$emailVerificationArgs<ExtArgs>
   _count?: boolean | Prisma.CustomerCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CustomerIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1911,27 +2443,32 @@ export type $CustomerPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     tenant: Prisma.$TenantPayload<ExtArgs>
     addresses: Prisma.$CustomerAddressPayload<ExtArgs>[]
-    sessions: Prisma.$CustomerSessionPayload<ExtArgs>[]
     orders: Prisma.$OrderPayload<ExtArgs>[]
-    carts: Prisma.$CartPayload<ExtArgs>[]
+    cart: Prisma.$CartPayload<ExtArgs> | null
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
     wishlistItems: Prisma.$WishlistItemPayload<ExtArgs>[]
+    sessions: Prisma.$CustomerSessionPayload<ExtArgs>[]
+    passwordReset: Prisma.$PasswordResetPayload<ExtArgs> | null
+    emailVerification: Prisma.$EmailVerificationPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     tenantId: string
     email: string
-    password: string | null
-    emailVerified: boolean
+    password: string
     firstName: string | null
     lastName: string | null
     phone: string | null
-    isActive: boolean
     acceptsMarketing: boolean
     locale: string
+    emailVerified: boolean
+    emailVerifiedAt: Date | null
+    googleId: string | null
+    facebookId: string | null
     totalSpent: runtime.Decimal
     ordersCount: number
     lastOrderAt: Date | null
+    isActive: boolean
     createdAt: Date
     updatedAt: Date
     deletedAt: Date | null
@@ -2331,11 +2868,13 @@ export interface Prisma__CustomerClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   addresses<T extends Prisma.Customer$addressesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$addressesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerAddressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  sessions<T extends Prisma.Customer$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   orders<T extends Prisma.Customer$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  carts<T extends Prisma.Customer$cartsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$cartsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CartPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  cart<T extends Prisma.Customer$cartArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$cartArgs<ExtArgs>>): Prisma.Prisma__CartClient<runtime.Types.Result.GetResult<Prisma.$CartPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   reviews<T extends Prisma.Customer$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   wishlistItems<T extends Prisma.Customer$wishlistItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$wishlistItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sessions<T extends Prisma.Customer$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  passwordReset<T extends Prisma.Customer$passwordResetArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$passwordResetArgs<ExtArgs>>): Prisma.Prisma__PasswordResetClient<runtime.Types.Result.GetResult<Prisma.$PasswordResetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  emailVerification<T extends Prisma.Customer$emailVerificationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$emailVerificationArgs<ExtArgs>>): Prisma.Prisma__EmailVerificationClient<runtime.Types.Result.GetResult<Prisma.$EmailVerificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2369,16 +2908,19 @@ export interface CustomerFieldRefs {
   readonly tenantId: Prisma.FieldRef<"Customer", 'String'>
   readonly email: Prisma.FieldRef<"Customer", 'String'>
   readonly password: Prisma.FieldRef<"Customer", 'String'>
-  readonly emailVerified: Prisma.FieldRef<"Customer", 'Boolean'>
   readonly firstName: Prisma.FieldRef<"Customer", 'String'>
   readonly lastName: Prisma.FieldRef<"Customer", 'String'>
   readonly phone: Prisma.FieldRef<"Customer", 'String'>
-  readonly isActive: Prisma.FieldRef<"Customer", 'Boolean'>
   readonly acceptsMarketing: Prisma.FieldRef<"Customer", 'Boolean'>
   readonly locale: Prisma.FieldRef<"Customer", 'String'>
+  readonly emailVerified: Prisma.FieldRef<"Customer", 'Boolean'>
+  readonly emailVerifiedAt: Prisma.FieldRef<"Customer", 'DateTime'>
+  readonly googleId: Prisma.FieldRef<"Customer", 'String'>
+  readonly facebookId: Prisma.FieldRef<"Customer", 'String'>
   readonly totalSpent: Prisma.FieldRef<"Customer", 'Decimal'>
   readonly ordersCount: Prisma.FieldRef<"Customer", 'Int'>
   readonly lastOrderAt: Prisma.FieldRef<"Customer", 'DateTime'>
+  readonly isActive: Prisma.FieldRef<"Customer", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Customer", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Customer", 'DateTime'>
   readonly deletedAt: Prisma.FieldRef<"Customer", 'DateTime'>
@@ -2802,30 +3344,6 @@ export type Customer$addressesArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
- * Customer.sessions
- */
-export type Customer$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the CustomerSession
-   */
-  select?: Prisma.CustomerSessionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the CustomerSession
-   */
-  omit?: Prisma.CustomerSessionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CustomerSessionInclude<ExtArgs> | null
-  where?: Prisma.CustomerSessionWhereInput
-  orderBy?: Prisma.CustomerSessionOrderByWithRelationInput | Prisma.CustomerSessionOrderByWithRelationInput[]
-  cursor?: Prisma.CustomerSessionWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.CustomerSessionScalarFieldEnum | Prisma.CustomerSessionScalarFieldEnum[]
-}
-
-/**
  * Customer.orders
  */
 export type Customer$ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2850,9 +3368,9 @@ export type Customer$ordersArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
- * Customer.carts
+ * Customer.cart
  */
-export type Customer$cartsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Customer$cartArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Cart
    */
@@ -2866,11 +3384,6 @@ export type Customer$cartsArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   include?: Prisma.CartInclude<ExtArgs> | null
   where?: Prisma.CartWhereInput
-  orderBy?: Prisma.CartOrderByWithRelationInput | Prisma.CartOrderByWithRelationInput[]
-  cursor?: Prisma.CartWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.CartScalarFieldEnum | Prisma.CartScalarFieldEnum[]
 }
 
 /**
@@ -2919,6 +3432,68 @@ export type Customer$wishlistItemsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.WishlistItemScalarFieldEnum | Prisma.WishlistItemScalarFieldEnum[]
+}
+
+/**
+ * Customer.sessions
+ */
+export type Customer$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CustomerSession
+   */
+  select?: Prisma.CustomerSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CustomerSession
+   */
+  omit?: Prisma.CustomerSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CustomerSessionInclude<ExtArgs> | null
+  where?: Prisma.CustomerSessionWhereInput
+  orderBy?: Prisma.CustomerSessionOrderByWithRelationInput | Prisma.CustomerSessionOrderByWithRelationInput[]
+  cursor?: Prisma.CustomerSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CustomerSessionScalarFieldEnum | Prisma.CustomerSessionScalarFieldEnum[]
+}
+
+/**
+ * Customer.passwordReset
+ */
+export type Customer$passwordResetArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PasswordReset
+   */
+  select?: Prisma.PasswordResetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PasswordReset
+   */
+  omit?: Prisma.PasswordResetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PasswordResetInclude<ExtArgs> | null
+  where?: Prisma.PasswordResetWhereInput
+}
+
+/**
+ * Customer.emailVerification
+ */
+export type Customer$emailVerificationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmailVerification
+   */
+  select?: Prisma.EmailVerificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EmailVerification
+   */
+  omit?: Prisma.EmailVerificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmailVerificationInclude<ExtArgs> | null
+  where?: Prisma.EmailVerificationWhereInput
 }
 
 /**

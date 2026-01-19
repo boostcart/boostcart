@@ -34,8 +34,8 @@ type TopProduct = Awaited<ReturnType<typeof getTopProducts>>[number];
 type TopCategory = Awaited<ReturnType<typeof getTopCategories>>[number];
 type Activity = Awaited<ReturnType<typeof getRecentActivity>>[number];
 
-function formatCurrency(amount: number, currency = "BGN"): string {
-	return new Intl.NumberFormat("bg-BG", {
+function formatCurrency(amount: number, currency = "EUR"): string {
+	return new Intl.NumberFormat("en-US", {
 		style: "currency",
 		currency,
 		minimumFractionDigits: 0,
@@ -44,7 +44,7 @@ function formatCurrency(amount: number, currency = "BGN"): string {
 }
 
 function formatNumber(num: number): string {
-	return new Intl.NumberFormat("bg-BG").format(num);
+	return new Intl.NumberFormat("en-US").format(num);
 }
 
 export default function AnalyticsPage() {
@@ -88,7 +88,7 @@ export default function AnalyticsPage() {
 
 	if (isLoading && !overview) {
 		return (
-			<div className="flex items-center justify-center min-h-[400px]">
+			<div className="flex items-center justify-center min-h-100">
 				<Loader size="lg" />
 			</div>
 		);

@@ -457,7 +457,7 @@ export function CollectionFormDialog({
 									/>
 								</div>
 
-								<div className="border rounded-lg p-4 space-y-3 max-h-[300px] overflow-y-auto">
+								<div className="border rounded-lg p-4 space-y-3 max-h-75 overflow-y-auto">
 									<div className="text-center py-8">
 										<p className="text-muted-foreground">
 											Product selection will be available after creating the

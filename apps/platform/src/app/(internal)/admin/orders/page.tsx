@@ -13,9 +13,8 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Loader } from "@/components/loader";
 import { PolarisButton } from "@/components/admin/polaris-button";
-import { Badge } from "@/components/ui/badge";
+import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -50,7 +49,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { getOrders } from "@/server/api/internal/orders";
+import { getOrder, getOrders } from "@/server/api/internal/orders";
 import {
 	CreateOrderDialog,
 	DeleteOrderDialog,
@@ -90,6 +89,9 @@ export default function OrdersPage() {
 	const [deleteOrderDialog, setDeleteOrderDialog] = useState(false);
 	const [createOrderDialog, setCreateOrderDialog] = useState(false);
 	const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+	const [fullOrderData, setFullOrderData] = useState<Awaited<
+		ReturnType<typeof getOrder>
+	> | null>(null);
 	const [stats, setStats] = useState<OrderStats>({
 		total: 0,
 		pending: 0,
@@ -257,7 +259,7 @@ export default function OrdersPage() {
 						/>
 					</div>
 					<Select value={statusFilter} onValueChange={setStatusFilter}>
-						<SelectTrigger className="w-full sm:w-[180px]">
+						<SelectTrigger className="w-full sm:w-45">
 							<SelectValue placeholder="Filter by status" />
 						</SelectTrigger>
 						<SelectContent>
@@ -285,7 +287,7 @@ export default function OrdersPage() {
 			{/* Orders Table */}
 			<Card>
 				{isLoading ? (
-					<div className="flex items-center justify-center min-h-[300px]">
+					<div className="flex items-center justify-center min-h-75">
 						<Loader size="lg" />
 					</div>
 				) : filteredOrders.length === 0 ? (
@@ -328,7 +330,7 @@ export default function OrdersPage() {
 								<TableHead>Payment</TableHead>
 								<TableHead>Items</TableHead>
 								<TableHead className="text-right">Total</TableHead>
-								<TableHead className="w-[70px]"></TableHead>
+								<TableHead className="w-17.5"></TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
@@ -379,8 +381,28 @@ export default function OrdersPage() {
 											<DropdownMenuContent align="end">
 												<DropdownMenuLabel>Actions</DropdownMenuLabel>
 												<DropdownMenuItem
-													onClick={() => {
+													onClick={async () => {
 														setSelectedOrder(order);
+														try {
+															// Extract order ID from formatted string like "#123" -> get raw ID
+															const rawOrders = await getOrders();
+															const rawOrder = rawOrders.find(
+																(o) =>
+																	`#${o.orderNumber || o.id.slice(-4).toUpperCase()}` ===
+																	order.id,
+															);
+															if (rawOrder) {
+																// Fetch full order details with history
+																const fullOrder = await getOrder(rawOrder.id);
+																setFullOrderData(fullOrder);
+															}
+														} catch (error) {
+															console.error(
+																"Failed to fetch order details:",
+																error,
+															);
+															toast.error("Failed to load order details");
+														}
 														setViewOrderDialog(true);
 													}}
 												>
@@ -438,7 +460,7 @@ export default function OrdersPage() {
 			<ViewOrderDialog
 				open={viewOrderDialog}
 				onOpenChange={setViewOrderDialog}
-				order={selectedOrder}
+				order={fullOrderData}
 			/>
 			<EditOrderDialog
 				open={editOrderDialog}

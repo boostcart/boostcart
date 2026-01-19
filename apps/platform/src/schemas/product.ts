@@ -132,6 +132,14 @@ export const ProductUnitPriceSchema = z.object({
 });
 export type ProductUnitPriceInput = z.infer<typeof ProductUnitPriceSchema>;
 
+// Currency Price Schema (for multi-currency pricing)
+export const CurrencyPriceSchema = z.object({
+	currencyId: z.string(),
+	price: z.number().positive().nullable(),
+	compareAtPrice: z.number().positive().nullable().optional(),
+});
+export type CurrencyPriceInput = z.infer<typeof CurrencyPriceSchema>;
+
 // Full Create Product Schema
 export const CreateProductSchema = z.object({
 	// Basic info
@@ -171,6 +179,9 @@ export const CreateProductSchema = z.object({
 
 	// SEO
 	seo: ProductSeoSchema.optional(),
+
+	// Multi-currency pricing (optional, for create with currency prices)
+	currencyPrices: z.array(CurrencyPriceSchema).optional(),
 });
 
 export type CreateProductInput = z.infer<typeof CreateProductSchema>;

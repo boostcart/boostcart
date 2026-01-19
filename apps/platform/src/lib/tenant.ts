@@ -55,7 +55,7 @@ export async function getTenantByDomain(
 		},
 	});
 
-	if (tenantDomain?.tenant && tenantDomain.tenant.isActive) {
+	if (tenantDomain?.tenant?.isActive) {
 		tenantCache.set(`domain:${domain}`, {
 			tenant: tenantDomain.tenant,
 			expiry: Date.now() + CACHE_TTL,

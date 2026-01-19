@@ -39,7 +39,13 @@ function createEmailTemplate(title: string, content: string): string {
 }
 
 export const emailTemplates = {
-	resetPassword: ({ user, url }: { user: { name?: string | null; email?: string }; url: string }) => ({
+	resetPassword: ({
+		user,
+		url,
+	}: {
+		user: { name?: string | null; email?: string };
+		url: string;
+	}) => ({
 		subject: "Reset your password",
 		html: createEmailTemplate(
 			"Reset Your Password",
@@ -51,7 +57,7 @@ export const emailTemplates = {
 			</div>
 			<p style="${baseStyles.smallText}">If you didn't request this password reset, you can safely ignore this email.</p>
 			<p style="font-size: 14px; color: #666; margin-top: 10px;">This link will expire in 1 hour.</p>
-			`
+			`,
 		),
 	}),
 
@@ -64,13 +70,19 @@ export const emailTemplates = {
 			<div style="${baseStyles.buttonWrapper}">
 				<a href="${url}" style="${baseStyles.button}">Sign In</a>
 			</div>
-			<p style="${baseStyles.smallText}">If you didn't request this email, you can safely ignore it.</p>
+			<p style="${baseStyles.smallText}">This email was sent to ${email}. If you didn't request this email, you can safely ignore it.</p>
 			<p style="font-size: 14px; color: #666; margin-top: 10px;">This link will expire in 5 minutes.</p>
-			`
+			`,
 		),
 	}),
 
-	verifyEmail: ({ user, url }: { user: { name?: string | null; email?: string }; url: string }) => ({
+	verifyEmail: ({
+		user,
+		url,
+	}: {
+		user: { name?: string | null; email?: string };
+		url: string;
+	}) => ({
 		subject: "Verify your email address",
 		html: createEmailTemplate(
 			"Verify Your Email",
@@ -81,7 +93,7 @@ export const emailTemplates = {
 				<a href="${url}" style="${baseStyles.button}">Verify Email</a>
 			</div>
 			<p style="${baseStyles.smallText}">If you didn't create an account, you can safely ignore this email.</p>
-			`
+			`,
 		),
 	}),
 };

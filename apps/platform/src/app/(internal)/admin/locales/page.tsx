@@ -1,10 +1,10 @@
 "use client";
 
 import { Eye, Globe, Pencil, Plus, Star, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Loader } from "@/components/loader";
 import { PolarisButton } from "@/components/admin/polaris-button";
+import { Loader } from "@/components/loader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -66,21 +66,21 @@ export default function LocalesPage() {
 		name: "",
 	});
 
-	useEffect(() => {
-		loadData();
-	}, []);
-
-	async function loadData() {
+	const loadData = useCallback(async () => {
 		try {
 			setLoading(true);
 			const data = await getLocales();
 			setLocales(data);
-		} catch (error) {
+		} catch (_error) {
 			toast.error("Failed to load locales");
 		} finally {
 			setLoading(false);
 		}
-	}
+	}, []);
+
+	useEffect(() => {
+		loadData();
+	}, [loadData]);
 
 	const handleView = (locale: LocaleData) => {
 		setSelectedLocale(locale);
@@ -117,7 +117,7 @@ export default function LocalesPage() {
 			await setDefaultLocale(locale.id);
 			toast.success(`${locale.name} is now the default locale`);
 			loadData();
-		} catch (error) {
+		} catch (_error) {
 			toast.error("Failed to set default locale");
 		}
 	};

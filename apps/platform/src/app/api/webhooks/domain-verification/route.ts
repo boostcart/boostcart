@@ -1,8 +1,8 @@
+import crypto from "node:crypto";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import crypto from "crypto";
-import { db } from "@/server/db";
 import { env } from "@/env";
+import { db } from "@/server/db";
 
 // Webhook secret for verification (set in environment)
 const WEBHOOK_SECRET = env.DOMAIN_WEBHOOK_SECRET;
@@ -21,7 +21,9 @@ interface DomainVerificationPayload {
  */
 function verifySignature(payload: string, signature: string): boolean {
 	if (!WEBHOOK_SECRET) {
-		console.warn("DOMAIN_WEBHOOK_SECRET not set, skipping signature verification");
+		console.warn(
+			"DOMAIN_WEBHOOK_SECRET not set, skipping signature verification",
+		);
 		return true; // Allow in development
 	}
 
@@ -32,13 +34,13 @@ function verifySignature(payload: string, signature: string): boolean {
 
 	return crypto.timingSafeEqual(
 		Buffer.from(signature),
-		Buffer.from(expectedSignature)
+		Buffer.from(expectedSignature),
 	);
 }
 
 /**
  * POST /api/webhooks/domain-verification
- * 
+ *
  * Receives domain verification events from external services (Vercel, Cloudflare, etc.)
  * Updates the domain record in the database accordingly.
  */
@@ -50,10 +52,7 @@ export async function POST(request: Request) {
 
 		// Verify webhook signature
 		if (!verifySignature(body, signature)) {
-			return NextResponse.json(
-				{ error: "Invalid signature" },
-				{ status: 401 }
-			);
+			return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
 		}
 
 		const payload: DomainVerificationPayload = JSON.parse(body);
@@ -62,7 +61,7 @@ export async function POST(request: Request) {
 		if (!payload.domain || !payload.type) {
 			return NextResponse.json(
 				{ error: "Invalid payload: missing domain or type" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -72,10 +71,7 @@ export async function POST(request: Request) {
 		});
 
 		if (!domainRecord) {
-			return NextResponse.json(
-				{ error: "Domain not found" },
-				{ status: 404 }
-			);
+			return NextResponse.json({ error: "Domain not found" }, { status: 404 });
 		}
 
 		// Handle different event types
@@ -121,7 +117,7 @@ export async function POST(request: Request) {
 			default:
 				return NextResponse.json(
 					{ error: `Unknown event type: ${payload.type}` },
-					{ status: 400 }
+					{ status: 400 },
 				);
 		}
 
@@ -130,14 +126,14 @@ export async function POST(request: Request) {
 		console.error("Domain verification webhook error:", error);
 		return NextResponse.json(
 			{ error: "Internal server error" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
 
 /**
  * GET /api/webhooks/domain-verification
- * 
+ *
  * Health check endpoint for webhook configuration
  */
 export async function GET() {

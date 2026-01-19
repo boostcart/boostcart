@@ -2,12 +2,12 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client"
-    output   = "../src/generated/prisma"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
-    provider = "postgresql"
+  provider = "postgresql"
 }
 
 // ======================================================================
@@ -15,147 +15,147 @@ datasource db {
 // ======================================================================
 
 enum UserRole {
-    USER // Regular customer
-    // STAFF  // Can view some internal data, not full admin
-    ADMIN // Full administrative access
+  USER // Regular customer
+  // STAFF  // Can view some internal data, not full admin
+  ADMIN // Full administrative access
 }
 
 enum OrderStatus {
-    PENDING // Initial state, after checkout initiated
-    CONFIRMED // Payment successful, inventory reserved
-    PROCESSING // Being prepared for shipment
-    SHIPPED // Handed over to courier
-    DELIVERED // Customer received
-    CANCELLED // User or admin cancelled
-    REFUNDED // Order refunded
-    FAILED // Payment failed or other issue
+  PENDING // Initial state, after checkout initiated
+  CONFIRMED // Payment successful, inventory reserved
+  PROCESSING // Being prepared for shipment
+  SHIPPED // Handed over to courier
+  DELIVERED // Customer received
+  CANCELLED // User or admin cancelled
+  REFUNDED // Order refunded
+  FAILED // Payment failed or other issue
 }
 
 enum PaymentStatus {
-    PENDING
-    PAID
-    REFUNDED
-    FAILED
-    CANCELED
+  PENDING
+  PAID
+  REFUNDED
+  FAILED
+  CANCELED
 }
 
 enum PaymentMethodType {
-    CASH_ON_DELIVERY
-    CREDIT_CARD
-    BANK_TRANSFER
-    GOOGLE_PAY
-    APPLE_PAY
-    INSTALLMENTS
-    GIFT_CARD
+  CASH_ON_DELIVERY
+  CREDIT_CARD
+  BANK_TRANSFER
+  GOOGLE_PAY
+  APPLE_PAY
+  INSTALLMENTS
+  GIFT_CARD
 }
 
 enum ShippingMethodType {
-    IN_STORE
-    DELIVERY_BOX
-    DELIVERY_OFFICE
-    TO_ADDRESS
+  IN_STORE
+  DELIVERY_BOX
+  DELIVERY_OFFICE
+  TO_ADDRESS
 }
 
 enum DiscountType {
-    PERCENTAGE
-    FIXED_AMOUNT
+  PERCENTAGE
+  FIXED_AMOUNT
 }
 
 enum DiscountScope {
-    PRODUCT
-    CATEGORY
-    BRAND
-    ALL_PRODUCTS
+  PRODUCT
+  CATEGORY
+  BRAND
+  ALL_PRODUCTS
 }
 
 enum CustomizationOptionType {
-    SELECT // Dropdown
-    CHECKBOX // Multi-select checkboxes
-    TEXT // User input
-    NUMBER // User input number
+  SELECT // Dropdown
+  CHECKBOX // Multi-select checkboxes
+  TEXT // User input
+  NUMBER // User input number
 }
 
 enum PageType {
-    FAQ
-    CONTACT
-    ABOUT_US
-    PRIVACY_POLICY
-    TERMS_OF_SERVICE
-    CUSTOM // For any other static pages
+  FAQ
+  CONTACT
+  ABOUT_US
+  PRIVACY_POLICY
+  TERMS_OF_SERVICE
+  CUSTOM // For any other static pages
 }
 
 enum ProductStatus {
-    ACTIVE // Visible and available for purchase
-    UNLISTED // Available for purchase via direct link only
-    DRAFT // Not visible, not purchasable, admin only
+  ACTIVE // Visible and available for purchase
+  UNLISTED // Available for purchase via direct link only
+  DRAFT // Not visible, not purchasable, admin only
 }
 
 enum MediaType {
-    IMAGE
-    VIDEO
+  IMAGE
+  VIDEO
 }
 
 enum PurchaseType {
-    ONE_TIME // Standard one-time purchase
-    SUBSCRIPTION // Recurring subscription only
-    ONE_TIME_AND_SUBSCRIPTION // Customer can choose either
-    PRE_ORDER // Not yet available, can pre-order
+  ONE_TIME // Standard one-time purchase
+  SUBSCRIPTION // Recurring subscription only
+  ONE_TIME_AND_SUBSCRIPTION // Customer can choose either
+  PRE_ORDER // Not yet available, can pre-order
 }
 
 enum SubscriptionInterval {
-    WEEKLY
-    BI_WEEKLY
-    MONTHLY
-    BI_MONTHLY
-    QUARTERLY
-    YEARLY
+  WEEKLY
+  BI_WEEKLY
+  MONTHLY
+  BI_MONTHLY
+  QUARTERLY
+  YEARLY
 }
 
 enum PackageType {
-    BOX
-    ENVELOPE
-    SOFT_PACKAGE
-    PALLET
+  BOX
+  ENVELOPE
+  SOFT_PACKAGE
+  PALLET
 }
 
 // Multi-tenant enums
 enum BillingStatus {
-    TRIAL
-    ACTIVE
-    PAST_DUE
-    CANCELLED
-    SUSPENDED
+  TRIAL
+  ACTIVE
+  PAST_DUE
+  CANCELLED
+  SUSPENDED
 }
 
 enum BillingCycle {
-    MONTHLY
-    YEARLY
+  MONTHLY
+  YEARLY
 }
 
 enum StaffRole {
-    OWNER
-    ADMIN
-    MANAGER
-    SUPPORT
-    VIEWER
+  OWNER
+  ADMIN
+  MANAGER
+  SUPPORT
+  VIEWER
 }
 
 enum MeasurementUnit {
-    // Weight
-    KG
-    G
-    // Volume
-    L
-    ML
-    // Length
-    M
-    CM
-    MM
-    // Area
-    SQM
-    SQCM
-    // Per item
-    PER_ITEM
+  // Weight
+  KG
+  G
+  // Volume
+  L
+  ML
+  // Length
+  M
+  CM
+  MM
+  // Area
+  SQM
+  SQCM
+  // Per item
+  PER_ITEM
 }
 
 // ======================================================================
@@ -163,1184 +163,1280 @@ enum MeasurementUnit {
 // ======================================================================
 
 model Tenant {
-    id                   String        @id @default(cuid())
-    slug                 String        @unique
-    name                 String
-    description          String?
-    email                String
-    phone                String?
-    logoUrl              String?
-    faviconUrl           String?
-    themeId              String?
-    themeConfig          Json          @default("{}")
-    isActive             Boolean       @default(true)
-    billingStatus        BillingStatus @default(TRIAL)
-    billingCycle         BillingCycle  @default(MONTHLY)
-    planId               String?
-    trialEndsAt          DateTime?
-    currentPeriodStart   DateTime?
-    currentPeriodEnd     DateTime?
-    stripeCustomerId     String?
-    stripeSubscriptionId String?
-    currency             String        @default("BGN")
-    locale               String        @default("bg")
-    timezone             String        @default("Europe/Sofia")
+  id                   String        @id @default(cuid())
+  slug                 String        @unique
+  name                 String
+  description          String?
+  email                String
+  phone                String?
+  logoUrl              String?
+  faviconUrl           String?
+  themeId              String?
+  themeConfig          Json          @default("{}")
+  isActive             Boolean       @default(true)
+  billingStatus        BillingStatus @default(TRIAL)
+  billingCycle         BillingCycle  @default(MONTHLY)
+  planId               String?
+  trialEndsAt          DateTime?
+  currentPeriodStart   DateTime?
+  currentPeriodEnd     DateTime?
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  currency             String        @default("EUR")
+  locale               String        @default("bg")
+  timezone             String        @default("Europe/Sofia")
 
-    // Relations
-    staff           TenantStaff[]
-    domains         TenantDomain[]
-    customers       Customer[]
-    products        Product[]
-    categories      Category[]
-    brands          Brand[]
-    collections     Collection[]
-    orders          Order[]
-    carts           Cart[]
-    reviews         Review[]
-    pages           Page[]
-    filters         Filter[]
-    shippingMethods ShippingMethod[]
-    paymentMethods  PaymentMethod[]
-    promoCodes      PromoCode[]
-    giftCards       GiftCard[]
-    discounts       Discount[]
-    media           Media[]
-    blogPosts       BlogPost[]
+  // Relations
+  staff           TenantStaff[]
+  domains         TenantDomain[]
+  customers       Customer[] // Store-scoped customers
+  products        Product[]
+  categories      Category[]
+  brands          Brand[]
+  collections     Collection[]
+  orders          Order[]
+  carts           Cart[]
+  reviews         Review[]
+  wishlistItems   WishlistItem[]
+  pages           Page[]
+  filters         Filter[]
+  shippingMethods ShippingMethod[]
+  paymentMethods  PaymentMethod[]
+  promoCodes      PromoCode[]
+  giftCards       GiftCard[]
+  discounts       Discount[]
+  media           Media[]
+  blogPosts       BlogPost[]
+  currencies      TenantCurrency[] // Enabled currencies
 
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
-    @@index([slug])
-    @@index([isActive])
+  @@index([slug])
+  @@index([isActive])
 }
 
 model TenantStaff {
-    id          String    @id @default(cuid())
-    tenantId    String
-    tenant      Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-    userId      String
-    user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-    role        StaffRole @default(VIEWER)
-    permissions Json      @default("[]")
+  id          String    @id @default(cuid())
+  tenantId    String
+  tenant      Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role        StaffRole @default(VIEWER)
+  permissions Json      @default("[]")
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@unique([tenantId, userId])
-    @@index([userId])
+  @@unique([tenantId, userId])
+  @@index([userId])
 }
 
 model TenantDomain {
-    id          String    @id @default(cuid())
-    tenantId    String
-    tenant      Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-    domain      String    @unique
-    isPrimary   Boolean   @default(false)
-    sslStatus   String    @default("pending")
-    sslExpiry   DateTime?
-    dnsVerified Boolean   @default(false)
-    dnsToken    String    @unique @default(cuid())
+  id          String    @id @default(cuid())
+  tenantId    String
+  tenant      Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  domain      String    @unique
+  isPrimary   Boolean   @default(false)
+  sslStatus   String    @default("pending")
+  sslExpiry   DateTime?
+  dnsVerified Boolean   @default(false)
+  dnsToken    String    @unique @default(cuid())
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@index([domain])
+  @@index([domain])
 }
 
+// ======================================================================
+// STORE-SCOPED CUSTOMER AUTHENTICATION
+// ======================================================================
+
+// Customer is store-scoped - same email can exist in different stores as different customers
+// This is separate from User (platform accounts for merchants/staff)
 model Customer {
-    id               String   @id @default(cuid())
-    tenantId         String
-    tenant           Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-    email            String
-    password         String?
-    emailVerified    Boolean  @default(false)
-    firstName        String?
-    lastName         String?
-    phone            String?
-    isActive         Boolean  @default(true)
-    acceptsMarketing Boolean  @default(false)
-    locale           String   @default("bg")
-    totalSpent       Decimal  @default(0) @db.Decimal(10, 2)
-    ordersCount      Int      @default(0)
-    lastOrderAt      DateTime?
+  id       String @id @default(cuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-    // Relations
-    addresses     CustomerAddress[]
-    sessions      CustomerSession[]
-    orders        Order[]
-    carts         Cart[]
-    reviews       Review[]
-    wishlistItems WishlistItem[]
+  // Authentication
+  email    String
+  password String // Hashed password
 
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    deletedAt DateTime?
+  // Profile
+  firstName        String?
+  lastName         String?
+  phone            String?
+  acceptsMarketing Boolean   @default(false)
+  locale           String    @default("bg")
+  emailVerified    Boolean   @default(false)
+  emailVerifiedAt  DateTime?
 
-    @@unique([tenantId, email])
-    @@index([tenantId])
-    @@index([tenantId, isActive])
+  // OAuth/Social logins (store-scoped)
+  googleId   String? // Google OAuth ID for this store
+  facebookId String? // Facebook OAuth ID for this store
+
+  // Analytics (updated via triggers/hooks)
+  totalSpent  Decimal   @default(0) @db.Decimal(10, 2)
+  ordersCount Int       @default(0)
+  lastOrderAt DateTime?
+
+  // Status
+  isActive Boolean @default(true)
+
+  // Relations
+  addresses          CustomerAddress[]
+  orders             Order[]
+  cart               Cart?
+  reviews            Review[]
+  wishlistItems      WishlistItem[]
+  sessions           CustomerSession[]
+  passwordReset      PasswordReset?
+  emailVerification  EmailVerification?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@unique([tenantId, email]) // Same email can exist in different stores
+  @@index([tenantId])
+  @@index([email])
+}
+
+// Customer sessions for JWT-based auth
+model CustomerSession {
+  id           String   @id @default(cuid())
+  customerId   String
+  customer     Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  token        String   @unique // JWT token or session identifier
+  userAgent    String?
+  ipAddress    String?
+  expiresAt    DateTime
+  lastActiveAt DateTime @default(now())
+
+  createdAt DateTime @default(now())
+
+  @@index([customerId])
+  @@index([token])
 }
 
 model CustomerAddress {
-    id         String   @id @default(cuid())
-    customerId String
-    customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
-    firstName  String
-    lastName   String
-    company    String?
-    address1   String
-    address2   String?
-    city       String
-    province   String?
-    country    String   @default("BG")
-    postalCode String
-    phone      String?
-    isDefault  Boolean  @default(false)
+  id         String   @id @default(cuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  firstName  String
+  lastName   String
+  company    String?
+  address1   String
+  address2   String?
+  city       String
+  province   String?
+  country    String   @default("BG")
+  postalCode String
+  phone      String?
+  isDefault  Boolean  @default(false)
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@index([customerId])
-}
-
-model CustomerSession {
-    id         String   @id @default(cuid())
-    customerId String
-    customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
-    token      String   @unique
-    ipAddress  String?
-    userAgent  String?
-
-    createdAt DateTime @default(now())
-    expiresAt DateTime
-
-    @@index([token])
-    @@index([customerId])
+  @@index([customerId])
 }
 
 // ======================================================================
 // CORE MODELS
 // ======================================================================
 
-// --- AUTHENTICATION (Better Auth Integration) ---
+// --- PLATFORM AUTHENTICATION (Better Auth Integration) ---
+// User model is for Platform Accounts: merchants, staff, admins
+// NOT for storefront customers (they use the Customer model)
 model User {
-    id               String    @id @default(cuid())
-    name             String
-    firstName        String?
-    lastName         String?
-    email            String    @unique
-    emailVerified    Boolean   @default(false)
-    emailVerifiedAt  DateTime?
-    image            String?
-    password         String? // For email/password sign-in
-    role             UserRole  @default(USER) // Default to regular user
+  id              String    @id @default(cuid())
+  name            String
+  firstName       String?
+  lastName        String?
+  email           String    @unique
+  emailVerified   Boolean   @default(false)
+  emailVerifiedAt DateTime?
+  image           String?
+  password        String? // For email/password sign-in
+  role            UserRole  @default(USER) // Default to regular user
+  phone           String?
 
-    accounts Account[]
-    sessions Session[]
+  // Better Auth relations
+  accounts Account[]
+  sessions Session[]
 
-    // Multi-tenant staff membership
-    tenantStaff TenantStaff[]
+  // Multi-tenant staff membership (merchants managing stores)
+  tenantStaff TenantStaff[]
 
-    // Custom fields
-    cart               Cart?
-    shippingAddresses  UserAddress[]
-    orders             Order[]
-    wishlistItems      WishlistItem[]
-    reviews            Review[]
-    giftCardsPurchased GiftCard[]     @relation("PurchasedGiftCards")
-    giftCardsReceived  GiftCard[]     @relation("ReceivedGiftCards")
-    orderHistoryEvents OrderHistory[] @relation("OrderHistoryEvents")
+  // Platform user addresses (for merchant billing, etc.)
+  shippingAddresses UserAddress[]
 
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    deletedAt DateTime?
+  // Gift cards purchased/received by platform users
+  giftCardsPurchased GiftCard[] @relation("PurchasedGiftCards")
+  giftCardsReceived  GiftCard[] @relation("ReceivedGiftCards")
+
+  // Order history events (staff actions on orders)
+  orderHistoryEvents OrderHistory[] @relation("OrderHistoryEvents")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 }
 
 model Account {
-    id                    String  @id @default(cuid())
-    accountId             String
-    providerId            String
-    userId                String
-    accessToken           String?
-    refreshToken          String?
-    idToken               String? @db.Text
-    accessTokenExpiresAt  DateTime?
-    refreshTokenExpiresAt DateTime?
-    scope                 String?
-    password              String?
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?   @db.Text
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
 
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@unique([providerId, accountId])
+  @@unique([providerId, accountId])
 }
 
 model Session {
-    id        String   @id @default(cuid())
-    expiresAt DateTime
-    token     String   @unique
-    ipAddress String?
-    userAgent String?
-    userId    String
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+  userId    String
 
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Verification {
-    id         String   @id @default(cuid())
-    identifier String
-    value      String   @unique
-    expiresAt  DateTime
+  id         String   @id @default(cuid())
+  identifier String
+  value      String   @unique
+  expiresAt  DateTime
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@unique([identifier, value])
+  @@unique([identifier, value])
 }
 
 // Legacy tables - keeping for now, can be removed after migration
 model EmailVerificationToken {
-    id      String   @id @default(cuid())
-    email   String
-    token   String   @unique
-    expires DateTime
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
 
-    @@unique([email, token])
+  @@unique([email, token])
+}
+
+// Password reset tokens for customers (storefront)
+model PasswordReset {
+  id         String   @id @default(cuid())
+  customerId String   @unique
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  token      String   @unique
+  expiresAt  DateTime
+  usedAt     DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([token])
+}
+
+// Email verification tokens for customers (storefront)
+model EmailVerification {
+  id         String   @id @default(cuid())
+  customerId String   @unique
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  token      String   @unique
+  expiresAt  DateTime
+  verifiedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([token])
 }
 
 model PasswordResetToken {
-    id      String   @id @default(cuid())
-    email   String
-    token   String   @unique
-    expires DateTime
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
 
-    @@unique([email, token])
+  @@unique([email, token])
 }
 
 // --- LOCALIZATION & INTERNATIONALIZATION ---
 model Locale {
-    id        String  @id @default(cuid())
-    code      String  @unique // e.g., "en-US", "bg-BG"
-    name      String // e.g., "English (US)", "Български"
-    isDefault Boolean @default(false)
+  id        String  @id @default(cuid())
+  code      String  @unique // e.g., "en-US", "bg-BG"
+  name      String // e.g., "English (US)", "Български"
+  isDefault Boolean @default(false)
 
-    ProductTranslation                         ProductTranslation[]
-    CategoryTranslation                        CategoryTranslation[]
-    BrandTranslation                           BrandTranslation[]
-    FilterAttributeTranslation                 FilterAttributeTranslation[]
-    ProductSpecificationTranslation            ProductSpecificationTranslation[]
-    ProductCustomizationOptionTranslation      ProductCustomizationOptionTranslation[]
-    ProductCustomizationOptionValueTranslation ProductCustomizationOptionValueTranslation[]
-    PageTranslation                            PageTranslation[]
-    CollectionTranslation                      CollectionTranslation[]
-    BlogPostTranslation                        BlogPostTranslation[]
+  ProductTranslation                         ProductTranslation[]
+  CategoryTranslation                        CategoryTranslation[]
+  BrandTranslation                           BrandTranslation[]
+  FilterAttributeTranslation                 FilterAttributeTranslation[]
+  ProductSpecificationTranslation            ProductSpecificationTranslation[]
+  ProductCustomizationOptionTranslation      ProductCustomizationOptionTranslation[]
+  ProductCustomizationOptionValueTranslation ProductCustomizationOptionValueTranslation[]
+  PageTranslation                            PageTranslation[]
+  CollectionTranslation                      CollectionTranslation[]
+  BlogPostTranslation                        BlogPostTranslation[]
 }
 
 // --- CURRENCIES ---
 model Currency {
-    id        String     @id @default(cuid())
-    code      String     @unique // e.g., "BGN", "EUR", "USD"
-    symbol    String // e.g., "leva", "€", "$"
-    name      String // e.g., "Bulgarian Lev", "Euro", "US Dollar"
-    rate      Decimal    @db.Decimal(10, 4) // Conversion rate to a base currency (e.g., USD or EUR)
-    isDefault Boolean    @default(false)
-    isActive  Boolean    @default(true) // Admin can enable/disable
-    orders    Order[]
-    giftCards GiftCard[]
+  id          String  @id @default(cuid())
+  code        String  @unique // ISO 4217 code: EUR, USD, GBP, etc.
+  symbol      String // €, $, £, etc.
+  name        String // Euro, US Dollar, British Pound
+  rate        Decimal @db.Decimal(10, 6) // Exchange rate from EUR (base currency)
+  decimals    Int     @default(2) // Number of decimal places
+  symbolFirst Boolean @default(true) // Symbol before or after amount
+  isActive    Boolean @default(true) // Admin can enable/disable globally
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  // Relations
+  orders        Order[]
+  giftCards     GiftCard[]
+  productPrices ProductPrice[]
+  tenants       TenantCurrency[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Currencies enabled per tenant
+model TenantCurrency {
+  id         String   @id @default(cuid())
+  tenantId   String
+  tenant     Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  currencyId String
+  currency   Currency @relation(fields: [currencyId], references: [id], onDelete: Cascade)
+  isDefault  Boolean  @default(false) // Only one per tenant
+
+  createdAt DateTime @default(now())
+
+  @@unique([tenantId, currencyId])
+  @@index([tenantId])
+}
+
+// Multi-currency product pricing
+model ProductPrice {
+  id         String   @id @default(cuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  currencyId String
+  currency   Currency @relation(fields: [currencyId], references: [id], onDelete: Cascade)
+
+  price          Decimal  @db.Decimal(10, 2) // Price in this currency
+  compareAtPrice Decimal? @db.Decimal(10, 2) // Compare at price in this currency
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([productId, currencyId])
+  @@index([productId])
 }
 
 // --- BRANDS ---
 model Brand {
-    id           String             @id @default(cuid())
-    slug         String
-    name         String
-    logoUrl      String?
-    description  String?            @db.Text
+  id          String  @id @default(cuid())
+  slug        String
+  name        String
+  logoUrl     String?
+  description String? @db.Text
 
-    // Multi-tenant
-    tenantId String
-    tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  // Multi-tenant
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-    products     Product[]
-    discounts    DiscountBrand[]
-    promoCodes   PromoCodeBrand[]
-    translations BrandTranslation[]
+  products     Product[]
+  discounts    DiscountBrand[]
+  promoCodes   PromoCodeBrand[]
+  translations BrandTranslation[]
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@unique([tenantId, slug])
-    @@index([tenantId])
+  @@unique([tenantId, slug])
+  @@index([tenantId])
 }
 
 model BrandTranslation {
-    id          String  @id @default(cuid())
-    brandId     String
-    brand       Brand   @relation(fields: [brandId], references: [id], onDelete: Cascade)
-    localeId    String
-    locale      Locale  @relation(fields: [localeId], references: [id])
-    name        String
-    description String? @db.Text
+  id          String  @id @default(cuid())
+  brandId     String
+  brand       Brand   @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  localeId    String
+  locale      Locale  @relation(fields: [localeId], references: [id])
+  name        String
+  description String? @db.Text
 
-    @@unique([brandId, localeId])
+  @@unique([brandId, localeId])
 }
 
 // --- CATEGORIES ---
 model Category {
-    id            String                @id @default(cuid())
-    slug          String
-    iconUrl       String?
-    coverImageUrl String?
-    parentId      String? // For sub-categories
-    parent        Category?             @relation("Subcategories", fields: [parentId], references: [id])
-    subCategories Category[]            @relation("Subcategories")
+  id            String     @id @default(cuid())
+  slug          String
+  iconUrl       String?
+  coverImageUrl String?
+  parentId      String? // For sub-categories
+  parent        Category?  @relation("Subcategories", fields: [parentId], references: [id])
+  subCategories Category[] @relation("Subcategories")
 
-    // Multi-tenant
-    tenantId String
-    tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  // Multi-tenant
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-    products      Product[]
-    filters       CategoryFilter[] // Many-to-many with filters
-    discounts     DiscountCategory[]
-    promoCodes    PromoCodeCategory[]
-    translations  CategoryTranslation[]
+  products     Product[]
+  filters      CategoryFilter[] // Many-to-many with filters
+  discounts    DiscountCategory[]
+  promoCodes   PromoCodeCategory[]
+  translations CategoryTranslation[]
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@unique([tenantId, slug])
-    @@index([tenantId])
-    @@index([tenantId, parentId])
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@index([tenantId, parentId])
 }
 
 model CategoryTranslation {
-    id          String   @id @default(cuid())
-    categoryId  String
-    category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-    localeId    String
-    locale      Locale   @relation(fields: [localeId], references: [id])
-    name        String
-    description String?  @db.Text
+  id          String   @id @default(cuid())
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  localeId    String
+  locale      Locale   @relation(fields: [localeId], references: [id])
+  name        String
+  description String?  @db.Text
 
-    @@unique([categoryId, localeId])
+  @@unique([categoryId, localeId])
 }
 
 // --- PRODUCTS ---
 model Product {
-    id         String        @id @default(cuid())
-    slug       String
-    price      Decimal       @db.Decimal(10, 2)
-    sku        String?
-    trackStock Boolean       @default(false)
-    stock      Int?
-    status     ProductStatus @default(DRAFT)
+  id         String        @id @default(cuid())
+  slug       String
+  price      Decimal       @db.Decimal(10, 2)
+  sku        String?
+  trackStock Boolean       @default(false)
+  stock      Int?
+  status     ProductStatus @default(DRAFT)
 
-    // Multi-tenant
-    tenantId String
-    tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  // Multi-tenant
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-    // Pricing options
-    compareAtPrice Decimal? @db.Decimal(10, 2) // Original price for showing discounts
-    costPerItem    Decimal? @db.Decimal(10, 2) // Cost for profit calculations (not shown to customers)
+  // Pricing options
+  compareAtPrice Decimal? @db.Decimal(10, 2) // Original price for showing discounts
+  costPerItem    Decimal? @db.Decimal(10, 2) // Cost for profit calculations (not shown to customers)
 
-    // Unit pricing
-    unitPriceAmount          Decimal?        @db.Decimal(10, 2)
-    unitPriceMeasurement     MeasurementUnit?
-    unitPriceBaseAmount      Decimal?        @db.Decimal(10, 2)
-    unitPriceBaseMeasurement MeasurementUnit?
+  // Unit pricing
+  unitPriceAmount          Decimal?         @db.Decimal(10, 2)
+  unitPriceMeasurement     MeasurementUnit?
+  unitPriceBaseAmount      Decimal?         @db.Decimal(10, 2)
+  unitPriceBaseMeasurement MeasurementUnit?
 
-    // Purchase options
-    purchaseType                PurchaseType         @default(ONE_TIME)
-    subscriptionDiscountPercent Decimal?             @db.Decimal(5, 2) // e.g., 10.00 for 10%
-    subscriptionIntervals       SubscriptionInterval[]
-    preOrderReleaseDate         DateTime?
-    preOrderDepositPercent      Decimal?             @db.Decimal(5, 2) // e.g., 20.00 for 20% deposit
+  // Purchase options
+  purchaseType                PurchaseType           @default(ONE_TIME)
+  subscriptionDiscountPercent Decimal?               @db.Decimal(5, 2) // e.g., 10.00 for 10%
+  subscriptionIntervals       SubscriptionInterval[]
+  preOrderReleaseDate         DateTime?
+  preOrderDepositPercent      Decimal?               @db.Decimal(5, 2) // e.g., 20.00 for 20% deposit
 
-    // Low stock alert
-    lowStockThreshold Int?
+  // Low stock alert
+  lowStockThreshold Int?
 
-    media                ProductMedia[]
-    translations         ProductTranslation[]
-    specs                ProductSpecification[]
-    shippingInfo         ProductShippingInfo?
-    filters              ProductFilter[]
-    variants             ProductVariant[]
-    customizationOptions ProductCustomizationOption[]
-    relatedProducts      Product[]                    @relation("RelatedProducts")
-    relatedByProducts    Product[]                    @relation("RelatedProducts")
-    downloads            ProductDownload[]
-    reviews              Review[]
-    cartItems            CartItem[]
-    orderItems           OrderItem[]
-    wishlistItems        WishlistItem[]
-    collectionProducts   CollectionProduct[]
+  media                ProductMedia[]
+  translations         ProductTranslation[]
+  specs                ProductSpecification[]
+  shippingInfo         ProductShippingInfo?
+  filters              ProductFilter[]
+  variants             ProductVariant[]
+  customizationOptions ProductCustomizationOption[]
+  relatedProducts      Product[]                    @relation("RelatedProducts")
+  relatedByProducts    Product[]                    @relation("RelatedProducts")
+  downloads            ProductDownload[]
+  reviews              Review[]
+  cartItems            CartItem[]
+  orderItems           OrderItem[]
+  wishlistItems        WishlistItem[]
+  collectionProducts   CollectionProduct[]
+  prices               ProductPrice[] // Multi-currency prices
 
-    category   Category           @relation(fields: [categoryId], references: [id])
-    categoryId String
-    brand      Brand?             @relation(fields: [brandId], references: [id])
-    brandId    String?
-    discounts  DiscountProduct[]
-    promoCodes PromoCodeProduct[]
+  category   Category           @relation(fields: [categoryId], references: [id])
+  categoryId String
+  brand      Brand?             @relation(fields: [brandId], references: [id])
+  brandId    String?
+  discounts  DiscountProduct[]
+  promoCodes PromoCodeProduct[]
 
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
-    @@unique([tenantId, slug])
-    @@unique([tenantId, sku])
-    @@index([tenantId])
-    @@index([tenantId, status])
-    @@index([tenantId, categoryId])
+  @@unique([tenantId, slug])
+  @@unique([tenantId, sku])
+  @@index([tenantId])
+  @@index([tenantId, status])
+  @@index([tenantId, categoryId])
 }
 
 model ProductTranslation {
-    id          String  @id @default(cuid())
-    productId   String
-    product     Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-    localeId    String
-    locale      Locale  @relation(fields: [localeId], references: [id])
-    name        String
-    description String? @db.Text // Rich text description
+  id          String  @id @default(cuid())
+  productId   String
+  product     Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  localeId    String
+  locale      Locale  @relation(fields: [localeId], references: [id])
+  name        String
+  description String? @db.Text // Rich text description
 
-    // SEO fields
-    metaTitle       String? // SEO title for search engines
-    metaDescription String? @db.Text // SEO description for search engines
-    customSlug      String? // Custom URL slug (if not set, use product.slug)
+  // SEO fields
+  metaTitle       String? // SEO title for search engines
+  metaDescription String? @db.Text // SEO description for search engines
+  customSlug      String? // Custom URL slug (if not set, use product.slug)
 
-    @@unique([productId, localeId])
+  @@unique([productId, localeId])
 }
 
 model ProductMedia {
-    id        String    @id @default(cuid())
-    productId String
-    product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
-    url       String
-    mediaType MediaType @default(IMAGE)
-    altText   String? // For accessibility
-    order     Int       @default(0) // For display order, first (0) is cover
+  id        String    @id @default(cuid())
+  productId String
+  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  mediaType MediaType @default(IMAGE)
+  altText   String? // For accessibility
+  order     Int       @default(0) // For display order, first (0) is cover
 
-    createdAt DateTime @default(now())
+  createdAt DateTime @default(now())
 }
 
 model ProductSpecification {
-    id           String                            @id @default(cuid())
-    productId    String
-    product      Product                           @relation(fields: [productId], references: [id], onDelete: Cascade)
-    order        Int                               @default(0)
-    translations ProductSpecificationTranslation[]
+  id           String                            @id @default(cuid())
+  productId    String
+  product      Product                           @relation(fields: [productId], references: [id], onDelete: Cascade)
+  order        Int                               @default(0)
+  translations ProductSpecificationTranslation[]
 }
 
 model ProductSpecificationTranslation {
-    id       String               @id @default(cuid())
-    specId   String
-    spec     ProductSpecification @relation(fields: [specId], references: [id], onDelete: Cascade)
-    localeId String
-    locale   Locale               @relation(fields: [localeId], references: [id])
-    name     String // Translated name of the spec (e.g., "Processor")
-    value    String // Translated value of the spec (e.g., "Intel Core i7")
+  id       String               @id @default(cuid())
+  specId   String
+  spec     ProductSpecification @relation(fields: [specId], references: [id], onDelete: Cascade)
+  localeId String
+  locale   Locale               @relation(fields: [localeId], references: [id])
+  name     String // Translated name of the spec (e.g., "Processor")
+  value    String // Translated value of the spec (e.g., "Intel Core i7")
 
-    @@unique([specId, localeId])
+  @@unique([specId, localeId])
 }
 
 model ProductShippingInfo {
-    id        String  @id @default(cuid())
-    productId String  @unique
-    product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  id        String  @id @default(cuid())
+  productId String  @unique
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-    // Package type
-    packageType PackageType @default(BOX)
+  // Package type
+  packageType PackageType @default(BOX)
 
-    // Packaging dimensions (used for all package types except pallet)
-    packagingWeightKg Decimal? @db.Decimal(10, 3)
-    packagingLengthCm Decimal? @db.Decimal(10, 2)
-    packagingWidthCm  Decimal? @db.Decimal(10, 2)
-    packagingHeightCm Decimal? @db.Decimal(10, 2)
+  // Packaging dimensions (used for all package types except pallet)
+  packagingWeightKg Decimal? @db.Decimal(10, 3)
+  packagingLengthCm Decimal? @db.Decimal(10, 2)
+  packagingWidthCm  Decimal? @db.Decimal(10, 2)
+  packagingHeightCm Decimal? @db.Decimal(10, 2)
 
-    // Product dimensions (used only for pallets - actual product size matters)
-    productWeightKg Decimal? @db.Decimal(10, 3)
-    productLengthCm Decimal? @db.Decimal(10, 2)
-    productWidthCm  Decimal? @db.Decimal(10, 2)
-    productHeightCm Decimal? @db.Decimal(10, 2)
+  // Product dimensions (used only for pallets - actual product size matters)
+  productWeightKg Decimal? @db.Decimal(10, 3)
+  productLengthCm Decimal? @db.Decimal(10, 2)
+  productWidthCm  Decimal? @db.Decimal(10, 2)
+  productHeightCm Decimal? @db.Decimal(10, 2)
 
-    // Shipping flags
-    isFragile      Boolean  @default(false)
-    isFreeShipping Boolean  @default(false)
-    tags           String[] // Array of strings, e.g., "Oversize", "Hazmat"
+  // Shipping flags
+  isFragile      Boolean  @default(false)
+  isFreeShipping Boolean  @default(false)
+  tags           String[] // Array of strings, e.g., "Oversize", "Hazmat"
 }
 
 model ProductDownload {
-    id         String  @id @default(cuid())
-    productId  String
-    product    Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-    name       String // e.g., "User Manual", "Drivers"
-    fileUrl    String // URL to the downloadable file
-    fileSizeKb Int? // in kilobytes
+  id         String  @id @default(cuid())
+  productId  String
+  product    Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name       String // e.g., "User Manual", "Drivers"
+  fileUrl    String // URL to the downloadable file
+  fileSizeKb Int? // in kilobytes
 
-    createdAt DateTime @default(now())
+  createdAt DateTime @default(now())
 }
 
 // --- FILTERS ---
 model Filter {
-    id         String            @id @default(cuid())
-    name       String // e.g., "Color", "RAM"
+  id   String @id @default(cuid())
+  name String // e.g., "Color", "RAM"
 
-    // Multi-tenant
-    tenantId String
-    tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  // Multi-tenant
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-    attributes FilterAttribute[]
-    categories CategoryFilter[]
+  attributes FilterAttribute[]
+  categories CategoryFilter[]
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@unique([tenantId, name])
-    @@index([tenantId])
+  @@unique([tenantId, name])
+  @@index([tenantId])
 }
 
 model FilterAttribute {
-    id             String                       @id @default(cuid())
-    filterId       String
-    filter         Filter                       @relation(fields: [filterId], references: [id], onDelete: Cascade)
-    translations   FilterAttributeTranslation[]
-    productFilters ProductFilter[] // Link to products through this attribute
+  id             String                       @id @default(cuid())
+  filterId       String
+  filter         Filter                       @relation(fields: [filterId], references: [id], onDelete: Cascade)
+  translations   FilterAttributeTranslation[]
+  productFilters ProductFilter[] // Link to products through this attribute
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model FilterAttributeTranslation {
-    id          String          @id @default(cuid())
-    attributeId String
-    attribute   FilterAttribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
-    localeId    String
-    locale      Locale          @relation(fields: [localeId], references: [id])
-    name        String // Translated value of the attribute (e.g., "Red", "8GB", "Intel")
+  id          String          @id @default(cuid())
+  attributeId String
+  attribute   FilterAttribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
+  localeId    String
+  locale      Locale          @relation(fields: [localeId], references: [id])
+  name        String // Translated value of the attribute (e.g., "Red", "8GB", "Intel")
 
-    @@unique([attributeId, localeId])
+  @@unique([attributeId, localeId])
 }
 
 // Connects a specific Product to a specific FilterAttribute (e.g., Product X has Color: Red)
 model ProductFilter {
-    productId         String
-    product           Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
-    filterAttributeId String
-    filterAttribute   FilterAttribute @relation(fields: [filterAttributeId], references: [id], onDelete: Cascade)
+  productId         String
+  product           Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  filterAttributeId String
+  filterAttribute   FilterAttribute @relation(fields: [filterAttributeId], references: [id], onDelete: Cascade)
 
-    @@id([productId, filterAttributeId]) // Composite primary key
+  @@id([productId, filterAttributeId]) // Composite primary key
 }
 
 // Connects a Category to an available Filter (e.g., "Laptops" category uses "Processor" filter)
 model CategoryFilter {
-    categoryId String
-    category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-    filterId   String
-    filter     Filter   @relation(fields: [filterId], references: [id], onDelete: Cascade)
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  filterId   String
+  filter     Filter   @relation(fields: [filterId], references: [id], onDelete: Cascade)
 
-    @@id([categoryId, filterId])
+  @@id([categoryId, filterId])
 }
 
 // --- PRODUCT VARIANTS & CUSTOMIZATION OPTIONS ---
 model ProductVariant {
-    id              String      @id @default(cuid())
-    productId       String
-    product         Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
-    sku             String?     @unique // Optional SKU per variant
-    price           Decimal?    @db.Decimal(10, 2) // Override price (null = use product price + adjustment)
-    priceAdjustment Decimal     @default(0.00) @db.Decimal(10, 2) // Price difference from base product
-    stock           Int? // Stock for this specific variant
-    imageUrl        String? // Image specific to this variant
-    options         Json // Store key-value pairs of variant options as JSON e.g. { "Color": "Red", "Size": "Large" }
-    cartItems       CartItem[]
-    orderItems      OrderItem[]
-    optionMeta      VariantOptionMeta[] // For color hex values etc.
+  id              String              @id @default(cuid())
+  productId       String
+  product         Product             @relation(fields: [productId], references: [id], onDelete: Cascade)
+  sku             String?             @unique // Optional SKU per variant
+  price           Decimal?            @db.Decimal(10, 2) // Override price (null = use product price + adjustment)
+  priceAdjustment Decimal             @default(0.00) @db.Decimal(10, 2) // Price difference from base product
+  stock           Int? // Stock for this specific variant
+  imageUrl        String? // Image specific to this variant
+  options         Json // Store key-value pairs of variant options as JSON e.g. { "Color": "Red", "Size": "Large" }
+  cartItems       CartItem[]
+  orderItems      OrderItem[]
+  optionMeta      VariantOptionMeta[] // For color hex values etc.
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Stores metadata for variant options (e.g., hex color for "Color" options)
 model VariantOptionMeta {
-    id         String         @id @default(cuid())
-    variantId  String
-    variant    ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
-    optionName String // e.g., "Color"
-    hexColor   String? // e.g., "#FF5733" for color options
+  id         String         @id @default(cuid())
+  variantId  String
+  variant    ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  optionName String // e.g., "Color"
+  hexColor   String? // e.g., "#FF5733" for color options
 
-    @@unique([variantId, optionName])
+  @@unique([variantId, optionName])
 }
 
 model ProductCustomizationOption {
-    id           String                                  @id @default(cuid())
-    productId    String
-    product      Product                                 @relation(fields: [productId], references: [id], onDelete: Cascade)
-    type         CustomizationOptionType
-    name         String // e.g., "Processor", "RAM"
-    description  String?
-    isRequired   Boolean                                 @default(false)
-    order        Int                                     @default(0)
-    values       ProductCustomizationOptionValue[]
-    translations ProductCustomizationOptionTranslation[]
+  id           String                                  @id @default(cuid())
+  productId    String
+  product      Product                                 @relation(fields: [productId], references: [id], onDelete: Cascade)
+  type         CustomizationOptionType
+  name         String // e.g., "Processor", "RAM"
+  description  String?
+  isRequired   Boolean                                 @default(false)
+  order        Int                                     @default(0)
+  values       ProductCustomizationOptionValue[]
+  translations ProductCustomizationOptionTranslation[]
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ProductCustomizationOptionTranslation {
-    id          String                     @id @default(cuid())
-    optionId    String
-    option      ProductCustomizationOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
-    localeId    String
-    locale      Locale                     @relation(fields: [localeId], references: [id])
-    name        String
-    description String?
+  id          String                     @id @default(cuid())
+  optionId    String
+  option      ProductCustomizationOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  localeId    String
+  locale      Locale                     @relation(fields: [localeId], references: [id])
+  name        String
+  description String?
 
-    @@unique([optionId, localeId])
+  @@unique([optionId, localeId])
 }
 
 model ProductCustomizationOptionValue {
-    id              String                     @id @default(cuid())
-    optionId        String
-    option          ProductCustomizationOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
-    value           String // e.g., "M1 Pro", "16GB", "512GB SSD"
-    priceAdjustment Decimal                    @default(0.00) @db.Decimal(10, 2)
-    stockAdjustment Int? // If selecting this option affects stock
-    // dependencies           Json?     // JSON to define if selecting this enables/disables other options
+  id              String                     @id @default(cuid())
+  optionId        String
+  option          ProductCustomizationOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  value           String // e.g., "M1 Pro", "16GB", "512GB SSD"
+  priceAdjustment Decimal                    @default(0.00) @db.Decimal(10, 2)
+  stockAdjustment Int? // If selecting this option affects stock
+  // dependencies           Json?     // JSON to define if selecting this enables/disables other options
 
-    translations ProductCustomizationOptionValueTranslation[]
+  translations ProductCustomizationOptionValueTranslation[]
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ProductCustomizationOptionValueTranslation {
-    id       String                          @id @default(cuid())
-    valueId  String
-    value    ProductCustomizationOptionValue @relation(fields: [valueId], references: [id], onDelete: Cascade)
-    localeId String
-    locale   Locale                          @relation(fields: [localeId], references: [id])
-    name     String // Translated value name
+  id       String                          @id @default(cuid())
+  valueId  String
+  value    ProductCustomizationOptionValue @relation(fields: [valueId], references: [id], onDelete: Cascade)
+  localeId String
+  locale   Locale                          @relation(fields: [localeId], references: [id])
+  name     String // Translated value name
 
-    @@unique([valueId, localeId])
+  @@unique([valueId, localeId])
 }
 
 // --- DISCOUNTS ---
 model Discount {
-    id          String             @id @default(cuid())
-    name        String
-    description String?
-    type        DiscountType
-    value       Decimal            @db.Decimal(10, 2) // Percentage (e.g., 0.15 for 15%) or fixed amount
-    scope       DiscountScope
-    startDate   DateTime           @default(now())
-    endDate     DateTime?
-    isActive    Boolean            @default(true)
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  type        DiscountType
+  value       Decimal       @db.Decimal(10, 2) // Percentage (e.g., 0.15 for 15%) or fixed amount
+  scope       DiscountScope
+  startDate   DateTime      @default(now())
+  endDate     DateTime?
+  isActive    Boolean       @default(true)
 
-    // Multi-tenant
-    tenantId String
-    tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  // Multi-tenant
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-    products    DiscountProduct[]
-    categories  DiscountCategory[]
-    brands      DiscountBrand[]
+  products   DiscountProduct[]
+  categories DiscountCategory[]
+  brands     DiscountBrand[]
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@index([tenantId])
-    @@index([tenantId, isActive])
+  @@index([tenantId])
+  @@index([tenantId, isActive])
 }
 
 // Junction tables for many-to-many relationships
 model DiscountProduct {
-    discountId String
-    discount   Discount @relation(fields: [discountId], references: [id], onDelete: Cascade)
-    productId  String
-    product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  discountId String
+  discount   Discount @relation(fields: [discountId], references: [id], onDelete: Cascade)
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-    @@id([discountId, productId])
+  @@id([discountId, productId])
 }
 
 model DiscountCategory {
-    discountId String
-    discount   Discount @relation(fields: [discountId], references: [id], onDelete: Cascade)
-    categoryId String
-    category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  discountId String
+  discount   Discount @relation(fields: [discountId], references: [id], onDelete: Cascade)
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
-    @@id([discountId, categoryId])
+  @@id([discountId, categoryId])
 }
 
 model DiscountBrand {
-    discountId String
-    discount   Discount @relation(fields: [discountId], references: [id], onDelete: Cascade)
-    brandId    String
-    brand      Brand    @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  discountId String
+  discount   Discount @relation(fields: [discountId], references: [id], onDelete: Cascade)
+  brandId    String
+  brand      Brand    @relation(fields: [brandId], references: [id], onDelete: Cascade)
 
-    @@id([discountId, brandId])
+  @@id([discountId, brandId])
 }
 
 // --- PROMO CODES ---
 model PromoCode {
-    id          String              @id @default(cuid())
-    code        String // The actual code (e.g., "SAVE10")
-    description String?
-    type        DiscountType // PERCENTAGE or FIXED_AMOUNT
-    value       Decimal             @db.Decimal(10, 2)
-    scope       DiscountScope // PRODUCT, CATEGORY, BRAND, ALL_PRODUCTS
-    startDate   DateTime            @default(now())
-    endDate     DateTime?
-    maxUses     Int? // Null for unlimited uses
-    usesCount   Int                 @default(0) // Track how many times it's been used
-    isActive    Boolean             @default(true)
+  id          String        @id @default(cuid())
+  code        String // The actual code (e.g., "SAVE10")
+  description String?
+  type        DiscountType // PERCENTAGE or FIXED_AMOUNT
+  value       Decimal       @db.Decimal(10, 2)
+  scope       DiscountScope // PRODUCT, CATEGORY, BRAND, ALL_PRODUCTS
+  startDate   DateTime      @default(now())
+  endDate     DateTime?
+  maxUses     Int? // Null for unlimited uses
+  usesCount   Int           @default(0) // Track how many times it's been used
+  isActive    Boolean       @default(true)
 
-    // Multi-tenant
-    tenantId String
-    tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  // Multi-tenant
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-    products    PromoCodeProduct[]
-    categories  PromoCodeCategory[]
-    brands      PromoCodeBrand[]
-    orders      Order[] // Link to orders where this promo code was applied
+  products   PromoCodeProduct[]
+  categories PromoCodeCategory[]
+  brands     PromoCodeBrand[]
+  orders     Order[] // Link to orders where this promo code was applied
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@unique([tenantId, code])
-    @@index([tenantId])
+  @@unique([tenantId, code])
+  @@index([tenantId])
 }
 
 model PromoCodeProduct {
-    promoCodeId String
-    promoCode   PromoCode @relation(fields: [promoCodeId], references: [id], onDelete: Cascade)
-    productId   String
-    product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  promoCodeId String
+  promoCode   PromoCode @relation(fields: [promoCodeId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-    @@id([promoCodeId, productId])
+  @@id([promoCodeId, productId])
 }
 
 model PromoCodeCategory {
-    promoCodeId String
-    promoCode   PromoCode @relation(fields: [promoCodeId], references: [id], onDelete: Cascade)
-    categoryId  String
-    category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  promoCodeId String
+  promoCode   PromoCode @relation(fields: [promoCodeId], references: [id], onDelete: Cascade)
+  categoryId  String
+  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
-    @@id([promoCodeId, categoryId])
+  @@id([promoCodeId, categoryId])
 }
 
 model PromoCodeBrand {
-    promoCodeId String
-    promoCode   PromoCode @relation(fields: [promoCodeId], references: [id], onDelete: Cascade)
-    brandId     String
-    brand       Brand     @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  promoCodeId String
+  promoCode   PromoCode @relation(fields: [promoCodeId], references: [id], onDelete: Cascade)
+  brandId     String
+  brand       Brand     @relation(fields: [brandId], references: [id], onDelete: Cascade)
 
-    @@id([promoCodeId, brandId])
+  @@id([promoCodeId, brandId])
 }
 
 // --- GIFT CARDS ---
 model GiftCard {
-    id             String    @id @default(cuid())
-    code           String    @unique // Unique code for the gift card
-    initialValue   Decimal   @db.Decimal(10, 2)
-    currentValue   Decimal   @db.Decimal(10, 2)
-    currencyId     String
-    currency       Currency  @relation(fields: [currencyId], references: [id])
-    expirationDate DateTime?
-    isActive       Boolean   @default(true)
-    purchaserId    String? // Who bought it (optional)
-    purchaser      User?     @relation("PurchasedGiftCards", fields: [purchaserId], references: [id])
-    recipientId    String? // Who it's for (optional)
-    recipient      User?     @relation("ReceivedGiftCards", fields: [recipientId], references: [id])
+  id             String    @id @default(cuid())
+  code           String    @unique // Unique code for the gift card
+  initialValue   Decimal   @db.Decimal(10, 2)
+  currentValue   Decimal   @db.Decimal(10, 2)
+  currencyId     String
+  currency       Currency  @relation(fields: [currencyId], references: [id])
+  expirationDate DateTime?
+  isActive       Boolean   @default(true)
+  purchaserId    String? // Who bought it (optional)
+  purchaser      User?     @relation("PurchasedGiftCards", fields: [purchaserId], references: [id])
+  recipientId    String? // Who it's for (optional)
+  recipient      User?     @relation("ReceivedGiftCards", fields: [recipientId], references: [id])
 
-    // Multi-tenant
-    tenantId String
-    tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  // Multi-tenant
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-    orders Order[] // Link to orders where this gift card was used
+  orders Order[] // Link to orders where this gift card was used
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@index([tenantId])
+  @@index([tenantId])
 }
 
 // --- CART ---
 model Cart {
-    id        String     @id @default(cuid())
-    userId    String?    @unique // Null if anonymous user, unique for registered
-    user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
-    expiresAt DateTime? // For anonymous carts (e.g., 30 days)
+  id         String    @id @default(cuid())
+  customerId String?   @unique // Null if guest, unique for logged-in customers
+  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  expiresAt  DateTime? // For guest carts (e.g., 30 days)
 
-    // Multi-tenant
-    tenantId   String
-    tenant     Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-    customerId String?
-    customer   Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade)
-    sessionId  String? // For anonymous carts
+  // Multi-tenant
+  tenantId  String
+  tenant    Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  sessionId String? // For guest carts (browser session ID)
 
-    items CartItem[]
+  items CartItem[]
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@index([tenantId])
-    @@index([tenantId, sessionId])
-    @@index([customerId])
+  @@index([tenantId])
+  @@index([tenantId, sessionId])
+  @@index([customerId])
 }
 
 model CartItem {
-    id                           String          @id @default(cuid())
-    cartId                       String
-    cart                         Cart            @relation(fields: [cartId], references: [id], onDelete: Cascade)
-    productId                    String
-    product                      Product         @relation(fields: [productId], references: [id])
-    quantity                     Int
-    selectedVariantId            String?
-    selectedVariant              ProductVariant? @relation(fields: [selectedVariantId], references: [id])
-    selectedCustomizationOptions Json? // Store as JSON, e.g., [{ optionId, valueId }]
+  id                           String          @id @default(cuid())
+  cartId                       String
+  cart                         Cart            @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId                    String
+  product                      Product         @relation(fields: [productId], references: [id])
+  quantity                     Int
+  selectedVariantId            String?
+  selectedVariant              ProductVariant? @relation(fields: [selectedVariantId], references: [id])
+  selectedCustomizationOptions Json? // Store as JSON, e.g., [{ optionId, valueId }]
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // --- CHECKOUT & ORDERS ---
 model Order {
-    id             String        @id @default(cuid())
-    orderNumber    String // Unique per tenant
-    userId         String? // Null if anonymous
-    user           User?         @relation(fields: [userId], references: [id])
-    guestEmail     String? // For anonymous orders
-    status         OrderStatus   @default(PENDING)
-    paymentStatus  PaymentStatus @default(PENDING)
-    totalAmount    Decimal       @db.Decimal(10, 2)
-    shippingCost   Decimal       @db.Decimal(10, 2)
+  id            String        @id @default(cuid())
+  orderNumber   String // Unique per tenant
+  customerId    String? // Null if guest checkout
+  customer      Customer?     @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  guestEmail    String? // For guest checkout orders
+  guestPhone    String? // For guest checkout orders
+  status        OrderStatus   @default(PENDING)
+  paymentStatus PaymentStatus @default(PENDING)
+  totalAmount   Decimal       @db.Decimal(10, 2)
+  shippingCost  Decimal       @db.Decimal(10, 2)
 
-    // Multi-tenant
-    tenantId   String
-    tenant     Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-    customerId String?
-    customer   Customer? @relation(fields: [customerId], references: [id])
-    discountAmount Decimal       @default(0.00) @db.Decimal(10, 2)
-    currencyId     String
-    currency       Currency      @relation(fields: [currencyId], references: [id])
-    promoCodeId    String?
-    promoCode      PromoCode?    @relation(fields: [promoCodeId], references: [id])
-    giftCardId     String?
-    giftCard       GiftCard?     @relation(fields: [giftCardId], references: [id])
+  // Multi-tenant
+  tenantId       String
+  tenant         Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  discountAmount Decimal    @default(0.00) @db.Decimal(10, 2)
+  currencyId     String
+  currency       Currency   @relation(fields: [currencyId], references: [id])
+  promoCodeId    String?
+  promoCode      PromoCode? @relation(fields: [promoCodeId], references: [id])
+  giftCardId     String?
+  giftCard       GiftCard?  @relation(fields: [giftCardId], references: [id])
 
-    // Shipping Information
-    shippingMethodId     String // References ShippingMethod
-    shippingMethod       ShippingMethod @relation(fields: [shippingMethodId], references: [id])
-    shippingFirstName    String
-    shippingLastName     String
-    shippingPhone        String
-    shippingEmail        String
-    shippingCompany      String?
-    shippingVatNumber    String?
-    shippingCountry      String
-    shippingCity         String
-    shippingPostcode     String
-    shippingAddressLine1 String
-    shippingAddressLine2 String?
-    shippingNotes        String? // e.g., "leave at door"
-    deliveryBoxName      String? // e.g., BoxNow location name
-    deliveryBoxId        String? // e.g., BoxNow unique ID
-    deliveryOfficeName   String? // e.g., DPD office name
-    deliveryOfficeId     String? // e.g., DPD office unique ID
+  // Shipping Information
+  shippingMethodId     String // References ShippingMethod
+  shippingMethod       ShippingMethod @relation(fields: [shippingMethodId], references: [id])
+  shippingFirstName    String
+  shippingLastName     String
+  shippingPhone        String
+  shippingEmail        String
+  shippingCompany      String?
+  shippingVatNumber    String?
+  shippingCountry      String
+  shippingCity         String
+  shippingPostcode     String
+  shippingAddressLine1 String
+  shippingAddressLine2 String?
+  shippingNotes        String? // e.g., "leave at door"
+  deliveryBoxName      String? // e.g., BoxNow location name
+  deliveryBoxId        String? // e.g., BoxNow unique ID
+  deliveryOfficeName   String? // e.g., DPD office name
+  deliveryOfficeId     String? // e.g., DPD office unique ID
 
-    paymentMethodId      String // References PaymentMethod
-    paymentMethod        PaymentMethod @relation(fields: [paymentMethodId], references: [id])
-    paymentTransactionId String? // ID from payment gateway
+  paymentMethodId      String // References PaymentMethod
+  paymentMethod        PaymentMethod @relation(fields: [paymentMethodId], references: [id])
+  paymentTransactionId String? // ID from payment gateway
 
-    items   OrderItem[]
-    history OrderHistory[] // For status changes
+  items   OrderItem[]
+  history OrderHistory[] // For status changes
 
-    createdAt   DateTime  @default(now())
-    updatedAt   DateTime  @updatedAt
-    cancelledAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  cancelledAt DateTime?
 
-    @@unique([tenantId, orderNumber])
-    @@index([tenantId])
-    @@index([tenantId, status])
-    @@index([tenantId, createdAt])
-    @@index([customerId])
+  @@unique([tenantId, orderNumber])
+  @@index([tenantId])
+  @@index([tenantId, status])
+  @@index([tenantId, createdAt])
+  @@index([customerId])
 }
 
 model OrderItem {
-    id                           String          @id @default(cuid())
-    orderId                      String
-    order                        Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
-    productId                    String
-    product                      Product         @relation(fields: [productId], references: [id])
-    selectedVariantId            String?
-    selectedVariant              ProductVariant? @relation(fields: [selectedVariantId], references: [id])
-    quantity                     Int
-    price                        Decimal         @db.Decimal(10, 2) // Price at the time of order
-    productName                  String // Store product name at order time (for historical integrity)
-    productSku                   String?
-    selectedVariantName          String? // e.g., "Size: L, Color: Red"
-    selectedCustomizationOptions Json? // Store a snapshot of configured options
+  id                           String          @id @default(cuid())
+  orderId                      String
+  order                        Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId                    String
+  product                      Product         @relation(fields: [productId], references: [id])
+  selectedVariantId            String?
+  selectedVariant              ProductVariant? @relation(fields: [selectedVariantId], references: [id])
+  quantity                     Int
+  price                        Decimal         @db.Decimal(10, 2) // Price at the time of order
+  productName                  String // Store product name at order time (for historical integrity)
+  productSku                   String?
+  selectedVariantName          String? // e.g., "Size: L, Color: Red"
+  selectedCustomizationOptions Json? // Store a snapshot of configured options
 
-    createdAt DateTime @default(now())
+  createdAt DateTime @default(now())
 }
 
 model OrderHistory {
-    id        String      @id @default(cuid())
-    orderId   String
-    order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
-    status    OrderStatus
-    timestamp DateTime    @default(now())
-    notes     String? // e.g., "Admin changed status to Shipped"
-    userId    String? // Who performed the action (admin/user)
-    user      User?       @relation("OrderHistoryEvents", fields: [userId], references: [id])
+  id        String      @id @default(cuid())
+  orderId   String
+  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status    OrderStatus
+  timestamp DateTime    @default(now())
+  notes     String? // e.g., "Admin changed status to Shipped"
+  userId    String? // Who performed the action (admin/user)
+  user      User?       @relation("OrderHistoryEvents", fields: [userId], references: [id])
 }
 
 model ShippingMethod {
-    id              String             @id @default(cuid())
-    name            String
-    type            ShippingMethodType
-    cost            Decimal            @db.Decimal(10, 2)
-    isActive        Boolean            @default(true)
-    description     String?
-    estimatedDays   Int?
-    freeAboveAmount Decimal?           @db.Decimal(10, 2)
+  id              String             @id @default(cuid())
+  name            String
+  type            ShippingMethodType
+  cost            Decimal            @db.Decimal(10, 2)
+  isActive        Boolean            @default(true)
+  description     String?
+  estimatedDays   Int?
+  freeAboveAmount Decimal?           @db.Decimal(10, 2)
 
-    // Multi-tenant
-    tenantId String
-    tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  // Multi-tenant
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-    orders Order[]
+  orders Order[]
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@index([tenantId])
+  @@index([tenantId])
 }
 
 model PaymentMethod {
-    id          String            @id @default(cuid())
-    name        String
-    type        PaymentMethodType
-    isActive    Boolean           @default(true)
-    description String?
+  id          String            @id @default(cuid())
+  name        String
+  type        PaymentMethodType
+  isActive    Boolean           @default(true)
+  description String?
 
-    // Multi-tenant
-    tenantId String
-    tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  // Multi-tenant
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-    orders Order[]
+  orders Order[]
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@index([tenantId])
+  @@index([tenantId])
 }
 
 // --- USER MANAGEMENT ---
 model UserAddress {
-    id           String  @id @default(cuid())
-    userId       String
-    user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-    name         String
-    firstName    String
-    lastName     String
-    phone        String
-    email        String?
-    company      String?
-    vatNumber    String?
-    country      String
-    region       String?
-    city         String
-    postcode     String
-    addressLine1 String
-    addressLine2 String?
-    isDefault    Boolean @default(false) // For shipping/billing preference
+  id           String  @id @default(cuid())
+  userId       String
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name         String
+  firstName    String
+  lastName     String
+  phone        String
+  email        String?
+  company      String?
+  vatNumber    String?
+  country      String
+  region       String?
+  city         String
+  postcode     String
+  addressLine1 String
+  addressLine2 String?
+  isDefault    Boolean @default(false) // For shipping/billing preference
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // --- WISHLIST ---
 model WishlistItem {
-    id        String  @id @default(cuid())
-    userId    String?
-    user      User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-    productId String
-    product   Product @relation(fields: [productId], references: [id])
+  id         String   @id @default(cuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id])
 
-    // Multi-tenant (for customer wishlists)
-    customerId String?
-    customer   Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  // Multi-tenant
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-    createdAt DateTime @default(now())
+  createdAt DateTime @default(now())
 
-    @@unique([customerId, productId])
+  @@unique([customerId, productId]) // One wishlist item per customer per product
+  @@index([tenantId])
+  @@index([customerId])
 }
 
 // --- REVIEWS ---
 model Review {
-    id         String  @id @default(cuid())
-    productId  String
-    product    Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-    userId     String?
-    user       User?   @relation(fields: [userId], references: [id])
-    rating     Int // 1 to 5 stars (validation should be handled in application logic)
-    title      String?
-    comment    String? @db.Text
-    isApproved Boolean @default(false) // Admin moderation
+  id         String   @id @default(cuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id])
+  rating     Int // 1 to 5 stars (validation should be handled in application logic)
+  title      String?
+  comment    String?  @db.Text
+  isApproved Boolean  @default(false) // Admin moderation
 
-    // Multi-tenant
-    tenantId   String
-    tenant     Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-    customerId String?
-    customer   Customer? @relation(fields: [customerId], references: [id])
+  // Multi-tenant
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@index([tenantId])
+  @@unique([customerId, productId]) // One review per customer per product
+  @@index([tenantId])
+  @@index([productId])
+  @@index([customerId])
 }
 
 // --- MEDIA / FILES ---
 model Media {
-    id          String    @id @default(cuid())
-    filename    String
-    originalName String
-    url         String
-    mimeType    String
-    size        Int       // Size in bytes
-    width       Int?      // For images
-    height      Int?      // For images
-    altText     String?
-    folder      String?   // For organization (e.g., "products", "blog", "pages")
-    
-    // Multi-tenant
-    tenantId String
-    tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  id           String  @id @default(cuid())
+  filename     String
+  originalName String
+  url          String
+  mimeType     String
+  size         Int // Size in bytes
+  width        Int? // For images
+  height       Int? // For images
+  altText      String?
+  folder       String? // For organization (e.g., "products", "blog", "pages")
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  // Multi-tenant
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-    @@index([tenantId])
-    @@index([tenantId, folder])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tenantId])
+  @@index([tenantId, folder])
 }
 
 // --- BLOG ---
 model BlogPost {
-    id           String               @id @default(cuid())
-    slug         String
-    featuredImage String?
-    author       String?
-    isPublished  Boolean              @default(false)
-    publishedAt  DateTime?
-    
-    // Multi-tenant
-    tenantId String
-    tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  id            String    @id @default(cuid())
+  slug          String
+  featuredImage String?
+  author        String?
+  isPublished   Boolean   @default(false)
+  publishedAt   DateTime?
 
-    translations BlogPostTranslation[]
+  // Multi-tenant
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  translations BlogPostTranslation[]
 
-    @@unique([tenantId, slug])
-    @@index([tenantId])
-    @@index([tenantId, isPublished])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@index([tenantId, isPublished])
 }
 
 model BlogPostTranslation {
-    id         String   @id @default(cuid())
-    postId     String
-    post       BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
-    localeId   String
-    locale     Locale   @relation(fields: [localeId], references: [id])
-    title      String
-    excerpt    String?  @db.Text
-    content    String   @db.Text // Rich text content
+  id       String   @id @default(cuid())
+  postId   String
+  post     BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  localeId String
+  locale   Locale   @relation(fields: [localeId], references: [id])
+  title    String
+  excerpt  String?  @db.Text
+  content  String   @db.Text // Rich text content
 
-    @@unique([postId, localeId])
+  @@unique([postId, localeId])
 }
 
 // --- STATIC PAGES (FAQ, CONTACT, ETC.) ---
 model Page {
-    id           String            @id @default(cuid())
-    slug         String
-    type         PageType
-    isActive     Boolean           @default(true)
+  id       String   @id @default(cuid())
+  slug     String
+  type     PageType
+  isActive Boolean  @default(true)
 
-    // Multi-tenant
-    tenantId String
-    tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  // Multi-tenant
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-    translations PageTranslation[]
+  translations PageTranslation[]
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@unique([tenantId, slug])
-    @@index([tenantId])
+  @@unique([tenantId, slug])
+  @@index([tenantId])
 }
 
 model PageTranslation {
-    id       String @id @default(cuid())
-    pageId   String
-    page     Page   @relation(fields: [pageId], references: [id], onDelete: Cascade)
-    localeId String
-    locale   Locale @relation(fields: [localeId], references: [id])
-    title    String
-    content  String @db.Text // Rich text content for FAQ answers, contact page description
+  id       String @id @default(cuid())
+  pageId   String
+  page     Page   @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  localeId String
+  locale   Locale @relation(fields: [localeId], references: [id])
+  title    String
+  content  String @db.Text // Rich text content for FAQ answers, contact page description
 
-    @@unique([pageId, localeId])
+  @@unique([pageId, localeId])
 }
 
 // --- COLLECTIONS ---
 model Collection {
-    id           String                  @id @default(cuid())
-    slug         String
-    imageUrl     String? // Banner or cover image for the collection
-    isActive     Boolean                 @default(true)
+  id       String  @id @default(cuid())
+  slug     String
+  imageUrl String? // Banner or cover image for the collection
+  isActive Boolean @default(true)
 
-    // Multi-tenant
-    tenantId String
-    tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  // Multi-tenant
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-    products     CollectionProduct[] // Many-to-many
-    translations CollectionTranslation[]
+  products     CollectionProduct[] // Many-to-many
+  translations CollectionTranslation[]
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@unique([tenantId, slug])
-    @@index([tenantId])
-    @@index([tenantId, isActive])
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@index([tenantId, isActive])
 }
 
 model CollectionTranslation {
-    id           String     @id @default(cuid())
-    collectionId String
-    collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
-    localeId     String
-    locale       Locale     @relation(fields: [localeId], references: [id])
-    name         String
-    description  String?    @db.Text
+  id           String     @id @default(cuid())
+  collectionId String
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  localeId     String
+  locale       Locale     @relation(fields: [localeId], references: [id])
+  name         String
+  description  String?    @db.Text
 
-    @@unique([collectionId, localeId])
+  @@unique([collectionId, localeId])
 }
 
 model CollectionProduct {
-    collectionId String
-    collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
-    productId    String
-    product      Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
-    order        Int        @default(0) // For custom ordering within collection
+  collectionId String
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  productId    String
+  product      Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  order        Int        @default(0) // For custom ordering within collection
 
-    @@id([collectionId, productId])
+  @@id([collectionId, productId])
 }

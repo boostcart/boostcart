@@ -1,7 +1,9 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { auth } from "@/server/auth";
 import { db } from "@/server/db";
+import { storage } from "@/server/storage";
 import { requireAdminTenant } from "@/server/tenant";
 
 async function requireStoreAccess() {
@@ -144,11 +146,21 @@ export async function deleteMedia(id: string) {
 		throw new Error("File not found or access denied");
 	}
 
-	// TODO: Delete from storage provider (S3, etc.)
+	// Delete from R2 storage
+	const key = storage.getKeyFromUrl(file.url);
+	if (key) {
+		try {
+			await storage.delete(key);
+		} catch (error) {
+			console.error("Failed to delete file from storage:", error);
+		}
+	}
 
 	await db.media.delete({
 		where: { id },
 	});
+
+	revalidatePath("/admin/media");
 
 	return { success: true };
 }
@@ -168,7 +180,18 @@ export async function deleteMultipleMedia(ids: string[]) {
 		throw new Error("Some files not found or access denied");
 	}
 
-	// TODO: Delete from storage provider (S3, etc.)
+	// Delete from R2 storage
+	const keys = files
+		.map((f) => storage.getKeyFromUrl(f.url))
+		.filter((k): k is string => k !== null);
+
+	if (keys.length > 0) {
+		try {
+			await storage.deleteMany(keys);
+		} catch (error) {
+			console.error("Failed to delete files from storage:", error);
+		}
+	}
 
 	await db.media.deleteMany({
 		where: {
@@ -176,6 +199,8 @@ export async function deleteMultipleMedia(ids: string[]) {
 			tenantId,
 		},
 	});
+
+	revalidatePath("/admin/media");
 
 	return { success: true, count: files.length };
 }
@@ -243,5 +268,67 @@ export async function moveToFolder(ids: string[], folder: string | null) {
 		},
 	});
 
+	revalidatePath("/admin/media");
+
 	return { success: true };
+}
+
+/**
+ * Get presigned URL for direct upload to R2
+ */
+export async function getUploadUrl(
+	filename: string,
+	folder: string = "general",
+	contentType?: string,
+) {
+	const { tenantId } = await requireStoreAccess();
+
+	const result = await storage.getPresignedUploadUrl({
+		tenantId,
+		filename,
+		folder,
+		contentType,
+	});
+
+	return result;
+}
+
+/**
+ * Confirm upload and create media record
+ */
+export async function confirmUpload(input: {
+	key: string;
+	publicUrl: string;
+	filename: string;
+	originalName: string;
+	mimeType: string;
+	size: number;
+	width?: number;
+	height?: number;
+	folder?: string;
+}) {
+	const { tenantId } = await requireStoreAccess();
+
+	// Verify the key belongs to this tenant
+	if (!input.key.startsWith(`${tenantId}/`)) {
+		throw new Error("Unauthorized");
+	}
+
+	const media = await db.media.create({
+		data: {
+			filename: input.filename,
+			originalName: input.originalName,
+			url: input.publicUrl,
+			mimeType: input.mimeType,
+			size: input.size,
+			width: input.width,
+			height: input.height,
+			folder: input.folder || "general",
+			tenantId,
+		},
+	});
+
+	revalidatePath("/admin/media");
+
+	return media;
 }

@@ -5,13 +5,12 @@ import {
 	CheckIcon,
 	DeleteIcon,
 	SearchIcon,
-	XIcon,
 } from "@shopify/polaris-icons";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
 	Dialog,
 	DialogContent,
@@ -108,7 +107,7 @@ export default function TenantsPage() {
 			setPage(1);
 		}, 300);
 		return () => clearTimeout(timer);
-	}, [search]);
+	}, []);
 
 	const handleStatusChange = async () => {
 		if (!selectedTenant) return;

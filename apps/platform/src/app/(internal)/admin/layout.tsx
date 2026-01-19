@@ -68,7 +68,13 @@ interface NavItem {
 }
 
 const navigation: NavItem[] = [
-	{ name: `Home`, href: `/admin`, icon: HomeFilledIcon, activeIcon: HomeIcon, permission: "dashboard:view" },
+	{
+		name: `Home`,
+		href: `/admin`,
+		icon: HomeFilledIcon,
+		activeIcon: HomeIcon,
+		permission: "dashboard:view",
+	},
 	{
 		name: `Orders`,
 		href: `/admin/orders`,
@@ -76,13 +82,21 @@ const navigation: NavItem[] = [
 		activeIcon: OrderIcon,
 		permission: "orders:view",
 		subItems: [
-			{ name: `Drafts`, href: `/admin/orders/drafts`, permission: "orders:view" },
+			{
+				name: `Drafts`,
+				href: `/admin/orders/drafts`,
+				permission: "orders:view",
+			},
 			{
 				name: `Abandoned checkouts`,
 				href: `/admin/orders/abandoned-checkouts`,
 				permission: "orders:view",
 			},
-			{ name: `Shipping labels`, href: `/admin/orders/shipping-labels`, permission: "orders:view" },
+			{
+				name: `Shipping labels`,
+				href: `/admin/orders/shipping-labels`,
+				permission: "orders:view",
+			},
 		],
 	},
 	{
@@ -92,10 +106,22 @@ const navigation: NavItem[] = [
 		activeIcon: ProductIcon,
 		permission: "products:view",
 		subItems: [
-			{ name: `Categories`, href: `/admin/categories`, permission: "categories:view" },
-			{ name: `Collections`, href: `/admin/collections`, permission: "collections:view" },
+			{
+				name: `Categories`,
+				href: `/admin/categories`,
+				permission: "categories:view",
+			},
+			{
+				name: `Collections`,
+				href: `/admin/collections`,
+				permission: "collections:view",
+			},
 			{ name: `Brands`, href: `/admin/brands`, permission: "brands:view" },
-			{ name: `Gift cards`, href: `/admin/gift-cards`, permission: "gift-cards:view" },
+			{
+				name: `Gift cards`,
+				href: `/admin/gift-cards`,
+				permission: "gift-cards:view",
+			},
 		],
 	},
 	{
@@ -112,7 +138,11 @@ const navigation: NavItem[] = [
 		activeIcon: ContentIcon,
 		permission: "content:view",
 		subItems: [
-			{ name: `Blog posts`, href: `/admin/content/blog`, permission: "content:view" },
+			{
+				name: `Blog posts`,
+				href: `/admin/content/blog`,
+				permission: "content:view",
+			},
 			{ name: `Files`, href: `/admin/content/files`, permission: "files:view" },
 		],
 	},
@@ -122,7 +152,13 @@ const navigation: NavItem[] = [
 		icon: DiscountFilledIcon,
 		activeIcon: DiscountIcon,
 		permission: "discounts:view",
-		subItems: [{ name: `Promo codes`, href: `/admin/promo-codes`, permission: "promo-codes:view" }],
+		subItems: [
+			{
+				name: `Promo codes`,
+				href: `/admin/promo-codes`,
+				permission: "promo-codes:view",
+			},
+		],
 	},
 	{
 		name: `Reviews`,
@@ -186,12 +222,12 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
 		.map((item) => ({
 			...item,
 			subItems: item.subItems?.filter(
-				(subItem) => !subItem.permission || hasPermission(subItem.permission)
+				(subItem) => !subItem.permission || hasPermission(subItem.permission),
 			),
 		}));
 
 	const filteredSettingsNavigation = settingsNavigation.filter(
-		(item) => !item.permission || hasPermission(item.permission)
+		(item) => !item.permission || hasPermission(item.permission),
 	);
 
 	const handleSignOut = async () => {
@@ -433,35 +469,35 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
 
 						{/* Sidebar footer - Settings section at bottom */}
 						{filteredSettingsNavigation.length > 0 && (
-						<div className="px-3 py-2 border-t border-[#d4d4d4]">
-							<p className="text-[11px] font-semibold text-[#616161] uppercase tracking-wider px-2 py-1.5">
-								Settings
-							</p>
-							{filteredSettingsNavigation.map((item) => {
-								const Icon = item.icon;
-								const ActiveIcon = item.activeIcon;
-								const isActive = pathname === item.href;
-								return (
-									<Link
-										key={item.name}
-										href={item.href}
-										className={cn(
-											`flex items-center gap-2 rounded-lg px-2 py-1 text-[13px] font-medium transition-all`,
-											isActive
-												? `bg-[#fafafa] text-[#1a1a1a]`
-												: `text-[#1a1a1a] hover:bg-[#f1f1f1]`,
-										)}
-									>
-										{isActive && ActiveIcon ? (
-											<ActiveIcon className="size-5 shrink-0" />
-										) : (
-											<Icon className="size-5 shrink-0 fill-[#4a4a4a]" />
-										)}
-										<span>{item.name}</span>
-									</Link>
-								);
-							})}
-						</div>
+							<div className="px-3 py-2 border-t border-[#d4d4d4]">
+								<p className="text-[11px] font-semibold text-[#616161] uppercase tracking-wider px-2 py-1.5">
+									Settings
+								</p>
+								{filteredSettingsNavigation.map((item) => {
+									const Icon = item.icon;
+									const ActiveIcon = item.activeIcon;
+									const isActive = pathname === item.href;
+									return (
+										<Link
+											key={item.name}
+											href={item.href}
+											className={cn(
+												`flex items-center gap-2 rounded-lg px-2 py-1 text-[13px] font-medium transition-all`,
+												isActive
+													? `bg-[#fafafa] text-[#1a1a1a]`
+													: `text-[#1a1a1a] hover:bg-[#f1f1f1]`,
+											)}
+										>
+											{isActive && ActiveIcon ? (
+												<ActiveIcon className="size-5 shrink-0" />
+											) : (
+												<Icon className="size-5 shrink-0 fill-[#4a4a4a]" />
+											)}
+											<span>{item.name}</span>
+										</Link>
+									);
+								})}
+							</div>
 						)}
 					</div>
 				</aside>

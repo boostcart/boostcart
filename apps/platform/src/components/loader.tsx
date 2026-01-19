@@ -20,7 +20,7 @@ export function Loader({ className, size = "md" }: LoaderProps) {
 			className={cn(
 				"text-muted-foreground animate-spin",
 				sizeClasses[size],
-				className
+				className,
 			)}
 		/>
 	);

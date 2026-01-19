@@ -160,7 +160,7 @@ export default function OnboardingPage() {
 	}, [form, slugSuggestion]);
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-950 dark:to-neutral-900 flex items-center justify-center p-4">
+		<div className="min-h-screen bg-linear-to-br from-neutral-50 to-neutral-100 dark:from-neutral-950 dark:to-neutral-900 flex items-center justify-center p-4">
 			<Card className="w-full max-w-lg">
 				<CardHeader className="text-center">
 					<div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">

@@ -38,15 +38,15 @@ export type TenantDomain = Prisma.TenantDomainModel
  */
 export type Customer = Prisma.CustomerModel
 /**
- * Model CustomerAddress
- * 
- */
-export type CustomerAddress = Prisma.CustomerAddressModel
-/**
  * Model CustomerSession
  * 
  */
 export type CustomerSession = Prisma.CustomerSessionModel
+/**
+ * Model CustomerAddress
+ * 
+ */
+export type CustomerAddress = Prisma.CustomerAddressModel
 /**
  * Model User
  * 
@@ -73,6 +73,16 @@ export type Verification = Prisma.VerificationModel
  */
 export type EmailVerificationToken = Prisma.EmailVerificationTokenModel
 /**
+ * Model PasswordReset
+ * 
+ */
+export type PasswordReset = Prisma.PasswordResetModel
+/**
+ * Model EmailVerification
+ * 
+ */
+export type EmailVerification = Prisma.EmailVerificationModel
+/**
  * Model PasswordResetToken
  * 
  */
@@ -87,6 +97,16 @@ export type Locale = Prisma.LocaleModel
  * 
  */
 export type Currency = Prisma.CurrencyModel
+/**
+ * Model TenantCurrency
+ * 
+ */
+export type TenantCurrency = Prisma.TenantCurrencyModel
+/**
+ * Model ProductPrice
+ * 
+ */
+export type ProductPrice = Prisma.ProductPriceModel
 /**
  * Model Brand
  * 

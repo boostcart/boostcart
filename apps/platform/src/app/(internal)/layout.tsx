@@ -1,4 +1,4 @@
-import { forbidden, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { userHasStore } from "@/server/api/private/tenant";
 import { auth } from "@/server/auth";
 

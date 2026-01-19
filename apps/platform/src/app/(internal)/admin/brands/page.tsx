@@ -12,8 +12,8 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Loader } from "@/components/loader";
 import { PolarisButton } from "@/components/admin/polaris-button";
+import { Loader } from "@/components/loader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -40,21 +40,6 @@ import {
 	DeleteBrandDialog,
 	ViewBrandDialog,
 } from "./_components/brand-dialogs";
-
-// Backend API type
-interface ApiBrand {
-	id: string;
-	name: string;
-	slug: string;
-	description: string | null;
-	logoUrl: string | null;
-	tenantId: string;
-	createdAt: Date;
-	updatedAt: Date;
-	_count: {
-		products: number;
-	};
-}
 
 // Dialog component type
 interface Brand {
@@ -239,7 +224,7 @@ export default function BrandsPage() {
 			{/* Brands Table */}
 			<Card>
 				{isLoading ? (
-					<div className="flex items-center justify-center min-h-[300px]">
+					<div className="flex items-center justify-center min-h-75">
 						<Loader size="lg" />
 					</div>
 				) : filteredBrands.length === 0 ? (
@@ -275,7 +260,7 @@ export default function BrandsPage() {
 								<TableHead>Website</TableHead>
 								<TableHead>Products</TableHead>
 								<TableHead>Status</TableHead>
-								<TableHead className="w-[70px]"></TableHead>
+								<TableHead className="w-17.5"></TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>

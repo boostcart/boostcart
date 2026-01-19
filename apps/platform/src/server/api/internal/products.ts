@@ -9,13 +9,30 @@ import {
 	type UpdateProductInput,
 	UpdateProductSchema,
 } from "@/schemas/product";
+import {
+	requireDeletePermission,
+	requireManagePermission,
+	requireViewPermission,
+} from "@/server/api/permissions";
 import { db } from "@/server/db";
 import { cleanupProductMedia } from "@/server/services/media-cleanup";
-import {
-	requireViewPermission,
-	requireManagePermission,
-	requireDeletePermission,
-} from "@/server/api/permissions";
+
+// Helper to get or create default locale
+async function getDefaultLocale() {
+	let locale = await db.locale.findFirst({
+		where: { isDefault: true },
+	});
+
+	if (!locale) {
+		locale = await db.locale.upsert({
+			where: { code: "bg-BG" },
+			create: { code: "bg-BG", name: "Български", isDefault: true },
+			update: {},
+		});
+	}
+
+	return locale;
+}
 
 // Helper to check access and get tenant context for admin operations (read access)
 async function requireStoreAccess() {
@@ -38,6 +55,7 @@ async function requireProductDeleteAccess() {
 // Get products with filters
 export async function getProducts(filters?: ProductFilterInput) {
 	const { tenantId } = await requireStoreAccess();
+	const locale = await getDefaultLocale();
 
 	const validatedFilters = filters
 		? ProductFilterSchema.parse(filters)
@@ -160,7 +178,7 @@ export async function getProducts(filters?: ProductFilterInput) {
 				category: {
 					include: {
 						translations: {
-							where: { localeId: "en" },
+							where: { localeId: locale.id },
 							take: 1,
 						},
 					},
@@ -168,13 +186,13 @@ export async function getProducts(filters?: ProductFilterInput) {
 				brand: {
 					include: {
 						translations: {
-							where: { localeId: "en" },
+							where: { localeId: locale.id },
 							take: 1,
 						},
 					},
 				},
 				translations: {
-					where: { localeId: "en" },
+					where: { localeId: locale.id },
 					take: 1,
 				},
 				media: {
@@ -191,8 +209,8 @@ export async function getProducts(filters?: ProductFilterInput) {
 			id: p.id,
 			slug: p.slug,
 			status: p.status,
-			price: p.price,
-			compareAtPrice: p.compareAtPrice,
+			price: Number(p.price),
+			compareAtPrice: p.compareAtPrice ? Number(p.compareAtPrice) : null,
 			sku: p.sku,
 			trackStock: p.trackStock,
 			stock: p.stock,
@@ -218,6 +236,7 @@ export async function getProducts(filters?: ProductFilterInput) {
 // Get single product by ID
 export async function getProduct(productId: string) {
 	const { tenantId } = await requireStoreAccess();
+	const locale = await getDefaultLocale();
 
 	const product = await db.product.findFirst({
 		where: { id: productId, tenantId },
@@ -235,7 +254,7 @@ export async function getProduct(productId: string) {
 					collection: {
 						include: {
 							translations: {
-								where: { localeId: "en" },
+								where: { localeId: locale.id },
 								take: 1,
 							},
 						},
@@ -249,8 +268,8 @@ export async function getProduct(productId: string) {
 		throw new Error("Product not found");
 	}
 
-	const englishTranslation = product.translations.find(
-		(t: { localeId: string }) => t.localeId === "en",
+	const defaultTranslation = product.translations.find(
+		(t: { localeId: string }) => t.localeId === locale.id,
 	);
 
 	return {
@@ -259,24 +278,34 @@ export async function getProduct(productId: string) {
 		status: product.status,
 		categoryId: product.categoryId,
 		brandId: product.brandId,
-		price: product.price,
-		compareAtPrice: product.compareAtPrice,
-		costPerItem: product.costPerItem,
+		price: Number(product.price),
+		compareAtPrice: product.compareAtPrice
+			? Number(product.compareAtPrice)
+			: null,
+		costPerItem: product.costPerItem ? Number(product.costPerItem) : null,
 		sku: product.sku,
 		trackStock: product.trackStock,
 		stock: product.stock,
 		lowStockThreshold: product.lowStockThreshold,
 		purchaseType: product.purchaseType,
-		subscriptionDiscountPercent: product.subscriptionDiscountPercent,
+		subscriptionDiscountPercent: product.subscriptionDiscountPercent
+			? Number(product.subscriptionDiscountPercent)
+			: null,
 		subscriptionIntervals: product.subscriptionIntervals,
 		preOrderReleaseDate: product.preOrderReleaseDate,
-		preOrderDepositPercent: product.preOrderDepositPercent,
-		unitPriceAmount: product.unitPriceAmount,
+		preOrderDepositPercent: product.preOrderDepositPercent
+			? Number(product.preOrderDepositPercent)
+			: null,
+		unitPriceAmount: product.unitPriceAmount
+			? Number(product.unitPriceAmount)
+			: null,
 		unitPriceMeasurement: product.unitPriceMeasurement,
-		unitPriceBaseAmount: product.unitPriceBaseAmount,
+		unitPriceBaseAmount: product.unitPriceBaseAmount
+			? Number(product.unitPriceBaseAmount)
+			: null,
 		unitPriceBaseMeasurement: product.unitPriceBaseMeasurement,
-		name: englishTranslation?.name ?? "",
-		description: englishTranslation?.description ?? "",
+		name: defaultTranslation?.name ?? "",
+		description: defaultTranslation?.description ?? "",
 		media: product.media.map(
 			(m: {
 				id: string;
@@ -305,8 +334,8 @@ export async function getProduct(productId: string) {
 			}) => ({
 				id: v.id,
 				sku: v.sku,
-				price: v.price,
-				priceAdjustment: v.priceAdjustment,
+				price: v.price ? Number(v.price) : null,
+				priceAdjustment: v.priceAdjustment ? Number(v.priceAdjustment) : null,
 				stock: v.stock,
 				imageUrl: v.imageUrl,
 				options: v.options as Record<string, string>,
@@ -327,8 +356,8 @@ export async function getProduct(productId: string) {
 				}
 			: null,
 		seo: {
-			metaTitle: englishTranslation?.metaTitle,
-			metaDescription: englishTranslation?.metaDescription,
+			metaTitle: defaultTranslation?.metaTitle,
+			metaDescription: defaultTranslation?.metaDescription,
 			slug: product.slug,
 		},
 		collectionIds: product.collectionProducts.map(
@@ -340,6 +369,7 @@ export async function getProduct(productId: string) {
 // Create product
 export async function createProduct(input: CreateProductInput) {
 	const { tenantId } = await requireProductManageAccess();
+	const locale = await getDefaultLocale();
 
 	const validatedInput = CreateProductSchema.parse(input);
 
@@ -378,11 +408,11 @@ export async function createProduct(input: CreateProductInput) {
 			},
 		});
 
-		// Create translation (English by default)
+		// Create translation with default locale
 		await tx.productTranslation.create({
 			data: {
 				productId: newProduct.id,
-				localeId: "en",
+				localeId: locale.id,
 				name: validatedInput.name,
 				description: validatedInput.description,
 				metaTitle: validatedInput.seo?.metaTitle,
@@ -462,6 +492,27 @@ export async function createProduct(input: CreateProductInput) {
 			});
 		}
 
+		// Create currency prices if provided
+		if (
+			validatedInput.currencyPrices &&
+			validatedInput.currencyPrices.length > 0
+		) {
+			const validPrices = validatedInput.currencyPrices.filter(
+				(cp): cp is typeof cp & { price: number } => cp.price !== null,
+			);
+
+			if (validPrices.length > 0) {
+				await tx.productPrice.createMany({
+					data: validPrices.map((cp) => ({
+						productId: newProduct.id,
+						currencyId: cp.currencyId,
+						price: cp.price,
+						compareAtPrice: cp.compareAtPrice ?? null,
+					})),
+				});
+			}
+		}
+
 		return newProduct;
 	});
 
@@ -473,6 +524,7 @@ export async function createProduct(input: CreateProductInput) {
 // Update product
 export async function updateProduct(input: UpdateProductInput) {
 	const { tenantId } = await requireProductManageAccess();
+	const locale = await getDefaultLocale();
 
 	const validatedInput = UpdateProductSchema.parse(input);
 
@@ -537,7 +589,7 @@ export async function updateProduct(input: UpdateProductInput) {
 				where: {
 					productId_localeId: {
 						productId: validatedInput.id,
-						localeId: "en",
+						localeId: locale.id,
 					},
 				},
 				update: {
@@ -554,7 +606,7 @@ export async function updateProduct(input: UpdateProductInput) {
 				},
 				create: {
 					productId: validatedInput.id,
-					localeId: "en",
+					localeId: locale.id,
 					name: validatedInput.name ?? "Untitled",
 					description: validatedInput.description,
 					metaTitle: validatedInput.seo?.metaTitle,
@@ -803,6 +855,7 @@ export async function permanentlyDeleteProducts(productIds: string[]) {
 // Get trashed products
 export async function getTrashedProducts() {
 	const { tenantId } = await requireStoreAccess();
+	const locale = await getDefaultLocale();
 
 	const products = await db.product.findMany({
 		where: {
@@ -812,7 +865,7 @@ export async function getTrashedProducts() {
 		orderBy: { deletedAt: "desc" },
 		include: {
 			translations: {
-				where: { localeId: "en" },
+				where: { localeId: locale.id },
 				take: 1,
 			},
 			media: {
@@ -826,7 +879,7 @@ export async function getTrashedProducts() {
 		id: p.id,
 		name: p.translations[0]?.name ?? "Untitled",
 		sku: p.sku,
-		price: p.price,
+		price: Number(p.price),
 		deletedAt: p.deletedAt ?? new Date(),
 		imageUrl: p.media[0]?.url ?? null,
 	}));
